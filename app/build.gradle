@@ -1,0 +1,44 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.chooongg.form.simple'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.chooongg.form.simple"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+}
+
+dependencies {
+    implementation "androidx.core:core-ktx:${dependenciesVersion.coreKtx}"
+    implementation "androidx.appcompat:appcompat:${dependenciesVersion.appcompat}"
+    implementation "com.google.android.material:material:${dependenciesVersion.material}"
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha13'
+    implementation project(path: ':m3')
+
+    implementation 'com.facebook.stetho:stetho:1.6.0'
+    debugImplementation 'com.facebook.soloader:soloader:0.10.5'
+    debugImplementation 'com.facebook.flipper:flipper:0.189.0'
+    releaseImplementation 'com.facebook.flipper:flipper-noop:0.189.0'
+}
