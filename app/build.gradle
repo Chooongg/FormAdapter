@@ -17,7 +17,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -28,6 +28,9 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -35,10 +38,10 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${dependenciesVersion.appcompat}"
     implementation "com.google.android.material:material:${dependenciesVersion.material}"
     implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha13'
-    implementation project(path: ':m3')
+    implementation project(path: ':core')
+    implementation project(path: ':M3Style')
 
-    implementation 'com.facebook.stetho:stetho:1.6.0'
+    debugImplementation 'com.facebook.flipper:flipper:0.227.0'
     debugImplementation 'com.facebook.soloader:soloader:0.10.5'
-    debugImplementation 'com.facebook.flipper:flipper:0.189.0'
-    releaseImplementation 'com.facebook.flipper:flipper-noop:0.189.0'
+    releaseImplementation 'com.facebook.flipper:flipper-noop:0.227.0'
 }

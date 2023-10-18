@@ -8,4 +8,4 @@ typealias FormColorBlock = Context.() -> Int
 
 typealias FormColorStateListBlock = Context.() -> ColorStateList
 
-typealias FormMenuBlock = FormMenuItem.()->Unit
+typealias FormMenuBlock = FormMenuItem.() -> Unit

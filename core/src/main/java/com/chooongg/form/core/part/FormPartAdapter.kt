@@ -2,9 +2,9 @@ package com.chooongg.form.core.part
 
 import android.view.ViewGroup
 import com.chooongg.form.core.FormViewHolder
-import com.chooongg.form.core.style.AbsStyle
+import com.chooongg.form.core.style.BaseStyle
 
-class FormPartAdapter(style: AbsStyle) : BaseFormPartAdapter(style) {
+class FormPartAdapter(style: BaseStyle) : BaseFormPartAdapter(style) {
 
     override fun update() {
         TODO("Not yet implemented")

@@ -1,12 +1,12 @@
-package com.chooongg.form.core.style
+package com.chooongg.form.core.typeset
 
-abstract class AbsStyle {
+abstract class BaseTypeset {
 
     override fun equals(other: Any?): Boolean {
         return javaClass == other?.javaClass
     }
 
     override fun hashCode(): Int {
-        return javaClass.hashCode()
+        return super.hashCode()
     }
 }

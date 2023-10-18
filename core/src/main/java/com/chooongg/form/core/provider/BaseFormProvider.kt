@@ -1,6 +1,10 @@
 package com.chooongg.form.core.provider
 
-abstract class AbsFormProvider {
+/**
+ * 子类必须实现空参构造方法
+ */
+abstract class BaseFormProvider {
+
     override fun equals(other: Any?): Boolean {
         return javaClass == other?.javaClass
     }

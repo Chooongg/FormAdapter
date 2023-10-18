@@ -1,13 +1,18 @@
 package com.chooongg.form.core.abstractItem
 
+import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.enum.FormValidateStatus
+import com.chooongg.form.core.provider.BaseFormProvider
+import kotlin.reflect.KClass
 
-open class BaseFormItem(
+abstract class BaseFormItem(
     /**
      * 标签文本
      */
     var label: CharSequence?
 ) : AbstractFormItem() {
+
+    abstract fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider>
 
     /**
      * 提示

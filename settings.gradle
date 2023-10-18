@@ -20,4 +20,4 @@ dependencyResolutionManagement {
 rootProject.name = "FormAdapter2"
 include ':app'
 include ':core'
-include ':m3'
+include ':M3Style'

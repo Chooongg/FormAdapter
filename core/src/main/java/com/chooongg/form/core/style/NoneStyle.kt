@@ -1,7 +1,5 @@
 package com.chooongg.form.core.style
 
-object NoneStyle : AbsStyle() {
-
-
+class NoneStyle : BaseStyle() {
 
 }

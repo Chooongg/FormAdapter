@@ -31,5 +31,5 @@ dependencies {
     implementation "androidx.core:core-ktx:${dependenciesVersion.coreKtx}"
     implementation "androidx.appcompat:appcompat:${dependenciesVersion.appcompat}"
     implementation "com.google.android.material:material:${dependenciesVersion.material}"
-    api project(path: ':core')
+    compileOnly project(path: ':core')
 }
