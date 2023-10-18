@@ -1,8 +1,9 @@
-package com.chooongg.form.core.abstractItem
+package com.chooongg.form.core.item
 
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.enum.FormValidateStatus
 import com.chooongg.form.core.provider.BaseFormProvider
+import com.chooongg.form.core.typeset.BaseTypeset
 import kotlin.reflect.KClass
 
 abstract class BaseFormItem(
@@ -38,5 +39,7 @@ abstract class BaseFormItem(
      * 效验的状态
      */
     var validateStatus: FormValidateStatus? = null
+
+    var typeset: BaseTypeset? = null
 
 }

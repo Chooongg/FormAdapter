@@ -1,4 +1,4 @@
 package com.chooongg.form.core.typeset
 
-class HorizontalTypeset {
+class HorizontalTypeset : BaseTypeset() {
 }

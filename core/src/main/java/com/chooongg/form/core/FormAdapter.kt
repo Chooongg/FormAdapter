@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.chooongg.form.core.abstractItem.BaseFormItem
+import com.chooongg.form.core.item.BaseFormItem
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
@@ -158,9 +158,8 @@ open class FormAdapter internal constructor(isEnabled: Boolean) :
     private val itemTypePool = ArrayList<Triple<Int, Int, Int>>()
 
     @Suppress("DEPRECATION")
-    internal fun getItemViewType(
+    internal fun getItemViewType4Pool(
         style: BaseStyle,
-        typeset: BaseTypeset,
         item: BaseFormItem
     ): Int {
         val styleIndex = stylePool.indexOf(style).let {
@@ -169,6 +168,7 @@ open class FormAdapter internal constructor(isEnabled: Boolean) :
                 stylePool.lastIndex
             } else it
         }
+        val typeset = item.typeset ?: FormManager.Default.typeset
         val typesetIndex = typesetPool.indexOf(typeset).let {
             if (it < 0) {
                 typesetPool.add(typeset)

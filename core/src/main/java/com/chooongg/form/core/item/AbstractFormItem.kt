@@ -1,4 +1,4 @@
-package com.chooongg.form.core.abstractItem
+package com.chooongg.form.core.item
 
 import com.chooongg.form.core.CacheCleanable
 import com.chooongg.form.core.FormMenuBlock
