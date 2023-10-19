@@ -1,7 +1,7 @@
 package com.chooongg.form.core.format
 
-import com.chooongg.form.core.item.BaseFormItem
+import com.chooongg.form.core.item.BaseForm
 
 interface LabelFormat {
-    fun format(item: BaseFormItem?): CharSequence?
+    fun format(item: BaseForm?): CharSequence?
 }

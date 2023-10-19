@@ -4,13 +4,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.chooongg.form.core.item.BaseFormItem
+import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.typeset.BaseTypeset
 
-open class FormAdapter internal constructor(isEnabled: Boolean) :
+open class FormAdapter(isEnabled: Boolean) :
     RecyclerView.Adapter<ViewHolder>() {
 
     private var _recyclerView: RecyclerView? = null
@@ -19,9 +19,7 @@ open class FormAdapter internal constructor(isEnabled: Boolean) :
         ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
     )
 
-    val adapters get() = concatAdapter.adapters
-
-    val partAdapters get() = adapters.map { it as BaseFormPartAdapter }
+    val partAdapters get() = concatAdapter.adapters.map { it as BaseFormPartAdapter }
 
     var isEnabled: Boolean = isEnabled
         set(value) {
@@ -67,23 +65,33 @@ open class FormAdapter internal constructor(isEnabled: Boolean) :
         concatAdapter.registerAdapterDataObserver(dataObserver)
     }
 
+    fun setNewInstance(block: FormAdapter.() -> Unit) {
+        clear()
+        block(this)
+        updateForm()
+    }
+
     fun updateForm() {
         partAdapters.forEach { it.update() }
     }
 
     //<editor-fold desc="ConcatAdapter 覆写">
 
-    fun addAdapter(adapter: RecyclerView.Adapter<ViewHolder>) {
-        concatAdapter.addAdapter(adapter)
+    fun addPart() {
+
     }
 
-    fun addAdapter(index: Int, adapter: RecyclerView.Adapter<ViewHolder>) {
-        concatAdapter.addAdapter(index, adapter)
-    }
-
-    fun removeAdapter(adapter: RecyclerView.Adapter<ViewHolder>) {
-        concatAdapter.removeAdapter(adapter)
-    }
+//    fun addAdapter(adapter: RecyclerView.Adapter<ViewHolder>) {
+//        concatAdapter.addAdapter(adapter)
+//    }
+//
+//    fun addAdapter(index: Int, adapter: RecyclerView.Adapter<ViewHolder>) {
+//        concatAdapter.addAdapter(index, adapter)
+//    }
+//
+//    fun removeAdapter(adapter: RecyclerView.Adapter<ViewHolder>) {
+//        concatAdapter.removeAdapter(adapter)
+//    }
 
     override fun findRelativeAdapterPositionIn(
         adapter: RecyclerView.Adapter<*>, viewHolder: ViewHolder, localPosition: Int
@@ -160,7 +168,7 @@ open class FormAdapter internal constructor(isEnabled: Boolean) :
     @Suppress("DEPRECATION")
     internal fun getItemViewType4Pool(
         style: BaseStyle,
-        item: BaseFormItem
+        item: BaseForm
     ): Int {
         val styleIndex = stylePool.indexOf(style).let {
             if (it < 0) {
@@ -168,7 +176,7 @@ open class FormAdapter internal constructor(isEnabled: Boolean) :
                 stylePool.lastIndex
             } else it
         }
-        val typeset = item.typeset ?: FormManager.Default.typeset
+        val typeset = item.typeset ?: style.typeset ?: FormManager.Default.typeset
         val typesetIndex = typesetPool.indexOf(typeset).let {
             if (it < 0) {
                 typesetPool.add(typeset)

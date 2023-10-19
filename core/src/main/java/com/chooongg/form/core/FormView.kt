@@ -11,20 +11,21 @@ class FormView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
-    private val formAdapter = FormAdapter(isEnabled)
-
     init {
         addOnScrollListener(object : OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == SCROLL_STATE_DRAGGING) recyclerView.focusedChild?.clearFocus()
             }
         })
-        recycledViewPool
     }
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
-        formAdapter.isEnabled = enabled
+        (adapter as? FormAdapter)?.isEnabled = enabled
+    }
+
+    fun setFormAdapter(formAdapter: FormAdapter?) {
+        adapter = formAdapter
     }
 
     @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)

@@ -1,10 +1,27 @@
 package com.chooongg.form.core.item
 
+import android.content.Context
+import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.provider.FormTextProvider
+import com.chooongg.utils.ext.resString
 
-class FormText(label: CharSequence?) : BaseFormItem(label) {
+class FormText : BaseForm {
+
+    constructor(name: CharSequence?) : super(name)
+    constructor(@StringRes nameRes: Int?) : super(nameRes)
 
     override fun getProvider(adapter: FormAdapter) = FormTextProvider::class
 
+    override fun getContentString(context: Context): CharSequence? {
+        return when (content) {
+            is Int -> try {
+                context.resString(content as Int)
+            } catch (e: Exception) {
+                content?.toString()
+            }
+
+            else -> content?.toString()
+        }
+    }
 }

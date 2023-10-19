@@ -7,7 +7,7 @@ import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.menu.FormMenuItem
 import java.util.UUID
 
-open class AbstractFormItem : CacheCleanable {
+open class AbstractForm : CacheCleanable {
 
     /**
      * 表单项唯一标识
@@ -47,7 +47,7 @@ open class AbstractFormItem : CacheCleanable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is AbstractFormItem) return false
+        if (other !is AbstractForm) return false
 
         if (id != other.id) return false
 

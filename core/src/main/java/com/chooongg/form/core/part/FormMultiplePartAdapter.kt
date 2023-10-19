@@ -9,6 +9,5 @@ class FormMultiplePartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     BaseFormPartAdapter(formAdapter, style) {
 
     override fun update() {
-        TODO("Not yet implemented")
     }
 }
