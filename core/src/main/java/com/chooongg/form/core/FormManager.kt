@@ -13,7 +13,7 @@ object FormManager {
         var typeset: BaseTypeset = HorizontalTypeset()
 
         @Px
-        var minWidth: Int = dp2px(300f)
+        var maxWidth: Int = dp2px(300f)
 
         var horizontalDividerType = Boundary.LOCAL
         var singleLineDividerType = Boundary.GLOBAL

@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <attr name="formTextAppearance" format="reference" />
+
+    <declare-styleable name="FormView">
+        <attr name="formPaddingStart" format="dimension" />
+        <attr name="formPaddingTop" format="dimension" />
+        <attr name="formPaddingEnd" format="dimension" />
+        <attr name="formPaddingBottom" format="dimension" />
+    </declare-styleable>
+
 </resources>

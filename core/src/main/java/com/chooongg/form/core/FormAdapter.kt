@@ -4,10 +4,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.chooongg.form.core.data.FormDynamicPartData
+import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.part.BaseFormPartAdapter
+import com.chooongg.form.core.part.FormDynamicPartAdapter
+import com.chooongg.form.core.part.FormPartAdapter
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
+import com.chooongg.form.core.style.NoneStyle
 import com.chooongg.form.core.typeset.BaseTypeset
 
 open class FormAdapter(isEnabled: Boolean) :
@@ -77,28 +82,50 @@ open class FormAdapter(isEnabled: Boolean) :
 
     //<editor-fold desc="ConcatAdapter 覆写">
 
-    fun addPart() {
-
+    fun addPart(
+        style: BaseStyle = NoneStyle(),
+        updateAdjacentAdapter: Boolean = false,
+        block: FormPartData.() -> Unit
+    ) {
+        val adapter = FormPartAdapter(this, style)
+        adapter.create { block(this) }
+        addPart(adapter, updateAdjacentAdapter)
     }
 
-//    fun addAdapter(adapter: RecyclerView.Adapter<ViewHolder>) {
-//        concatAdapter.addAdapter(adapter)
-//    }
-//
-//    fun addAdapter(index: Int, adapter: RecyclerView.Adapter<ViewHolder>) {
-//        concatAdapter.addAdapter(index, adapter)
-//    }
-//
-//    fun removeAdapter(adapter: RecyclerView.Adapter<ViewHolder>) {
-//        concatAdapter.removeAdapter(adapter)
-//    }
+    fun addPart(adapter: FormPartAdapter?, updateAdjacentAdapter: Boolean = false) {
+        if (adapter != null) concatAdapter.addAdapter(adapter)
+        if (!updateAdjacentAdapter || _recyclerView == null || concatAdapter.adapters.size - 2 < 0) return
+        partAdapters[concatAdapter.adapters.size - 2].update()
+    }
+
+    fun addDynamicPart(
+        style: BaseStyle = NoneStyle(),
+        updateAdjacentAdapter: Boolean = false,
+        block: FormDynamicPartData.() -> Unit
+    ) {
+        val adapter = FormDynamicPartAdapter(this, style)
+        adapter.create { block(this) }
+        addDynamicPart(adapter, updateAdjacentAdapter)
+    }
+
+    fun addDynamicPart(adapter: FormDynamicPartAdapter?, updateAdjacentAdapter: Boolean = false) {
+        if (adapter != null) concatAdapter.addAdapter(adapter)
+        if (!updateAdjacentAdapter || _recyclerView == null || concatAdapter.adapters.size - 2 < 0) return
+        partAdapters[concatAdapter.adapters.size - 2].update()
+    }
+
+    fun removeAdapter(adapter: RecyclerView.Adapter<ViewHolder>) {
+        concatAdapter.removeAdapter(adapter)
+    }
 
     override fun findRelativeAdapterPositionIn(
         adapter: RecyclerView.Adapter<*>, viewHolder: ViewHolder, localPosition: Int
     ) = concatAdapter.findRelativeAdapterPositionIn(adapter, viewHolder, localPosition)
 
-    fun getWrappedAdapterAndPosition(globalPosition: Int) =
-        concatAdapter.getWrappedAdapterAndPosition(globalPosition)
+    fun getWrappedAdapterAndPosition(globalPosition: Int): Pair<BaseFormPartAdapter, Int> =
+        concatAdapter.getWrappedAdapterAndPosition(globalPosition).let {
+            return Pair(it.first as BaseFormPartAdapter, it.second)
+        }
 
     //</editor-fold>
 
@@ -138,6 +165,14 @@ open class FormAdapter(isEnabled: Boolean) :
         concatAdapter.onAttachedToRecyclerView(recyclerView)
         if (recyclerView.layoutManager !is FormLayoutManager) {
             val layoutManager = FormLayoutManager(recyclerView.context)
+            if (recyclerView is FormView) {
+                layoutManager.setPadding(
+                    recyclerView.formPaddingStart,
+                    recyclerView.formPaddingTop,
+                    recyclerView.formPaddingEnd,
+                    recyclerView.formPaddingBottom
+                )
+            }
             recyclerView.layoutManager = layoutManager
 //            normalColumnCount = layoutManager.normalColumnCount
         }

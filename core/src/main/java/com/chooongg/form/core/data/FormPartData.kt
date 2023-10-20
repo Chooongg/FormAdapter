@@ -1,5 +1,11 @@
 package com.chooongg.form.core.data
 
-class FormPartData : FormGroupData() {
+import com.chooongg.form.core.item.BaseForm
+
+class FormPartData : BaseFormPartData(), IFormCreator {
+
+    private val _items = mutableListOf<BaseForm>()
+
+    override fun getItems(): MutableList<BaseForm> = _items
 
 }

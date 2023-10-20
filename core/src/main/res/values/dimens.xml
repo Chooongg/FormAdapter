@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <dimen name="formPaddingStart">16dp</dimen>
+    <dimen name="formPaddingTop">16dp</dimen>
+    <dimen name="formPaddingEnd">16dp</dimen>
+    <dimen name="formPaddingBottom">16dp</dimen>
 </resources>
