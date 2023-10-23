@@ -10,6 +10,8 @@ open class FormInput : BaseForm {
     constructor(name: CharSequence?) : super(name)
     constructor(@StringRes nameRes: Int?) : super(nameRes)
 
+    var placeholder: CharSequence? = null
+
     override fun getProvider(adapter: FormAdapter) = if (adapter.isEnabled) {
         FormInputProvider::class
     } else FormTextProvider::class

@@ -7,6 +7,7 @@ import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.item.FormInput
 import com.chooongg.utils.ext.resDimensionPixelSize
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -35,11 +36,12 @@ class FormInputProvider : BaseFormProvider() {
     }
 
     override fun onBindViewHolder(holder: FormViewHolder, view: View, item: BaseForm) {
+        val itemInput = item as? FormInput
         with(view as TextInputLayout) {
-//            placeholderText = "测试"
+            placeholderText = itemInput?.placeholder
         }
         with(view.findViewById<TextInputEditText>(R.id.formInternalContentChildView)) {
-            hint = item.getHintString(context)
+            hint = if (itemInput?.placeholder != null) null else item.getHintString(context)
             setText(item.getContentString(context))
         }
     }
