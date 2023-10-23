@@ -33,6 +33,6 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         data.getItems().forEach {
             tempItems.add(it)
         }
-        asyncDiffer.submitList(tempItems) { notifyItemRangeChanged(0, itemCount) }
+        asyncDiffer.submitList(tempItems) { lastEnabled = formAdapter.isEnabled }
     }
 }

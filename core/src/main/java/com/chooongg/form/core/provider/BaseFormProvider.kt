@@ -14,6 +14,15 @@ abstract class BaseFormProvider {
 
     abstract fun onBindViewHolder(holder: FormViewHolder, view: View, item: BaseForm)
 
+    open fun onViewRecycled(holder: FormViewHolder, view: View) {
+    }
+
+    open fun onViewAttachedToWindow(holder: FormViewHolder, view: View) {
+    }
+
+    open fun onViewDetachedFromWindow(holder: FormViewHolder, view: View) {
+    }
+
     override fun equals(other: Any?): Boolean {
         return javaClass == other?.javaClass
     }

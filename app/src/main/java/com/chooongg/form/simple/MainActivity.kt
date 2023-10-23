@@ -3,6 +3,8 @@ package com.chooongg.form.simple
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.addInput
+import com.chooongg.form.core.addInputNoTypeset
 import com.chooongg.form.core.addText
 import com.chooongg.form.simple.databinding.ActivityMainBinding
 
@@ -19,8 +21,16 @@ class MainActivity : AppCompatActivity() {
         adapter.setNewInstance {
             addPart {
                 for (i in 0 until 100) {
-                    addText(R.string.app_name) {
+                    addText("Text") {
                         content = "测试内容"
+                    }
+                    addInput("Input") {
+                        hint = "请输入"
+                        content = "测试"
+                    }
+                    addInputNoTypeset("InputNoTypeset") {
+                        hint = "请输入"
+                        content = "测试"
                     }
                 }
             }

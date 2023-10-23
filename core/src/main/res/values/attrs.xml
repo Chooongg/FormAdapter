@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="formTextAppearance" format="reference" />
+    <attr name="formTextAppearanceName" format="reference" />
+    <attr name="formTextAppearanceContent" format="reference" />
+    <attr name="formTextAppearanceHint" format="reference" />
+    <attr name="formTextAppearancePrefix" format="reference" />
+    <attr name="formTextAppearanceSuffix" format="reference" />
+    <attr name="formTextAppearancePlaceholder" format="reference" />
+    <attr name="formTextAppearanceLabel" format="reference" />
+    <attr name="formTextAppearanceTip" format="reference" />
+
 
     <declare-styleable name="FormView">
-        <attr name="formPaddingStart" format="dimension" />
-        <attr name="formPaddingTop" format="dimension" />
-        <attr name="formPaddingEnd" format="dimension" />
-        <attr name="formPaddingBottom" format="dimension" />
+        <attr name="formMarginStart" format="dimension" />
+        <attr name="formMarginTop" format="dimension" />
+        <attr name="formMarginEnd" format="dimension" />
+        <attr name="formMarginBottom" format="dimension" />
     </declare-styleable>
 
 </resources>

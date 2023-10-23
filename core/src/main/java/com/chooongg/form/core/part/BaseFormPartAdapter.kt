@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.style.BaseStyle
@@ -17,6 +16,8 @@ import kotlinx.coroutines.SupervisorJob
 
 abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: BaseStyle) :
     RecyclerView.Adapter<FormViewHolder>() {
+
+    protected var lastEnabled: Boolean = formAdapter.isEnabled
 
     var adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         internal set
@@ -34,12 +35,10 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     }, AsyncDifferConfig.Builder(object : DiffUtil.ItemCallback<BaseForm>() {
         override fun areItemsTheSame(oldItem: BaseForm, newItem: BaseForm) =
-            oldItem.javaClass == newItem.javaClass &&
-                    (oldItem.typeset ?: FormManager.Default.typeset) ==
-                    (newItem.typeset ?: FormManager.Default.typeset)
+            oldItem.javaClass == newItem.javaClass && oldItem.typeset == newItem.typeset
 
         override fun areContentsTheSame(oldItem: BaseForm, newItem: BaseForm) =
-            oldItem.id == newItem.id
+            oldItem.id == newItem.id && lastEnabled == formAdapter.isEnabled
     }).build())
 
     abstract fun update()
@@ -81,5 +80,34 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         payloads: MutableList<Any>
     ) {
         super.onBindViewHolder(holder, position, payloads)
+    }
+
+    override fun onViewRecycled(holder: FormViewHolder) {
+        holder.styleLayout?.let { style.onViewRecycled(holder, it) }
+        holder.typesetLayout?.let {
+            formAdapter.getTypeset4ItemViewType(holder.itemViewType).onViewRecycled(holder, it)
+        }
+        formAdapter.getProvider4ItemViewType(holder.itemViewType)
+            .onViewRecycled(holder, holder.view)
+    }
+
+    override fun onViewAttachedToWindow(holder: FormViewHolder) {
+        holder.styleLayout?.let { style.onViewAttachedToWindow(holder, it) }
+        holder.typesetLayout?.let {
+            formAdapter.getTypeset4ItemViewType(holder.itemViewType)
+                .onViewAttachedToWindow(holder, it)
+        }
+        formAdapter.getProvider4ItemViewType(holder.itemViewType)
+            .onViewAttachedToWindow(holder, holder.view)
+    }
+
+    override fun onViewDetachedFromWindow(holder: FormViewHolder) {
+        holder.styleLayout?.let { style.onViewDetachedFromWindow(holder, it) }
+        holder.typesetLayout?.let {
+            formAdapter.getTypeset4ItemViewType(holder.itemViewType)
+                .onViewDetachedFromWindow(holder, it)
+        }
+        formAdapter.getProvider4ItemViewType(holder.itemViewType)
+            .onViewDetachedFromWindow(holder, holder.view)
     }
 }

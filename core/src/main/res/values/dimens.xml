@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="formPaddingStart">16dp</dimen>
-    <dimen name="formPaddingTop">16dp</dimen>
-    <dimen name="formPaddingEnd">16dp</dimen>
-    <dimen name="formPaddingBottom">16dp</dimen>
+
+    <dimen name="formMarginStart">16dp</dimen>
+    <dimen name="formMarginTop">16dp</dimen>
+    <dimen name="formMarginEnd">16dp</dimen>
+    <dimen name="formMarginBottom">16dp</dimen>
+
+    <dimen name="formInsideStart">16dp</dimen>
+    <dimen name="formInsideTop">16dp</dimen>
+    <dimen name="formInsideEnd">16dp</dimen>
+    <dimen name="formInsideBottom">16dp</dimen>
+
+    <dimen name="formFadingEdgeLength">16dp</dimen>
+
 </resources>

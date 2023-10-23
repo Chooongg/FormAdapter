@@ -32,14 +32,6 @@ open class FormAdapter(isEnabled: Boolean) :
             updateForm()
         }
 
-    private val onScrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-            if (newState == RecyclerView.SCROLL_STATE_DRAGGING && recyclerView.focusedChild != null) {
-                recyclerView.focusedChild.clearFocus()
-            }
-        }
-    }
-
     private val dataObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
             notifyItemRangeChanged(positionStart, itemCount)
@@ -166,23 +158,21 @@ open class FormAdapter(isEnabled: Boolean) :
         if (recyclerView.layoutManager !is FormLayoutManager) {
             val layoutManager = FormLayoutManager(recyclerView.context)
             if (recyclerView is FormView) {
-                layoutManager.setPadding(
-                    recyclerView.formPaddingStart,
-                    recyclerView.formPaddingTop,
-                    recyclerView.formPaddingEnd,
-                    recyclerView.formPaddingBottom
+                layoutManager.setFormMargin(
+                    recyclerView.formMarginStart,
+                    recyclerView.formMarginTop,
+                    recyclerView.formMarginEnd,
+                    recyclerView.formMarginBottom
                 )
             }
             recyclerView.layoutManager = layoutManager
 //            normalColumnCount = layoutManager.normalColumnCount
         }
-        recyclerView.addOnScrollListener(onScrollListener)
         _recyclerView = recyclerView
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         concatAdapter.onDetachedFromRecyclerView(recyclerView)
-        recyclerView.removeOnScrollListener(onScrollListener)
         clearPool()
         _recyclerView = null
     }

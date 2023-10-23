@@ -21,4 +21,6 @@ class FormDynamicPartData : BaseFormPartData() {
     fun addGroup(block: FormGroupData.() -> Unit) {
         _groups.add(FormGroupData().apply(block))
     }
+
+    fun getGroups(): MutableList<FormGroupData> = _groups
 }

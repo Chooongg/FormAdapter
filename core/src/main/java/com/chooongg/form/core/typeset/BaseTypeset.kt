@@ -13,6 +13,15 @@ abstract class BaseTypeset {
 
     protected abstract fun addView(parentView: ViewGroup, child: View)
 
+    open fun onViewRecycled(holder: FormViewHolder, view: View) {
+    }
+
+    open fun onViewAttachedToWindow(holder: FormViewHolder, view: View) {
+    }
+
+    open fun onViewDetachedFromWindow(holder: FormViewHolder, view: View) {
+    }
+
     fun executeAddView(parentView: ViewGroup?, child: View?) {
         if (parentView != null && child != null) {
             addView(parentView, child)

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.annotation.RestrictTo
 import androidx.recyclerview.widget.RecyclerView
+import com.chooongg.utils.ext.inputMethodManager
 import com.chooongg.utils.ext.resDimensionPixelSize
 
 class FormView @JvmOverloads constructor(
@@ -12,16 +13,16 @@ class FormView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
-    var formPaddingStart: Int = 0
+    var formMarginStart: Int = 0
         private set
 
-    var formPaddingTop: Int = 0
+    var formMarginTop: Int = 0
         private set
 
-    var formPaddingEnd: Int = 0
+    var formMarginEnd: Int = 0
         private set
 
-    var formPaddingBottom: Int = 0
+    var formMarginBottom: Int = 0
         private set
 
     init {
@@ -30,26 +31,33 @@ class FormView @JvmOverloads constructor(
         val a = context.obtainStyledAttributes(
             attrs, R.styleable.FormView, defStyleAttr, 0
         )
-        formPaddingStart = a.getDimensionPixelSize(
-            R.styleable.FormView_formPaddingStart,
-            context.resDimensionPixelSize(R.dimen.formPaddingStart)
+        formMarginStart = a.getDimensionPixelSize(
+            R.styleable.FormView_formMarginStart,
+            context.resDimensionPixelSize(R.dimen.formInsideStart)
         )
-        formPaddingTop = a.getDimensionPixelSize(
-            R.styleable.FormView_formPaddingTop,
-            context.resDimensionPixelSize(R.dimen.formPaddingTop)
+        formMarginTop = a.getDimensionPixelSize(
+            R.styleable.FormView_formMarginTop,
+            context.resDimensionPixelSize(R.dimen.formInsideTop)
         )
-        formPaddingEnd = a.getDimensionPixelSize(
-            R.styleable.FormView_formPaddingEnd,
-            context.resDimensionPixelSize(R.dimen.formPaddingStart)
+        formMarginEnd = a.getDimensionPixelSize(
+            R.styleable.FormView_formMarginEnd,
+            context.resDimensionPixelSize(R.dimen.formInsideStart)
         )
-        formPaddingBottom = a.getDimensionPixelSize(
-            R.styleable.FormView_formPaddingBottom,
-            context.resDimensionPixelSize(R.dimen.formPaddingBottom)
+        formMarginBottom = a.getDimensionPixelSize(
+            R.styleable.FormView_formMarginBottom,
+            context.resDimensionPixelSize(R.dimen.formInsideBottom)
         )
         a.recycle()
         addOnScrollListener(object : OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == SCROLL_STATE_DRAGGING) recyclerView.focusedChild?.clearFocus()
+                when (newState) {
+                    SCROLL_STATE_IDLE -> {
+                        recyclerView.focusedChild?.clearFocus()
+                        context.inputMethodManager.hideSoftInputFromWindow(
+                            recyclerView.windowToken, 0
+                        )
+                    }
+                }
             }
         })
     }
@@ -73,30 +81,30 @@ class FormView @JvmOverloads constructor(
         super.setLayoutManager(layout)
     }
 
-    fun setFormPadding(start: Int, top: Int, end: Int, bottom: Int) {
-        formPaddingStart = start
-        formPaddingTop = top
-        formPaddingEnd = end
-        formPaddingBottom = bottom
-        updateFormPadding4LayoutManager()
+    fun setFormMargin(start: Int, top: Int, end: Int, bottom: Int) {
+        formMarginStart = start
+        formMarginTop = top
+        formMarginEnd = end
+        formMarginBottom = bottom
+        updateFormMargin4LayoutManager()
     }
 
-    fun updateFormPadding(
-        start: Int = formPaddingStart,
-        top: Int = formPaddingTop,
-        end: Int = formPaddingEnd,
-        bottom: Int = formPaddingBottom
+    fun updateFormMargin(
+        start: Int = formMarginStart,
+        top: Int = formMarginTop,
+        end: Int = formMarginEnd,
+        bottom: Int = formMarginBottom
     ) {
-        formPaddingStart = start
-        formPaddingTop = top
-        formPaddingEnd = end
-        formPaddingBottom = bottom
-        updateFormPadding4LayoutManager()
+        formMarginStart = start
+        formMarginTop = top
+        formMarginEnd = end
+        formMarginBottom = bottom
+        updateFormMargin4LayoutManager()
     }
 
-    private fun updateFormPadding4LayoutManager() {
+    private fun updateFormMargin4LayoutManager() {
         (layoutManager as? FormLayoutManager)?.also {
-            it.setPadding(formPaddingStart, formPaddingTop, formPaddingEnd, formPaddingBottom)
+            it.setFormMargin(formMarginStart, formMarginTop, formMarginEnd, formMarginBottom)
         }
     }
 }

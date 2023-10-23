@@ -49,9 +49,19 @@ abstract class BaseForm(
     /**
      * 排版
      */
-    var typeset: BaseTypeset? = null
+    open var typeset: BaseTypeset? = null
 
-    open fun getContentString(context: Context): CharSequence? = content?.toString()
+    open fun getContentString(context: Context): CharSequence? = when (content) {
+        is Int -> context.getString(content as Int)
+        is CharSequence -> content as CharSequence
+        else -> content?.toString()
+    }
+
+    open fun getHintString(context: Context): CharSequence? = when (hint) {
+        is Int -> context.getString(hint as Int)
+        is CharSequence -> hint as CharSequence
+        else -> hint?.toString()
+    }
 
     fun getNameString(context: Context): CharSequence? {
         return when (val temp = name) {
