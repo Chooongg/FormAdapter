@@ -1,22 +1,37 @@
 package com.chooongg.form.core
 
+import android.content.res.Resources
+import android.view.Gravity
+import androidx.annotation.GravityInt
 import androidx.annotation.Px
 import com.chooongg.form.core.boundary.Boundary
+import com.chooongg.form.core.format.BaseNameFormatter
+import com.chooongg.form.core.format.NormalNameFormatter
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.HorizontalTypeset
-import com.chooongg.utils.ext.dp2px
 
 object FormManager {
 
     object Default {
 
-        var typeset: BaseTypeset = HorizontalTypeset()
-
         @Px
-        var maxWidth: Int = dp2px(300f)
+        var maxWidth: Int = (300 * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
-        var horizontalDividerType = Boundary.LOCAL
-        var singleLineDividerType = Boundary.GLOBAL
+        var typeset: BaseTypeset = HorizontalTypeset()
+        var emsSize = 5
+
+        @GravityInt
+        var contentGravity = Gravity.NO_GRAVITY
+
+        @GravityInt
+        var singleLineContentGravity = contentGravity
+
+        @GravityInt
+        var multiColumnContentGravity = Gravity.NO_GRAVITY
+
+        var horizontalMiddleType = Boundary.MIDDLE
+
+        var nameFormatter: BaseNameFormatter = NormalNameFormatter()
     }
 
     fun defaultConfig(block: Default.() -> Unit) = apply {

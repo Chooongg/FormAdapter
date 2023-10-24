@@ -2,10 +2,10 @@ package com.chooongg.form.core
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RestrictTo
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.chooongg.utils.ext.inputMethodManager
-import com.chooongg.utils.ext.resDimensionPixelSize
 
 class FormView @JvmOverloads constructor(
     context: Context,
@@ -33,19 +33,19 @@ class FormView @JvmOverloads constructor(
         )
         formMarginStart = a.getDimensionPixelSize(
             R.styleable.FormView_formMarginStart,
-            context.resDimensionPixelSize(R.dimen.formInsideStart)
+            resources.getDimensionPixelSize(R.dimen.formMarginStart)
         )
         formMarginTop = a.getDimensionPixelSize(
             R.styleable.FormView_formMarginTop,
-            context.resDimensionPixelSize(R.dimen.formInsideTop)
+            resources.getDimensionPixelSize(R.dimen.formMarginTop)
         )
         formMarginEnd = a.getDimensionPixelSize(
             R.styleable.FormView_formMarginEnd,
-            context.resDimensionPixelSize(R.dimen.formInsideStart)
+            resources.getDimensionPixelSize(R.dimen.formMarginEnd)
         )
         formMarginBottom = a.getDimensionPixelSize(
             R.styleable.FormView_formMarginBottom,
-            context.resDimensionPixelSize(R.dimen.formInsideBottom)
+            resources.getDimensionPixelSize(R.dimen.formMarginBottom)
         )
         a.recycle()
         addOnScrollListener(object : OnScrollListener() {
@@ -53,9 +53,8 @@ class FormView @JvmOverloads constructor(
                 when (newState) {
                     SCROLL_STATE_IDLE -> {
                         recyclerView.focusedChild?.clearFocus()
-                        context.inputMethodManager.hideSoftInputFromWindow(
-                            recyclerView.windowToken, 0
-                        )
+                        ContextCompat.getSystemService(context, InputMethodManager::class.java)
+                            ?.hideSoftInputFromWindow(recyclerView.windowToken, 0)
                     }
                 }
             }

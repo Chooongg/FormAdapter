@@ -2,22 +2,20 @@ package com.chooongg.form.core.provider
 
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.FormInput
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 
-class FormInputProvider : BaseFormProvider() {
+class FormInputFilledProvider : BaseFormProvider() {
     override fun onCreateViewHolder(parent: ViewGroup): View {
-        return TextInputLayout(parent.context).also {
+        return TextInputLayout(
+            parent.context, null, com.google.android.material.R.attr.textInputFilledStyle
+        ).also {
             it.id = R.id.formInternalContentView
-            it.isHintEnabled = false
-            it.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_NONE
             it.setHintTextAppearance(formTextAppearance(it, R.attr.formTextAppearanceHint))
             it.setPrefixTextAppearance(formTextAppearance(it, R.attr.formTextAppearancePrefix))
             it.setSuffixTextAppearance(formTextAppearance(it, R.attr.formTextAppearanceSuffix))
@@ -26,10 +24,6 @@ class FormInputProvider : BaseFormProvider() {
             it.layoutParams = ViewGroup.MarginLayoutParams(-1, -2)
             it.addView(TextInputEditText(it.context).apply {
                 id = R.id.formInternalContentChildView
-                imeOptions = EditorInfo.IME_ACTION_DONE
-                isHorizontalFadingEdgeEnabled = true
-                isVerticalFadingEdgeEnabled = true
-                setFadingEdgeLength(context.resources.getDimensionPixelSize(R.dimen.formFadingEdgeLength))
                 setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
             })
         }
@@ -41,14 +35,10 @@ class FormInputProvider : BaseFormProvider() {
         view: View,
         item: BaseForm
     ) {
-        val itemInput = item as? FormInput
-        with(view as TextInputLayout) {
-            placeholderText = itemInput?.placeholder
-            prefixText = "测试"
-            suffixText = "测试"
+        with(view.findViewById<TextInputLayout>(R.id.formInternalContentView)) {
+            hint = item.getHintString(context)
         }
         with(view.findViewById<TextInputEditText>(R.id.formInternalContentChildView)) {
-            hint = if (itemInput?.placeholder != null) null else item.getHintString(context)
             setText(item.getContentString(context))
         }
     }
@@ -56,6 +46,6 @@ class FormInputProvider : BaseFormProvider() {
     override fun onViewAttachedToWindow(holder: FormViewHolder, view: View) {
         val tempEnabled = view.isEnabled
         view.isEnabled = false
-//        if (tempEnabled) view.isEnabled = true
+        if (tempEnabled) view.isEnabled = true
     }
 }

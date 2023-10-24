@@ -4,8 +4,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.addInput
-import com.chooongg.form.core.addInputNoTypeset
+import com.chooongg.form.core.addInputFilled
+import com.chooongg.form.core.addInputOutlined
 import com.chooongg.form.core.addText
+import com.chooongg.form.core.data.FormPartData
+import com.chooongg.form.core.style.CardStyle
+import com.chooongg.form.core.typeset.VerticalTypeset
 import com.chooongg.form.simple.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,21 +23,24 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.formView.setFormAdapter(adapter)
         adapter.setNewInstance {
-            addPart {
-                for (i in 0 until 100) {
-                    addText("Text") {
-                        content = "测试内容"
-                    }
-                    addInput("Input") {
-                        hint = "请输入"
-                        content = "测试"
-                    }
-                    addInputNoTypeset("InputNoTypeset") {
-                        hint = "请输入"
-                        content = "测试"
-                    }
-                }
-            }
+            addPart { fillData() }
+            addPart(CardStyle(VerticalTypeset())) { fillData() }
+        }
+    }
+
+    private fun FormPartData.fillData() {
+        addText("Text") {
+            content = "测试内容"
+        }
+        addInput("Input") {
+            hint = "请输入"
+            content = "测试"
+        }
+        addInputFilled("InputFilled") {
+            hint = "请输入"
+        }
+        addInputOutlined("InputOutlined") {
+            hint = "请输入"
         }
     }
 }

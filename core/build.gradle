@@ -28,7 +28,7 @@ android {
 }
 
 dependencies {
-    api 'com.chooongg.utils:utils:1.0.1'
+//    api 'com.chooongg:utils:1.0.3'
     implementation "androidx.core:core-ktx:${dependenciesVersion.coreKtx}"
     implementation "androidx.appcompat:appcompat:${dependenciesVersion.appcompat}"
     implementation "com.google.android.material:material:${dependenciesVersion.material}"

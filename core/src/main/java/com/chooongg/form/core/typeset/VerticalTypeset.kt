@@ -9,6 +9,7 @@ import com.chooongg.form.core.item.BaseForm
 import com.google.android.material.textview.MaterialTextView
 
 class VerticalTypeset : BaseTypeset() {
+
     override fun onCreateViewHolder(parent: ViewGroup): ViewGroup {
         return LinearLayoutCompat(parent.context).also {
             it.orientation = LinearLayoutCompat.VERTICAL
@@ -18,9 +19,9 @@ class VerticalTypeset : BaseTypeset() {
         }
     }
 
-    override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup, item: BaseForm) {
-        with(layout.findViewById<MaterialTextView>(R.id.formInternalLabelView)) {
-            text = item.getNameString(context)
+    override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
+        layout?.findViewById<MaterialTextView>(R.id.formInternalLabelView)?.apply {
+            text = obtainNameFormatter().format(context, item)
         }
     }
 

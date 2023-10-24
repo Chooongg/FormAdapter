@@ -58,20 +58,16 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         val provider = formAdapter.getProvider4ItemViewType(viewType)
         val itemView = provider.onCreateViewHolder(typesetLayout ?: styleLayout ?: parent)
         typeset.executeAddView(typesetLayout ?: styleLayout, itemView)
-        return FormViewHolder(styleLayout, typesetLayout, itemView)
+        return FormViewHolder(style, typeset, styleLayout, typesetLayout, itemView)
     }
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
         val item = asyncDiffer.currentList[position]
-        if (holder.styleLayout != null) {
-            style.onBindViewHolder(holder, holder.styleLayout)
-        }
-        if (holder.typesetLayout != null) {
-            formAdapter.getTypeset4ItemViewType(holder.itemViewType)
-                .onBindViewHolder(holder, holder.typesetLayout, item)
-        }
+        style.onBindViewHolder(holder, holder.styleLayout)
+        formAdapter.getTypeset4ItemViewType(holder.itemViewType)
+            .onBindViewHolder(holder, holder.typesetLayout, item)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)
-            .onBindViewHolder(holder, holder.view, item)
+            .onBindViewHolder(adapterScope, holder, holder.view, item)
     }
 
     override fun onBindViewHolder(
@@ -83,31 +79,31 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     }
 
     override fun onViewRecycled(holder: FormViewHolder) {
-        holder.styleLayout?.let { style.onViewRecycled(holder, it) }
-        holder.typesetLayout?.let {
-            formAdapter.getTypeset4ItemViewType(holder.itemViewType).onViewRecycled(holder, it)
-        }
+        style.onViewRecycled(holder, holder.styleLayout)
+        formAdapter.getTypeset4ItemViewType(holder.itemViewType)
+            .onViewRecycled(holder, holder.typesetLayout)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)
             .onViewRecycled(holder, holder.view)
     }
 
     override fun onViewAttachedToWindow(holder: FormViewHolder) {
-        holder.styleLayout?.let { style.onViewAttachedToWindow(holder, it) }
-        holder.typesetLayout?.let {
-            formAdapter.getTypeset4ItemViewType(holder.itemViewType)
-                .onViewAttachedToWindow(holder, it)
-        }
+        style.onViewAttachedToWindow(holder, holder.styleLayout)
+        formAdapter.getTypeset4ItemViewType(holder.itemViewType)
+            .onViewAttachedToWindow(holder, holder.typesetLayout)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)
             .onViewAttachedToWindow(holder, holder.view)
     }
 
     override fun onViewDetachedFromWindow(holder: FormViewHolder) {
-        holder.styleLayout?.let { style.onViewDetachedFromWindow(holder, it) }
-        holder.typesetLayout?.let {
-            formAdapter.getTypeset4ItemViewType(holder.itemViewType)
-                .onViewDetachedFromWindow(holder, it)
-        }
+        style.onViewDetachedFromWindow(holder, holder.styleLayout)
+        formAdapter.getTypeset4ItemViewType(holder.itemViewType)
+            .onViewDetachedFromWindow(holder, holder.typesetLayout)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)
             .onViewDetachedFromWindow(holder, holder.view)
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        style.createSizeInfo(recyclerView.context)
     }
 }

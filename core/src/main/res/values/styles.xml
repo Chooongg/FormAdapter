@@ -5,13 +5,21 @@
 
     <style name="Form.TextAppearance.Content" parent="TextAppearance.Material3.BodyMedium" />
 
-    <style name="Form.TextAppearance.Hint" parent="TextAppearance.Material3.BodyMedium" />
+    <style name="Form.TextAppearance.Hint" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/form_input_hint_color</item>
+    </style>
 
-    <style name="Form.TextAppearance.Prefix" parent="TextAppearance.Material3.BodyMedium" />
+    <style name="Form.TextAppearance.Prefix" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/form_input_indicator_text_color</item>
+    </style>
 
-    <style name="Form.TextAppearance.Suffix" parent="TextAppearance.Material3.BodyMedium" />
+    <style name="Form.TextAppearance.Suffix" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/form_input_indicator_text_color</item>
+    </style>
 
-    <style name="Form.TextAppearance.Placeholder" parent="TextAppearance.Material3.BodyMedium" />
+    <style name="Form.TextAppearance.Placeholder" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/form_input_indicator_text_color</item>
+    </style>
 
     <style name="Form.TextAppearance.Label" parent="TextAppearance.Material3.HeadlineSmall" />
 

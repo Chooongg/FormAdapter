@@ -13,8 +13,8 @@ data class Boundary(
 
     companion object {
         const val NONE = 0
-        const val LOCAL = 1
-        const val GLOBAL = 2
+        const val MIDDLE = 1
+        const val MARGIN = 2
     }
 
     internal fun update(
@@ -24,6 +24,6 @@ data class Boundary(
         @BoundaryInt bottom: Int = this.bottom
     ) = Boundary(start, top, end, bottom)
 
-    @IntDef(NONE, LOCAL, GLOBAL)
+    @IntDef(NONE, MIDDLE, MARGIN)
     annotation class BoundaryInt
 }

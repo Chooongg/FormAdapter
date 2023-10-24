@@ -34,7 +34,7 @@ abstract class BaseForm(
     /**
      * 是否为必填项
      */
-    var required: Boolean? = null
+    var required: Boolean = false
 
     /**
      * 验证表单项
