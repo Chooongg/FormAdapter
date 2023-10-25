@@ -89,7 +89,7 @@ class FormLayoutManager(private val context: Context) : GridLayoutManager(contex
                     item.marginBoundary.start = Boundary.NONE
                     item.insideBoundary.start = FormManager.Default.horizontalMiddleBoundary
                 }
-                spanIndex = if (item.positionInGroup < item.groupItemCount - 1) {
+                spanIndex = if (item.positionInGroup < item.itemCountInGroup - 1) {
                     spanIndex + item.spanSize
                 } else 0
                 if (spanIndex == spanCount) {
