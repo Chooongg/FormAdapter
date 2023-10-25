@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -11,7 +12,7 @@ import kotlinx.coroutines.CoroutineScope
  */
 abstract class BaseFormProvider {
 
-    abstract fun onCreateViewHolder(parent: ViewGroup): View
+    abstract fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View
 
     abstract fun onBindViewHolder(
         scope: CoroutineScope,
@@ -31,10 +32,8 @@ abstract class BaseFormProvider {
     }
 
     override fun equals(other: Any?): Boolean {
-        return javaClass == other?.javaClass
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
+        if (other !is BaseFormProvider) return false
+        if (javaClass != other.javaClass) return false
+        return true
     }
 }

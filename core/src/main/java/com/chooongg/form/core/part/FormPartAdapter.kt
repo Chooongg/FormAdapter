@@ -31,7 +31,20 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         }
         val tempItems = mutableListOf<BaseForm>()
         data.getItems().forEach {
-            tempItems.add(it)
+            it.globalPosition = -1
+            it.groupItemCount = -1
+            it.groupIndex = -1
+            it.itemCountInGroup = -1
+            it.positionInGroup = -1
+            if (it.isRealVisible(formAdapter)) {
+                tempItems.add(it)
+            }
+        }
+        tempItems.forEachIndexed { index, item ->
+            item.groupItemCount = 1
+            item.groupIndex = 0
+            item.itemCountInGroup = tempItems.size
+            item.positionInGroup = index
         }
         asyncDiffer.submitList(tempItems) { lastEnabled = formAdapter.isEnabled }
     }

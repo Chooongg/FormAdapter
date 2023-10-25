@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.core.FormAdapter
@@ -41,29 +42,39 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             oldItem.id == newItem.id && lastEnabled == formAdapter.isEnabled
     }).build())
 
+    val itemList get() = asyncDiffer.currentList
+
     abstract fun update()
 
-    override fun getItemCount() = asyncDiffer.currentList.size
+    override fun getItemCount() = itemList.size
 
-    fun getItem(position: Int) = asyncDiffer.currentList[position]
+    fun getItem(position: Int) = itemList[position]
 
     override fun getItemViewType(position: Int) =
         formAdapter.getItemViewType4Pool(style, getItem(position))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder {
-        val styleLayout = style.onCreateViewHolder(parent)
+        val styleLayout = style.onCreateViewHolder(parent)?.apply {
+            clipChildren = false
+            clipToPadding = false
+        }
         val typeset = formAdapter.getTypeset4ItemViewType(viewType)
-        val typesetLayout = typeset.onCreateViewHolder(styleLayout ?: parent)
+        val typesetLayout = typeset.onCreateViewHolder(style, styleLayout ?: parent)?.apply {
+            clipChildren = false
+            clipToPadding = false
+        }
         style.executeAddView(styleLayout, typesetLayout)
         val provider = formAdapter.getProvider4ItemViewType(viewType)
-        val itemView = provider.onCreateViewHolder(typesetLayout ?: styleLayout ?: parent)
-        typeset.executeAddView(typesetLayout ?: styleLayout, itemView)
+        val itemView = provider.onCreateViewHolder(style, typesetLayout ?: styleLayout ?: parent)
+        typeset.executeAddView(style, typesetLayout ?: styleLayout, itemView)
+        (styleLayout ?: typesetLayout ?: itemView).layoutParams =
+            GridLayoutManager.LayoutParams(-1, -2)
         return FormViewHolder(style, typeset, styleLayout, typesetLayout, itemView)
     }
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
-        val item = asyncDiffer.currentList[position]
-        style.onBindViewHolder(holder, holder.styleLayout)
+        val item = getItem(position)
+        style.onBindViewHolder(holder, holder.styleLayout, item)
         formAdapter.getTypeset4ItemViewType(holder.itemViewType)
             .onBindViewHolder(holder, holder.typesetLayout, item)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)

@@ -9,25 +9,26 @@ import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.enum.FormEmsMode
 import com.chooongg.form.core.format.BaseNameFormatter
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.style.BaseStyle
 
 abstract class BaseTypeset {
 
-    open var nameFormatter: BaseNameFormatter? = null
+    abstract var emsMode: FormEmsMode
 
-    open var emsMode: FormEmsMode = FormEmsMode.NONE
+    open var multiColumnEmsMode: FormEmsMode = emsMode
 
     open var emsSize: Int = FormManager.Default.emsSize
+
+    open var nameFormatter: BaseNameFormatter? = null
 
     @GravityInt
     open var contentGravity: Int = FormManager.Default.contentGravity
 
     @GravityInt
-    open var singleLineGravity: Int = FormManager.Default.singleLineContentGravity
+    open var multiColumnContentGravity: Int =
+        FormManager.Default.multiColumnContentGravity
 
-    @GravityInt
-    open var multiColumnContentGravity: Int = FormManager.Default.multiColumnContentGravity
-
-    abstract fun onCreateViewHolder(parent: ViewGroup): ViewGroup?
+    abstract fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): ViewGroup?
 
     abstract fun onBindViewHolder(
         holder: FormViewHolder,
@@ -35,19 +36,19 @@ abstract class BaseTypeset {
         item: BaseForm
     )
 
-    protected abstract fun addView(parentView: ViewGroup, child: View)
+    protected abstract fun addView(style: BaseStyle, parentView: ViewGroup, child: View)
 
     fun obtainNameFormatter(): BaseNameFormatter =
         nameFormatter ?: FormManager.Default.nameFormatter
 
     @GravityInt
-    open fun obtainContentGravity(): Int {
+    fun obtainContentGravity(): Int {
         return contentGravity
     }
 
-    fun executeAddView(parentView: ViewGroup?, child: View?) {
+    fun executeAddView(style: BaseStyle, parentView: ViewGroup?, child: View?) {
         if (parentView != null && child != null) {
-            addView(parentView, child)
+            addView(style, parentView, child)
         }
     }
 
@@ -68,10 +69,7 @@ abstract class BaseTypeset {
                 textView.maxEms = emsSize
             }
 
-            FormEmsMode.FIXED -> {
-                textView.minEms = emsSize
-                textView.maxEms = emsSize
-            }
+            FormEmsMode.FIXED -> textView.setEms(emsSize)
         }
     }
 
@@ -80,10 +78,13 @@ abstract class BaseTypeset {
     open fun onViewDetachedFromWindow(holder: FormViewHolder, layout: ViewGroup?) = Unit
 
     override fun equals(other: Any?): Boolean {
-        return other is BaseTypeset && javaClass == other.javaClass
-    }
-
-    override fun hashCode(): Int {
-        return super.hashCode()
+        if (other !is BaseTypeset) return false
+        if (javaClass != other.javaClass) return false
+        if (nameFormatter != other.nameFormatter) return false
+        if (emsMode != other.emsMode) return false
+        if (emsSize != other.emsSize) return false
+        if (contentGravity != other.contentGravity) return false
+        if (multiColumnContentGravity != other.multiColumnContentGravity) return false
+        return true
     }
 }

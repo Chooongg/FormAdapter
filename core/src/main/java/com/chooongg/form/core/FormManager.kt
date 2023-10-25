@@ -3,6 +3,7 @@ package com.chooongg.form.core
 import android.content.res.Resources
 import android.view.Gravity
 import androidx.annotation.GravityInt
+import androidx.annotation.IntRange
 import androidx.annotation.Px
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.format.BaseNameFormatter
@@ -17,21 +18,21 @@ object FormManager {
         @Px
         var maxWidth: Int = (300 * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
-        var typeset: BaseTypeset = HorizontalTypeset()
-        var emsSize = 5
+        @IntRange(from = 1)
+        var emsSize: Int = 5
 
         @GravityInt
-        var contentGravity = Gravity.NO_GRAVITY
+        var contentGravity: Int = Gravity.END
 
         @GravityInt
-        var singleLineContentGravity = contentGravity
+        var multiColumnContentGravity: Int = Gravity.NO_GRAVITY
 
-        @GravityInt
-        var multiColumnContentGravity = Gravity.NO_GRAVITY
-
-        var horizontalMiddleType = Boundary.MIDDLE
+        @Boundary.BoundaryInt
+        var horizontalMiddleBoundary: Int = Boundary.MIDDLE
 
         var nameFormatter: BaseNameFormatter = NormalNameFormatter()
+
+        var typeset: BaseTypeset = HorizontalTypeset()
     }
 
     fun defaultConfig(block: Default.() -> Unit) = apply {

@@ -8,12 +8,13 @@ import com.chooongg.form.core.R
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.FormInput
+import com.chooongg.form.core.style.BaseStyle
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 
 class FormInputProvider : BaseFormProvider() {
-    override fun onCreateViewHolder(parent: ViewGroup): View {
+    override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
         return TextInputLayout(parent.context).also {
             it.id = R.id.formInternalContentView
             it.isHintEnabled = false
@@ -23,7 +24,6 @@ class FormInputProvider : BaseFormProvider() {
             it.setSuffixTextAppearance(formTextAppearance(it, R.attr.formTextAppearanceSuffix))
             it.placeholderTextAppearance =
                 formTextAppearance(it, R.attr.formTextAppearancePlaceholder)
-            it.layoutParams = ViewGroup.MarginLayoutParams(-1, -2)
             it.addView(TextInputEditText(it.context).apply {
                 id = R.id.formInternalContentChildView
                 imeOptions = EditorInfo.IME_ACTION_DONE
@@ -56,6 +56,6 @@ class FormInputProvider : BaseFormProvider() {
     override fun onViewAttachedToWindow(holder: FormViewHolder, view: View) {
         val tempEnabled = view.isEnabled
         view.isEnabled = false
-//        if (tempEnabled) view.isEnabled = true
+        if (tempEnabled) view.isEnabled = true
     }
 }

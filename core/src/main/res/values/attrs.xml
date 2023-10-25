@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <attr name="formShapeAppearanceCorner" format="reference" />
+
     <attr name="formTextAppearanceName" format="reference" />
     <attr name="formTextAppearanceContent" format="reference" />
     <attr name="formTextAppearanceHint" format="reference" />
@@ -9,7 +11,6 @@
     <attr name="formTextAppearancePlaceholder" format="reference" />
     <attr name="formTextAppearanceLabel" format="reference" />
     <attr name="formTextAppearanceTip" format="reference" />
-
 
     <declare-styleable name="FormView">
         <attr name="formMarginStart" format="dimension" />

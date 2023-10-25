@@ -6,16 +6,20 @@ import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.style.BaseStyle
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope
 
 class FormTextProvider : BaseFormProvider() {
-    override fun onCreateViewHolder(parent: ViewGroup): View {
+    override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
         return MaterialTextView(parent.context).apply {
             id = R.id.formInternalContentView
             setTextIsSelectable(true)
             setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
-            layoutParams = ViewGroup.MarginLayoutParams(-1, -2)
+            setPaddingRelative(
+                style.insideInfo.middleStart, style.insideInfo.middleTop,
+                style.insideInfo.middleEnd, style.insideInfo.middleBottom
+            )
         }
     }
 
@@ -26,7 +30,8 @@ class FormTextProvider : BaseFormProvider() {
         item: BaseForm
     ) {
         with(view as MaterialTextView) {
-            text = item.content?.toString()
+            text = item.getContentString(context)
+            gravity = holder.typeset.obtainContentGravity()
         }
     }
 

@@ -2,28 +2,38 @@ package com.chooongg.form.core.boundary
 
 import androidx.annotation.IntDef
 
-data class Boundary(
-    @BoundaryInt val start: Int,
-    @BoundaryInt val top: Int,
-    @BoundaryInt val end: Int,
-    @BoundaryInt val bottom: Int
+class Boundary(
+    @BoundaryInt start: Int,
+    @BoundaryInt top: Int,
+    @BoundaryInt end: Int,
+    @BoundaryInt bottom: Int
 ) {
+
+    @BoundaryInt
+    var start: Int = start
+        internal set
+
+    @BoundaryInt
+    var top: Int = top
+        internal set
+
+    @BoundaryInt
+    var end: Int = end
+        internal set
+
+    @BoundaryInt
+    var bottom: Int = bottom
+        internal set
+
     constructor() : this(NONE)
     constructor(any: Int) : this(any, any, any, any)
 
     companion object {
         const val NONE = 0
         const val MIDDLE = 1
-        const val MARGIN = 2
+        const val GLOBAL = 2
     }
 
-    internal fun update(
-        @BoundaryInt start: Int = this.start,
-        @BoundaryInt top: Int = this.top,
-        @BoundaryInt end: Int = this.end,
-        @BoundaryInt bottom: Int = this.bottom
-    ) = Boundary(start, top, end, bottom)
-
-    @IntDef(NONE, MIDDLE, MARGIN)
+    @IntDef(NONE, MIDDLE, GLOBAL)
     annotation class BoundaryInt
 }

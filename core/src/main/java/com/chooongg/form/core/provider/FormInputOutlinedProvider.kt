@@ -6,12 +6,13 @@ import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.style.BaseStyle
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 
 class FormInputOutlinedProvider : BaseFormProvider() {
-    override fun onCreateViewHolder(parent: ViewGroup): View {
+    override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
         return TextInputLayout(
             parent.context, null, com.google.android.material.R.attr.textInputOutlinedStyle
         ).also {
@@ -21,7 +22,6 @@ class FormInputOutlinedProvider : BaseFormProvider() {
             it.setSuffixTextAppearance(formTextAppearance(it, R.attr.formTextAppearanceSuffix))
             it.placeholderTextAppearance =
                 formTextAppearance(it, R.attr.formTextAppearancePlaceholder)
-            it.layoutParams = ViewGroup.MarginLayoutParams(-1, -2)
             it.addView(TextInputEditText(it.context).apply {
                 id = R.id.formInternalContentChildView
                 setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))

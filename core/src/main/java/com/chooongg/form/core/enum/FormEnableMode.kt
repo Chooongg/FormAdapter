@@ -12,12 +12,12 @@ enum class FormEnableMode {
     /**
      * 仅编辑时可用
      */
-    ONLY_EDIT,
+    ENABLED,
 
     /**
      * 仅查看时可用
      */
-    ONLY_SEE,
+    DISABLED,
 
     /**
      * 总不可用

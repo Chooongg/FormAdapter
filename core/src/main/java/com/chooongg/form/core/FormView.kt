@@ -61,9 +61,8 @@ class FormView @JvmOverloads constructor(
         })
     }
 
+    @Deprecated("Under normal circumstances, the View enable status cannot be modified")
     override fun setEnabled(enabled: Boolean) {
-        super.setEnabled(enabled)
-        (adapter as? FormAdapter)?.isEnabled = enabled
     }
 
     fun setFormAdapter(formAdapter: FormAdapter?) {

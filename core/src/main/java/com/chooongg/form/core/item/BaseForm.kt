@@ -2,6 +2,7 @@ package com.chooongg.form.core.item
 
 import android.content.Context
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.enum.FormValidateStatus
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.typeset.BaseTypeset
@@ -50,6 +51,63 @@ abstract class BaseForm(
      * 排版
      */
     open var typeset: BaseTypeset? = null
+
+    /**
+     * 独占一行
+     */
+    open var loneLine = false
+
+    /**
+     * 下一项为独占一行
+     */
+    var nextItemLoneLine = false
+
+    /**
+     * 边界信息
+     */
+    var marginBoundary: Boundary = Boundary()
+        internal set
+
+    /**
+     * 填充信息
+     */
+    var insideBoundary: Boundary = Boundary()
+        internal set
+
+    /**
+     * 全局位置
+     */
+    var globalPosition = -1
+        internal set
+
+    /**
+     * Part 组数量
+     */
+    var groupItemCount = -1
+        internal set
+
+    /**
+     * Part 组索引
+     */
+    var groupIndex = -1
+        internal set
+
+    /**
+     * 组中项数
+     */
+    var itemCountInGroup = -1
+        internal set
+
+    /**
+     * 组中位置
+     */
+    var positionInGroup = -1
+        internal set
+
+    var spanSize: Int = -1
+        internal set
+    var spanIndex: Int = -1
+        internal set
 
     open fun getContentString(context: Context): CharSequence? = when (content) {
         is Int -> context.getString(content as Int)

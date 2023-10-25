@@ -10,14 +10,14 @@ enum class FormVisibilityMode {
     ALWAYS,
 
     /**
-     * 仅编辑时可见
+     * 仅启用时可见
      */
-    ONLY_EDIT,
+    ENABLED,
 
     /**
-     * 仅查看时可见
+     * 仅禁用时可见
      */
-    ONLY_SEE,
+    DISABLED,
 
     /**
      * 总不可见

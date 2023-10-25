@@ -7,9 +7,12 @@ import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.boundary.FormInsideInfo
 import com.chooongg.form.core.boundary.FormMarginInfo
+import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.typeset.BaseTypeset
 
-abstract class BaseStyle(val typeset: BaseTypeset?) {
+abstract class BaseStyle {
+
+    var typeset: BaseTypeset? = null
 
     var marginInfo: FormMarginInfo = FormMarginInfo(0, 0, 0, 0)
         private set
@@ -23,10 +26,6 @@ abstract class BaseStyle(val typeset: BaseTypeset?) {
 
     protected open fun onCreateMarginInfo(context: Context): FormMarginInfo {
         return FormMarginInfo(
-            context.resources.getDimensionPixelSize(R.dimen.formMarginStart),
-            context.resources.getDimensionPixelSize(R.dimen.formMarginTop),
-            context.resources.getDimensionPixelSize(R.dimen.formMarginEnd),
-            context.resources.getDimensionPixelSize(R.dimen.formMarginBottom),
             context.resources.getDimensionPixelSize(R.dimen.formMarginMiddleStart),
             context.resources.getDimensionPixelSize(R.dimen.formMarginMiddleTop),
             context.resources.getDimensionPixelSize(R.dimen.formMarginMiddleEnd),
@@ -49,21 +48,13 @@ abstract class BaseStyle(val typeset: BaseTypeset?) {
 
     abstract fun onCreateViewHolder(parent: ViewGroup): ViewGroup?
 
-    abstract fun onBindViewHolder(
-        holder: FormViewHolder,
-        layout: ViewGroup?
-    )
+    abstract fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm)
 
     protected abstract fun addView(parentView: ViewGroup, child: View)
 
-    open fun onViewRecycled(holder: FormViewHolder, layout: ViewGroup?) {
-    }
-
-    open fun onViewAttachedToWindow(holder: FormViewHolder, layout: ViewGroup?) {
-    }
-
-    open fun onViewDetachedFromWindow(holder: FormViewHolder, layout: ViewGroup?) {
-    }
+    open fun onViewRecycled(holder: FormViewHolder, layout: ViewGroup?) = Unit
+    open fun onViewAttachedToWindow(holder: FormViewHolder, layout: ViewGroup?) = Unit
+    open fun onViewDetachedFromWindow(holder: FormViewHolder, layout: ViewGroup?) = Unit
 
     fun executeAddView(parentView: ViewGroup?, child: View?) {
         if (parentView != null && child != null) {
@@ -72,10 +63,9 @@ abstract class BaseStyle(val typeset: BaseTypeset?) {
     }
 
     override fun equals(other: Any?): Boolean {
-        return other is BaseStyle && javaClass == other.javaClass && typeset == other.typeset
-    }
-
-    override fun hashCode(): Int {
-        return javaClass.hashCode()
+        if (other !is BaseStyle) return false
+        if (javaClass != other.javaClass) return false
+        if (typeset != other.typeset) return false
+        return true
     }
 }

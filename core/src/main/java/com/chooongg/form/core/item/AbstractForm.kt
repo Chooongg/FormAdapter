@@ -1,6 +1,7 @@
 package com.chooongg.form.core.item
 
 import com.chooongg.form.core.CacheCleanable
+import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormMenuBlock
 import com.chooongg.form.core.enum.FormEnableMode
 import com.chooongg.form.core.enum.FormVisibilityMode
@@ -40,6 +41,30 @@ open class AbstractForm : CacheCleanable {
         menu2 = if (block != null) {
             FormMenuItem().apply(block)
         } else null
+    }
+
+    /**
+     * 真实的可见性
+     */
+    fun isRealVisible(adapter: FormAdapter): Boolean {
+        return when (visibilityMode) {
+            FormVisibilityMode.ALWAYS -> true
+            FormVisibilityMode.ENABLED -> adapter.isEnabled
+            FormVisibilityMode.DISABLED -> !adapter.isEnabled
+            FormVisibilityMode.NEVER -> false
+        }
+    }
+
+    /**
+     * 真实的可用性
+     */
+    fun isRealEnable(adapter: FormAdapter): Boolean {
+        return when (enableMode) {
+            FormEnableMode.ALWAYS -> true
+            FormEnableMode.ENABLED -> adapter.isEnabled
+            FormEnableMode.DISABLED -> !adapter.isEnabled
+            FormEnableMode.NEVER -> false
+        }
     }
 
     override fun cleanCache() {
