@@ -2,18 +2,19 @@ package com.chooongg.form.core
 
 import androidx.annotation.StringRes
 import com.chooongg.form.core.data.IFormCreator
+import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.item.FormInput
 import com.chooongg.form.core.item.FormInputFilled
 import com.chooongg.form.core.item.FormInputOutlined
 import com.chooongg.form.core.item.FormText
 
-fun IFormCreator.addText(
-    name: CharSequence?, block: (FormText.() -> Unit)? = null
-) = addItem(FormText(name).apply { block?.invoke(this) })
+fun IFormCreator.addButton(
+    name: CharSequence?, block: (FormButton.() -> Unit)? = null
+) = addItem(FormButton(name).apply { block?.invoke(this) })
 
-fun IFormCreator.addText(
-    @StringRes nameRes: Int?, block: (FormText.() -> Unit)? = null
-) = addItem(FormText(nameRes).apply { block?.invoke(this) })
+fun IFormCreator.addButton(
+    @StringRes nameRes: Int?, block: (FormButton.() -> Unit)? = null
+) = addItem(FormButton(nameRes).apply { block?.invoke(this) })
 
 fun IFormCreator.addInput(
     name: CharSequence?, block: (FormInput.() -> Unit)? = null
@@ -38,3 +39,11 @@ fun IFormCreator.addInputOutlined(
 fun IFormCreator.addInputOutlined(
     @StringRes nameRes: Int?, block: (FormInputOutlined.() -> Unit)? = null
 ) = addItem(FormInputOutlined(nameRes).apply { block?.invoke(this) })
+
+fun IFormCreator.addText(
+    name: CharSequence?, block: (FormText.() -> Unit)? = null
+) = addItem(FormText(name).apply { block?.invoke(this) })
+
+fun IFormCreator.addText(
+    @StringRes nameRes: Int?, block: (FormText.() -> Unit)? = null
+) = addItem(FormText(nameRes).apply { block?.invoke(this) })

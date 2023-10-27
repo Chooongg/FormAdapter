@@ -3,6 +3,7 @@ package com.chooongg.form.simple
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.addButton
 import com.chooongg.form.core.addInput
 import com.chooongg.form.core.addInputFilled
 import com.chooongg.form.core.addInputOutlined
@@ -69,5 +70,6 @@ class MainActivity : AppCompatActivity() {
             hint = "请输入"
 //            counterMaxLength = 11
         }
+        addButton("测试")
     }
 }
