@@ -36,9 +36,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             it.groupIndex = -1
             it.itemCountInGroup = -1
             it.positionInGroup = -1
-            if (it.isRealVisible(formAdapter)) {
-                tempItems.add(it)
-            }
+            if (it.isRealVisible(formAdapter.isEnabled)) tempItems.add(it)
         }
         tempItems.forEachIndexed { index, item ->
             item.groupItemCount = 1
@@ -47,5 +45,23 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             item.positionInGroup = index
         }
         asyncDiffer.submitList(tempItems) { lastEnabled = formAdapter.isEnabled }
+    }
+
+    override fun findOfField(field: String, update: Boolean, block: (BaseForm) -> Unit): Boolean {
+        itemList.forEach {
+            if (it.field == field) {
+                block(it)
+                if (update) update()
+                return true
+            }
+        }
+        data.getItems().forEach {
+            if (it.field == field) {
+                block(it)
+                if (update) update()
+                return true
+            }
+        }
+        return false
     }
 }

@@ -6,8 +6,10 @@ import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.use
+import androidx.core.view.updateLayoutParams
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
+import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.item.BaseForm
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.shape.AbsoluteCornerSize
@@ -27,19 +29,16 @@ class CardStyle : BaseStyle {
 
     private lateinit var shapeAppearanceModel: ShapeAppearanceModel
 
-    override fun onCreateViewHolder(parent: ViewGroup): ViewGroup? {
+    override fun onCreateViewHolder(parent: ViewGroup): ViewGroup? = null
+
+    override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         if (!this::shapeAppearanceModel.isInitialized) {
             shapeAppearanceModel = ShapeAppearanceModel.builder(
-                parent.context,
-                shapeAppearanceResId
-                    ?: getDefaultShapeAppearanceResId(parent.context),
+                holder.itemView.context,
+                shapeAppearanceResId ?: getDefaultShapeAppearanceResId(holder.itemView.context),
                 0
             ).build()
         }
-        return null
-    }
-
-    override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         val context = holder.itemView.context
         holder.itemView.clipToOutline = true
         val shape = ShapeAppearanceModel.builder().apply {
@@ -94,12 +93,22 @@ class CardStyle : BaseStyle {
         } else MaterialShapeDrawable(shape)
         shapeDrawable.fillColor = ColorStateList.valueOf(
             MaterialColors.getColor(
-                context, com.google.android.material.R.attr.colorSurfaceContainer, Color.TRANSPARENT
+                context, com.google.android.material.R.attr.colorSurface, Color.TRANSPARENT
             ),
         )
         holder.itemView.background = shapeDrawable
         holder.itemView.elevation =
-            elevation ?: context.resources.getDimension(R.dimen.formMarginMiddleEnd)
+            elevation ?: context.resources.getDimension(R.dimen.formCardElevation)
+        holder.itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = when (item.marginBoundary.top) {
+                Boundary.MIDDLE -> marginInfo.middleTop
+                else -> 0
+            }
+            bottomMargin = when (item.marginBoundary.bottom) {
+                Boundary.MIDDLE -> marginInfo.middleBottom
+                else -> 0
+            }
+        }
     }
 
     override fun addView(parentView: ViewGroup, child: View) {

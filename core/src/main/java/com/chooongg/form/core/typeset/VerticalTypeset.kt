@@ -38,9 +38,7 @@ class VerticalTypeset : BaseTypeset() {
     }
 
     override fun addView(style: BaseStyle, parentView: ViewGroup, child: View) {
-        parentView.addView(child, LinearLayoutCompat.LayoutParams(-1, -2).apply {
-            topMargin = -style.insideInfo.middleTop
-        })
+        parentView.addView(child, LinearLayoutCompat.LayoutParams(-1, -2))
     }
 
 }

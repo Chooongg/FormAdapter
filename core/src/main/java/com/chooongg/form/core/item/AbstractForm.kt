@@ -46,11 +46,11 @@ open class AbstractForm : CacheCleanable {
     /**
      * 真实的可见性
      */
-    fun isRealVisible(adapter: FormAdapter): Boolean {
+    fun isRealVisible(isEnabled: Boolean): Boolean {
         return when (visibilityMode) {
             FormVisibilityMode.ALWAYS -> true
-            FormVisibilityMode.ENABLED -> adapter.isEnabled
-            FormVisibilityMode.DISABLED -> !adapter.isEnabled
+            FormVisibilityMode.ENABLED -> isEnabled
+            FormVisibilityMode.DISABLED -> !isEnabled
             FormVisibilityMode.NEVER -> false
         }
     }
@@ -58,11 +58,11 @@ open class AbstractForm : CacheCleanable {
     /**
      * 真实的可用性
      */
-    fun isRealEnable(adapter: FormAdapter): Boolean {
+    fun isRealEnable(isEnabled: Boolean): Boolean {
         return when (enableMode) {
             FormEnableMode.ALWAYS -> true
-            FormEnableMode.ENABLED -> adapter.isEnabled
-            FormEnableMode.DISABLED -> !adapter.isEnabled
+            FormEnableMode.ENABLED -> isEnabled
+            FormEnableMode.DISABLED -> !isEnabled
             FormEnableMode.NEVER -> false
         }
     }

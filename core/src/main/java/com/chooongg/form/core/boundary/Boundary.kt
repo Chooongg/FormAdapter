@@ -36,4 +36,24 @@ class Boundary(
 
     @IntDef(NONE, MIDDLE, GLOBAL)
     annotation class BoundaryInt
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Boundary) return false
+
+        if (start != other.start) return false
+        if (top != other.top) return false
+        if (end != other.end) return false
+        if (bottom != other.bottom) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = start
+        result = 31 * result + top
+        result = 31 * result + end
+        result = 31 * result + bottom
+        return result
+    }
 }

@@ -1,11 +1,13 @@
 package com.chooongg.form.core.item
 
-import android.content.Context
+import androidx.annotation.GravityInt
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.FormLinkageBlock
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.enum.FormValidateStatus
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.typeset.BaseTypeset
+import org.json.JSONObject
 import kotlin.reflect.KClass
 
 abstract class BaseForm(
@@ -16,6 +18,13 @@ abstract class BaseForm(
 ) : AbstractForm() {
 
     abstract fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider>
+
+    //<editor-fold desc="基础 Basic">
+
+    /**
+     * 扩展字段和内容
+     */
+    private var extensionFieldAndContent: HashMap<String, Any?>? = null
 
     /**
      * 字段
@@ -47,20 +56,55 @@ abstract class BaseForm(
      */
     var validateStatus: FormValidateStatus? = null
 
+    //</editor-fold>
+
+    //<editor-fold desc="排版 Typeset">
+
     /**
      * 排版
      */
     open var typeset: BaseTypeset? = null
 
     /**
+     * 内容重力
+     */
+    @GravityInt
+    open var contentGravity: Int? = null
+
+    /**
+     * 多列内容重力
+     */
+    @GravityInt
+    open var multiColumnContentGravity: Int? = null
+
+    /**
      * 独占一行
      */
     open var loneLine = false
+
+    //</editor-fold>
+
+    //<editor-fold desc="接口 interface">
+
+    /**
+     * 联动接口
+     */
+    internal var linkageBlock: FormLinkageBlock? = null
+
+    /**
+     * 自定义输出接口
+     */
+    private var customOutputBlock: ((json: JSONObject) -> Unit)? = null
+
+    //</editor-fold>
+
+    //<editor-fold desc="内部 Internal">
 
     /**
      * 下一项为独占一行
      */
     var nextItemLoneLine = false
+        internal set
 
     /**
      * 边界信息
@@ -106,32 +150,54 @@ abstract class BaseForm(
 
     var spanSize: Int = -1
         internal set
+
     var spanIndex: Int = -1
         internal set
 
-    open fun getContentString(context: Context): CharSequence? = when (content) {
-        is Int -> context.getString(content as Int)
-        is CharSequence -> content as CharSequence
-        else -> content?.toString()
-    }
+    //</editor-fold>
 
-    open fun getHintString(context: Context): CharSequence? = when (hint) {
-        is Int -> context.getString(hint as Int)
-        is CharSequence -> hint as CharSequence
-        else -> hint?.toString()
-    }
+    //<editor-fold desc="扩展 extend">
 
-    fun getNameString(context: Context): CharSequence? {
-        return when (val temp = name) {
-            is String -> temp
-            is CharSequence -> temp
-            is Int -> try {
-                context.getString(temp)
-            } catch (e: Exception) {
-                null
-            }
-
-            else -> temp?.toString()
+    /**
+     * 放置扩展内容
+     */
+    fun putExtensionContent(key: String, value: Any?) {
+        if (value != null) {
+            if (extensionFieldAndContent == null) extensionFieldAndContent = HashMap()
+            extensionFieldAndContent!![key] = value
+        } else if (extensionFieldAndContent != null) {
+            extensionFieldAndContent!!.remove(key)
+            if (extensionFieldAndContent!!.isEmpty()) extensionFieldAndContent = null
         }
     }
+
+    /**
+     * 获取扩展内容
+     */
+    fun getExtensionContent(key: String): Any? = extensionFieldAndContent?.get(key)
+
+    /**
+     * 是否有扩展内容
+     */
+    fun hasExtensionContent(key: String) = extensionFieldAndContent?.containsKey(key) ?: false
+
+    /**
+     * 快照扩展字段和内容
+     */
+    fun snapshotExtensionFieldAndContent() = extensionFieldAndContent ?: emptyMap()
+
+    /**
+     * 删除扩展字段
+     */
+    fun removeExtensionContent(key: String) = extensionFieldAndContent?.remove(key)
+
+    //</editor-fold>
+
+    //<editor-fold desc="设置方法 set">
+
+    fun setLinkage(block: FormLinkageBlock?) {
+        linkageBlock = block
+    }
+
+    //</editor-fold>
 }

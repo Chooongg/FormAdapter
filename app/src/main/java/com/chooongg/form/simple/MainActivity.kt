@@ -9,6 +9,7 @@ import com.chooongg.form.core.addInputOutlined
 import com.chooongg.form.core.addText
 import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.style.CardStyle
+import com.chooongg.form.core.style.NoneNotAlignmentStyle
 import com.chooongg.form.core.typeset.HorizontalTypeset
 import com.chooongg.form.core.typeset.VerticalTypeset
 import com.chooongg.form.simple.databinding.ActivityMainBinding
@@ -24,11 +25,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.formView.setFormAdapter(adapter)
         adapter.setNewInstance {
-            addPart { fillData() }
+            addPart(NoneNotAlignmentStyle()) { fillData() }
             addPart(CardStyle {
                 typeset = HorizontalTypeset {
                     emsSize = 4
                 }
+            }) { fillData() }
+            addPart(CardStyle {
+                typeset = VerticalTypeset()
+            }) { fillData() }
+            addPart(CardStyle {
+                typeset = VerticalTypeset()
+            }) { fillData() }
+            addPart(CardStyle {
+                typeset = VerticalTypeset()
+            }) { fillData() }
+            addPart(CardStyle {
+                typeset = VerticalTypeset()
             }) { fillData() }
             addPart(CardStyle {
                 typeset = VerticalTypeset()
@@ -46,12 +59,15 @@ class MainActivity : AppCompatActivity() {
         addInput("Input") {
             hint = "请输入"
             content = "测试"
+            counterMaxLength = 11
         }
-//        addInputFilled("InputFilled") {
-//            hint = "请输入"
-//        }
+        addInputFilled("InputFilled") {
+            hint = "请输入"
+//            counterMaxLength = 11
+        }
         addInputOutlined("InputOutlined") {
             hint = "请输入"
+//            counterMaxLength = 11
         }
     }
 }

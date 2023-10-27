@@ -10,7 +10,35 @@ open class FormInput : BaseForm {
     constructor(name: CharSequence?) : super(name)
     constructor(@StringRes nameRes: Int?) : super(nameRes)
 
-    var placeholder: CharSequence? = null
+    /**
+     * 最小行数
+     */
+    var minLines: Int = 0
+
+    /**
+     * 最大行数
+     */
+    var maxLines: Int = Int.MAX_VALUE
+
+    /**
+     * 前缀: Int(StringRes), String, CharSequence
+     */
+    var prefix: Any? = null
+
+    /**
+     * 后缀: Int(StringRes), String, CharSequence
+     */
+    var suffix: Any? = null
+
+    /**
+     * 占位: Int(StringRes), String, CharSequence
+     */
+    var placeholder: Any? = null
+
+    /**
+     * 计数器最大长度
+     */
+    var counterMaxLength: Int = Int.MAX_VALUE
 
     override fun getProvider(adapter: FormAdapter) = if (adapter.isEnabled) {
         FormInputProvider::class

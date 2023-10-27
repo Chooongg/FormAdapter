@@ -1,7 +1,6 @@
 package com.chooongg.form.core
 
 import android.content.Context
-import android.util.Log
 import android.view.View.MeasureSpec
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -10,7 +9,7 @@ import com.chooongg.form.core.boundary.Boundary
 import kotlin.math.max
 import kotlin.math.min
 
-class FormLayoutManager(private val context: Context) : GridLayoutManager(context, 24) {
+class FormLayoutManager(context: Context) : GridLayoutManager(context, 24) {
 
     private var recyclerView: RecyclerView? = null
 
@@ -59,10 +58,7 @@ class FormLayoutManager(private val context: Context) : GridLayoutManager(contex
     }
 
     override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
-        if (state.didStructureChange()) {
-            calculateBoundary()
-            Log.e("Form", "onLayoutChildren")
-        }
+        if (state.didStructureChange()) calculateBoundary()
         super.onLayoutChildren(recycler, state)
     }
 
@@ -89,9 +85,7 @@ class FormLayoutManager(private val context: Context) : GridLayoutManager(contex
                     item.marginBoundary.start = Boundary.NONE
                     item.insideBoundary.start = FormManager.Default.horizontalMiddleBoundary
                 }
-                spanIndex = if (item.positionInGroup < item.itemCountInGroup - 1) {
-                    spanIndex + item.spanSize
-                } else 0
+                spanIndex += item.spanSize
                 if (spanIndex == spanCount) {
                     item.marginBoundary.end = Boundary.GLOBAL
                     item.insideBoundary.end = Boundary.GLOBAL

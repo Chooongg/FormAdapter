@@ -46,6 +46,12 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     abstract fun update()
 
+    abstract fun findOfField(
+        field: String,
+        update: Boolean = true,
+        block: (BaseForm) -> Unit
+    ): Boolean
+
     override fun getItemCount() = itemList.size
 
     fun getItem(position: Int) = itemList[position]
@@ -67,18 +73,23 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         val provider = formAdapter.getProvider4ItemViewType(viewType)
         val itemView = provider.onCreateViewHolder(style, typesetLayout ?: styleLayout ?: parent)
         typeset.executeAddView(style, typesetLayout ?: styleLayout, itemView)
-        (styleLayout ?: typesetLayout ?: itemView).layoutParams =
-            GridLayoutManager.LayoutParams(-1, -2)
+        val view = styleLayout ?: typesetLayout ?: itemView
+        view.layoutParams =
+            if (view.layoutParams != null) GridLayoutManager.LayoutParams(view.layoutParams!!)
+            else GridLayoutManager.LayoutParams(-1, -2)
         return FormViewHolder(style, typeset, styleLayout, typesetLayout, itemView)
     }
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
         val item = getItem(position)
         style.onBindViewHolder(holder, holder.styleLayout, item)
-        formAdapter.getTypeset4ItemViewType(holder.itemViewType)
-            .onBindViewHolder(holder, holder.typesetLayout, item)
-        formAdapter.getProvider4ItemViewType(holder.itemViewType)
-            .onBindViewHolder(adapterScope, holder, holder.view, item)
+        formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
+            setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
+            onBindViewHolder(holder, holder.typesetLayout, item)
+        }
+        formAdapter.getProvider4ItemViewType(holder.itemViewType).apply {
+            onBindViewHolder(adapterScope, holder, holder.view, item, formAdapter.isEnabled)
+        }
     }
 
     override fun onBindViewHolder(
@@ -86,7 +97,17 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         position: Int,
         payloads: MutableList<Any>
     ) {
-        super.onBindViewHolder(holder, position, payloads)
+        val item = getItem(position)
+        style.onBindViewHolder(holder, holder.styleLayout, item)
+        formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
+            setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
+            onBindViewHolder(holder, holder.typesetLayout, item)
+        }
+        formAdapter.getProvider4ItemViewType(holder.itemViewType).apply {
+            onBindViewHolder(
+                adapterScope, holder, holder.view, item, formAdapter.isEnabled, payloads
+            )
+        }
     }
 
     override fun onViewRecycled(holder: FormViewHolder) {

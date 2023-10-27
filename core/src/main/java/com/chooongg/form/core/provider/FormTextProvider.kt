@@ -2,6 +2,7 @@ package com.chooongg.form.core.provider
 
 import android.view.View
 import android.view.ViewGroup
+import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.formTextAppearance
@@ -27,11 +28,13 @@ class FormTextProvider : BaseFormProvider() {
         scope: CoroutineScope,
         holder: FormViewHolder,
         view: View,
-        item: BaseForm
+        item: BaseForm,
+        enabled: Boolean
     ) {
         with(view as MaterialTextView) {
-            text = item.getContentString(context)
-            gravity = holder.typeset.obtainContentGravity()
+            text = FormUtils.getText(context, item.content)
+            hint = FormUtils.getText(context, item.hint) ?: resources.getString(R.string.fromDefaultHintNone)
+            gravity = holder.typeset.obtainContentGravity(item)
         }
     }
 

@@ -1,29 +1,25 @@
 package com.chooongg.form.core
 
-import android.graphics.Paint
+import android.content.Context
 import android.view.View
+import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.core.content.res.use
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.typeset.BaseTypeset
-import kotlin.math.ceil
 
 object FormUtils {
 
-//    fun Context.getFontHeightInTextAppearance(@StyleRes resId: Int) = getFontHeight(
-//        resChildDimension(resId, android.R.attr.textSize, 0f)
-//    )
-//
-//    fun Context.getFontHeightInResource(@DimenRes resId: Int) = getFontHeight(
-//        resDimension(resId)
-//    )
+    fun getFontHeight(textView: TextView): Int {
+        val fm = textView.paint.fontMetricsInt
+        return textView.paint.getFontMetricsInt(fm)
+    }
 
-    fun getFontHeight(fontSize: Float): Int {
-        val paint = Paint()
-        paint.textSize = fontSize
-        val fm = paint.fontMetrics
-        return (ceil(fm.descent - fm.top) + fontSize).toInt()
+    fun getText(context: Context, any: Any?) = when (any) {
+        is Int -> context.getString(any)
+        is CharSequence -> any
+        else -> any?.toString()
     }
 }
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="formDefaultGroupName">组</string>
+    <string name="fromDefaultHintNone">空</string>
+    <string name="formDefaultHintSelect">请选择</string>
+    <string name="formDefaultHintInput">请输入</string>
+
+    <string name="formPickerOpenError">无法打开选择器</string>
+
+    <string name="formOptionsLoading">选项加载中</string>
+    <string name="formOptionsEmpty">没有可选项</string>
+
+    <string name="formSearchHint">输入要搜索的文本</string>
+
+    <string name="formRatingFormat">%f星</string>
+
+</resources>

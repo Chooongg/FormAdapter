@@ -72,6 +72,18 @@ open class FormAdapter(isEnabled: Boolean) :
         partAdapters.forEach { it.update() }
     }
 
+    fun findOfField(
+        field: String,
+        update: Boolean = true,
+        block: (BaseForm) -> Unit
+    ): Boolean {
+        partAdapters.forEach {
+            val temp = it.findOfField(field, update, block)
+            if (temp) return true
+        }
+        return false
+    }
+
     //<editor-fold desc="ConcatAdapter 覆写">
 
     fun addPart(

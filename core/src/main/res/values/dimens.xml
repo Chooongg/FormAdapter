@@ -21,6 +21,8 @@
     <dimen name="formInsideMiddleEnd">8dp</dimen>
     <dimen name="formInsideMiddleBottom">8dp</dimen>
 
+    <dimen name="formCardElevation">3dp</dimen>
+
     <dimen name="formFadingEdgeLength">16dp</dimen>
 
 </resources>

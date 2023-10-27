@@ -37,4 +37,24 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         }
         asyncDiffer.submitList(tempItems) { lastEnabled = formAdapter.isEnabled }
     }
+
+    override fun findOfField(field: String, update: Boolean, block: (BaseForm) -> Unit): Boolean {
+        itemList.forEach {
+            if (it.field == field) {
+                block(it)
+                if (update) update()
+                return true
+            }
+        }
+        data.getGroups().forEach { group ->
+            group.getItems().forEach {
+                if (it.field == field) {
+                    block(it)
+                    if (update) update()
+                    return true
+                }
+            }
+        }
+        return false
+    }
 }

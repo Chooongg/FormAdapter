@@ -7,7 +7,7 @@ import androidx.annotation.IntRange
 import androidx.annotation.Px
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.format.BaseNameFormatter
-import com.chooongg.form.core.format.NormalNameFormatter
+import com.chooongg.form.core.format.ColonNameFormatter
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.HorizontalTypeset
 
@@ -30,7 +30,7 @@ object FormManager {
         @Boundary.BoundaryInt
         var horizontalMiddleBoundary: Int = Boundary.MIDDLE
 
-        var nameFormatter: BaseNameFormatter = NormalNameFormatter()
+        var nameFormatter: BaseNameFormatter = ColonNameFormatter()
 
         var typeset: BaseTypeset = HorizontalTypeset()
     }
