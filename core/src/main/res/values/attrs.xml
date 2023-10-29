@@ -12,6 +12,13 @@
     <attr name="formTextAppearanceLabel" format="reference" />
     <attr name="formTextAppearanceTip" format="reference" />
 
+    <attr name="formButtonStyle" format="reference" />
+    <attr name="formButtonTextStyle" format="reference" />
+    <attr name="formButtonTonalStyle" format="reference" />
+    <attr name="formButtonOutlinedStyle" format="reference" />
+    <attr name="formButtonElevatedStyle" format="reference" />
+    <attr name="formButtonUnelevatedStyle" format="reference" />
+
     <declare-styleable name="FormView">
         <attr name="formMarginStart" format="dimension" />
         <attr name="formMarginTop" format="dimension" />

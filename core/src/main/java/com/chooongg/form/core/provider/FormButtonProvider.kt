@@ -20,6 +20,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.theme.overlay.MaterialThemeOverlay
 import kotlinx.coroutines.CoroutineScope
 
+
 class FormButtonProvider : BaseFormProvider() {
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
         return MaterialButton(parent.context).also {
@@ -58,25 +59,28 @@ class FormButtonProvider : BaseFormProvider() {
     private fun configButtonStyle(view: MaterialButton, itemButton: FormButton?) {
         val style = when (itemButton?.buttonStyle ?: FormButton.ButtonStyle.DEFAULT) {
             FormButton.ButtonStyle.DEFAULT -> view.context.obtainStyledAttributes(
-                intArrayOf(com.google.android.material.R.attr.materialButtonStyle)
-            ).use { it.getResourceId(0, 0) }
+                intArrayOf(R.attr.formButtonStyle)
+            ).use { it.getResourceId(0, R.style.Form_Button) }
 
             FormButton.ButtonStyle.TEXT -> view.context.obtainStyledAttributes(
-                intArrayOf(com.google.android.material.R.attr.borderlessButtonStyle)
-            ).use { it.getResourceId(0, 0) }
+                intArrayOf(R.attr.formButtonTextStyle)
+            ).use { it.getResourceId(0, R.style.Form_Button_TextButton) }
 
-            FormButton.ButtonStyle.TONAL ->
-                com.google.android.material.R.style.Widget_Material3_Button_TonalButton
+            FormButton.ButtonStyle.TONAL -> view.context.obtainStyledAttributes(
+                intArrayOf(R.attr.formButtonTonalStyle)
+            ).use { it.getResourceId(0, R.style.Form_Button_TonalButton) }
 
             FormButton.ButtonStyle.OUTLINED -> view.context.obtainStyledAttributes(
-                intArrayOf(com.google.android.material.R.attr.materialButtonOutlinedStyle)
-            ).use { it.getResourceId(0, 0) }
+                intArrayOf(R.attr.formButtonOutlinedStyle)
+            ).use { it.getResourceId(0, R.style.Form_Button_OutlinedButton) }
 
-            FormButton.ButtonStyle.ELEVATED ->
-                com.google.android.material.R.style.Widget_Material3_Button_ElevatedButton
+            FormButton.ButtonStyle.ELEVATED -> view.context.obtainStyledAttributes(
+                intArrayOf(R.attr.formButtonElevatedStyle)
+            ).use { it.getResourceId(0, R.style.Form_Button_ElevatedButton) }
 
-            FormButton.ButtonStyle.UN_ELEVATED ->
-                com.google.android.material.R.style.Widget_Material3_Button_UnelevatedButton
+            FormButton.ButtonStyle.UN_ELEVATED -> view.context.obtainStyledAttributes(
+                intArrayOf(R.attr.formButtonUnelevatedStyle)
+            ).use { it.getResourceId(0, R.style.Form_Button_UnelevatedButton) }
         }
         val wrap = MaterialThemeOverlay.wrap(view.context, null, 0, style)
         view.setTextColor(wrap.obtainStyledAttributes(

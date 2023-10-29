@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FormAdapter2</string>
+
+    <string name="basic">基础</string>
+    <string name="style">样式</string>
+    <string name="advanced">进阶</string>
+</resources>

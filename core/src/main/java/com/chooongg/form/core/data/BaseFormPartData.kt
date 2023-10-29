@@ -8,10 +8,13 @@ abstract class BaseFormPartData {
     var isEnablePart: Boolean = true
 
     /**
-     *
+     * 片段识别字段
      */
     var partField: String? = null
 
-    var partName: CharSequence? = null
+    /**
+     * 片段名称
+     */
+    var partName: Any? = null
 
 }

@@ -8,6 +8,8 @@ import androidx.annotation.Px
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.format.BaseNameFormatter
 import com.chooongg.form.core.format.ColonNameFormatter
+import com.chooongg.form.core.style.BaseStyle
+import com.chooongg.form.core.style.NoneNotAlignmentStyle
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.HorizontalTypeset
 
@@ -33,6 +35,8 @@ object FormManager {
         var nameFormatter: BaseNameFormatter = ColonNameFormatter()
 
         var typeset: BaseTypeset = HorizontalTypeset()
+
+        var style: BaseStyle = NoneNotAlignmentStyle()
     }
 
     fun defaultConfig(block: Default.() -> Unit) = apply {

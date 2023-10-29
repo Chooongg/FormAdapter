@@ -23,4 +23,12 @@ class FormDynamicPartData : BaseFormPartData() {
     }
 
     fun getGroups(): MutableList<FormGroupData> = _groups
+
+    fun dynamicGroupCreator(block: FormGroupCreateBlock?) {
+        dynamicGroupCreateBlock = block
+    }
+
+    fun dynamicPartNameFormatter(block: FormPartNameFormatter?) {
+        dynamicPartNameFormatter = block
+    }
 }

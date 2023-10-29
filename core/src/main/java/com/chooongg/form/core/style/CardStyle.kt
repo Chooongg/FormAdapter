@@ -2,7 +2,6 @@ package com.chooongg.form.core.style
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.use
@@ -11,7 +10,7 @@ import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.item.BaseForm
-import com.google.android.material.color.MaterialColors
+import com.google.android.material.elevation.ElevationOverlayProvider
 import com.google.android.material.shape.AbsoluteCornerSize
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -86,19 +85,22 @@ class CardStyle : BaseStyle {
                 )
             }
         }.build()
+        holder.itemView.elevation =
+            elevation ?: context.resources.getDimension(R.dimen.formCardElevation)
         val shapeDrawable = if (holder.itemView.background is MaterialShapeDrawable) {
             (holder.itemView.background as MaterialShapeDrawable).apply {
                 shapeAppearanceModel = shape
             }
         } else MaterialShapeDrawable(shape)
-        shapeDrawable.fillColor = ColorStateList.valueOf(
-            MaterialColors.getColor(
-                context, com.google.android.material.R.attr.colorSurface, Color.TRANSPARENT
-            ),
-        )
+        ElevationOverlayProvider(holder.itemView.context).let {
+            shapeDrawable.fillColor = ColorStateList.valueOf(
+                it.compositeOverlay(
+                    it.themeSurfaceColor,
+                    it.getParentAbsoluteElevation(holder.itemView) + holder.itemView.elevation
+                )
+            )
+        }
         holder.itemView.background = shapeDrawable
-        holder.itemView.elevation =
-            elevation ?: context.resources.getDimension(R.dimen.formCardElevation)
         holder.itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = when (item.marginBoundary.top) {
                 Boundary.MIDDLE -> marginInfo.middleTop

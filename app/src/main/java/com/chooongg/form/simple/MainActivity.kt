@@ -2,74 +2,51 @@ package com.chooongg.form.simple
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.addButton
-import com.chooongg.form.core.addInput
-import com.chooongg.form.core.addInputFilled
-import com.chooongg.form.core.addInputOutlined
-import com.chooongg.form.core.addText
-import com.chooongg.form.core.data.FormPartData
-import com.chooongg.form.core.style.CardStyle
-import com.chooongg.form.core.style.NoneNotAlignmentStyle
-import com.chooongg.form.core.typeset.HorizontalTypeset
-import com.chooongg.form.core.typeset.VerticalTypeset
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.chooongg.form.simple.databinding.ActivityMainBinding
+import com.chooongg.form.simple.fragment.AdvancedFragment
+import com.chooongg.form.simple.fragment.BasicFragment
+import com.chooongg.form.simple.fragment.StyleFragment
+import com.google.android.material.navigation.NavigationBarView
 
 class MainActivity : AppCompatActivity() {
 
-    private val adapter = FormAdapter(true)
-
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+
+    private val fragments = arrayListOf(
+        BasicFragment(), StyleFragment(), AdvancedFragment()
+    )
+
+    private val adapter by lazy { PageAdapter(this, fragments) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.formView.setFormAdapter(adapter)
-        adapter.setNewInstance {
-            addPart(NoneNotAlignmentStyle()) { fillData() }
-            addPart(CardStyle {
-                typeset = HorizontalTypeset {
-                    emsSize = 4
+        binding.viewPager.isUserInputEnabled = false
+        binding.viewPager.adapter = adapter
+        (binding.navigationView as NavigationBarView).apply {
+            setOnItemSelectedListener {
+                when (it.itemId) {
+                    R.id.basic -> binding.viewPager.setCurrentItem(0, false)
+                    R.id.style -> binding.viewPager.setCurrentItem(1, false)
+                    R.id.advanced -> binding.viewPager.setCurrentItem(2, false)
+                    else -> return@setOnItemSelectedListener false
                 }
-            }) { fillData() }
-            addPart(CardStyle {
-                typeset = VerticalTypeset()
-            }) { fillData() }
-            addPart(CardStyle {
-                typeset = VerticalTypeset()
-            }) { fillData() }
-            addPart(CardStyle {
-                typeset = VerticalTypeset()
-            }) { fillData() }
-            addPart(CardStyle {
-                typeset = VerticalTypeset()
-            }) { fillData() }
-            addPart(CardStyle {
-                typeset = VerticalTypeset()
-            }) { fillData() }
+                true
+            }
+            binding.viewPager.currentItem = when (selectedItemId) {
+                R.id.style -> 1
+                R.id.advanced -> 2
+                else -> 0
+            }
         }
+
     }
 
-    private fun FormPartData.fillData() {
-        addText("Text") {
-            content = "测试内容"
-        }
-        addText("Text") {
-            content = "测试内容"
-        }
-        addInput("Input") {
-            hint = "请输入"
-            content = "测试"
-            counterMaxLength = 11
-        }
-        addInputFilled("InputFilled") {
-            hint = "请输入"
-//            counterMaxLength = 11
-        }
-        addInputOutlined("InputOutlined") {
-            hint = "请输入"
-//            counterMaxLength = 11
-        }
-        addButton("测试")
+    private class PageAdapter(activity: MainActivity, val fragments: MutableList<Fragment>) :
+        FragmentStateAdapter(activity) {
+        override fun getItemCount() = fragments.size
+        override fun createFragment(position: Int) = fragments[position]
     }
 }
