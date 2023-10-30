@@ -2,10 +2,11 @@ package com.chooongg.form.simple
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.core.view.WindowCompat
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.chooongg.form.simple.databinding.ActivityMainBinding
 import com.chooongg.form.simple.fragment.AdvancedFragment
+import com.chooongg.form.simple.fragment.BaseFragment
 import com.chooongg.form.simple.fragment.BasicFragment
 import com.chooongg.form.simple.fragment.StyleFragment
 import com.google.android.material.navigation.NavigationBarView
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(binding.root)
         binding.viewPager.isUserInputEnabled = false
         binding.viewPager.adapter = adapter
@@ -41,10 +43,9 @@ class MainActivity : AppCompatActivity() {
                 else -> 0
             }
         }
-
     }
 
-    private class PageAdapter(activity: MainActivity, val fragments: MutableList<Fragment>) :
+    private class PageAdapter(activity: MainActivity, val fragments: MutableList<BaseFragment>) :
         FragmentStateAdapter(activity) {
         override fun getItemCount() = fragments.size
         override fun createFragment(position: Int) = fragments[position]

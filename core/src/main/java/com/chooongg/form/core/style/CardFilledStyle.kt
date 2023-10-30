@@ -1,37 +1,37 @@
 package com.chooongg.form.core.style
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
+import androidx.core.content.res.use
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
-import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.InternalFormPartName
+import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.textview.MaterialTextView
 
-class NoneStyle : BaseStyle {
+class CardFilledStyle : BaseCardStyle {
 
     constructor() : super()
-    constructor(block: NoneStyle.() -> Unit) : super() {
+    constructor(block: CardFilledStyle.() -> Unit) : super() {
         block(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewGroup? = null
 
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
-        holder.itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            topMargin = when (item.marginBoundary.top) {
-                Boundary.GLOBAL -> marginInfo.top
-                Boundary.MIDDLE -> marginInfo.middleTop
-                else -> 0
-            }
-            bottomMargin = when (item.marginBoundary.bottom) {
-                Boundary.GLOBAL -> marginInfo.bottom
-                Boundary.MIDDLE -> marginInfo.middleBottom
-                else -> 0
-            }
-        }
+        super.onBindViewHolder(holder, layout, item)
+        val context = holder.itemView.context
+        holder.itemView.clipToOutline = true
+        val shape = getShapeAppearanceModel(holder, item)
+        val shapeDrawable = MaterialShapeDrawable(shape)
+        shapeDrawable.fillColor = ColorStateList.valueOf(
+            context.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorSurfaceContainerHighest))
+                .use { it.getColor(0, Color.GRAY) }
+        )
+        holder.itemView.background = shapeDrawable
     }
 
     override fun onCreatePartName(parent: ViewGroup): View {
@@ -51,6 +51,7 @@ class NoneStyle : BaseStyle {
         }
     }
 
-    override fun addView(parentView: ViewGroup, child: View) = Unit
-
+    override fun addView(parentView: ViewGroup, child: View) {
+        parentView.addView(child)
+    }
 }

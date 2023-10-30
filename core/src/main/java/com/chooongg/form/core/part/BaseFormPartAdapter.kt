@@ -56,8 +56,10 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     fun getItem(position: Int) = itemList[position]
 
-    override fun getItemViewType(position: Int) =
-        formAdapter.getItemViewType4Pool(style, getItem(position))
+    override fun getItemViewType(position: Int): Int {
+        return formAdapter.getItemViewType4Pool(style, getItem(position))
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder {
         val styleLayout = style.onCreateViewHolder(parent)?.apply {
@@ -136,6 +138,6 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        style.createSizeInfo(recyclerView.context)
+        style.createSizeInfo(recyclerView)
     }
 }

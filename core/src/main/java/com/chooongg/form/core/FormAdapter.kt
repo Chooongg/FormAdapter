@@ -170,14 +170,10 @@ open class FormAdapter(isEnabled: Boolean) :
             val layoutManager = FormLayoutManager(recyclerView.context)
             if (recyclerView is FormView) {
                 layoutManager.setFormMargin(
-                    recyclerView.formMarginStart,
-                    recyclerView.formMarginTop,
-                    recyclerView.formMarginEnd,
-                    recyclerView.formMarginBottom
+                    recyclerView.formMarginStart, recyclerView.formMarginEnd
                 )
             }
             recyclerView.layoutManager = layoutManager
-//            normalColumnCount = layoutManager.normalColumnCount
         }
         _recyclerView = recyclerView
     }

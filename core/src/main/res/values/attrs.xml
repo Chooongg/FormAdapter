@@ -21,9 +21,8 @@
 
     <declare-styleable name="FormView">
         <attr name="formMarginStart" format="dimension" />
-        <attr name="formMarginTop" format="dimension" />
         <attr name="formMarginEnd" format="dimension" />
-        <attr name="formMarginBottom" format="dimension" />
+        <attr name="formMaxColumn" format="integer" />
     </declare-styleable>
 
 </resources>

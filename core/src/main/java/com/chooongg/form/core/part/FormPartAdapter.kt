@@ -3,6 +3,7 @@ package com.chooongg.form.core.part
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.item.InternalFormPartName
 import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +31,9 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             return
         }
         val tempItems = mutableListOf<BaseForm>()
+        if (data.partName != null) {
+            tempItems.add(InternalFormPartName(data.partName))
+        }
         data.getItems().forEach {
             it.globalPosition = -1
             it.groupItemCount = -1

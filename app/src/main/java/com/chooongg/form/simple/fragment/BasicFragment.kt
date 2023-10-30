@@ -1,10 +1,7 @@
 package com.chooongg.form.simple.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.addButton
 import com.chooongg.form.core.addInput
@@ -12,23 +9,15 @@ import com.chooongg.form.core.addInputFilled
 import com.chooongg.form.core.addInputOutlined
 import com.chooongg.form.core.addText
 import com.chooongg.form.core.item.FormButton
-import com.chooongg.form.simple.databinding.FragmentBasicBinding
+import com.chooongg.form.simple.R
 
-class BasicFragment : Fragment() {
-
-    private lateinit var binding: FragmentBasicBinding
+class BasicFragment : BaseFragment() {
 
     private val adapter = FormAdapter(true)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentBasicBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.formView.setFormAdapter(adapter)
+        toolbar.setTitle(R.string.basic)
+        formView.setFormAdapter(adapter)
         adapter.setNewInstance {
             addPart {
                 addText("Text") {

@@ -3,29 +3,45 @@ package com.chooongg.form.core.style
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.chooongg.form.core.FormLayoutManager
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.boundary.FormInsideInfo
 import com.chooongg.form.core.boundary.FormMarginInfo
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.item.InternalFormPartName
 import com.chooongg.form.core.typeset.BaseTypeset
 
 abstract class BaseStyle {
 
     var typeset: BaseTypeset? = null
 
-    var marginInfo: FormMarginInfo = FormMarginInfo(0, 0, 0, 0)
+    var marginInfo: FormMarginInfo = FormMarginInfo(0, 0, 0, 0, 0, 0, 0, 0)
         private set
     var insideInfo: FormInsideInfo = FormInsideInfo(0, 0, 0, 0)
         private set
 
-    internal fun createSizeInfo(context: Context) {
-        marginInfo = onCreateMarginInfo(context)
-        insideInfo = onCreateInsideInfo(context)
+    internal fun createSizeInfo(recyclerView: RecyclerView) {
+        val layoutManager = recyclerView.layoutManager as? FormLayoutManager
+        var start = layoutManager?.formMarginStart
+        if (start == -1) start = null
+        var end = layoutManager?.formMarginEnd
+        if (end == -1) end = null
+        marginInfo = onCreateMarginInfo(recyclerView.context, start, end)
+        insideInfo = onCreateInsideInfo(recyclerView.context)
     }
 
-    protected open fun onCreateMarginInfo(context: Context): FormMarginInfo {
+    protected open fun onCreateMarginInfo(
+        context: Context,
+        start: Int?,
+        end: Int?
+    ): FormMarginInfo {
         return FormMarginInfo(
+            start ?: context.resources.getDimensionPixelSize(R.dimen.formMarginStart),
+            context.resources.getDimensionPixelSize(R.dimen.formMarginTop),
+            end ?: context.resources.getDimensionPixelSize(R.dimen.formMarginEnd),
+            context.resources.getDimensionPixelSize(R.dimen.formMarginBottom),
             context.resources.getDimensionPixelSize(R.dimen.formMarginMiddleStart),
             context.resources.getDimensionPixelSize(R.dimen.formMarginMiddleTop),
             context.resources.getDimensionPixelSize(R.dimen.formMarginMiddleEnd),
@@ -50,6 +66,16 @@ abstract class BaseStyle {
 
     abstract fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm)
 
+    /**
+     * 创建分组标题
+     */
+    abstract fun onCreatePartName(parent: ViewGroup): View
+
+    /**
+     * 绑定分组标题
+     */
+    abstract fun onBindPartName(holder: FormViewHolder, view: View, item: InternalFormPartName)
+
     protected abstract fun addView(parentView: ViewGroup, child: View)
 
     open fun onViewRecycled(holder: FormViewHolder, layout: ViewGroup?) = Unit
@@ -67,5 +93,9 @@ abstract class BaseStyle {
         if (javaClass != other.javaClass) return false
         if (typeset != other.typeset) return false
         return true
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
     }
 }

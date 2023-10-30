@@ -16,13 +16,7 @@ class FormView @JvmOverloads constructor(
     var formMarginStart: Int = 0
         private set
 
-    var formMarginTop: Int = 0
-        private set
-
     var formMarginEnd: Int = 0
-        private set
-
-    var formMarginBottom: Int = 0
         private set
 
     init {
@@ -35,17 +29,9 @@ class FormView @JvmOverloads constructor(
             R.styleable.FormView_formMarginStart,
             resources.getDimensionPixelSize(R.dimen.formMarginStart)
         )
-        formMarginTop = a.getDimensionPixelSize(
-            R.styleable.FormView_formMarginTop,
-            resources.getDimensionPixelSize(R.dimen.formMarginTop)
-        )
         formMarginEnd = a.getDimensionPixelSize(
             R.styleable.FormView_formMarginEnd,
             resources.getDimensionPixelSize(R.dimen.formMarginEnd)
-        )
-        formMarginBottom = a.getDimensionPixelSize(
-            R.styleable.FormView_formMarginBottom,
-            resources.getDimensionPixelSize(R.dimen.formMarginBottom)
         )
         a.recycle()
         addOnScrollListener(object : OnScrollListener() {
@@ -79,30 +65,24 @@ class FormView @JvmOverloads constructor(
         super.setLayoutManager(layout)
     }
 
-    fun setFormMargin(start: Int, top: Int, end: Int, bottom: Int) {
+    fun setFormMargin(start: Int, end: Int) {
         formMarginStart = start
-        formMarginTop = top
         formMarginEnd = end
-        formMarginBottom = bottom
         updateFormMargin4LayoutManager()
     }
 
     fun updateFormMargin(
         start: Int = formMarginStart,
-        top: Int = formMarginTop,
         end: Int = formMarginEnd,
-        bottom: Int = formMarginBottom
     ) {
         formMarginStart = start
-        formMarginTop = top
         formMarginEnd = end
-        formMarginBottom = bottom
         updateFormMargin4LayoutManager()
     }
 
     private fun updateFormMargin4LayoutManager() {
         (layoutManager as? FormLayoutManager)?.also {
-            it.setFormMargin(formMarginStart, formMarginTop, formMarginEnd, formMarginBottom)
+            it.setFormMargin(formMarginStart, formMarginEnd)
         }
     }
 }

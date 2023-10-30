@@ -19,16 +19,17 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 24) {
         set(value) {
             field = value
             if (width != 0) {
-                columnCount = max(1, min(4, (width - formMarginStart - formMarginEnd) / value))
+                columnCount = max(
+                    1,
+                    min(4, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / value)
+                )
             }
         }
 
     private var columnCount = 1
 
-    private var formMarginStart: Int = 0
-    private var formMarginTop: Int = 0
-    private var formMarginEnd: Int = 0
-    private var formMarginBottom: Int = 0
+    internal var formMarginStart: Int = -1
+    internal var formMarginEnd: Int = -1
 
     init {
         spanSizeLookup = object : SpanSizeLookup() {
@@ -54,7 +55,8 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 24) {
     ) {
         super.onMeasure(recycler, state, widthSpec, heightSpec)
         val width = MeasureSpec.getSize(widthSpec)
-        columnCount = max(1, min(4, (width - formMarginStart - formMarginEnd) / maxItemWidth))
+        columnCount =
+            max(1, min(4, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / maxItemWidth))
     }
 
     override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
@@ -171,24 +173,22 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 24) {
         )
     }
 
-    fun setFormMargin(start: Int, top: Int, end: Int, bottom: Int) {
+    fun setFormMargin(start: Int, end: Int) {
         formMarginStart = start
-        formMarginTop = top
         formMarginEnd = end
-        formMarginBottom = bottom
     }
 
-    override fun getPaddingTop() = super.getPaddingTop() + formMarginTop
-    override fun getPaddingBottom() = super.getPaddingBottom() + formMarginBottom
-
-    override fun getPaddingStart() = super.getPaddingStart() + formMarginEnd
-    override fun getPaddingEnd() = super.getPaddingEnd() + formMarginEnd
+    override fun getPaddingStart() = super.getPaddingStart() + max(0, formMarginStart)
+    override fun getPaddingEnd() = super.getPaddingEnd() + max(0, formMarginEnd)
 
     override fun getPaddingLeft() =
-        super.getPaddingLeft() + if (isLayoutRTL) formMarginEnd else formMarginStart
+        super.getPaddingLeft() + if (isLayoutRTL) max(0, formMarginEnd) else max(0, formMarginStart)
 
     override fun getPaddingRight() =
-        super.getPaddingRight() + if (isLayoutRTL) formMarginStart else formMarginEnd
+        super.getPaddingRight() + if (isLayoutRTL) max(0, formMarginStart) else max(
+            0,
+            formMarginEnd
+        )
 
     private class CenterSmoothScroller(context: Context) : LinearSmoothScroller(context) {
         override fun calculateDtToFit(
