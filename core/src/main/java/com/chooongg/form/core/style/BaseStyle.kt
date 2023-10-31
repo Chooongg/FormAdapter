@@ -3,7 +3,6 @@ package com.chooongg.form.core.style
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.core.FormLayoutManager
 import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
@@ -12,6 +11,7 @@ import com.chooongg.form.core.boundary.FormInsideInfo
 import com.chooongg.form.core.boundary.FormMarginInfo
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.nameProvider.BasePartNameProvider
+import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.typeset.BaseTypeset
 
 abstract class BaseStyle {
@@ -25,14 +25,19 @@ abstract class BaseStyle {
     var insideInfo: FormInsideInfo = FormInsideInfo(0, 0, 0, 0)
         private set
 
-    internal fun createSizeInfo(recyclerView: RecyclerView) {
-        val layoutManager = recyclerView.layoutManager as? FormLayoutManager
-        var start = layoutManager?.formMarginStart
+    private var isInstanceMarginInsideInfo = false
+
+    internal fun createSizeInfo(adapter: BaseFormPartAdapter) {
+        if (isInstanceMarginInsideInfo) return
+        val recyclerView = adapter.formAdapter.recyclerView ?: return
+        val layoutManager = recyclerView.layoutManager as? FormLayoutManager ?: return
+        var start: Int? = layoutManager.formMarginStart
         if (start == -1) start = null
-        var end = layoutManager?.formMarginEnd
+        var end: Int? = layoutManager.formMarginEnd
         if (end == -1) end = null
         marginInfo = onCreateMarginInfo(recyclerView.context, start, end)
         insideInfo = onCreateInsideInfo(recyclerView.context)
+        isInstanceMarginInsideInfo = true
     }
 
     protected open fun onCreateMarginInfo(

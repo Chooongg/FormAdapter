@@ -23,7 +23,7 @@ open class AbstractForm : CacheCleanable {
     /**
      * 启用模式
      */
-    var enableMode: FormEnableMode = FormEnableMode.ALWAYS
+    var enableMode: FormEnableMode = FormEnableMode.ENABLED
 
     protected var menuInternal: FormMenuItem? = null
 

@@ -37,6 +37,6 @@
 
     <style name="Form.Button.UnelevatedButton" parent="Widget.Material3.Button.UnelevatedButton" />
 
-    <style name="Temp" parent="Widget.Material3.CardView.Outlined" />
+    <style name="Temp" parent="Widget.Material3.MaterialDivider" />
 
 </resources>

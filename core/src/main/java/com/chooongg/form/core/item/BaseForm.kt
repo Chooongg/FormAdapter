@@ -82,6 +82,11 @@ abstract class BaseForm(
      */
     open var loneLine = false
 
+    /**
+     * 在边缘显示
+     */
+    open var showAtEdge = true
+
     //</editor-fold>
 
     //<editor-fold desc="接口 interface">

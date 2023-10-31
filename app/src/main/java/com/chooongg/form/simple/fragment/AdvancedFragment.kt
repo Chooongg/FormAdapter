@@ -15,6 +15,10 @@ class AdvancedFragment : BaseFragment() {
 
     private val adapter = FormAdapter(true)
 
+    override fun change() {
+        adapter.isEnabled = !adapter.isEnabled
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setTitle(R.string.advanced)
         formView.setFormAdapter(adapter)

@@ -17,7 +17,7 @@ import com.chooongg.form.core.typeset.BaseTypeset
 open class FormAdapter(isEnabled: Boolean) :
     RecyclerView.Adapter<ViewHolder>() {
 
-    private var _recyclerView: RecyclerView? = null
+    internal var recyclerView: RecyclerView? = null
 
     private val concatAdapter = ConcatAdapter(
         ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
@@ -97,7 +97,7 @@ open class FormAdapter(isEnabled: Boolean) :
 
     fun addPart(adapter: FormPartAdapter?, updateAdjacentAdapter: Boolean = false) {
         if (adapter != null) concatAdapter.addAdapter(adapter)
-        if (!updateAdjacentAdapter || _recyclerView == null || concatAdapter.adapters.size - 2 < 0) return
+        if (!updateAdjacentAdapter || recyclerView == null || concatAdapter.adapters.size - 2 < 0) return
         partAdapters[concatAdapter.adapters.size - 2].update()
     }
 
@@ -113,7 +113,7 @@ open class FormAdapter(isEnabled: Boolean) :
 
     fun addDynamicPart(adapter: FormDynamicPartAdapter?, updateAdjacentAdapter: Boolean = false) {
         if (adapter != null) concatAdapter.addAdapter(adapter)
-        if (!updateAdjacentAdapter || _recyclerView == null || concatAdapter.adapters.size - 2 < 0) return
+        if (!updateAdjacentAdapter || recyclerView == null || concatAdapter.adapters.size - 2 < 0) return
         partAdapters[concatAdapter.adapters.size - 2].update()
     }
 
@@ -175,17 +175,17 @@ open class FormAdapter(isEnabled: Boolean) :
             }
             recyclerView.layoutManager = layoutManager
         }
-        _recyclerView = recyclerView
+        this.recyclerView = recyclerView
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         concatAdapter.onDetachedFromRecyclerView(recyclerView)
         clearPool()
-        _recyclerView = null
+        this.recyclerView = null
     }
 
     fun scrollToPosition(globalPosition: Int) {
-        _recyclerView?.smoothScrollToPosition(globalPosition)
+        recyclerView?.smoothScrollToPosition(globalPosition)
     }
 
     //</editor-fold>
@@ -244,7 +244,7 @@ open class FormAdapter(isEnabled: Boolean) :
     }
 
     fun clearPool() {
-        _recyclerView?.recycledViewPool?.clear()
+        recyclerView?.recycledViewPool?.clear()
         stylePool.clear()
         typesetPool.clear()
         providerPool.clear()

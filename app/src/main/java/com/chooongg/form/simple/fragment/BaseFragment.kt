@@ -29,8 +29,14 @@ abstract class BaseFragment : Fragment() {
         }
         toolbar = view.findViewById(R.id.toolbar)
         formView = view.findViewById(R.id.formView)
+        toolbar.setOnMenuItemClickListener {
+            change()
+            true
+        }
         return view
     }
+
+    abstract fun change()
 
     override fun onResume() {
         super.onResume()

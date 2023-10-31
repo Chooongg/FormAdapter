@@ -18,8 +18,6 @@ import kotlinx.coroutines.SupervisorJob
 abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: BaseStyle) :
     RecyclerView.Adapter<FormViewHolder>() {
 
-    protected var lastEnabled: Boolean = formAdapter.isEnabled
-
     var adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         internal set
 
@@ -39,7 +37,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             oldItem.javaClass == newItem.javaClass && oldItem.typeset == newItem.typeset
 
         override fun areContentsTheSame(oldItem: BaseForm, newItem: BaseForm) =
-            oldItem.id == newItem.id && lastEnabled == formAdapter.isEnabled
+            oldItem.id == newItem.id
     }).build())
 
     val itemList get() = asyncDiffer.currentList
@@ -62,6 +60,8 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder {
+        val style = formAdapter.getStyle4ItemViewType(viewType)
+        style.createSizeInfo(this)
         val styleLayout = style.onCreateViewHolder(parent)?.apply {
             clipChildren = false
             clipToPadding = false
@@ -84,7 +84,10 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
         val item = getItem(position)
-        style.onBindViewHolder(holder, holder.styleLayout, item)
+        val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
+        formAdapter.getStyle4ItemViewType(holder.itemViewType).apply {
+            onBindViewHolder(holder, holder.styleLayout, item)
+        }
         formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
             setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
             onBindViewHolder(holder, holder.typesetLayout, item)
@@ -100,6 +103,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         payloads: MutableList<Any>
     ) {
         val item = getItem(position)
+        val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
         style.onBindViewHolder(holder, holder.styleLayout, item)
         formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
             setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
@@ -113,7 +117,8 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     }
 
     override fun onViewRecycled(holder: FormViewHolder) {
-        style.onViewRecycled(holder, holder.styleLayout)
+        formAdapter.getStyle4ItemViewType(holder.itemViewType)
+            .onViewRecycled(holder, holder.styleLayout)
         formAdapter.getTypeset4ItemViewType(holder.itemViewType)
             .onViewRecycled(holder, holder.typesetLayout)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)
@@ -121,7 +126,8 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     }
 
     override fun onViewAttachedToWindow(holder: FormViewHolder) {
-        style.onViewAttachedToWindow(holder, holder.styleLayout)
+        formAdapter.getStyle4ItemViewType(holder.itemViewType)
+            .onViewAttachedToWindow(holder, holder.styleLayout)
         formAdapter.getTypeset4ItemViewType(holder.itemViewType)
             .onViewAttachedToWindow(holder, holder.typesetLayout)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)
@@ -129,15 +135,11 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     }
 
     override fun onViewDetachedFromWindow(holder: FormViewHolder) {
-        style.onViewDetachedFromWindow(holder, holder.styleLayout)
+        formAdapter.getStyle4ItemViewType(holder.itemViewType)
+            .onViewDetachedFromWindow(holder, holder.styleLayout)
         formAdapter.getTypeset4ItemViewType(holder.itemViewType)
             .onViewDetachedFromWindow(holder, holder.typesetLayout)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)
             .onViewDetachedFromWindow(holder, holder.view)
-    }
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        style.createSizeInfo(recyclerView)
     }
 }

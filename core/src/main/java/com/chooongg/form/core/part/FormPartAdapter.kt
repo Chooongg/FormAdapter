@@ -30,9 +30,9 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             asyncDiffer.submitList(null)
             return
         }
-        val tempItems = mutableListOf<BaseForm>()
+        val tempList = mutableListOf<BaseForm>()
         if (data.partName != null) {
-            tempItems.add(InternalFormPartName(data.partName))
+            tempList.add(InternalFormPartName(data.partName))
         }
         data.getItems().forEach {
             it.globalPosition = -1
@@ -40,15 +40,21 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             it.groupIndex = -1
             it.itemCountInGroup = -1
             it.positionInGroup = -1
-            if (it.isRealVisible(formAdapter.isEnabled)) tempItems.add(it)
+            if (it.isRealVisible(formAdapter.isEnabled)) tempList.add(it)
         }
-        tempItems.forEachIndexed { index, item ->
+        while (tempList.size > 0 && !tempList[0].showAtEdge) {
+            tempList.removeAt(0)
+        }
+        while (tempList.size > 1 && !tempList[tempList.lastIndex].showAtEdge) {
+            tempList.removeAt(tempList.lastIndex)
+        }
+        tempList.forEachIndexed { index, item ->
             item.groupItemCount = 1
             item.groupIndex = 0
-            item.itemCountInGroup = tempItems.size
+            item.itemCountInGroup = tempList.size
             item.positionInGroup = index
         }
-        asyncDiffer.submitList(tempItems) { lastEnabled = formAdapter.isEnabled }
+        asyncDiffer.submitList(tempList) { notifyItemRangeChanged(0, itemCount) }
     }
 
     override fun findOfField(field: String, update: Boolean, block: (BaseForm) -> Unit): Boolean {
