@@ -2,7 +2,6 @@ package com.chooongg.form.simple
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.chooongg.form.simple.databinding.ActivityMainBinding
 import com.chooongg.form.simple.fragment.AdvancedFragment
@@ -10,6 +9,7 @@ import com.chooongg.form.simple.fragment.BaseFragment
 import com.chooongg.form.simple.fragment.BasicFragment
 import com.chooongg.form.simple.fragment.StyleFragment
 import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.shape.MaterialShapeDrawable
 
 class MainActivity : AppCompatActivity() {
 
@@ -23,11 +23,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(binding.root)
         binding.viewPager.isUserInputEnabled = false
         binding.viewPager.adapter = adapter
         (binding.navigationView as NavigationBarView).apply {
+            val color = (background as? MaterialShapeDrawable)?.fillColor?.defaultColor
+            if (color != null) window.navigationBarColor = color
             setOnItemSelectedListener {
                 when (it.itemId) {
                     R.id.basic -> binding.viewPager.setCurrentItem(0, false)
