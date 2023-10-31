@@ -5,11 +5,8 @@ import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.GridLayoutManager
 import com.chooongg.form.core.FormViewHolder
-import com.chooongg.form.core.R
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.InternalFormPartName
-import com.google.android.material.textview.MaterialTextView
 
 class NoneNotAlignmentStyle : BaseStyle {
 
@@ -40,23 +37,6 @@ class NoneNotAlignmentStyle : BaseStyle {
                 Boundary.MIDDLE -> -holder.style.marginInfo.middleEnd
                 else -> 0
             }
-        }
-    }
-
-    override fun onCreatePartName(parent: ViewGroup): View {
-        return MaterialTextView(parent.context).apply {
-            setTextIsSelectable(true)
-            setTextAppearance(R.style.Form_TextAppearance_Label)
-            setPaddingRelative(
-                insideInfo.middleStart, insideInfo.middleTop,
-                insideInfo.middleEnd, insideInfo.middleBottom
-            )
-        }
-    }
-
-    override fun onBindPartName(holder: FormViewHolder, view: View, item: InternalFormPartName) {
-        with(view as MaterialTextView) {
-            text = item.getPartName(context)
         }
     }
 

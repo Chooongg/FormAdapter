@@ -4,11 +4,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import com.chooongg.form.core.FormViewHolder
-import com.chooongg.form.core.R
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.InternalFormPartName
-import com.google.android.material.textview.MaterialTextView
 
 class NoneStyle : BaseStyle {
 
@@ -31,23 +28,6 @@ class NoneStyle : BaseStyle {
                 Boundary.MIDDLE -> marginInfo.middleBottom
                 else -> 0
             }
-        }
-    }
-
-    override fun onCreatePartName(parent: ViewGroup): View {
-        return MaterialTextView(parent.context).apply {
-            setTextIsSelectable(true)
-            setTextAppearance(R.style.Form_TextAppearance_Label)
-            setPaddingRelative(
-                insideInfo.middleStart, insideInfo.middleTop,
-                insideInfo.middleEnd, insideInfo.middleBottom
-            )
-        }
-    }
-
-    override fun onBindPartName(holder: FormViewHolder, view: View, item: InternalFormPartName) {
-        with(view as MaterialTextView) {
-            text = item.getPartName(context)
         }
     }
 

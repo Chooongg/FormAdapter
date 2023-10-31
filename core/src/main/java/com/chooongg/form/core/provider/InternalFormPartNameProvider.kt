@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 
 class InternalFormPartNameProvider : BaseFormProvider() {
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
-        return style.onCreatePartName(parent)
+        return style.partNameProvider.onCreatePartName(style, parent)
     }
 
     override fun onBindViewHolder(
@@ -20,7 +20,7 @@ class InternalFormPartNameProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        holder.style.onBindPartName(holder, view, item as InternalFormPartName)
+        holder.style.partNameProvider.onBindPartName(holder, view, item as InternalFormPartName)
     }
 
     override fun onViewAttachedToWindow(holder: FormViewHolder, view: View) {

@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.addText
+import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.style.CardElevatedStyle
 import com.chooongg.form.core.style.CardFilledStyle
+import com.chooongg.form.core.style.CardOutlinedStyle
 import com.chooongg.form.core.style.NoneStyle
 import com.chooongg.form.simple.R
 
@@ -18,95 +20,40 @@ class StyleFragment : BaseFragment() {
         formView.setFormAdapter(adapter)
         adapter.setNewInstance {
             addPart {
-                partName = "Default"
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
+                partName = "NoneNotAlignmentStyle"
+                addChild()
             }
             addPart(NoneStyle()) {
                 partName = "NoneStyle"
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
+                addChild()
             }
             addPart(CardElevatedStyle()) {
-                partName = "CardStyle"
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
+                partName = "CardElevatedStyle"
+                addChild()
             }
             addPart(CardFilledStyle()) {
-                partName = "CardStyle"
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
+                partName = "CardFilledStyle"
+                addChild()
             }
-            addPart(CardElevatedStyle()) {
-                partName = "CardStyle"
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
+            addPart(CardOutlinedStyle()) {
+                partName = "CardOutlinedStyle"
+                addChild()
             }
-            addPart(CardElevatedStyle()) {
-                partName = "CardStyle"
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-                addText("Style") {
-                    content = "Default"
-                }
-            }
+        }
+    }
+
+    private fun FormPartData.addChild() {
+        addText("Style") {
+            content = "StyleTest"
+        }
+        addText("Style") {
+            content = "StyleTest"
+        }
+        addText("Style") {
+            content = "StyleTest"
+        }
+        addText("Style") {
+            content = "StyleTest"
         }
     }
 }

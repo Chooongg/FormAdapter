@@ -5,15 +5,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.core.FormLayoutManager
+import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.boundary.FormInsideInfo
 import com.chooongg.form.core.boundary.FormMarginInfo
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.InternalFormPartName
+import com.chooongg.form.core.nameProvider.BasePartNameProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 
 abstract class BaseStyle {
+
+    var partNameProvider: BasePartNameProvider = FormManager.Default.partNameProvider
 
     var typeset: BaseTypeset? = null
 
@@ -66,16 +69,6 @@ abstract class BaseStyle {
 
     abstract fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm)
 
-    /**
-     * 创建分组标题
-     */
-    abstract fun onCreatePartName(parent: ViewGroup): View
-
-    /**
-     * 绑定分组标题
-     */
-    abstract fun onBindPartName(holder: FormViewHolder, view: View, item: InternalFormPartName)
-
     protected abstract fun addView(parentView: ViewGroup, child: View)
 
     open fun onViewRecycled(holder: FormViewHolder, layout: ViewGroup?) = Unit
@@ -91,6 +84,7 @@ abstract class BaseStyle {
     override fun equals(other: Any?): Boolean {
         if (other !is BaseStyle) return false
         if (javaClass != other.javaClass) return false
+        if (partNameProvider != other.partNameProvider) return false
         if (typeset != other.typeset) return false
         return true
     }

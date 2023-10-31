@@ -47,54 +47,52 @@ abstract class BaseCardStyle : BaseStyle() {
         }
     }
 
-    protected fun getShapeAppearanceModel(
-        holder: FormViewHolder,
-        item: BaseForm
-    ) = ShapeAppearanceModel.builder().apply {
-        if (holder.itemView.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
-            setTopLeftCornerSize(
-                if (item.marginBoundary.top != 0 && item.marginBoundary.start != 0) {
-                    shapeAppearanceModel.topLeftCornerSize
-                } else AbsoluteCornerSize(0f)
-            )
-            setTopRightCornerSize(
-                if (item.marginBoundary.top != 0 && item.marginBoundary.end != 0) {
-                    shapeAppearanceModel.topRightCornerSize
-                } else AbsoluteCornerSize(0f)
-            )
-            setBottomLeftCornerSize(
-                if (item.marginBoundary.bottom != 0 && item.marginBoundary.start != 0) {
-                    shapeAppearanceModel.bottomLeftCornerSize
-                } else AbsoluteCornerSize(0f)
-            )
-            setBottomRightCornerSize(
-                if (item.marginBoundary.bottom != 0 && item.marginBoundary.end != 0) {
-                    shapeAppearanceModel.bottomRightCornerSize
-                } else AbsoluteCornerSize(0f)
-            )
-        } else {
-            setTopLeftCornerSize(
-                if (item.marginBoundary.top != 0 && item.marginBoundary.start != 0) {
-                    shapeAppearanceModel.topRightCornerSize
-                } else AbsoluteCornerSize(0f)
-            )
-            setTopRightCornerSize(
-                if (item.marginBoundary.top != 0 && item.marginBoundary.end != 0) {
-                    shapeAppearanceModel.topLeftCornerSize
-                } else AbsoluteCornerSize(0f)
-            )
-            setBottomLeftCornerSize(
-                if (item.marginBoundary.bottom != 0 && item.marginBoundary.start != 0) {
-                    shapeAppearanceModel.bottomRightCornerSize
-                } else AbsoluteCornerSize(0f)
-            )
-            setBottomRightCornerSize(
-                if (item.marginBoundary.bottom != 0 && item.marginBoundary.end != 0) {
-                    shapeAppearanceModel.bottomLeftCornerSize
-                } else AbsoluteCornerSize(0f)
-            )
-        }
-    }.build()
+    protected fun getShapeAppearanceModel(view: View, item: BaseForm) =
+        ShapeAppearanceModel.builder().apply {
+            if (view.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+                setTopLeftCornerSize(
+                    if (item.marginBoundary.top != 0 && item.marginBoundary.start != 0) {
+                        shapeAppearanceModel.topLeftCornerSize
+                    } else AbsoluteCornerSize(0f)
+                )
+                setTopRightCornerSize(
+                    if (item.marginBoundary.top != 0 && item.marginBoundary.end != 0) {
+                        shapeAppearanceModel.topRightCornerSize
+                    } else AbsoluteCornerSize(0f)
+                )
+                setBottomLeftCornerSize(
+                    if (item.marginBoundary.bottom != 0 && item.marginBoundary.start != 0) {
+                        shapeAppearanceModel.bottomLeftCornerSize
+                    } else AbsoluteCornerSize(0f)
+                )
+                setBottomRightCornerSize(
+                    if (item.marginBoundary.bottom != 0 && item.marginBoundary.end != 0) {
+                        shapeAppearanceModel.bottomRightCornerSize
+                    } else AbsoluteCornerSize(0f)
+                )
+            } else {
+                setTopLeftCornerSize(
+                    if (item.marginBoundary.top != 0 && item.marginBoundary.start != 0) {
+                        shapeAppearanceModel.topRightCornerSize
+                    } else AbsoluteCornerSize(0f)
+                )
+                setTopRightCornerSize(
+                    if (item.marginBoundary.top != 0 && item.marginBoundary.end != 0) {
+                        shapeAppearanceModel.topLeftCornerSize
+                    } else AbsoluteCornerSize(0f)
+                )
+                setBottomLeftCornerSize(
+                    if (item.marginBoundary.bottom != 0 && item.marginBoundary.start != 0) {
+                        shapeAppearanceModel.bottomRightCornerSize
+                    } else AbsoluteCornerSize(0f)
+                )
+                setBottomRightCornerSize(
+                    if (item.marginBoundary.bottom != 0 && item.marginBoundary.end != 0) {
+                        shapeAppearanceModel.bottomLeftCornerSize
+                    } else AbsoluteCornerSize(0f)
+                )
+            }
+        }.build()
 
     override fun equals(other: Any?): Boolean {
         if (other !is BaseCardStyle) return false

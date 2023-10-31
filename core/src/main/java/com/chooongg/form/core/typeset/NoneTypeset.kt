@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.chooongg.form.core.FormViewHolder
-import com.chooongg.form.core.boundary.FormInsideInfo
 import com.chooongg.form.core.enum.FormEmsMode
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.style.BaseStyle
@@ -24,14 +23,5 @@ class NoneTypeset : BaseTypeset() {
 
     override fun addView(style: BaseStyle, parentView: ViewGroup, child: View) {
         parentView.addView(child)
-    }
-
-    override fun setTypesetLayoutPadding(
-        holder: FormViewHolder,
-        layout: ViewGroup?,
-        insideInfo: FormInsideInfo,
-        item: BaseForm
-    ) {
-        super.setTypesetLayoutPadding(holder, layout, insideInfo, item)
     }
 }

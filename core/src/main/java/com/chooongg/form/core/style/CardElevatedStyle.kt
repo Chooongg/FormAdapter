@@ -8,9 +8,7 @@ import androidx.core.content.res.use
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.InternalFormPartName
 import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.textview.MaterialTextView
 
 class CardElevatedStyle : BaseCardStyle {
 
@@ -27,7 +25,7 @@ class CardElevatedStyle : BaseCardStyle {
         super.onBindViewHolder(holder, layout, item)
         val context = holder.itemView.context
         holder.itemView.clipToOutline = true
-        val shape = getShapeAppearanceModel(holder, item)
+        val shape = getShapeAppearanceModel(holder.itemView, item)
         holder.itemView.elevation =
             elevation ?: context.resources.getDimension(R.dimen.formCardElevation)
         val shapeDrawable = MaterialShapeDrawable(shape)
@@ -38,24 +36,18 @@ class CardElevatedStyle : BaseCardStyle {
         holder.itemView.background = shapeDrawable
     }
 
-    override fun onCreatePartName(parent: ViewGroup): View {
-        return MaterialTextView(parent.context).apply {
-            setTextIsSelectable(true)
-            setTextAppearance(R.style.Form_TextAppearance_Label)
-            setPaddingRelative(
-                insideInfo.middleStart, insideInfo.middleTop,
-                insideInfo.middleEnd, insideInfo.middleBottom
-            )
-        }
-    }
-
-    override fun onBindPartName(holder: FormViewHolder, view: View, item: InternalFormPartName) {
-        with(view as MaterialTextView) {
-            text = item.getPartName(context)
-        }
-    }
-
     override fun addView(parentView: ViewGroup, child: View) {
         parentView.addView(child)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is CardElevatedStyle) return false
+        if (!super.equals(other)) return false
+        if (elevation != other.elevation) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
     }
 }
