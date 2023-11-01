@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     BaseFormPartAdapter(formAdapter, style) {
@@ -30,6 +31,8 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             asyncDiffer.submitList(null)
             return
         }
+        adapterScope.launch {
+        }
         val tempList = mutableListOf<BaseForm>()
         if (data.partName != null) {
             tempList.add(InternalFormPartName(data.partName))
@@ -40,6 +43,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             it.groupIndex = -1
             it.itemCountInGroup = -1
             it.positionInGroup = -1
+            it.nextItemLoneLine = false
             if (it.isRealVisible(formAdapter.isEnabled)) tempList.add(it)
         }
         while (tempList.size > 0 && !tempList[0].showAtEdge) {
@@ -53,6 +57,9 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             item.groupIndex = 0
             item.itemCountInGroup = tempList.size
             item.positionInGroup = index
+            if (item.loneLine && index > 0) {
+                tempList[index - 1].nextItemLoneLine = true
+            }
         }
         asyncDiffer.submitList(tempList) { notifyItemRangeChanged(0, itemCount) }
     }

@@ -17,6 +17,7 @@ class FormLabelProvider : BaseFormProvider() {
 
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
         return MaterialTextView(parent.context).apply {
+            id = R.id.formInternalContentView
             setTextIsSelectable(true)
             setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceLabel))
             setPaddingRelative(

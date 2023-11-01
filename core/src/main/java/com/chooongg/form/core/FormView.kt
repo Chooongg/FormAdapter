@@ -2,9 +2,7 @@ package com.chooongg.form.core
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RestrictTo
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 class FormView @JvmOverloads constructor(
@@ -39,8 +37,7 @@ class FormView @JvmOverloads constructor(
                 when (newState) {
                     SCROLL_STATE_IDLE -> {
                         recyclerView.focusedChild?.clearFocus()
-                        ContextCompat.getSystemService(context, InputMethodManager::class.java)
-                            ?.hideSoftInputFromWindow(recyclerView.windowToken, 0)
+                        FormUtils.hideIme(recyclerView)
                     }
                 }
             }

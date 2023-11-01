@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.GravityInt
+import com.chooongg.form.core.FormLayoutManager
 import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.boundary.Boundary
@@ -11,6 +12,7 @@ import com.chooongg.form.core.boundary.FormInsideInfo
 import com.chooongg.form.core.enum.FormEmsMode
 import com.chooongg.form.core.format.BaseNameFormatter
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
 
 abstract class BaseTypeset {
@@ -31,11 +33,11 @@ abstract class BaseTypeset {
     open var multiColumnContentGravity: Int =
         FormManager.Default.multiColumnContentGravity
 
-    abstract fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): ViewGroup?
+    abstract fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): ViewGroup
 
     abstract fun onBindViewHolder(
         holder: FormViewHolder,
-        layout: ViewGroup?,
+        layout: ViewGroup,
         item: BaseForm
     )
 
@@ -45,9 +47,14 @@ abstract class BaseTypeset {
         nameFormatter ?: FormManager.Default.nameFormatter
 
     @GravityInt
-    fun obtainContentGravity(item: BaseForm): Int = if (item.spanSize < 24) {
-        item.multiColumnContentGravity ?: multiColumnContentGravity
-    } else item.contentGravity ?: contentGravity
+    fun obtainContentGravity(holder: FormViewHolder, item: BaseForm): Int {
+        val adapter = holder.bindingAdapter as? BaseFormPartAdapter
+        val manager = adapter?.formAdapter?.recyclerView?.layoutManager as? FormLayoutManager
+        return if ((manager?.columnCount ?: 1) > 1) {
+            item.multiColumnContentGravity ?: multiColumnContentGravity
+        } else item.contentGravity ?: contentGravity
+    }
+
 
     fun executeAddView(style: BaseStyle, parentView: ViewGroup?, child: View?) {
         if (parentView != null && child != null) {

@@ -4,13 +4,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.InternalFormPartName
 import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 
-class InternalFormPartNameProvider : BaseFormProvider() {
+class FormSelectorProvider : BaseFormProvider() {
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
-        return style.partNameProvider.onCreatePartName(style, parent)
+        TODO("Not yet implemented")
     }
 
     override fun onBindViewHolder(
@@ -20,13 +19,6 @@ class InternalFormPartNameProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        holder.style.partNameProvider.onBindPartName(
-            holder, view, item as InternalFormPartName, enabled
-        )
-    }
-
-    override fun onViewAttachedToWindow(holder: FormViewHolder, view: View) {
-        view.isEnabled = false
-        view.isEnabled = true
+        TODO("Not yet implemented")
     }
 }

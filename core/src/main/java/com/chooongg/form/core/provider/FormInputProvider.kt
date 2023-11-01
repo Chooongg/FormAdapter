@@ -77,8 +77,8 @@ class FormInputProvider : BaseFormProvider() {
                 null -> FormUtils.getText(context, item.hint)
                 else -> null
             }
-            setText(FormUtils.getText(context, item.content))
-            gravity = holder.typeset.obtainContentGravity(item)
+            setText(item.getContentText(context, enabled))
+            gravity = holder.typeset.obtainContentGravity(holder, item)
             if (itemInput != null && itemInput.maxLines <= 1) {
                 setSingleLine()
             } else {

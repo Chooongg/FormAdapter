@@ -1,6 +1,7 @@
 package com.chooongg.form.core
 
 import android.content.Context
+import android.util.Log
 import android.view.View.MeasureSpec
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -26,7 +27,8 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 24) {
             }
         }
 
-    private var columnCount = 1
+    var columnCount = 1
+        private set
 
     internal var formMarginStart: Int = -1
     internal var formMarginEnd: Int = -1
@@ -88,7 +90,7 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 24) {
                     item.insideBoundary.start = FormManager.Default.horizontalMiddleBoundary
                 }
                 spanIndex += item.spanSize
-                if (spanIndex == spanCount) {
+                if (spanIndex >= spanCount) {
                     item.marginBoundary.end = Boundary.GLOBAL
                     item.insideBoundary.end = Boundary.GLOBAL
                     spanIndex = 0
@@ -117,9 +119,15 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 24) {
                 }
                 globalPosition++
             }
+            adapter.itemList.forEach {
+                Log.e(
+                    "Form",
+                    "position: ${it.globalPosition}, spanIndex: ${it.spanIndex}, spanSize: ${it.spanSize}"
+                )
+            }
             for (index in adapter.itemList.lastIndex downTo 0) {
                 val item = adapter.getItem(index)
-                if (item.itemCountInGroup - item.positionInGroup == 1) {
+                if (item.itemCountInGroup - 1 - item.positionInGroup == 0) {
                     if (item.globalPosition == formAdapter.itemCount - 1) {
                         item.marginBoundary.bottom = Boundary.GLOBAL
                         item.insideBoundary.bottom = Boundary.GLOBAL

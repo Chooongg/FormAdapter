@@ -8,6 +8,10 @@ import com.chooongg.form.core.item.FormInput
 import com.chooongg.form.core.item.FormInputFilled
 import com.chooongg.form.core.item.FormInputOutlined
 import com.chooongg.form.core.item.FormLabel
+import com.chooongg.form.core.item.FormRating
+import com.chooongg.form.core.item.FormSlider
+import com.chooongg.form.core.item.FormSwitch
+import com.chooongg.form.core.item.FormSwitchMaterial
 import com.chooongg.form.core.item.FormText
 
 fun IFormCreator.addButton(
@@ -53,6 +57,38 @@ fun IFormCreator.addLabel(
 fun IFormCreator.addLabel(
     @StringRes nameRes: Int?, block: (FormLabel.() -> Unit)? = null
 ) = addItem(FormLabel(nameRes).apply { block?.invoke(this) })
+
+fun IFormCreator.addRating(
+    name: CharSequence?, block: (FormRating.() -> Unit)? = null
+) = addItem(FormRating(name).apply { block?.invoke(this) })
+
+fun IFormCreator.addRating(
+    @StringRes nameRes: Int?, block: (FormRating.() -> Unit)? = null
+) = addItem(FormRating(nameRes).apply { block?.invoke(this) })
+
+fun IFormCreator.addSlider(
+    name: CharSequence?, block: (FormSlider.() -> Unit)? = null
+) = addItem(FormSlider(name).apply { block?.invoke(this) })
+
+fun IFormCreator.addSlider(
+    @StringRes nameRes: Int?, block: (FormSlider.() -> Unit)? = null
+) = addItem(FormSlider(nameRes).apply { block?.invoke(this) })
+
+fun IFormCreator.addSwitch(
+    name: CharSequence?, block: (FormSwitch.() -> Unit)? = null
+) = addItem(FormSwitch(name).apply { block?.invoke(this) })
+
+fun IFormCreator.addSwitch(
+    @StringRes nameRes: Int?, block: (FormSwitch.() -> Unit)? = null
+) = addItem(FormSwitch(nameRes).apply { block?.invoke(this) })
+
+fun IFormCreator.addSwitchMaterial(
+    name: CharSequence?, block: (FormSwitchMaterial.() -> Unit)? = null
+) = addItem(FormSwitchMaterial(name).apply { block?.invoke(this) })
+
+fun IFormCreator.addSwitchMaterial(
+    @StringRes nameRes: Int?, block: (FormSwitchMaterial.() -> Unit)? = null
+) = addItem(FormSwitchMaterial(nameRes).apply { block?.invoke(this) })
 
 fun IFormCreator.addText(
     name: CharSequence?, block: (FormText.() -> Unit)? = null

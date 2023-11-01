@@ -16,7 +16,12 @@ abstract class BasePartNameProvider {
     /**
      * 绑定分组标题
      */
-    abstract fun onBindPartName(holder: FormViewHolder, view: View, item: InternalFormPartName)
+    abstract fun onBindPartName(
+        holder: FormViewHolder,
+        view: View,
+        item: InternalFormPartName,
+        enabled: Boolean
+    )
 
     override fun equals(other: Any?): Boolean {
         if (other !is BasePartNameProvider) return false

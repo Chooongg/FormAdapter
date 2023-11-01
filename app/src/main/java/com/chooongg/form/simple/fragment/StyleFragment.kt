@@ -59,5 +59,8 @@ class StyleFragment : BaseFragment() {
         addText("Style") {
             content = "StyleTest"
         }
+        addText("Style") {
+            content = "StyleTest"
+        }
     }
 }

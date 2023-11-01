@@ -21,8 +21,14 @@ class DefaultPartNameProvider : BasePartNameProvider() {
         }
     }
 
-    override fun onBindPartName(holder: FormViewHolder, view: View, item: InternalFormPartName) {
+    override fun onBindPartName(
+        holder: FormViewHolder,
+        view: View,
+        item: InternalFormPartName,
+        enabled: Boolean
+    ) {
         with(view as MaterialTextView) {
+            isEnabled = enabled
             text = item.getPartName(context)
         }
     }

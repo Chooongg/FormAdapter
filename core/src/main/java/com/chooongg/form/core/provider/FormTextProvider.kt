@@ -32,9 +32,10 @@ class FormTextProvider : BaseFormProvider() {
         enabled: Boolean
     ) {
         with(view as MaterialTextView) {
-            text = FormUtils.getText(context, item.content)
-            hint = FormUtils.getText(context, item.hint) ?: resources.getString(R.string.fromDefaultHintNone)
-            gravity = holder.typeset.obtainContentGravity(item)
+            text = item.getContentText(context, enabled)
+            hint = FormUtils.getText(context, item.hint)
+                ?: resources.getString(R.string.fromDefaultHintNone)
+            gravity = holder.typeset.obtainContentGravity(holder, item)
         }
     }
 

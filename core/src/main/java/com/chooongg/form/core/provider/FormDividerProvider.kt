@@ -8,6 +8,7 @@ import android.view.ViewGroup.MarginLayoutParams
 import androidx.core.content.res.use
 import androidx.core.view.updateLayoutParams
 import com.chooongg.form.core.FormViewHolder
+import com.chooongg.form.core.R
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.FormDivider
 import com.chooongg.form.core.style.BaseStyle
@@ -16,7 +17,9 @@ import kotlinx.coroutines.CoroutineScope
 
 class FormDividerProvider : BaseFormProvider() {
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
-        MaterialDivider(parent.context)
+        MaterialDivider(parent.context).apply {
+            id = R.id.formInternalContentView
+        }
 
     override fun onBindViewHolder(
         scope: CoroutineScope,

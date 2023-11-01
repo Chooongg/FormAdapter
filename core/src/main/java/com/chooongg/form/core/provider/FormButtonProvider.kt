@@ -51,7 +51,7 @@ class FormButtonProvider : BaseFormProvider() {
             } else icon = null
             iconSize = itemButton?.iconSize ?: FormUtils.getFontHeight(this)
             iconGravity = itemButton?.iconGravity ?: MaterialButton.ICON_GRAVITY_TEXT_START
-            configButtonGravity(this, holder.typeset.obtainContentGravity(item))
+            configButtonGravity(this, holder.typeset.obtainContentGravity(holder, item))
             configButtonStyle(this, itemButton)
         }
     }

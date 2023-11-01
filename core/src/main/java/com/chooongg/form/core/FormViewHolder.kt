@@ -9,9 +9,9 @@ import kotlinx.coroutines.Job
 
 class FormViewHolder(
     val style: BaseStyle,
-    val typeset: BaseTypeset,
     val styleLayout: ViewGroup?,
-    val typesetLayout: ViewGroup?,
+    val typeset: BaseTypeset,
+    val typesetLayout: ViewGroup,
     val view: View
 ) : RecyclerView.ViewHolder(styleLayout ?: typesetLayout ?: view) {
 

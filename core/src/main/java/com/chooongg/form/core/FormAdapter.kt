@@ -74,11 +74,10 @@ open class FormAdapter(isEnabled: Boolean) :
     fun findOfField(
         field: String,
         update: Boolean = true,
-        block: (BaseForm) -> Unit
+        block: BaseForm.() -> Unit
     ): Boolean {
         partAdapters.forEach {
-            val temp = it.findOfField(field, update, block)
-            if (temp) return true
+            if (it.findOfField(field, update, block)) return true
         }
         return false
     }

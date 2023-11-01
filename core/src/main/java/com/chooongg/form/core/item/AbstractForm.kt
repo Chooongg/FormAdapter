@@ -1,14 +1,13 @@
 package com.chooongg.form.core.item
 
 import com.chooongg.form.core.CacheCleanable
-import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormMenuBlock
 import com.chooongg.form.core.enum.FormEnableMode
 import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.menu.FormMenuItem
 import java.util.UUID
 
-open class AbstractForm : CacheCleanable {
+abstract class AbstractForm : CacheCleanable {
 
     /**
      * 表单项唯一标识

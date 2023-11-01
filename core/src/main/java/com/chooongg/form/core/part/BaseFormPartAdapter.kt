@@ -23,6 +23,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     protected val asyncDiffer = AsyncListDiffer(object : ListUpdateCallback {
         override fun onChanged(position: Int, count: Int, payload: Any?) = Unit
+
         override fun onRemoved(position: Int, count: Int) =
             notifyItemRangeRemoved(position, count)
 
@@ -33,11 +34,9 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             notifyItemMoved(fromPosition, toPosition)
 
     }, AsyncDifferConfig.Builder(object : DiffUtil.ItemCallback<BaseForm>() {
+        override fun areContentsTheSame(oldItem: BaseForm, newItem: BaseForm) = true
         override fun areItemsTheSame(oldItem: BaseForm, newItem: BaseForm) =
-            oldItem.javaClass == newItem.javaClass && oldItem.typeset == newItem.typeset
-
-        override fun areContentsTheSame(oldItem: BaseForm, newItem: BaseForm) =
-            oldItem.id == newItem.id
+            oldItem.id == newItem.id && oldItem.typeset == newItem.typeset
     }).build())
 
     val itemList get() = asyncDiffer.currentList
@@ -47,7 +46,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     abstract fun findOfField(
         field: String,
         update: Boolean = true,
-        block: (BaseForm) -> Unit
+        block: BaseForm.() -> Unit
     ): Boolean
 
     override fun getItemCount() = itemList.size
@@ -67,19 +66,19 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             clipToPadding = false
         }
         val typeset = formAdapter.getTypeset4ItemViewType(viewType)
-        val typesetLayout = typeset.onCreateViewHolder(style, styleLayout ?: parent)?.apply {
+        val typesetLayout = typeset.onCreateViewHolder(style, styleLayout ?: parent).apply {
             clipChildren = false
             clipToPadding = false
         }
         style.executeAddView(styleLayout, typesetLayout)
         val provider = formAdapter.getProvider4ItemViewType(viewType)
-        val itemView = provider.onCreateViewHolder(style, typesetLayout ?: styleLayout ?: parent)
-        typeset.executeAddView(style, typesetLayout ?: styleLayout, itemView)
-        val view = styleLayout ?: typesetLayout ?: itemView
+        val itemView = provider.onCreateViewHolder(style, typesetLayout)
+        typeset.executeAddView(style, typesetLayout, itemView)
+        val view = styleLayout ?: typesetLayout
         view.layoutParams =
             if (view.layoutParams != null) GridLayoutManager.LayoutParams(view.layoutParams!!)
             else GridLayoutManager.LayoutParams(-1, -2)
-        return FormViewHolder(style, typeset, styleLayout, typesetLayout, itemView)
+        return FormViewHolder(style, styleLayout, typeset, typesetLayout, itemView)
     }
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {

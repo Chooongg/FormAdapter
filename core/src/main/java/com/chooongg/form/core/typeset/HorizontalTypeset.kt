@@ -25,11 +25,10 @@ class HorizontalTypeset : BaseTypeset {
             it.orientation = LinearLayoutCompat.HORIZONTAL
             it.addView(MaterialTextView(it.context).apply {
                 id = R.id.formInternalNameView
-//                includeFontPadding = false
                 setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceName))
                 setPaddingRelative(
                     style.insideInfo.middleStart, style.insideInfo.middleTop,
-                    style.insideInfo.middleEnd, style.insideInfo.middleBottom
+                    0, style.insideInfo.middleBottom
                 )
             }, LinearLayoutCompat.LayoutParams(-2, -2))
         }
@@ -37,10 +36,10 @@ class HorizontalTypeset : BaseTypeset {
 
     override fun onBindViewHolder(
         holder: FormViewHolder,
-        layout: ViewGroup?,
+        layout: ViewGroup,
         item: BaseForm
     ) {
-        layout?.findViewById<MaterialTextView>(R.id.formInternalNameView)?.apply {
+        layout.findViewById<MaterialTextView>(R.id.formInternalNameView)?.apply {
             setNameViewEms(this)
             text = obtainNameFormatter().format(context, item)
         }

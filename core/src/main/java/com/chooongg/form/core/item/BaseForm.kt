@@ -1,8 +1,10 @@
 package com.chooongg.form.core.item
 
+import android.content.Context
 import androidx.annotation.GravityInt
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormLinkageBlock
+import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.enum.FormValidateStatus
 import com.chooongg.form.core.provider.BaseFormProvider
@@ -202,6 +204,14 @@ abstract class BaseForm(
 
     fun setLinkage(block: FormLinkageBlock?) {
         linkageBlock = block
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="获取方法 get">
+
+    open fun getContentText(context: Context, enabled: Boolean): CharSequence? {
+        return FormUtils.getText(context, content)
     }
 
     //</editor-fold>

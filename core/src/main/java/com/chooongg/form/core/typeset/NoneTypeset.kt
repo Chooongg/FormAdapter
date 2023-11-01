@@ -19,7 +19,7 @@ class NoneTypeset : BaseTypeset() {
         }
     }
 
-    override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) = Unit
+    override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup, item: BaseForm) = Unit
 
     override fun addView(style: BaseStyle, parentView: ViewGroup, child: View) {
         parentView.addView(child)

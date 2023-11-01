@@ -2,6 +2,7 @@ package com.chooongg.form.core.part
 
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.data.FormDynamicPartData
+import com.chooongg.form.core.data.FormGroupData
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.InternalFormPartName
 import com.chooongg.form.core.style.BaseStyle
@@ -35,6 +36,14 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             return
         }
         val tempList = mutableListOf<MutableList<BaseForm>>()
+        data.getGroups().forEach { if (it.getItems().isEmpty()) data.getGroups().remove(it) }
+        if (data.dynamicGroupCreateBlock != null) {
+            while (data.getGroups().size < data.dynamicPartMinGroupCount) {
+                val groupData = FormGroupData()
+                data.dynamicGroupCreateBlock!!.invoke(groupData)
+                data.getGroups().add(groupData)
+            }
+        }
         data.getGroups().forEach { group ->
             val groupList = mutableListOf<BaseForm>()
             if (data.partName != null) {
@@ -48,6 +57,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 it.groupIndex = -1
                 it.itemCountInGroup = -1
                 it.positionInGroup = -1
+                it.nextItemLoneLine = false
                 if (it.isRealVisible(formAdapter.isEnabled)) groupList.add(it)
             }
             while (groupList.size > 0 && !groupList[0].showAtEdge) {
@@ -64,6 +74,9 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 item.groupIndex = index
                 item.itemCountInGroup = group.size
                 item.positionInGroup = position
+                if (item.loneLine && position > 0) {
+                    group[position - 1].nextItemLoneLine = true
+                }
             }
         }
         asyncDiffer.submitList(ArrayList<BaseForm>().apply { tempList.forEach { addAll(it) } }) {

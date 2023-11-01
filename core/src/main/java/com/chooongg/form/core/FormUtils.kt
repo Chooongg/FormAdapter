@@ -2,8 +2,10 @@ package com.chooongg.form.core
 
 import android.content.Context
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.annotation.AttrRes
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
 import com.chooongg.form.core.nameProvider.BasePartNameProvider
 import com.chooongg.form.core.provider.BaseFormProvider
@@ -21,6 +23,11 @@ object FormUtils {
         is Int -> context.getString(any)
         is CharSequence -> any
         else -> any?.toString()
+    }
+
+    fun hideIme(view: View) {
+        ContextCompat.getSystemService(view.context, InputMethodManager::class.java)
+            ?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
 
