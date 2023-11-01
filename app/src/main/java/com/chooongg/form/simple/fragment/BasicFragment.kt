@@ -13,13 +13,16 @@ import com.chooongg.form.core.addInputFilled
 import com.chooongg.form.core.addInputOutlined
 import com.chooongg.form.core.addLabel
 import com.chooongg.form.core.addRating
+import com.chooongg.form.core.addSelector
 import com.chooongg.form.core.addSlider
+import com.chooongg.form.core.addSwitch
+import com.chooongg.form.core.addSwitchMaterial
 import com.chooongg.form.core.addText
 import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.item.FormButton
-import com.chooongg.form.core.item.FormSwitch
-import com.chooongg.form.core.item.FormSwitchMaterial
+import com.chooongg.form.core.option.Option
 import com.chooongg.form.simple.R
+import kotlinx.coroutines.delay
 
 class BasicFragment : BaseFragment() {
 
@@ -59,8 +62,20 @@ class BasicFragment : BaseFragment() {
                 addSlider("测试") {
                     stepSize = 1f
                 }
-                addItem(FormSwitch("测试"))
-                addItem(FormSwitchMaterial("测试"))
+                addSwitch("测试")
+                addSwitchMaterial("测试")
+                addSelector("测试") {
+                    optionLoader {
+                        delay(5000)
+                        listOf(
+                            Option("测试1"),
+                            Option("测试2"),
+                            Option("测试3"),
+                            Option("测试4"),
+                            Option("测试5")
+                        )
+                    }
+                }
                 addInputFilled("InputFilled") {
                     hint = "请输入"
                 }

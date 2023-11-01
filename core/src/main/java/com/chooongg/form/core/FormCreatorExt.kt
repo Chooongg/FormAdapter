@@ -9,6 +9,7 @@ import com.chooongg.form.core.item.FormInputFilled
 import com.chooongg.form.core.item.FormInputOutlined
 import com.chooongg.form.core.item.FormLabel
 import com.chooongg.form.core.item.FormRating
+import com.chooongg.form.core.item.FormSelector
 import com.chooongg.form.core.item.FormSlider
 import com.chooongg.form.core.item.FormSwitch
 import com.chooongg.form.core.item.FormSwitchMaterial
@@ -65,6 +66,14 @@ fun IFormCreator.addRating(
 fun IFormCreator.addRating(
     @StringRes nameRes: Int?, block: (FormRating.() -> Unit)? = null
 ) = addItem(FormRating(nameRes).apply { block?.invoke(this) })
+
+fun IFormCreator.addSelector(
+    name: CharSequence?, block: (FormSelector.() -> Unit)? = null
+) = addItem(FormSelector(name).apply { block?.invoke(this) })
+
+fun IFormCreator.addSelector(
+    @StringRes nameRes: Int?, block: (FormSelector.() -> Unit)? = null
+) = addItem(FormSelector(nameRes).apply { block?.invoke(this) })
 
 fun IFormCreator.addSlider(
     name: CharSequence?, block: (FormSlider.() -> Unit)? = null

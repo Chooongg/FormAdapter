@@ -49,6 +49,13 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         block: BaseForm.() -> Unit
     ): Boolean
 
+    fun indexOf(item: BaseForm): Int? {
+        itemList.forEachIndexed { index, it ->
+            if (it.id == item.id) return index
+        }
+        return null
+    }
+
     override fun getItemCount() = itemList.size
 
     fun getItem(position: Int) = itemList[position]
