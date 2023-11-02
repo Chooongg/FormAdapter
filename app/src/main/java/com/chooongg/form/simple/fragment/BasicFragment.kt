@@ -22,7 +22,6 @@ import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.option.Option
 import com.chooongg.form.simple.R
-import kotlinx.coroutines.delay
 
 class BasicFragment : BaseFragment() {
 
@@ -30,9 +29,12 @@ class BasicFragment : BaseFragment() {
 
     override fun change() {
         adapter.findOfField("input") {
-            visibilityMode = FormVisibilityMode.NEVER
+            visibilityMode = if (visibilityMode == FormVisibilityMode.NEVER) {
+                FormVisibilityMode.ALWAYS
+            } else {
+                FormVisibilityMode.NEVER
+            }
         }
-//        adapter.isEnabled = !adapter.isEnabled
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,14 +68,20 @@ class BasicFragment : BaseFragment() {
                 addSwitchMaterial("测试")
                 addSelector("测试") {
                     optionLoader {
-                        delay(5000)
-                        listOf(
-                            Option("测试1"),
-                            Option("测试2"),
-                            Option("测试3"),
-                            Option("测试4"),
-                            Option("测试5")
-                        )
+                        val list = mutableListOf<Option>()
+                        for (i in 0..100) {
+                            list.add(Option("测试${i}", "附属"))
+                        }
+                        list
+                    }
+                }
+                addSelector("测试") {
+                    optionLoader {
+                        val list = mutableListOf<Option>()
+                        for (i in 0..5) {
+                            list.add(Option("测试${i}", "附属"))
+                        }
+                        list
                     }
                 }
                 addInputFilled("InputFilled") {

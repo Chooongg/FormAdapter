@@ -32,7 +32,7 @@ class VerticalTypeset : BaseTypeset() {
     }
 
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup, item: BaseForm) {
-        layout?.findViewById<MaterialTextView>(R.id.formInternalNameView)?.apply {
+        layout.findViewById<MaterialTextView>(R.id.formInternalNameView)?.apply {
             text = obtainNameFormatter().format(context, item)
         }
     }

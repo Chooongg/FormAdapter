@@ -15,10 +15,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-abstract class BaseOptionForm<T>(name: Any?) : BaseForm(name) {
+abstract class BaseOptionForm<T : IOption>(name: Any?) : BaseForm(name) {
 
     abstract fun hasOpenOperation(): Boolean
 
+    /**
+     * 本地设置的选项
+     */
     private var localOptions: List<T>? = null
 
     /**
@@ -37,6 +40,9 @@ abstract class BaseOptionForm<T>(name: Any?) : BaseForm(name) {
     var optionLoadResult: OptionLoadResult<T> = OptionLoadResult.Wait()
         protected set
 
+    /**
+     * 选项
+     */
     var options: List<T>?
         get() = localOptions ?: (optionLoadResult as? OptionLoadResult.Success<T>)?.options
         set(value) {
@@ -94,14 +100,14 @@ abstract class BaseOptionForm<T>(name: Any?) : BaseForm(name) {
         val optionSecondaryName = option.getOptionSecondaryName() ?: return option.getOptionName()
         if (optionName == null) {
             return SpannableString(optionSecondaryName).apply {
-                setSpan(RelativeSizeSpan(0.8f), 0, 1, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+                setSpan(RelativeSizeSpan(0.8f), 0, length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
-        return SpannableString(optionName + optionSecondaryName).apply {
+        return SpannableString("$optionName $optionSecondaryName").apply {
             setSpan(
                 RelativeSizeSpan(0.8f),
-                optionName.length,
-                optionName.length + optionSecondaryName.length,
+                optionName.length + 1,
+                length,
                 SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }

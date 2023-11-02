@@ -1,6 +1,8 @@
 package com.chooongg.form.core
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -29,6 +31,16 @@ object FormUtils {
         ContextCompat.getSystemService(view.context, InputMethodManager::class.java)
             ?.hideSoftInputFromWindow(view.windowToken, 0)
     }
+
+    fun getActivity(context: Context): Activity? {
+        if (context is Activity) return context
+        var tempContext: Context? = context
+        while (tempContext != null) {
+            if (tempContext is Activity) return tempContext
+            tempContext = (tempContext as? ContextWrapper)?.baseContext
+        }
+        return null
+    }
 }
 
 fun BaseStyle.formTextAppearance(view: View, @AttrRes resId: Int): Int =
@@ -43,7 +55,7 @@ fun BaseTypeset.formTextAppearance(view: View, @AttrRes resId: Int): Int =
 fun BaseFormProvider.formTextAppearance(view: View, @AttrRes resId: Int): Int =
     getTextAppearance(view, resId)
 
-private fun getTextAppearance(view: View, @AttrRes resId: Int): Int =
+internal fun getTextAppearance(view: View, @AttrRes resId: Int): Int =
     view.context.obtainStyledAttributes(intArrayOf(resId)).use {
         it.getResourceId(
             0, when (resId) {

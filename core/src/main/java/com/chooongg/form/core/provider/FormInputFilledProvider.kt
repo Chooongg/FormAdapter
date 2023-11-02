@@ -29,10 +29,8 @@ class FormInputFilledProvider : BaseFormProvider() {
             it.placeholderTextAppearance =
                 formTextAppearance(it, R.attr.formTextAppearancePlaceholder)
             it.setPaddingRelative(
-                style.insideInfo.start - style.insideInfo.middleStart,
-                style.insideInfo.top - style.insideInfo.middleTop,
-                style.insideInfo.end - style.insideInfo.middleEnd,
-                style.insideInfo.bottom - style.insideInfo.middleBottom
+                style.insideInfo.middleStart, style.insideInfo.middleTop,
+                style.insideInfo.middleEnd, style.insideInfo.middleBottom
             )
             val editText = TextInputEditText(it.context).apply {
                 id = R.id.formInternalContentChildView

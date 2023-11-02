@@ -64,7 +64,6 @@ class FormSliderProvider : BaseFormProvider() {
                 override fun onStopTrackingTouch(slider: Slider) = Unit
                 override fun onStartTrackingTouch(slider: Slider) {
                     FormUtils.hideIme(holder.itemView)
-                    (holder.itemView.parent as? ViewGroup)?.focusedChild?.clearFocus()
                 }
             })
         }

@@ -1,5 +1,6 @@
 package com.chooongg.form.core.typeset
 
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -48,6 +49,7 @@ class HorizontalTypeset : BaseTypeset {
     override fun addView(style: BaseStyle, parentView: ViewGroup, child: View) {
         parentView.addView(child, 1, LinearLayoutCompat.LayoutParams(0, -2).apply {
             weight = 1f
+            gravity = Gravity.CENTER_VERTICAL
         })
     }
 }

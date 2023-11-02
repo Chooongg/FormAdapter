@@ -82,4 +82,10 @@ class FormView @JvmOverloads constructor(
             it.setFormMargin(formMarginStart, formMarginEnd)
         }
     }
+
+    fun clearPool() {
+        if (adapter is FormAdapter) {
+            (adapter as FormAdapter).clearPool()
+        } else recycledViewPool.clear()
+    }
 }

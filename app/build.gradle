@@ -35,11 +35,9 @@ android {
 
 dependencies {
     implementation "androidx.core:core-ktx:${dependenciesVersion.coreKtx}"
-    implementation "androidx.appcompat:appcompat:${dependenciesVersion.appcompat}"
     implementation "com.google.android.material:material:${dependenciesVersion.material}"
     implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha13'
     implementation project(path: ':core')
-    implementation project(path: ':M3Style')
 
     debugImplementation 'com.facebook.soloader:soloader:0.10.5'
     debugImplementation 'com.facebook.flipper:flipper:0.227.0'

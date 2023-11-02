@@ -1,16 +1,17 @@
 package com.chooongg.form.core.provider
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.ListPopupWindow
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.TooltipCompat
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.res.use
 import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.FormViewHolder
@@ -19,6 +20,7 @@ import com.chooongg.form.core.enum.FormSelectorOpenMode
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.FormSelector
+import com.chooongg.form.core.option.FormSelectorPageActivity
 import com.chooongg.form.core.option.OptionLoadResult
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
@@ -26,6 +28,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
 import com.google.android.material.progressindicator.IndeterminateDrawable
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import kotlinx.coroutines.CoroutineScope
 
 class FormSelectorProvider : BaseFormProvider() {
@@ -56,7 +59,7 @@ class FormSelectorProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        configOption(view, item)
+        configOption(view, item, enabled)
         with(view as MaterialButton) {
             isEnabled = enabled
             text = item.getContentText(context, enabled)
@@ -64,7 +67,6 @@ class FormSelectorProvider : BaseFormProvider() {
             if (item is FormSelector) {
                 setOnClickListener { onClickButton(holder, this, item) }
             } else setOnClickListener(null)
-
         }
         loadOption(holder, item)
     }
@@ -74,26 +76,33 @@ class FormSelectorProvider : BaseFormProvider() {
         holder: FormViewHolder,
         view: View,
         item: BaseForm,
-        isEnabled: Boolean,
+        enabled: Boolean,
         payloads: MutableList<Any>
     ) {
         if (payloads.isEmpty()) {
-            super.onBindViewHolder(scope, holder, view, item, isEnabled, payloads)
+            super.onBindViewHolder(scope, holder, view, item, enabled, payloads)
             return
         }
         if (payloads.contains("changeOption")) {
-            configOption(view, item)
+            configOption(view, item, enabled)
         }
     }
 
-    private fun configOption(view: View, item: BaseForm) {
+    private fun configOption(view: View, item: BaseForm, enabled: Boolean) {
         with(view as MaterialButton) {
             when (val result = (item as? FormSelector)?.optionLoadResult) {
-                null, is OptionLoadResult.Wait -> {
+                null -> {
                     TooltipCompat.setTooltipText(this, null)
                     hint = FormUtils.getText(context, item.hint)
                         ?: resources.getString(R.string.formDefaultHintSelect)
                     icon = null
+                }
+
+                is OptionLoadResult.Wait -> {
+                    TooltipCompat.setTooltipText(this, null)
+                    hint = FormUtils.getText(context, item.hint)
+                        ?: resources.getString(R.string.formDefaultHintSelect)
+                    if (enabled) setIconResource(R.drawable.ic_form_arrow_down) else icon = null
                 }
 
                 is OptionLoadResult.Success -> {
@@ -155,8 +164,8 @@ class FormSelectorProvider : BaseFormProvider() {
     }
 
     private fun show(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {
+        (holder.itemView.parent as ViewGroup).focusedChild?.clearFocus()
         FormUtils.hideIme(holder.itemView)
-        holder.itemView.requestFocus()
         when (item.openMode) {
             FormSelectorOpenMode.POPUPMENU -> showPopupMenu(holder, view, item)
             FormSelectorOpenMode.PAGE -> showPage(holder, view, item)
@@ -167,7 +176,6 @@ class FormSelectorProvider : BaseFormProvider() {
         }
     }
 
-    @Suppress("INACCESSIBLE_TYPE")
     @SuppressLint("RestrictedApi")
     private fun showPopupMenu(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {
         ListPopupWindow(view.context)
@@ -190,27 +198,18 @@ class FormSelectorProvider : BaseFormProvider() {
                 0,
                 index + 1,
                 index + 1,
-                SpannableString("${option.getOptionName() ?: ""}${option.getOptionSecondaryName() ?: ""}").apply {
-                    val nameLength = (option.getOptionName() ?: "").length
-                    setSpan(
-                        RelativeSizeSpan(0.8f),
-                        nameLength,
-                        length,
-                        SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                    setSpan(
-                        ForegroundColorSpan(
-                            if (item.content == option) {
-                                view.context.obtainStyledAttributes(
-                                    intArrayOf(com.google.android.material.R.attr.colorPrimary)
-                                ).use { it.getColor(0, Color.GRAY) }
-                            } else {
-                                view.context.obtainStyledAttributes(
-                                    intArrayOf(com.google.android.material.R.attr.colorOnSurface)
-                                ).use { it.getColor(0, Color.GRAY) }
-                            }
-                        ), 0, length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
+                option.getSpannableString(view.context).apply {
+                    setSpan(ForegroundColorSpan(
+                        if (item.content == option) {
+                            view.context.obtainStyledAttributes(
+                                intArrayOf(com.google.android.material.R.attr.colorPrimary)
+                            ).use { it.getColor(0, Color.GRAY) }
+                        } else {
+                            view.context.obtainStyledAttributes(
+                                intArrayOf(com.google.android.material.R.attr.colorOnSurface)
+                            ).use { it.getColor(0, Color.GRAY) }
+                        }
+                    ), 0, length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
                 }
             )
         }
@@ -230,22 +229,22 @@ class FormSelectorProvider : BaseFormProvider() {
     }
 
     private fun showPage(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {
-//        val activity = view.context.getActivity()
-//        val intent = Intent(view.context, FormSelectorPageActivity::class.java)
-//        intent.putExtra("name", item.name)
-//        FormSelectorPageActivity.Controller.formSelector = item
-//        FormSelectorPageActivity.Controller.resultBlock = {
-//            changeContentAndNotifyLinkage(adapter, item, it)
-//            view.text = item.getContentText(adapter, holder)
-//        }
-//        if (activity != null) {
-//            activity.setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
-//            activity.startActivity(
-//                intent, ActivityOptionsCompat.makeSceneTransitionAnimation(
-//                    activity, view, "FormSelectorPage"
-//                ).toBundle()
-//            )
-//        } else view.context.startActivity(intent)
+        val activity = FormUtils.getActivity(view.context)
+        val intent = Intent(view.context, FormSelectorPageActivity::class.java)
+        intent.putExtra("name", FormUtils.getText(view.context, item.name))
+        FormSelectorPageActivity.Controller.formSelector = item
+        FormSelectorPageActivity.Controller.resultBlock = {
+            changeContentAndNotifyLinkage(holder, item, it)
+            view.text = item.getContentText(view.context, true)
+        }
+        if (activity != null) {
+            activity.setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+            activity.startActivity(
+                intent, ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    activity, view, "FormSelectorPage"
+                ).toBundle()
+            )
+        } else view.context.startActivity(intent)
     }
 
     override fun onViewRecycled(holder: FormViewHolder, view: View) {

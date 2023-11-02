@@ -17,9 +17,9 @@
     <dimen name="formInsideBottom">16dp</dimen>
 
     <dimen name="formInsideMiddleStart">8dp</dimen>
-    <dimen name="formInsideMiddleTop">8dp</dimen>
+    <dimen name="formInsideMiddleTop">10dp</dimen>
     <dimen name="formInsideMiddleEnd">8dp</dimen>
-    <dimen name="formInsideMiddleBottom">8dp</dimen>
+    <dimen name="formInsideMiddleBottom">10dp</dimen>
 
     <dimen name="formCardElevation">1dp</dimen>
 

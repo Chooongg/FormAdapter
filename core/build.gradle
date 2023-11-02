@@ -25,12 +25,13 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
-//    api 'com.chooongg:utils:1.0.3'
     implementation "androidx.core:core-ktx:${dependenciesVersion.coreKtx}"
-    implementation "androidx.appcompat:appcompat:${dependenciesVersion.appcompat}"
     implementation "com.google.android.material:material:${dependenciesVersion.material}"
     api 'androidx.recyclerview:recyclerview:1.3.1'
 }

@@ -29,9 +29,9 @@ abstract class BaseFormProvider {
         holder: FormViewHolder,
         view: View,
         item: BaseForm,
-        isEnabled: Boolean,
+        enabled: Boolean,
         payloads: MutableList<Any>
-    ) = onBindViewHolder(scope, holder, view, item, isEnabled)
+    ) = onBindViewHolder(scope, holder, view, item, enabled)
 
     open fun isNeedParentLayoutSupport(): Boolean = false
 

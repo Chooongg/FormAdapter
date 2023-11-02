@@ -37,17 +37,15 @@ class FormInputProvider : BaseFormProvider() {
                 setFadingEdgeLength(context.resources.getDimensionPixelSize(R.dimen.formFadingEdgeLength))
                 setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
                 setPaddingRelative(
-                    style.insideInfo.middleStart,
-                    style.insideInfo.middleTop,
-                    style.insideInfo.middleEnd,
-                    style.insideInfo.middleBottom
+                    style.insideInfo.middleStart, style.insideInfo.middleTop,
+                    style.insideInfo.middleEnd, style.insideInfo.middleBottom
                 )
             }
             it.addView(editText)
             it.endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
             it.setEndIconTintList(editText.hintTextColors)
             it.endIconMinSize =
-                FormUtils.getFontHeight(editText) + style.insideInfo.middleTop + style.insideInfo.middleBottom
+                FormUtils.getFontHeight(editText) + style.insideInfo.middleStart + style.insideInfo.middleEnd
             it.setEndIconDrawable(R.drawable.ic_form_close)
         }
     }
