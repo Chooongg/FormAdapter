@@ -8,7 +8,7 @@
 
     <string name="formPickerOpenError">Failed to open selector</string>
 
-    <string name="formOptionsLoading">Option loading</string>
+    <string name="formOptionsLoading">Loading</string>
     <string name="formOptionsEmpty">No options available</string>
     <string name="formOptionsError">Option loading failed</string>
 

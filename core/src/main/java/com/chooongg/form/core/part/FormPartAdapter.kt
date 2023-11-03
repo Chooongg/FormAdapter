@@ -24,7 +24,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         this.data = data
     }
 
-    override fun update() {
+    override fun executeUpdate(notifyBlock: () -> Unit) {
         adapterScope.cancel()
         adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         if (!data.isEnablePart) {
@@ -61,7 +61,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 tempList[index - 1].nextItemLoneLine = true
             }
         }
-        asyncDiffer.submitList(tempList) { notifyItemRangeChanged(0, itemCount) }
+        asyncDiffer.submitList(tempList) { notifyBlock.invoke() }
     }
 
     override fun findOfField(field: String, update: Boolean, block: (BaseForm) -> Unit): Boolean {

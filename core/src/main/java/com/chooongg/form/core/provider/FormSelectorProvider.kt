@@ -94,21 +94,21 @@ class FormSelectorProvider : BaseFormProvider() {
                 null -> {
                     TooltipCompat.setTooltipText(this, null)
                     hint = FormUtils.getText(context, item.hint)
-                        ?: resources.getString(R.string.formDefaultHintSelect)
+                        ?: context.getString(R.string.formDefaultHintSelect)
                     icon = null
                 }
 
                 is OptionLoadResult.Wait -> {
                     TooltipCompat.setTooltipText(this, null)
                     hint = FormUtils.getText(context, item.hint)
-                        ?: resources.getString(R.string.formDefaultHintSelect)
+                        ?: context.getString(R.string.formDefaultHintSelect)
                     if (enabled) setIconResource(R.drawable.ic_form_arrow_down) else icon = null
                 }
 
                 is OptionLoadResult.Success -> {
                     TooltipCompat.setTooltipText(this, null)
                     hint = FormUtils.getText(context, item.hint)
-                        ?: resources.getString(R.string.formDefaultHintSelect)
+                        ?: context.getString(R.string.formDefaultHintSelect)
                     setIconResource(R.drawable.ic_form_arrow_down)
                 }
 
@@ -127,7 +127,7 @@ class FormSelectorProvider : BaseFormProvider() {
 
                 is OptionLoadResult.Error -> {
                     TooltipCompat.setTooltipText(this, result.e.message)
-                    hint = resources.getString(R.string.formOptionsError)
+                    hint = context.getString(R.string.formOptionsError)
                     setIconResource(R.drawable.ic_form_error)
                 }
 

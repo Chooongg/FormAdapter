@@ -31,6 +31,9 @@ open class FormAdapter(isEnabled: Boolean) :
             updateForm()
         }
 
+    var columnCount: Int = 1
+        internal set
+
     private val dataObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
             notifyItemRangeChanged(positionStart, itemCount)
@@ -173,6 +176,7 @@ open class FormAdapter(isEnabled: Boolean) :
                 )
             }
             recyclerView.layoutManager = layoutManager
+            columnCount = layoutManager.columnCount
         }
         this.recyclerView = recyclerView
     }

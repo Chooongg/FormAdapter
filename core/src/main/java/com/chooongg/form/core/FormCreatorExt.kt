@@ -11,6 +11,7 @@ import com.chooongg.form.core.item.FormLabel
 import com.chooongg.form.core.item.FormRating
 import com.chooongg.form.core.item.FormSelector
 import com.chooongg.form.core.item.FormSlider
+import com.chooongg.form.core.item.FormSliderRange
 import com.chooongg.form.core.item.FormSwitch
 import com.chooongg.form.core.item.FormSwitchMaterial
 import com.chooongg.form.core.item.FormText
@@ -82,6 +83,14 @@ fun IFormCreator.addSlider(
 fun IFormCreator.addSlider(
     @StringRes nameRes: Int?, block: (FormSlider.() -> Unit)? = null
 ) = addItem(FormSlider(nameRes).apply { block?.invoke(this) })
+
+fun IFormCreator.addSliderRange(
+    name: CharSequence?, block: (FormSliderRange.() -> Unit)? = null
+) = addItem(FormSliderRange(name).apply { block?.invoke(this) })
+
+fun IFormCreator.addSliderRange(
+    @StringRes nameRes: Int?, block: (FormSliderRange.() -> Unit)? = null
+) = addItem(FormSliderRange(nameRes).apply { block?.invoke(this) })
 
 fun IFormCreator.addSwitch(
     name: CharSequence?, block: (FormSwitch.() -> Unit)? = null

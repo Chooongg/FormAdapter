@@ -2,17 +2,21 @@ package com.chooongg.form.core.provider
 
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.core.content.res.use
 import androidx.core.view.updateLayoutParams
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
+import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.FormRating
 import com.chooongg.form.core.style.BaseStyle
+import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope
 
 class FormRatingProvider : BaseFormProvider() {
@@ -42,6 +46,16 @@ class FormRatingProvider : BaseFormProvider() {
         enabled: Boolean
     ) {
         val itemRating = item as? FormRating
+        if (view.layoutParams.height == -2) {
+            val textView = MaterialTextView(view.context).apply {
+                setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
+                measure(0, 0)
+            }
+            view.updateLayoutParams<MarginLayoutParams> {
+                height =
+                    textView.measuredHeight + holder.style.insideInfo.middleTop + holder.style.insideInfo.middleBottom
+            }
+        }
         with(view.findViewById<AppCompatRatingBar>(R.id.formInternalContentChildView)) {
             setIsIndicator(!enabled)
             onRatingBarChangeListener = null
@@ -59,7 +73,8 @@ class FormRatingProvider : BaseFormProvider() {
             }
             updateLayoutParams<FrameLayout.LayoutParams> {
                 width = minimumHeight * numStars
-                gravity = holder.typeset.obtainContentGravity(holder, item)
+                gravity =
+                    holder.typeset.obtainContentGravity(holder, item) or Gravity.CENTER_VERTICAL
             }
         }
     }

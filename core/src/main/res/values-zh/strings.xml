@@ -8,7 +8,7 @@
 
     <string name="formPickerOpenError">无法打开选择器</string>
 
-    <string name="formOptionsLoading">选项加载中</string>
+    <string name="formOptionsLoading">加载中</string>
     <string name="formOptionsEmpty">没有可选项</string>
     <string name="formOptionsError">选项加载失败</string>
 

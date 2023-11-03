@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
+import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
@@ -41,7 +43,104 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     val itemList get() = asyncDiffer.currentList
 
-    abstract fun update()
+    fun update() {
+        executeUpdate {
+            calculateBoundary()
+            notifyItemRangeChanged(0, itemCount)
+        }
+    }
+
+    abstract fun executeUpdate(notifyBlock: () -> Unit)
+
+    fun calculateBoundary() {
+        val partAdapters = formAdapter.partAdapters
+        val partIndex = partAdapters.indexOf(this)
+        var spanIndex = 0
+        val spanCount = 24
+        itemList.forEachIndexed { index, item ->
+            item.spanSize = if (item.loneLine) spanCount
+            else {
+                val span = spanCount / formAdapter.columnCount
+                if (item.nextItemLoneLine || (index >= itemList.lastIndex && spanIndex + span < spanCount)) {
+                    spanCount - spanIndex
+                } else span
+            }
+            item.spanIndex = spanIndex
+            if (spanIndex == 0) {
+                item.marginBoundary.start = Boundary.GLOBAL
+                item.insideBoundary.start = Boundary.GLOBAL
+            } else {
+                item.marginBoundary.start = Boundary.NONE
+                item.insideBoundary.start = FormManager.Default.horizontalMiddleBoundary
+            }
+            spanIndex += item.spanSize
+            if (spanIndex >= spanCount) {
+                item.marginBoundary.end = Boundary.GLOBAL
+                item.insideBoundary.end = Boundary.GLOBAL
+                spanIndex = 0
+            } else {
+                item.marginBoundary.end = Boundary.NONE
+                item.insideBoundary.end = FormManager.Default.horizontalMiddleBoundary
+            }
+            if (item.positionInGroup == 0) {
+                var isFirst = true
+                var beginIndex = partIndex
+                while (beginIndex - 1 >= 0) {
+                    if (partAdapters[beginIndex - 1].itemList.isNotEmpty()) {
+                        isFirst = false
+                        break
+                    } else beginIndex--
+                }
+                if (isFirst) {
+                    item.marginBoundary.top = Boundary.GLOBAL
+                    item.insideBoundary.top = Boundary.GLOBAL
+                } else {
+                    item.marginBoundary.top = Boundary.MIDDLE
+                    item.insideBoundary.top = Boundary.GLOBAL
+                }
+            } else if (item.spanIndex == 0) {
+                item.marginBoundary.top = Boundary.NONE
+                item.insideBoundary.top = Boundary.MIDDLE
+            } else {
+                var beginIndex = index - 1
+                while (getItem(beginIndex).spanIndex != 0) {
+                    beginIndex--
+                }
+                item.marginBoundary.top = getItem(beginIndex).marginBoundary.top
+                item.insideBoundary.top = getItem(beginIndex).insideBoundary.top
+            }
+        }
+        for (index in itemList.lastIndex downTo 0) {
+            val item = getItem(index)
+            if (item.itemCountInGroup - 1 - item.positionInGroup == 0) {
+                var isLast = true
+                var lastIndex = partIndex
+                while (lastIndex + 1 < partAdapters.size) {
+                    if (partAdapters[lastIndex + 1].itemList.isNotEmpty()) {
+                        isLast = false
+                        break
+                    } else lastIndex++
+                }
+                if (isLast) {
+                    item.marginBoundary.bottom = Boundary.GLOBAL
+                    item.insideBoundary.bottom = Boundary.GLOBAL
+                } else {
+                    item.marginBoundary.bottom = Boundary.MIDDLE
+                    item.insideBoundary.bottom = Boundary.GLOBAL
+                }
+            } else if (item.spanIndex + item.spanSize == spanCount) {
+                item.marginBoundary.bottom = Boundary.NONE
+                item.insideBoundary.bottom = Boundary.MIDDLE
+            } else {
+                var lastIndex = index + 1
+                while (getItem(lastIndex).spanIndex + getItem(lastIndex).spanSize != spanCount) {
+                    lastIndex++
+                }
+                item.marginBoundary.bottom = getItem(lastIndex).marginBoundary.bottom
+                item.insideBoundary.bottom = getItem(lastIndex).insideBoundary.bottom
+            }
+        }
+    }
 
     abstract fun findOfField(
         field: String,
@@ -63,7 +162,6 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     override fun getItemViewType(position: Int): Int {
         return formAdapter.getItemViewType4Pool(style, getItem(position))
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder {
         val style = formAdapter.getStyle4ItemViewType(viewType)

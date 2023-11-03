@@ -9,15 +9,15 @@ import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.FormSlider
+import com.chooongg.form.core.item.FormSliderRange
 import com.chooongg.form.core.style.BaseStyle
-import com.google.android.material.slider.Slider
+import com.google.android.material.slider.RangeSlider
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope
 
-class FormSliderProvider : BaseFormProvider() {
+class FormSliderRangeProvider : BaseFormProvider() {
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
-        Slider(parent.context).apply {
+        RangeSlider(parent.context).apply {
             id = R.id.formInternalContentView
             val textHeight = with(MaterialTextView(context)) {
                 setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
@@ -38,6 +38,7 @@ class FormSliderProvider : BaseFormProvider() {
             haloRadius = height / 2
         }
 
+    @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(
         scope: CoroutineScope,
         holder: FormViewHolder,
@@ -45,16 +46,20 @@ class FormSliderProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        val itemSlider = item as? FormSlider
-        with(view as Slider) {
+        val itemSlider = item as? FormSliderRange
+        with(view as RangeSlider) {
             clearOnChangeListeners()
             clearOnSliderTouchListeners()
             isEnabled = enabled
             valueFrom = itemSlider?.valueFrom ?: 0f
             valueTo = itemSlider?.valueTo ?: 100f
             stepSize = itemSlider?.stepSize ?: 0f
-            val content = item.content as? Float
-            value = content ?: 0f
+            values = try {
+                if (item.content is List<*>) item.content as List<Float>
+                else listOf(valueFrom, valueTo)
+            } catch (e: Exception) {
+                listOf(valueFrom, valueTo)
+            }
             tickInactiveTintList = if (itemSlider?.showInactiveTick == true) {
                 trackActiveTintList
             } else ColorStateList.valueOf(Color.TRANSPARENT)
@@ -62,12 +67,12 @@ class FormSliderProvider : BaseFormProvider() {
                 trackInactiveTintList
             } else ColorStateList.valueOf(Color.TRANSPARENT)
             setLabelFormatter(itemSlider?.formatter)
-            addOnChangeListener { _, value, fromUser ->
-                if (fromUser) changeContentAndNotifyLinkage(holder, item, value)
+            addOnChangeListener { _, _, fromUser ->
+                if (fromUser) changeContentAndNotifyLinkage(holder, item, values)
             }
-            addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-                override fun onStopTrackingTouch(slider: Slider) = Unit
-                override fun onStartTrackingTouch(slider: Slider) {
+            addOnSliderTouchListener(object : RangeSlider.OnSliderTouchListener {
+                override fun onStopTrackingTouch(slider: RangeSlider) = Unit
+                override fun onStartTrackingTouch(slider: RangeSlider) {
                     FormUtils.hideIme(holder.itemView)
                 }
             })

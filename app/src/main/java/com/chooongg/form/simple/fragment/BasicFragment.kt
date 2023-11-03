@@ -15,6 +15,7 @@ import com.chooongg.form.core.addLabel
 import com.chooongg.form.core.addRating
 import com.chooongg.form.core.addSelector
 import com.chooongg.form.core.addSlider
+import com.chooongg.form.core.addSliderRange
 import com.chooongg.form.core.addSwitch
 import com.chooongg.form.core.addSwitchMaterial
 import com.chooongg.form.core.addText
@@ -63,6 +64,11 @@ class BasicFragment : BaseFragment() {
                 }
                 addSlider("测试") {
                     stepSize = 1f
+                    content = 50f
+                }
+                addSliderRange("测试") {
+                    stepSize = 1f
+                    valueTo = 5f
                 }
                 addSwitch("测试")
                 addSwitchMaterial("测试")

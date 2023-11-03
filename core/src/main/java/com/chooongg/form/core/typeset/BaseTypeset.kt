@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.GravityInt
-import com.chooongg.form.core.FormLayoutManager
 import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.boundary.Boundary
@@ -49,8 +48,7 @@ abstract class BaseTypeset {
     @GravityInt
     fun obtainContentGravity(holder: FormViewHolder, item: BaseForm): Int {
         val adapter = holder.bindingAdapter as? BaseFormPartAdapter
-        val manager = adapter?.formAdapter?.recyclerView?.layoutManager as? FormLayoutManager
-        return if ((manager?.columnCount ?: 1) > 1) {
+        return if ((adapter?.formAdapter?.columnCount ?: 1) > 1) {
             item.multiColumnContentGravity ?: multiColumnContentGravity
         } else item.contentGravity ?: contentGravity
     }

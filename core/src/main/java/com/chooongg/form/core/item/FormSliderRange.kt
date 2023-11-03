@@ -6,9 +6,9 @@ import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormSliderFormatter
 import com.chooongg.form.core.FormUtils
-import com.chooongg.form.core.provider.FormSliderProvider
+import com.chooongg.form.core.provider.FormSliderRangeProvider
 
-class FormSlider : BaseForm {
+class FormSliderRange : BaseForm {
 
     constructor(name: CharSequence?) : super(name)
     constructor(@StringRes nameRes: Int?) : super(nameRes)
@@ -33,14 +33,27 @@ class FormSlider : BaseForm {
 
     internal var formatter: FormSliderFormatter? = null
 
-    override fun getProvider(adapter: FormAdapter) = FormSliderProvider::class
+    override fun getProvider(adapter: FormAdapter) = FormSliderRangeProvider::class
 
     fun formatter(block: FormSliderFormatter?) {
         formatter = block
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
-        val value = content as? Float ?: return FormUtils.getText(context, content)
-        return formatter?.invoke(value) ?: value.toString()
+        return try {
+            if (content is List<*>) {
+                val temp = content as List<Float>
+                if (temp.isEmpty()) null
+                else buildString {
+                    temp.forEachIndexed { index, float ->
+                        if (index != 0) append(" - ")
+                        append(formatter?.invoke(float) ?: float)
+                    }
+                }
+            } else FormUtils.getText(context, content)
+        } catch (e: Exception) {
+            FormUtils.getText(context, content)
+        }
     }
 }

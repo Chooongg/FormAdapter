@@ -28,7 +28,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         return super.getItemViewType(position)
     }
 
-    override fun update() {
+    override fun executeUpdate(notifyBlock: () -> Unit) {
         adapterScope.cancel()
         adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         if (!data.isEnablePart) {
@@ -80,7 +80,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             }
         }
         asyncDiffer.submitList(ArrayList<BaseForm>().apply { tempList.forEach { addAll(it) } }) {
-            notifyItemRangeChanged(0, itemCount)
+            notifyBlock.invoke()
         }
     }
 
