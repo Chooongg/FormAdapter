@@ -7,7 +7,7 @@ data class Option(
 ) : IOption {
 
     constructor(name: String?) : this(name, null, name)
-    constructor(name: String?, value: String?) : this(name, value, null)
+    constructor(name: String?, value: String?) : this(name, null, value)
 
     override fun getOptionName() = _name
     override fun getOptionSecondaryName() = _secondaryName

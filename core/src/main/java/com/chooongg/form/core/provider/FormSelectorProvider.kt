@@ -19,6 +19,7 @@ import com.chooongg.form.core.R
 import com.chooongg.form.core.enum.FormSelectorOpenMode
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.item.BaseOptionForm
 import com.chooongg.form.core.item.FormSelector
 import com.chooongg.form.core.option.FormSelectorPageActivity
 import com.chooongg.form.core.option.OptionLoadResult
@@ -90,7 +91,7 @@ class FormSelectorProvider : BaseFormProvider() {
 
     private fun configOption(view: View, item: BaseForm, enabled: Boolean) {
         with(view as MaterialButton) {
-            when (val result = (item as? FormSelector)?.optionLoadResult) {
+            when (val result = (item as? BaseOptionForm<*>)?.optionLoadResult) {
                 null -> {
                     TooltipCompat.setTooltipText(this, null)
                     hint = FormUtils.getText(context, item.hint)
@@ -119,7 +120,6 @@ class FormSelectorProvider : BaseFormProvider() {
                         CircularProgressIndicatorSpec(context, null).apply {
                             trackThickness = iconSize / 10
                             indicatorSize = iconSize / 2
-                            indicatorColors = intArrayOf(iconTint.defaultColor)
                         })
                     icon = drawable
                     drawable.start()
@@ -140,17 +140,9 @@ class FormSelectorProvider : BaseFormProvider() {
         }
     }
 
-    private fun onClickButton(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {
-        if (item.optionLoadResult is OptionLoadResult.Loading) {
-            Snackbar.make(view, R.string.formOptionsLoading, Snackbar.LENGTH_SHORT).show()
-        } else if (item.options.isNullOrEmpty()) {
-            loadOption(holder, item)
-        } else show(holder, view, item)
-    }
-
     private fun loadOption(holder: FormViewHolder, item: BaseForm?) {
-        val itemSelector = item as? FormSelector
-        if (itemSelector?.isNeedToLoadOption(holder) == true) {
+        val itemOption = item as? BaseOptionForm<*>
+        if (itemOption?.isNeedToLoadOption(holder) == true) {
             val adapter = holder.bindingAdapter as? BaseFormPartAdapter ?: return
             item.loadOption(holder) {
                 holder.itemView.post {
@@ -161,6 +153,14 @@ class FormSelectorProvider : BaseFormProvider() {
                 }
             }
         }
+    }
+
+    private fun onClickButton(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {
+        if (item.optionLoadResult is OptionLoadResult.Loading) {
+            Snackbar.make(view, R.string.formOptionsLoading, Snackbar.LENGTH_SHORT).show()
+        } else if (item.options.isNullOrEmpty()) {
+            loadOption(holder, item)
+        } else show(holder, view, item)
     }
 
     private fun show(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {

@@ -3,18 +3,18 @@ package com.chooongg.form.core
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.res.use
 import com.chooongg.form.core.nameProvider.BasePartNameProvider
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.typeset.BaseTypeset
-import java.lang.reflect.ParameterizedType
-import java.lang.reflect.Type
 
 
 object FormUtils {
@@ -33,6 +33,13 @@ object FormUtils {
     fun hideIme(view: View) {
         ContextCompat.getSystemService(view.context, InputMethodManager::class.java)
             ?.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    fun getIconChangeSize(context: Context, resId: Int, size: Int): Drawable? {
+        val drawable =
+            ResourcesCompat.getDrawable(context.resources, resId, context.theme) ?: return null
+        drawable.setBounds(0, 0, size, size)
+        return drawable
     }
 
     fun getActivity(context: Context): Activity? {

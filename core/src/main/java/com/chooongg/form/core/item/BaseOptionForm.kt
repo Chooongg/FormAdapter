@@ -15,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-abstract class BaseOptionForm<T : IOption>(name: Any?) : BaseForm(name) {
+abstract class BaseOptionForm<T>(name: Any?) : BaseForm(name) {
 
     abstract fun hasOpenOperation(): Boolean
 
@@ -95,21 +95,27 @@ abstract class BaseOptionForm<T : IOption>(name: Any?) : BaseForm(name) {
 
     override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
         if (content == null) return null
-        val option = content as? IOption ?: return FormUtils.getText(context, content)
-        val optionName = option.getOptionName()
-        val optionSecondaryName = option.getOptionSecondaryName() ?: return option.getOptionName()
-        if (optionName == null) {
-            return SpannableString(optionSecondaryName).apply {
-                setSpan(RelativeSizeSpan(0.8f), 0, length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+        if (content is IOption) {
+            val option = content as IOption
+            val optionName = option.getOptionName()
+            val optionSecondaryName =
+                option.getOptionSecondaryName() ?: return option.getOptionName()
+            if (optionName == null) {
+                return SpannableString(optionSecondaryName).apply {
+                    setSpan(
+                        RelativeSizeSpan(0.8f),
+                        0, length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
+                }
             }
-        }
-        return SpannableString("$optionName $optionSecondaryName").apply {
-            setSpan(
-                RelativeSizeSpan(0.8f),
-                optionName.length + 1,
-                length,
-                SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
+            return SpannableString("$optionName $optionSecondaryName").apply {
+                setSpan(
+                    RelativeSizeSpan(0.8f),
+                    optionName.length + 1, length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+        } else {
+            return FormUtils.getText(context, content)
         }
     }
 }

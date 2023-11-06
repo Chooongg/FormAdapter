@@ -5,7 +5,7 @@ import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.provider.FormInputProvider
 import com.chooongg.form.core.provider.FormTextProvider
 
-open class FormInput : BaseForm {
+open class FormInput : BaseOptionForm<CharSequence> {
 
     constructor(name: CharSequence?) : super(name)
     constructor(@StringRes nameRes: Int?) : super(nameRes)
@@ -39,6 +39,8 @@ open class FormInput : BaseForm {
      * 计数器最大长度
      */
     var counterMaxLength: Int = Int.MAX_VALUE
+
+    override fun hasOpenOperation() = false
 
     override fun getProvider(adapter: FormAdapter) = if (adapter.isEnabled) {
         FormInputProvider::class
