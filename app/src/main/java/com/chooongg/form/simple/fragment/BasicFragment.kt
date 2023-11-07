@@ -1,9 +1,6 @@
 package com.chooongg.form.simple.fragment
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.addButton
@@ -20,6 +17,9 @@ import com.chooongg.form.core.addSliderRange
 import com.chooongg.form.core.addSwitch
 import com.chooongg.form.core.addSwitchMaterial
 import com.chooongg.form.core.addText
+import com.chooongg.form.core.addTime
+import com.chooongg.form.core.addTip
+import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.option.Option
 import com.chooongg.form.simple.R
@@ -30,6 +30,10 @@ class BasicFragment : BaseFragment() {
     private val adapter = FormAdapter(true)
 
     override fun change() {
+        adapter.findOfField("button", false) {
+            visibilityMode =
+                if (visibilityMode == FormVisibilityMode.ALWAYS) FormVisibilityMode.NEVER else FormVisibilityMode.ALWAYS
+        }
         adapter.isEnabled = !adapter.isEnabled
     }
 
@@ -38,115 +42,108 @@ class BasicFragment : BaseFragment() {
         formView.setFormAdapter(adapter)
         adapter.setNewInstance {
             addPart {
+                addButton("Button(Tonal)") {
+                    field = "button"
+                    buttonStyle = FormButton.ButtonStyle.TONAL
+                }
                 addDivider()
-                addText("Text") {
-                    content =
-                        "测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容测试内容"
-                }
-                addText("Text") {
-                    content = "测试内容"
-                }
-                addDivider {
-                    matchParentStartEdge = true
-                    matchParentEndEdge = true
-                }
-                addSelector("测试") {
+                addInputFilled("InputFilled") {
                     optionLoader {
-                        val list = mutableListOf<Option>()
-                        for (i in 0..5) {
-                            list.add(Option("测试${i}", "附属"))
+                        delay(5000)
+                        val list = mutableListOf<CharSequence>()
+                        for (i in 0..100) {
+                            list.add("Test${i}")
+                        }
+                        list
+                    }
+                }
+                addInputOutlined("InputOutlined") {
+                    optionLoader {
+                        delay(5000)
+                        val list = mutableListOf<CharSequence>()
+                        for (i in 0..100) {
+                            list.add("Test${i}")
                         }
                         list
                     }
                 }
                 addInput("Input") {
                     field = "input"
-                    hint = "请输入"
-                    content = "测试"
                     maxLines = 1
                     counterMaxLength = 11
                     optionLoader {
                         delay(5000)
                         val list = mutableListOf<CharSequence>()
                         for (i in 0..100) {
-                            list.add("测试${i}")
+                            list.add("Test${i}")
                         }
                         list
                     }
                 }
-                addSlider("测试") {
-                    stepSize = 1f
-                    content = 50f
+                addLabel("Label")
+                addTip("Tip") {
+                    visibilityMode = FormVisibilityMode.ENABLED
+                    enableBottomPadding = true
                 }
-                addSliderRange("测试") {
-                    stepSize = 1f
-                    valueTo = 5f
-                }
-                addSwitch("测试")
-                addSwitchMaterial("测试")
-                addSelector("测试") {
-                    optionLoader {
-                        delay(5000)
-                        val list = mutableListOf<Option>()
-                        for (i in 0..100) {
-                            list.add(Option("测试${i}", "附属"))
-                        }
-                        list
-                    }
-                }
-                addInputFilled("InputFilled") {
-                    hint = "请输入"
-                    optionLoader {
-                        delay(5000)
-                        val list = mutableListOf<CharSequence>()
-                        for (i in 0..100) {
-                            list.add("测试${i}")
-                        }
-                        list
-                    }
-                }
-                addInputOutlined("InputOutlined") {
-                    hint = "请输入"
-                    optionLoader {
-                        delay(5000)
-                        val list = mutableListOf<CharSequence>()
-                        for (i in 0..100) {
-                            list.add("测试${i}")
-                        }
-                        list
-                    }
-                }
-                addRating("测试")
-                addRadioButton("测试") {
+                addRadioButton("RadioButton") {
                     optionLoader {
                         val list = mutableListOf<Option>()
                         for (i in 0..5) {
-                            list.add(Option("测试${i}", "1"))
+                            list.add(Option("Test${i}", i.toString()))
                         }
                         list
                     }
                 }
-                addButton("测试") {
+                addRating("Rating")
+                addSelector("Selector") {
+                    optionLoader {
+                        val list = mutableListOf<Option>()
+                        for (i in 0..5) {
+                            list.add(Option("Test${i}", "remarks"))
+                        }
+                        list
+                    }
+                }
+                addSelector("Selector") {
+                    optionLoader {
+                        delay(5000)
+                        val list = mutableListOf<Option>()
+                        for (i in 0..100) {
+                            list.add(Option("Test${i}", "remarks"))
+                        }
+                        list
+                    }
+                }
+                addSlider("Slider") {
+                    stepSize = 1f
+                    content = 50f
+                }
+                addSliderRange("SliderRange") {
+                    stepSize = 1f
+                    valueTo = 5f
+                }
+                addSwitch("Switch")
+                addSwitchMaterial("SwitchMaterial")
+                addText("Text") {
+                    content = "Test"
+                }
+                addTime("Time")
+                addDivider {
+                    matchParentStartEdge = true
+                    matchParentEndEdge = true
+                }
+                addButton("Button(Elevated)") {
                     buttonStyle = FormButton.ButtonStyle.ELEVATED
                 }
-                addLabel("测试")
-                addLabel("测试") {
-                    color = { ColorStateList.valueOf(Color.RED) }
-                }
-                addButton("测试") {
+                addButton("Button(UnElevated)") {
                     buttonStyle = FormButton.ButtonStyle.UN_ELEVATED
-                    contentGravity = Gravity.CENTER
                 }
-                addButton("测试") {
+                addButton("Button(Text)") {
                     buttonStyle = FormButton.ButtonStyle.TEXT
                 }
-                addButton("测试") {
+                addButton("Button(OutLined)") {
                     buttonStyle = FormButton.ButtonStyle.OUTLINED
                 }
-                addButton("测试") {
-                    buttonStyle = FormButton.ButtonStyle.TONAL
-                }
-                addDivider()
             }
         }
     }

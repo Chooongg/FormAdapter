@@ -31,8 +31,10 @@ class CardFilledStyle : BaseCardStyle {
         shapeDrawable.fillColor = ColorStateList.valueOf(
             if (colorResId != null) {
                 context.getColor(colorResId!!)
-            } else context.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorSurfaceContainerHighest))
-                .use { it.getColor(0, Color.GRAY) }
+            } else {
+                context.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorSurfaceContainerHighest))
+                    .use { it.getColor(0, Color.GRAY) }
+            }
         )
         holder.itemView.background = shapeDrawable
     }

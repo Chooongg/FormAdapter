@@ -25,7 +25,9 @@
 
     <style name="Form.TextAppearance.Label" parent="TextAppearance.Material3.HeadlineSmall" />
 
-    <style name="Form.TextAppearance.Tip" parent="TextAppearance.Material3.BodySmall" />
+    <style name="Form.TextAppearance.Tip" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/form_input_indicator_text_color</item>
+    </style>
 
     <style name="Form.Button" parent="Widget.Material3.Button" />
 

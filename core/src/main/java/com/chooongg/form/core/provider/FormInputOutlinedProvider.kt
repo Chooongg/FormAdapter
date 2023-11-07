@@ -117,6 +117,8 @@ class FormInputOutlinedProvider : BaseFormProvider() {
             if (tag is TextWatcher) removeTextChangedListener(tag as TextWatcher)
             hint = when (itemInput?.placeholder) {
                 null -> FormUtils.getText(context, item.hint)
+                    ?: context.getString(R.string.formDefaultHintInput)
+
                 else -> null
             }
             setText(item.getContentText(context, enabled))
@@ -170,7 +172,7 @@ class FormInputOutlinedProvider : BaseFormProvider() {
                     )
                 }
 
-                is OptionLoadResult.Wait -> {
+                is OptionLoadResult.Wait, is OptionLoadResult.Success -> {
                     TooltipCompat.setTooltipText(this, null)
                     if (enabled && item.options != null) {
                         endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
@@ -178,19 +180,9 @@ class FormInputOutlinedProvider : BaseFormProvider() {
                             context, R.drawable.ic_form_arrow_down, fontHeight
                         )
                     } else {
-                        endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
-                        endIconDrawable = FormUtils.getIconChangeSize(
-                            context, R.drawable.ic_form_close, fontHeight
-                        )
+                        endIconMode = TextInputLayout.END_ICON_NONE
+                        endIconDrawable = null
                     }
-                }
-
-                is OptionLoadResult.Success -> {
-                    TooltipCompat.setTooltipText(this, null)
-                    endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                    endIconDrawable = FormUtils.getIconChangeSize(
-                        context, R.drawable.ic_form_arrow_down, fontHeight
-                    )
                 }
 
                 is OptionLoadResult.Loading -> {

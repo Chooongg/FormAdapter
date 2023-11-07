@@ -5,6 +5,7 @@ import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.enum.FormSelectorOpenMode
 import com.chooongg.form.core.option.IOption
 import com.chooongg.form.core.provider.FormSelectorProvider
+import com.chooongg.form.core.provider.FormTextProvider
 
 class FormSelector : BaseOptionForm<IOption> {
 
@@ -18,6 +19,7 @@ class FormSelector : BaseOptionForm<IOption> {
 
     override fun hasOpenOperation() = true
 
-    override fun getProvider(adapter: FormAdapter) = FormSelectorProvider::class
+    override fun getProvider(adapter: FormAdapter) =
+        if (adapter.isEnabled) FormSelectorProvider::class else FormTextProvider::class
 
 }

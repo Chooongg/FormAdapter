@@ -4,6 +4,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.DimenRes
 import androidx.core.content.res.use
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
@@ -17,7 +18,8 @@ class CardElevatedStyle : BaseCardStyle {
         block(this)
     }
 
-    var elevation: Float? = null
+    @DimenRes
+    var elevationResId: Int? = null
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewGroup? = null
 
@@ -26,8 +28,9 @@ class CardElevatedStyle : BaseCardStyle {
         val context = holder.itemView.context
         holder.itemView.clipToOutline = true
         val shape = getShapeAppearanceModel(holder.itemView, item)
-        holder.itemView.elevation =
-            elevation ?: context.resources.getDimension(R.dimen.formCardElevation)
+        holder.itemView.elevation = if (elevationResId == null) {
+            context.resources.getDimension(R.dimen.formCardElevation)
+        } else context.resources.getDimension(elevationResId!!)
         val shapeDrawable = MaterialShapeDrawable(shape)
         shapeDrawable.fillColor = ColorStateList.valueOf(
             context.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorSurfaceContainerLow))
@@ -43,7 +46,7 @@ class CardElevatedStyle : BaseCardStyle {
     override fun equals(other: Any?): Boolean {
         if (other !is CardElevatedStyle) return false
         if (!super.equals(other)) return false
-        if (elevation != other.elevation) return false
+        if (elevationResId != other.elevationResId) return false
         return true
     }
 

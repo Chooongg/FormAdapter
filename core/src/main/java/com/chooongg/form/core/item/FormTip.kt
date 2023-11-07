@@ -4,14 +4,24 @@ import android.view.Gravity
 import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormColorStateListBlock
-import com.chooongg.form.core.provider.FormLabelProvider
+import com.chooongg.form.core.provider.FormTipProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
 
-class FormLabel : BaseForm {
+class FormTip : BaseForm {
 
     constructor(name: CharSequence?) : super(name)
     constructor(@StringRes nameRes: Int?) : super(nameRes)
+
+    /**
+     * 启用顶部填充
+     */
+    var enableTopPadding: Boolean = false
+
+    /**
+     * 启用底部填充
+     */
+    var enableBottomPadding: Boolean = false
 
     /**
      * 文字颜色
@@ -26,6 +36,6 @@ class FormLabel : BaseForm {
 
     override var multiColumnContentGravity: Int? = Gravity.CENTER
 
-    override fun getProvider(adapter: FormAdapter) = FormLabelProvider::class
+    override fun getProvider(adapter: FormAdapter) = FormTipProvider::class
 
 }

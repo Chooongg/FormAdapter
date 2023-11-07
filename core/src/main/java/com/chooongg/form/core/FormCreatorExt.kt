@@ -16,6 +16,8 @@ import com.chooongg.form.core.item.FormSliderRange
 import com.chooongg.form.core.item.FormSwitch
 import com.chooongg.form.core.item.FormSwitchMaterial
 import com.chooongg.form.core.item.FormText
+import com.chooongg.form.core.item.FormTime
+import com.chooongg.form.core.item.FormTip
 
 fun IFormCreator.addButton(
     name: CharSequence?, block: (FormButton.() -> Unit)? = null
@@ -124,3 +126,19 @@ fun IFormCreator.addText(
 fun IFormCreator.addText(
     @StringRes nameRes: Int?, block: (FormText.() -> Unit)? = null
 ) = addItem(FormText(nameRes).apply { block?.invoke(this) })
+
+fun IFormCreator.addTime(
+    name: CharSequence?, block: (FormTime.() -> Unit)? = null
+) = addItem(FormTime(name).apply { block?.invoke(this) })
+
+fun IFormCreator.addTime(
+    @StringRes nameRes: Int?, block: (FormTime.() -> Unit)? = null
+) = addItem(FormTime(nameRes).apply { block?.invoke(this) })
+
+fun IFormCreator.addTip(
+    name: CharSequence?, block: (FormTip.() -> Unit)? = null
+) = addItem(FormTip(name).apply { block?.invoke(this) })
+
+fun IFormCreator.addTip(
+    @StringRes nameRes: Int?, block: (FormTip.() -> Unit)? = null
+) = addItem(FormTip(nameRes).apply { block?.invoke(this) })

@@ -33,6 +33,7 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import kotlinx.coroutines.CoroutineScope
 
 class FormSelectorProvider : BaseFormProvider() {
+
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View = MaterialButton(
         parent.context, null, com.google.android.material.R.attr.borderlessButtonStyle
     ).apply {
@@ -66,7 +67,7 @@ class FormSelectorProvider : BaseFormProvider() {
             isEnabled = enabled
             text = item.getContentText(context, enabled)
             gravity = holder.typeset.obtainContentGravity(holder, item)
-            if (item is FormSelector) {
+            if (enabled && item is FormSelector) {
                 setOnClickListener { onClickButton(holder, this, item) }
             } else setOnClickListener(null)
         }
@@ -100,18 +101,11 @@ class FormSelectorProvider : BaseFormProvider() {
                     icon = null
                 }
 
-                is OptionLoadResult.Wait -> {
+                is OptionLoadResult.Wait, is OptionLoadResult.Success -> {
                     TooltipCompat.setTooltipText(this, null)
                     hint = FormUtils.getText(context, item.hint)
                         ?: context.getString(R.string.formDefaultHintSelect)
                     if (enabled) setIconResource(R.drawable.ic_form_arrow_down) else icon = null
-                }
-
-                is OptionLoadResult.Success -> {
-                    TooltipCompat.setTooltipText(this, null)
-                    hint = FormUtils.getText(context, item.hint)
-                        ?: context.getString(R.string.formDefaultHintSelect)
-                    setIconResource(R.drawable.ic_form_arrow_down)
                 }
 
                 is OptionLoadResult.Loading -> {

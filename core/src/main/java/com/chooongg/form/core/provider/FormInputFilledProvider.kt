@@ -116,6 +116,8 @@ class FormInputFilledProvider : BaseFormProvider() {
             if (tag is TextWatcher) removeTextChangedListener(tag as TextWatcher)
             hint = when (itemInput?.placeholder) {
                 null -> FormUtils.getText(context, item.hint)
+                    ?: context.getString(R.string.formDefaultHintInput)
+
                 else -> null
             }
             setText(item.getContentText(context, enabled))
@@ -131,7 +133,7 @@ class FormInputFilledProvider : BaseFormProvider() {
             }
             tag = watcher
         }
-        loadOption(holder, item)
+        if (enabled) loadOption(holder, item)
     }
 
     override fun onBindViewHolder(
@@ -167,7 +169,7 @@ class FormInputFilledProvider : BaseFormProvider() {
                     endIconDrawable = null
                 }
 
-                is OptionLoadResult.Wait -> {
+                is OptionLoadResult.Wait, is OptionLoadResult.Success -> {
                     TooltipCompat.setTooltipText(this, null)
                     if (enabled && item.options != null) {
                         endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
@@ -178,14 +180,6 @@ class FormInputFilledProvider : BaseFormProvider() {
                         endIconMode = TextInputLayout.END_ICON_NONE
                         endIconDrawable = null
                     }
-                }
-
-                is OptionLoadResult.Success -> {
-                    TooltipCompat.setTooltipText(this, null)
-                    endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                    endIconDrawable = FormUtils.getIconChangeSize(
-                        context, R.drawable.ic_form_arrow_down, fontHeight
-                    )
                 }
 
                 is OptionLoadResult.Loading -> {
