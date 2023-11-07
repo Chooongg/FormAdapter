@@ -72,6 +72,7 @@ internal fun getTextAppearance(view: View, @AttrRes resId: Int): Int =
                 R.attr.formTextAppearanceName -> R.style.Form_TextAppearance_Name
                 R.attr.formTextAppearanceContent -> R.style.Form_TextAppearance_Content
                 R.attr.formTextAppearanceHint -> R.style.Form_TextAppearance_Hint
+                R.attr.formTextAppearanceSearch -> R.style.Form_TextAppearance_Search
                 R.attr.formTextAppearancePrefix -> R.style.Form_TextAppearance_Prefix
                 R.attr.formTextAppearanceSuffix -> R.style.Form_TextAppearance_Suffix
                 R.attr.formTextAppearancePlaceholder -> R.style.Form_TextAppearance_Placeholder

@@ -20,20 +20,19 @@
             app:endIconMode="clear_text"
             app:endIconTint="?android:textColorHint"
             app:hintEnabled="false"
-            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+            app:shapeAppearance="@style/Form.ShapeAppearance.Search"
             app:startIconDrawable="@drawable/ic_form_search">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editSearch"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fadingEdgeLength="16dp"
+                android:fadingEdgeLength="@dimen/formFadingEdgeLength"
                 android:hint="@string/formSearchHint"
                 android:paddingTop="0dp"
                 android:paddingBottom="0dp"
                 android:requiresFadingEdge="horizontal"
-                android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
+                android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

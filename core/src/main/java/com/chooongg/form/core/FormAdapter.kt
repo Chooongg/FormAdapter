@@ -71,6 +71,7 @@ open class FormAdapter(isEnabled: Boolean) :
     }
 
     fun updateForm() {
+        recyclerView?.focusedChild?.clearFocus()
         partAdapters.forEach { it.update() }
     }
 

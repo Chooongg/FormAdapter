@@ -9,6 +9,8 @@
         <item name="android:textColor">@color/form_input_hint_color</item>
     </style>
 
+    <style name="Form.TextAppearance.Search" parent="TextAppearance.Material3.TitleMedium" />
+
     <style name="Form.TextAppearance.Prefix" parent="TextAppearance.Material3.BodyMedium">
         <item name="android:textColor">@color/form_input_indicator_text_color</item>
     </style>
@@ -38,5 +40,7 @@
     <style name="Form.Button.UnelevatedButton" parent="Widget.Material3.Button.UnelevatedButton" />
 
     <style name="Temp" parent="ThemeOverlay.Material3.AutoCompleteTextView" />
+
+    <style name="Form.ShapeAppearance.Search" parent="ShapeAppearance.Material3.Corner.Full" />
 
 </resources>

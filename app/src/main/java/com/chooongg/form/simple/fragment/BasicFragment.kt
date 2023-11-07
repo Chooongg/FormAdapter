@@ -50,12 +50,29 @@ class BasicFragment : BaseFragment() {
                     matchParentStartEdge = true
                     matchParentEndEdge = true
                 }
+                addSelector("测试") {
+                    optionLoader {
+                        val list = mutableListOf<Option>()
+                        for (i in 0..5) {
+                            list.add(Option("测试${i}", "附属"))
+                        }
+                        list
+                    }
+                }
                 addInput("Input") {
                     field = "input"
                     hint = "请输入"
                     content = "测试"
                     maxLines = 1
-//                    counterMaxLength = 11
+                    counterMaxLength = 11
+                    optionLoader {
+                        delay(5000)
+                        val list = mutableListOf<CharSequence>()
+                        for (i in 0..100) {
+                            list.add("测试${i}")
+                        }
+                        list
+                    }
                 }
                 addSlider("测试") {
                     stepSize = 1f
@@ -72,15 +89,6 @@ class BasicFragment : BaseFragment() {
                         delay(5000)
                         val list = mutableListOf<Option>()
                         for (i in 0..100) {
-                            list.add(Option("测试${i}", "附属"))
-                        }
-                        list
-                    }
-                }
-                addSelector("测试") {
-                    optionLoader {
-                        val list = mutableListOf<Option>()
-                        for (i in 0..5) {
                             list.add(Option("测试${i}", "附属"))
                         }
                         list

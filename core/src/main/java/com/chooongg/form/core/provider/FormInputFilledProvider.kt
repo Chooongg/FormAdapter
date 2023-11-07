@@ -4,8 +4,11 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.TooltipCompat
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
 import com.chooongg.form.core.FormUtils
@@ -19,6 +22,7 @@ import com.chooongg.form.core.option.FormArrayAdapter
 import com.chooongg.form.core.option.OptionLoadResult
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
+import com.google.android.material.internal.CheckableImageButton
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
 import com.google.android.material.progressindicator.IndeterminateDrawable
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -26,9 +30,12 @@ import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 
 class FormInputFilledProvider : BaseFormProvider() {
+
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
         TextInputLayout(
-            parent.context, null, com.google.android.material.R.attr.textInputFilledStyle
+            parent.context,
+            null,
+            com.google.android.material.R.attr.textInputFilledExposedDropdownMenuStyle
         ).also {
             it.clipChildren = false
             it.clipToPadding = false
@@ -61,8 +68,28 @@ class FormInputFilledProvider : BaseFormProvider() {
             }
             it.addView(editText)
             it.setEndIconTintList(editText.hintTextColors)
-            it.endIconMinSize =
-                FormUtils.getFontHeight(editText) + style.insideInfo.top + style.insideInfo.bottom
+            it.findViewById<CheckableImageButton>(
+                com.google.android.material.R.id.text_input_end_icon
+            ).apply {
+                val iconPadding = context.resources.getDimensionPixelSize(R.dimen.formIconPadding)
+                background = null
+                scaleType = ImageView.ScaleType.CENTER_INSIDE
+                minimumHeight = 0
+                minimumWidth = 0
+                setPaddingRelative(
+                    iconPadding, style.insideInfo.top,
+                    style.insideInfo.end, style.insideInfo.bottom
+                )
+                updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    marginStart = 0
+                    val fontHeight = FormUtils.getFontHeight(editText)
+                    width = fontHeight + iconPadding + style.insideInfo.end
+                    height = fontHeight + style.insideInfo.top + style.insideInfo.bottom
+                }
+            }
+            it.getChildAt(0).updateLayoutParams<LinearLayout.LayoutParams> {
+                topMargin = 0
+            }
         }
 
     override fun onBindViewHolder(

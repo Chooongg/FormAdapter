@@ -60,6 +60,9 @@ class FormSelectorPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         configWindow()
         setContentView(binding.root)
+        binding.editSearch.setTextAppearance(
+            getTextAppearance(binding.editSearch, R.attr.formTextAppearanceSearch)
+        )
         if (Controller.formSelector == null || Controller.resultBlock == null) {
             finishAfterTransition()
             return

@@ -6,6 +6,7 @@
     <attr name="formTextAppearanceName" format="reference" />
     <attr name="formTextAppearanceContent" format="reference" />
     <attr name="formTextAppearanceHint" format="reference" />
+    <attr name="formTextAppearanceSearch" format="reference" />
     <attr name="formTextAppearancePrefix" format="reference" />
     <attr name="formTextAppearanceSuffix" format="reference" />
     <attr name="formTextAppearancePlaceholder" format="reference" />

@@ -44,9 +44,10 @@ class FormSelectorProvider : BaseFormProvider() {
         insetBottom = 0
         insetTop = 0
         setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
-        iconSize = FormUtils.getFontHeight(this)
         iconTint = hintTextColors
         iconGravity = MaterialButton.ICON_GRAVITY_END
+        iconSize = FormUtils.getFontHeight(this)
+        iconPadding = context.resources.getDimensionPixelSize(R.dimen.formIconPadding)
         setPaddingRelative(
             style.insideInfo.middleStart, style.insideInfo.middleTop,
             style.insideInfo.middleEnd, style.insideInfo.middleBottom
@@ -115,11 +116,12 @@ class FormSelectorProvider : BaseFormProvider() {
 
                 is OptionLoadResult.Loading -> {
                     TooltipCompat.setTooltipText(this, null)
+                    val fontHeight = FormUtils.getFontHeight(view)
                     hint = context.getString(R.string.formOptionsLoading)
                     val drawable = IndeterminateDrawable.createCircularDrawable(context,
                         CircularProgressIndicatorSpec(context, null).apply {
-                            trackThickness = iconSize / 10
-                            indicatorSize = iconSize / 2
+                            trackThickness = fontHeight / 10
+                            indicatorSize = fontHeight / 2
                         })
                     icon = drawable
                     drawable.start()
