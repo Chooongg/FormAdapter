@@ -4,7 +4,13 @@ import androidx.annotation.IntRange
 import com.chooongg.form.core.FormGroupCreateBlock
 import com.chooongg.form.core.FormPartNameFormatter
 
-class FormDynamicPartData : BaseFormPartData() {
+class FormDynamicPartData : BaseFormPartData {
+
+    override var isEnablePart: Boolean = true
+
+    override var partField: String? = null
+
+    override var partName: Any? = null
 
     private val _groups = mutableListOf<FormGroupData>()
 

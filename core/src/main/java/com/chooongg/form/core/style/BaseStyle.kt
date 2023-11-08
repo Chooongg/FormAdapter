@@ -9,6 +9,7 @@ import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.boundary.FormInsideInfo
 import com.chooongg.form.core.boundary.FormMarginInfo
+import com.chooongg.form.core.iconProvider.BaseIconProvider
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.nameProvider.BasePartNameProvider
 import com.chooongg.form.core.part.BaseFormPartAdapter
@@ -17,6 +18,8 @@ import com.chooongg.form.core.typeset.BaseTypeset
 abstract class BaseStyle {
 
     var partNameProvider: BasePartNameProvider = FormManager.Default.partNameProvider
+
+    var iconProvider: BaseIconProvider = FormManager.Default.iconProvider
 
     var typeset: BaseTypeset? = null
 

@@ -23,7 +23,7 @@ class FormButton : BaseForm {
     @MaterialButton.IconGravity
     var iconGravity: Int = MaterialButton.ICON_GRAVITY_TEXT_START
 
-    var iconRes: Int? = null
+    var icon: Any? = null
 
     var iconSize: Int? = null
 

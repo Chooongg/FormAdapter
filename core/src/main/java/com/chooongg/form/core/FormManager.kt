@@ -8,6 +8,8 @@ import androidx.annotation.Px
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.format.BaseNameFormatter
 import com.chooongg.form.core.format.ColonNameFormatter
+import com.chooongg.form.core.iconProvider.BaseIconProvider
+import com.chooongg.form.core.iconProvider.DefaultIconProvider
 import com.chooongg.form.core.nameProvider.BasePartNameProvider
 import com.chooongg.form.core.nameProvider.DefaultPartNameProvider
 import com.chooongg.form.core.style.BaseStyle
@@ -39,6 +41,8 @@ object FormManager {
         var typeset: BaseTypeset = HorizontalTypeset()
 
         var partNameProvider: BasePartNameProvider = DefaultPartNameProvider()
+
+        var iconProvider: BaseIconProvider = DefaultIconProvider()
 
         var style: BaseStyle = NoneNotAlignmentStyle()
     }

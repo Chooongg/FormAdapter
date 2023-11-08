@@ -26,7 +26,6 @@ class CardElevatedStyle : BaseCardStyle {
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         super.onBindViewHolder(holder, layout, item)
         val context = holder.itemView.context
-        holder.itemView.clipToOutline = true
         val shape = getShapeAppearanceModel(holder.itemView, item)
         holder.itemView.elevation = if (elevationResId == null) {
             context.resources.getDimension(R.dimen.formCardElevation)

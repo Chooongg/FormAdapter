@@ -4,7 +4,6 @@ import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.data.FormDynamicPartData
 import com.chooongg.form.core.data.FormGroupData
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.InternalFormPartName
 import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,8 +46,9 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         data.getGroups().forEach { group ->
             val groupList = mutableListOf<BaseForm>()
             if (data.partName != null) {
-                groupList.add(InternalFormPartName(data.partName).apply {
-                    dynamicPartNameFormatBlock = data.dynamicPartNameFormatter
+                groupList.add(group.getPartNameItem {
+                    it.name = data.partName
+                    it.dynamicPartNameFormatBlock = data.dynamicPartNameFormatter
                 })
             }
             group.getItems().forEach {
@@ -85,18 +85,23 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     }
 
     override fun findOfField(field: String, update: Boolean, block: (BaseForm) -> Unit): Boolean {
-        itemList.forEach {
-            if (it.field == field) {
-                block(it)
-                if (update) update()
-                return true
-            }
-        }
         data.getGroups().forEach { group ->
             group.getItems().forEach {
                 if (it.field == field) {
                     block(it)
-                    if (update) update()
+                    if (update && itemList.contains(it)) {
+                        val tempEmpty = itemList.isEmpty()
+                        update()
+                        if (tempEmpty != itemList.isEmpty()) {
+                            val partIndex = formAdapter.partAdapters.indexOf(this)
+                            if (partIndex > 0) {
+                                formAdapter.partAdapters[partIndex - 1].update()
+                            }
+                            if (partIndex < formAdapter.partAdapters.size - 1) {
+                                formAdapter.partAdapters[partIndex + 1].update()
+                            }
+                        }
+                    }
                     return true
                 }
             }

@@ -18,10 +18,11 @@ abstract class BaseTypeset {
 
     abstract var emsMode: FormEmsMode
 
-    @Suppress("LeakingThis")
-    open var multiColumnEmsMode: FormEmsMode = emsMode
+    abstract var multiColumnEmsMode: FormEmsMode
 
     open var emsSize: Int = FormManager.Default.emsSize
+
+    open var multiColumnEmsSize: Int = FormManager.Default.emsSize
 
     open var nameFormatter: BaseNameFormatter? = null
 
@@ -83,24 +84,26 @@ abstract class BaseTypeset {
         )
     }
 
-    protected fun setNameViewEms(textView: TextView) {
-        when (emsMode) {
+    protected fun setNameViewEms(holder: FormViewHolder, textView: TextView) {
+        val adapter = holder.bindingAdapter as? BaseFormPartAdapter
+        val isMultiColumn = (adapter?.formAdapter?.columnCount ?: 1) > 1
+        when (if (isMultiColumn) multiColumnEmsMode else emsMode) {
             FormEmsMode.NONE -> {
                 textView.minWidth = 0
                 textView.maxWidth = Int.MAX_VALUE
             }
 
             FormEmsMode.MIN -> {
-                textView.minEms = emsSize
+                textView.minEms = if (isMultiColumn) multiColumnEmsSize else emsSize
                 textView.maxWidth = Int.MAX_VALUE
             }
 
             FormEmsMode.MAX -> {
                 textView.minWidth = 0
-                textView.maxEms = emsSize
+                textView.maxEms = if (isMultiColumn) multiColumnEmsSize else emsSize
             }
 
-            FormEmsMode.FIXED -> textView.setEms(emsSize)
+            FormEmsMode.FIXED -> textView.setEms(if (isMultiColumn) multiColumnEmsSize else emsSize)
         }
     }
 
@@ -113,7 +116,9 @@ abstract class BaseTypeset {
         if (javaClass != other.javaClass) return false
         if (nameFormatter != other.nameFormatter) return false
         if (emsMode != other.emsMode) return false
+        if (multiColumnEmsMode != other.multiColumnEmsMode) return false
         if (emsSize != other.emsSize) return false
+        if (multiColumnEmsSize != other.multiColumnEmsSize) return false
         if (contentGravity != other.contentGravity) return false
         if (multiColumnContentGravity != other.multiColumnContentGravity) return false
         return true

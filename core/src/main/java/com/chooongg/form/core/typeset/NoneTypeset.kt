@@ -11,6 +11,7 @@ import com.chooongg.form.core.style.BaseStyle
 class NoneTypeset : BaseTypeset() {
 
     override var emsMode = FormEmsMode.NONE
+    override var multiColumnEmsMode: FormEmsMode = FormEmsMode.NONE
 
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): ViewGroup {
         return FrameLayout(parent.context).apply {

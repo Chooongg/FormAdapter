@@ -36,6 +36,7 @@ android {
 dependencies {
     implementation "androidx.core:core-ktx:${dependenciesVersion.coreKtx}"
     implementation "com.google.android.material:material:${dependenciesVersion.material}"
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha13'
     implementation project(path: ':core')
 

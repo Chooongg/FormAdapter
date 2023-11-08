@@ -52,7 +52,6 @@ abstract class BaseOptionForm<T>(name: Any?) : BaseForm(name) {
     fun isNeedToLoadOption(holder: FormViewHolder): Boolean {
         if (localOptions != null) return false
         if (optionLoader == null) return false
-        if (optionLoadResult is OptionLoadResult.Loading<T>) return false
         if (holder.job?.isActive == true) return false
         return when (optionLoadMode) {
             FormOptionLoadMode.ALWAYS -> true

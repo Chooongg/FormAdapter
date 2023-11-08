@@ -46,9 +46,7 @@ class FormButtonProvider : BaseFormProvider() {
             isEnabled = item.isRealEnable(enabled)
             text = FormUtils.getText(context, item.name)
             hint = FormUtils.getText(context, item.hint)
-            if (itemButton?.iconRes != null) {
-                setIconResource(itemButton.iconRes!!)
-            } else icon = null
+            holder.style.iconProvider.setButtonIcon(this,itemButton?.icon)
             iconSize = itemButton?.iconSize ?: FormUtils.getFontHeight(this)
             iconGravity = itemButton?.iconGravity ?: MaterialButton.ICON_GRAVITY_TEXT_START
             configButtonGravity(this, holder.typeset.obtainContentGravity(holder, item))

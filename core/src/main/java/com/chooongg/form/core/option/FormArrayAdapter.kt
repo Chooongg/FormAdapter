@@ -1,23 +1,31 @@
 package com.chooongg.form.core.option
 
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Filter
 import android.widget.Filterable
-import com.chooongg.form.core.FormManager
+import androidx.annotation.GravityInt
 import com.chooongg.form.core.R
+import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.getTextAppearance
 import com.google.android.material.textview.MaterialTextView
 
-class FormArrayAdapter<T>(list: List<T>?) : BaseAdapter(), Filterable {
+class FormArrayAdapter<T>(
+    private val boundary: Boundary
+) : BaseAdapter(), Filterable {
 
     private var mOriginalValues: ArrayList<T> = ArrayList()
 
-    private var mObjects: ArrayList<T>
+    private var mObjects: ArrayList<T> = ArrayList()
 
-    init {
+    @GravityInt
+    private var gravity: Int = Gravity.NO_GRAVITY
+
+    fun setNewData(list: List<T>?, gravity: Int?) {
         mObjects = if (list == null) ArrayList() else ArrayList(list)
+        if (gravity != null) this.gravity = gravity
     }
 
     override fun getCount(): Int = mObjects.size
@@ -29,16 +37,12 @@ class FormArrayAdapter<T>(list: List<T>?) : BaseAdapter(), Filterable {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = convertView ?: MaterialTextView(parent.context).apply {
             setTextAppearance(getTextAppearance(this, R.attr.formTextAppearanceContent))
-            setPaddingRelative(
-                FormManager.Default.style.insideInfo.middleStart,
-                FormManager.Default.style.insideInfo.middleTop,
-                FormManager.Default.style.insideInfo.middleEnd,
-                FormManager.Default.style.insideInfo.middleBottom
-            )
+            setPaddingRelative(boundary.start, boundary.top, boundary.end, boundary.bottom)
         }
         val text = view as MaterialTextView
         val item = getItem(position)
         text.text = if (item is CharSequence) item else item.toString()
+        text.gravity = gravity
         return view
     }
 

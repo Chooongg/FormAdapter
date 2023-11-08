@@ -1,6 +1,5 @@
 package com.chooongg.form.core.typeset
 
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -20,6 +19,7 @@ class HorizontalTypeset : BaseTypeset {
     }
 
     override var emsMode = FormEmsMode.FIXED
+    override var multiColumnEmsMode: FormEmsMode = FormEmsMode.FIXED
 
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): ViewGroup {
         return LinearLayoutCompat(parent.context).also {
@@ -41,7 +41,7 @@ class HorizontalTypeset : BaseTypeset {
         item: BaseForm
     ) {
         layout.findViewById<MaterialTextView>(R.id.formInternalNameView)?.apply {
-            setNameViewEms(this)
+            setNameViewEms(holder, this)
             text = obtainNameFormatter().format(context, item)
         }
     }

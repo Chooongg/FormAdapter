@@ -20,6 +20,7 @@ abstract class BaseCardStyle : BaseStyle() {
 
     @CallSuper
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
+        holder.itemView.clipToOutline = true
         if (!this::shapeAppearanceModel.isInitialized) {
             val resId = if (shapeAppearanceResId == null) {
                 holder.itemView.context.obtainStyledAttributes(intArrayOf(R.attr.formShapeAppearanceCorner))

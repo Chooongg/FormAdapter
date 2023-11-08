@@ -3,7 +3,6 @@ package com.chooongg.form.core.part
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.InternalFormPartName
 import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +34,9 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         }
         val tempList = mutableListOf<BaseForm>()
         if (data.partName != null) {
-            tempList.add(InternalFormPartName(data.partName))
+            tempList.add(data.getPartNameItem {
+                it.name = data.partName
+            })
         }
         data.getItems().forEach {
             it.globalPosition = -1
@@ -65,17 +66,22 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     }
 
     override fun findOfField(field: String, update: Boolean, block: (BaseForm) -> Unit): Boolean {
-        itemList.forEach {
-            if (it.field == field) {
-                block(it)
-                if (update) update()
-                return true
-            }
-        }
         data.getItems().forEach {
             if (it.field == field) {
                 block(it)
-                if (update) update()
+                if (update && itemList.contains(it)) {
+                    val tempEmpty = itemList.isEmpty()
+                    update()
+                    if (tempEmpty != itemList.isEmpty()) {
+                        val partIndex = formAdapter.partAdapters.indexOf(this)
+                        if (partIndex > 0) {
+                            formAdapter.partAdapters[partIndex - 1].update()
+                        }
+                        if (partIndex < formAdapter.partAdapters.size - 1) {
+                            formAdapter.partAdapters[partIndex + 1].update()
+                        }
+                    }
+                }
                 return true
             }
         }

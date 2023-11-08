@@ -14,6 +14,7 @@ import com.google.android.material.textview.MaterialTextView
 class VerticalTypeset : BaseTypeset() {
 
     override var emsMode = FormEmsMode.NONE
+    override var multiColumnEmsMode: FormEmsMode = FormEmsMode.NONE
 
     override var contentGravity: Int = Gravity.NO_GRAVITY
     override var multiColumnContentGravity: Int = Gravity.NO_GRAVITY
@@ -33,6 +34,7 @@ class VerticalTypeset : BaseTypeset() {
 
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup, item: BaseForm) {
         layout.findViewById<MaterialTextView>(R.id.formInternalNameView)?.apply {
+            setNameViewEms(holder, this)
             text = obtainNameFormatter().format(context, item)
         }
     }

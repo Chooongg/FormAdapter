@@ -25,7 +25,6 @@ class CardFilledStyle : BaseCardStyle {
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         super.onBindViewHolder(holder, layout, item)
         val context = holder.itemView.context
-        holder.itemView.clipToOutline = true
         val shape = getShapeAppearanceModel(holder.itemView, item)
         val shapeDrawable = MaterialShapeDrawable(shape)
         shapeDrawable.fillColor = ColorStateList.valueOf(

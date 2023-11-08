@@ -14,6 +14,7 @@ import androidx.core.widget.doAfterTextChanged
 import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
+import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.BaseOptionForm
@@ -80,12 +81,21 @@ class FormInputOutlinedProvider : BaseFormProvider() {
                     iconPadding, style.insideInfo.top,
                     style.insideInfo.end, style.insideInfo.bottom
                 )
+                val fontHeight = FormUtils.getFontHeight(editText)
+                val realHeight = fontHeight + iconPadding + style.insideInfo.end
                 updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     marginStart = 0
-                    val fontHeight = FormUtils.getFontHeight(editText)
                     width = fontHeight + iconPadding + style.insideInfo.end
                     height = fontHeight + style.insideInfo.top + style.insideInfo.bottom
                 }
+                editText.setAdapter(
+                    FormArrayAdapter<CharSequence>(
+                        Boundary(
+                            style.insideInfo.start, style.insideInfo.middleTop,
+                            realHeight, style.insideInfo.middleBottom
+                        )
+                    )
+                )
             }
             it.getChildAt(0).updateLayoutParams<LinearLayout.LayoutParams> {
                 topMargin = 0
@@ -154,13 +164,16 @@ class FormInputOutlinedProvider : BaseFormProvider() {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun configOption(holder: FormViewHolder, view: View, item: BaseForm, enabled: Boolean) {
         val editText =
             view.findViewById<MaterialAutoCompleteTextView>(R.id.formInternalContentChildView)
         val itemInput = item as? FormInput
-        if (itemInput?.options != null) {
-            editText.setAdapter(FormArrayAdapter(itemInput.options))
-        } else editText.setAdapter(null)
+        try {
+            val adapter = editText.adapter as FormArrayAdapter<CharSequence>
+            adapter.setNewData(itemInput?.options, editText.gravity)
+        } catch (_: Exception) {
+        }
         val fontHeight = FormUtils.getFontHeight(editText)
         with(view as TextInputLayout) {
             when (val result = itemInput?.optionLoadResult) {
