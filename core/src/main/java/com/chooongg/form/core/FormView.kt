@@ -20,6 +20,7 @@ class FormView @JvmOverloads constructor(
     init {
         clipChildren = false
         clipToPadding = false
+        itemAnimator
         itemAnimator = FormItemAnimator()
         val a = context.obtainStyledAttributes(
             attrs, R.styleable.FormView, defStyleAttr, 0

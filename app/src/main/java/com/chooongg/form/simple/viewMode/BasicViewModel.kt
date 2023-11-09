@@ -124,6 +124,7 @@ class BasicViewModel : ViewModel() {
                 addSliderRange("SliderRange") {
                     stepSize = 1f
                     valueTo = 5f
+                    content = listOf("1","2")
                 }
                 addSwitch("Switch")
                 addSwitchMaterial("SwitchMaterial")

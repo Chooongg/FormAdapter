@@ -60,6 +60,7 @@ class FormSliderRangeProvider : BaseFormProvider() {
             } catch (e: Exception) {
                 listOf(valueFrom, valueTo)
             }
+            item.content = values
             tickInactiveTintList = if (itemSlider?.showInactiveTick == true) {
                 trackActiveTintList
             } else ColorStateList.valueOf(Color.TRANSPARENT)

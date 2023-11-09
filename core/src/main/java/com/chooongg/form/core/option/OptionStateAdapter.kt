@@ -18,15 +18,21 @@ class OptionStateAdapter(private val style: BaseStyle) :
 
     class OptionStateViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
+    private var enabled: Boolean = false
+
+    private var isEmpty: Boolean = false
+
     private var optionLoadResult: OptionLoadResult<*>? = null
 
     @SuppressLint("NotifyDataSetChanged")
-    fun update(result: OptionLoadResult<*>?) {
+    fun update(result: OptionLoadResult<*>?, isEmpty: Boolean, enabled: Boolean) {
         optionLoadResult = when (result) {
             is OptionLoadResult.Wait -> null
             is OptionLoadResult.Success -> null
             else -> result
         }
+        this.isEmpty = isEmpty
+        this.enabled = enabled
         notifyDataSetChanged()
     }
 
@@ -63,9 +69,13 @@ class OptionStateAdapter(private val style: BaseStyle) :
         with(holder.itemView.findViewById<MaterialTextView>(R.id.formInternalContentChildView)) {
             hint = when (optionLoadResult) {
                 is OptionLoadResult.Loading -> context.getString(R.string.formOptionsLoading)
-                is OptionLoadResult.Empty -> context.getString(R.string.formOptionsEmpty)
                 is OptionLoadResult.Error -> context.getString(R.string.formOptionsError)
-                else -> null
+                is OptionLoadResult.Empty -> context.getString(R.string.formOptionsEmpty)
+                else -> if (isEmpty) {
+                    context.getString(R.string.formOptionsEmpty)
+                } else {
+                    null
+                }
             }
         }
         with(holder.itemView.findViewById<CircularProgressIndicator>(R.id.formInternalContentChildSecondView)) {

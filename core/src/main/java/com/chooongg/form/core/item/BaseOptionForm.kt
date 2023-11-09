@@ -20,6 +20,11 @@ abstract class BaseOptionForm<T>(name: Any?) : BaseForm(name) {
     abstract fun hasOpenOperation(): Boolean
 
     /**
+     * 禁用提示: Int(StringRes), String, CharSequence
+     */
+    var disableHint: Any? = null
+
+    /**
      * 本地设置的选项
      */
     private var localOptions: List<T>? = null

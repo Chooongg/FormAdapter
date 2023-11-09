@@ -178,8 +178,10 @@ class FormInputProvider : BaseFormProvider() {
             when (val result = itemInput?.optionLoadResult) {
                 null -> {
                     TooltipCompat.setTooltipText(this, null)
-                    endIconMode = TextInputLayout.END_ICON_NONE
-                    endIconDrawable = null
+                    endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                    endIconDrawable = FormUtils.getIconChangeSize(
+                        context, R.drawable.ic_form_close, fontHeight
+                    )
                 }
 
                 is OptionLoadResult.Wait, is OptionLoadResult.Success -> {
@@ -190,8 +192,10 @@ class FormInputProvider : BaseFormProvider() {
                             context, R.drawable.ic_form_arrow_down, fontHeight
                         )
                     } else {
-                        endIconMode = TextInputLayout.END_ICON_NONE
-                        endIconDrawable = null
+                        endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                        endIconDrawable = FormUtils.getIconChangeSize(
+                            context, R.drawable.ic_form_close, fontHeight
+                        )
                     }
                 }
 
@@ -218,8 +222,10 @@ class FormInputProvider : BaseFormProvider() {
 
                 is OptionLoadResult.Empty -> {
                     TooltipCompat.setTooltipText(this, null)
-                    endIconMode = TextInputLayout.END_ICON_NONE
-                    endIconDrawable = null
+                    endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                    endIconDrawable = FormUtils.getIconChangeSize(
+                        context, R.drawable.ic_form_close, fontHeight
+                    )
                 }
             }
         }
@@ -244,9 +250,5 @@ class FormInputProvider : BaseFormProvider() {
         val tempEnabled = view.isEnabled
         view.isEnabled = false
         if (tempEnabled) view.isEnabled = true
-    }
-
-    override fun onViewRecycled(holder: FormViewHolder, view: View) {
-        super.onViewRecycled(holder, view)
     }
 }

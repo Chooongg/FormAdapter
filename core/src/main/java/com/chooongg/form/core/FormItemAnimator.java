@@ -3,14 +3,13 @@ package com.chooongg.form.core;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
-import android.view.animation.AccelerateInterpolator;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FormItemAnimator extends SimpleItemAnimator {
+    private static final boolean DEBUG = false;
 
     private static TimeInterpolator sDefaultInterpolator;
 
@@ -87,13 +87,16 @@ public class FormItemAnimator extends SimpleItemAnimator {
             final ArrayList<MoveInfo> moves = new ArrayList<>(mPendingMoves);
             mMovesList.add(moves);
             mPendingMoves.clear();
-            Runnable mover = () -> {
-                for (MoveInfo moveInfo : moves) {
-                    animateMoveImpl(moveInfo.holder, moveInfo.fromX, moveInfo.fromY,
-                            moveInfo.toX, moveInfo.toY);
+            Runnable mover = new Runnable() {
+                @Override
+                public void run() {
+                    for (MoveInfo moveInfo : moves) {
+                        animateMoveImpl(moveInfo.holder, moveInfo.fromX, moveInfo.fromY,
+                                moveInfo.toX, moveInfo.toY);
+                    }
+                    moves.clear();
+                    mMovesList.remove(moves);
                 }
-                moves.clear();
-                mMovesList.remove(moves);
             };
             if (removalsPending) {
                 View view = moves.get(0).holder.itemView;
@@ -107,12 +110,15 @@ public class FormItemAnimator extends SimpleItemAnimator {
             final ArrayList<ChangeInfo> changes = new ArrayList<>(mPendingChanges);
             mChangesList.add(changes);
             mPendingChanges.clear();
-            Runnable changer = () -> {
-                for (ChangeInfo change : changes) {
-                    animateChangeImpl(change);
+            Runnable changer = new Runnable() {
+                @Override
+                public void run() {
+                    for (ChangeInfo change : changes) {
+                        animateChangeImpl(change);
+                    }
+                    changes.clear();
+                    mChangesList.remove(changes);
                 }
-                changes.clear();
-                mChangesList.remove(changes);
             };
             if (removalsPending) {
                 RecyclerView.ViewHolder holder = changes.get(0).oldHolder;
@@ -126,12 +132,15 @@ public class FormItemAnimator extends SimpleItemAnimator {
             final ArrayList<RecyclerView.ViewHolder> additions = new ArrayList<>(mPendingAdditions);
             mAdditionsList.add(additions);
             mPendingAdditions.clear();
-            Runnable adder = () -> {
-                for (RecyclerView.ViewHolder holder : additions) {
-                    animateAddImpl(holder);
+            Runnable adder = new Runnable() {
+                @Override
+                public void run() {
+                    for (RecyclerView.ViewHolder holder : additions) {
+                        animateAddImpl(holder);
+                    }
+                    additions.clear();
+                    mAdditionsList.remove(additions);
                 }
-                additions.clear();
-                mAdditionsList.remove(additions);
             };
             if (removalsPending || movesPending || changesPending) {
                 long removeDuration = removalsPending ? getRemoveDuration() : 0;
@@ -139,7 +148,7 @@ public class FormItemAnimator extends SimpleItemAnimator {
                 long changeDuration = changesPending ? getChangeDuration() : 0;
                 long totalDelay = removeDuration + Math.max(moveDuration, changeDuration);
                 View view = additions.get(0).itemView;
-                ViewCompat.postOnAnimationDelayed(view, adder, totalDelay / 2);
+                ViewCompat.postOnAnimationDelayed(view, adder, totalDelay);
             } else {
                 adder.run();
             }
@@ -159,9 +168,8 @@ public class FormItemAnimator extends SimpleItemAnimator {
         final ViewPropertyAnimator animation = view.animate();
         mRemoveAnimations.add(holder);
         final float elevation = view.getElevation();
-        animation.setDuration(getRemoveDuration()).alpha(0)
-                .setInterpolator(new AccelerateInterpolator(3))
-                .setListener(new AnimatorListenerAdapter() {
+        animation.setDuration(getRemoveDuration()).alpha(0).setListener(
+                new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationStart(Animator animator) {
                         view.setElevation(0);
@@ -170,12 +178,18 @@ public class FormItemAnimator extends SimpleItemAnimator {
 
                     @Override
                     public void onAnimationEnd(Animator animator) {
+                        view.setElevation(elevation);
                         animation.setListener(null);
                         view.setAlpha(1);
-                        view.setElevation(elevation);
                         dispatchRemoveFinished(holder);
                         mRemoveAnimations.remove(holder);
                         dispatchFinishedWhenDone();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+                        view.setAlpha(1);
+                        view.setElevation(elevation);
                     }
                 }).start();
     }
@@ -195,7 +209,6 @@ public class FormItemAnimator extends SimpleItemAnimator {
         mAddAnimations.add(holder);
         final float elevation = view.getElevation();
         animation.alpha(1).setDuration(getAddDuration())
-                .setInterpolator(new AccelerateInterpolator(3))
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationStart(Animator animator) {
@@ -320,7 +333,8 @@ public class FormItemAnimator extends SimpleItemAnimator {
         final RecyclerView.ViewHolder newHolder = changeInfo.newHolder;
         final View newView = newHolder != null ? newHolder.itemView : null;
         if (view != null) {
-            final ViewPropertyAnimator oldViewAnim = view.animate().setDuration(getChangeDuration());
+            final ViewPropertyAnimator oldViewAnim = view.animate().setDuration(
+                    getChangeDuration());
             mChangeAnimations.add(changeInfo.oldHolder);
             oldViewAnim.translationX(changeInfo.toX - changeInfo.fromX);
             oldViewAnim.translationY(changeInfo.toY - changeInfo.fromY);
@@ -346,11 +360,6 @@ public class FormItemAnimator extends SimpleItemAnimator {
             final ViewPropertyAnimator newViewAnimation = newView.animate();
             mChangeAnimations.add(changeInfo.newHolder);
             newView.setAlpha(1f);
-//            if (newView.getElevation() > 0) {
-//                newView.setAlpha(1f);
-//            } else {
-//                newViewAnimation.alpha(1f);
-//            }
             newViewAnimation.translationX(0).translationY(0).setDuration(getChangeDuration())
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
@@ -361,9 +370,6 @@ public class FormItemAnimator extends SimpleItemAnimator {
                         @Override
                         public void onAnimationEnd(Animator animator) {
                             newViewAnimation.setListener(null);
-                            if (newView.getElevation() <= 0) {
-                                newView.setAlpha(1f);
-                            }
                             newView.setTranslationX(0);
                             newView.setTranslationY(0);
                             dispatchChangeFinished(changeInfo.newHolder, false);
@@ -471,17 +477,32 @@ public class FormItemAnimator extends SimpleItemAnimator {
         }
 
         // animations should be ended by the cancel above.
-        mRemoveAnimations.remove(item);
-        mAddAnimations.remove(item);
-        mChangeAnimations.remove(item);
-        mMoveAnimations.remove(item);
+        if (mRemoveAnimations.remove(item) && DEBUG) {
+            throw new IllegalStateException("after animation is cancelled, item should not be in "
+                    + "mRemoveAnimations list");
+        }
+
+        if (mAddAnimations.remove(item) && DEBUG) {
+            throw new IllegalStateException("after animation is cancelled, item should not be in "
+                    + "mAddAnimations list");
+        }
+
+        if (mChangeAnimations.remove(item) && DEBUG) {
+            throw new IllegalStateException("after animation is cancelled, item should not be in "
+                    + "mChangeAnimations list");
+        }
+
+        if (mMoveAnimations.remove(item) && DEBUG) {
+            throw new IllegalStateException("after animation is cancelled, item should not be in "
+                    + "mMoveAnimations list");
+        }
         dispatchFinishedWhenDone();
     }
 
     @SuppressLint("Recycle")
     private void resetAnimation(RecyclerView.ViewHolder holder) {
         if (sDefaultInterpolator == null) {
-            sDefaultInterpolator = new FastOutSlowInInterpolator();
+            sDefaultInterpolator = new ValueAnimator().getInterpolator();
         }
         holder.itemView.animate().setInterpolator(sDefaultInterpolator);
         endAnimation(holder);

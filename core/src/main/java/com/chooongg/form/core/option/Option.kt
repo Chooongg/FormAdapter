@@ -4,7 +4,7 @@ data class Option(
     val _name: String?,
     val _secondaryName: String?,
     val _value: String?
-) : IOption {
+) : IOption() {
 
     constructor(name: String?) : this(name, null, name)
     constructor(name: String?, value: String?) : this(name, null, value)

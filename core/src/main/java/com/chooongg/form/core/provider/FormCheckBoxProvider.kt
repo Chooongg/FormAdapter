@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.core.content.res.use
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
@@ -19,17 +18,16 @@ import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.BaseOptionForm
 import com.chooongg.form.core.item.FormRadioButton
 import com.chooongg.form.core.option.IOption
-import com.chooongg.form.core.option.Option
 import com.chooongg.form.core.option.OptionStateAdapter
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
-import com.google.android.material.radiobutton.MaterialRadioButton
+import com.google.android.material.checkbox.MaterialCheckBox
 import kotlinx.coroutines.CoroutineScope
 import kotlin.math.min
 
-class FormRadioButtonProvider : BaseFormProvider() {
+class FormCheckBoxProvider : BaseFormProvider() {
 
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
         RecyclerView(parent.context).also {
@@ -47,9 +45,6 @@ class FormRadioButtonProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        if (item is FormRadioButton && item.content is CharSequence) {
-            item.content = Option(null, (item.content as CharSequence).toString())
-        }
         with(view as RecyclerView) {
             val concatAdapter = adapter as ConcatAdapter
             val optionStateAdapter = concatAdapter.adapters[0] as OptionStateAdapter
@@ -122,7 +117,7 @@ class FormRadioButtonProvider : BaseFormProvider() {
     private class ChildAdapter(private val style: BaseStyle) :
         RecyclerView.Adapter<ChildAdapter.ChildViewHolder>() {
 
-        var provider: FormRadioButtonProvider? = null
+        var provider: FormCheckBoxProvider? = null
 
         var formHolder: FormViewHolder? = null
 
@@ -132,7 +127,7 @@ class FormRadioButtonProvider : BaseFormProvider() {
 
         private var options: List<IOption> = listOf()
 
-        private class ChildViewHolder(view: View) : ViewHolder(view)
+        private class ChildViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
         @SuppressLint("NotifyDataSetChanged")
         fun update(options: List<IOption>?, enabled: Boolean) {
@@ -144,7 +139,7 @@ class FormRadioButtonProvider : BaseFormProvider() {
         override fun getItemCount() = options.size
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ChildViewHolder(
-            MaterialRadioButton(parent.context).apply {
+            MaterialCheckBox(parent.context).apply {
                 minWidth = 0
                 minHeight = 0
                 minimumWidth = 0
@@ -172,36 +167,21 @@ class FormRadioButtonProvider : BaseFormProvider() {
 
         override fun onBindViewHolder(holder: ChildViewHolder, position: Int) {
             val option = options[position]
-            with(holder.itemView as MaterialRadioButton) {
+            with(holder.itemView as MaterialCheckBox) {
                 setOnCheckedChangeListener(null)
                 isEnabled = enabled
                 isChecked = item?.content == option
                 text = option.getSpannableString(context)
                 if (provider != null && formHolder != null && item != null) {
                     setOnCheckedChangeListener { _, checked ->
-                        if (!checked) return@setOnCheckedChangeListener
                         FormUtils.hideIme(this)
+
                         val selectedPosition =
                             options.indexOfFirst { item!!.content == it }
                         provider!!.changeContentAndNotifyLinkage(formHolder!!, item!!, option)
-                        if (selectedPosition != -1 && selectedPosition != position) {
-                            post { notifyItemChanged(selectedPosition, "uncheck") }
-                        }
                     }
                 }
             }
-        }
-
-        override fun onBindViewHolder(
-            holder: ChildViewHolder,
-            position: Int,
-            payloads: MutableList<Any>
-        ) {
-            if (payloads.contains("uncheck")) {
-                (holder.itemView as MaterialRadioButton).isChecked = false
-                return
-            }
-            super.onBindViewHolder(holder, position, payloads)
         }
     }
 }

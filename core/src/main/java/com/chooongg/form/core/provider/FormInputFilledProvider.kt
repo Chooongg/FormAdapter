@@ -38,8 +38,6 @@ class FormInputFilledProvider : BaseFormProvider() {
             null,
             com.google.android.material.R.attr.textInputFilledExposedDropdownMenuStyle
         ).also {
-            it.clipChildren = false
-            it.clipToPadding = false
             it.id = R.id.formInternalContentView
             it.setHintTextAppearance(formTextAppearance(it, R.attr.formTextAppearanceHint))
             it.setPrefixTextAppearance(formTextAppearance(it, R.attr.formTextAppearancePrefix))
@@ -178,8 +176,10 @@ class FormInputFilledProvider : BaseFormProvider() {
             when (val result = itemInput?.optionLoadResult) {
                 null -> {
                     TooltipCompat.setTooltipText(this, null)
-                    endIconMode = TextInputLayout.END_ICON_NONE
-                    endIconDrawable = null
+                    endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                    endIconDrawable = FormUtils.getIconChangeSize(
+                        context, R.drawable.ic_form_close, fontHeight
+                    )
                 }
 
                 is OptionLoadResult.Wait, is OptionLoadResult.Success -> {
@@ -190,8 +190,10 @@ class FormInputFilledProvider : BaseFormProvider() {
                             context, R.drawable.ic_form_arrow_down, fontHeight
                         )
                     } else {
-                        endIconMode = TextInputLayout.END_ICON_NONE
-                        endIconDrawable = null
+                        endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                        endIconDrawable = FormUtils.getIconChangeSize(
+                            context, R.drawable.ic_form_close, fontHeight
+                        )
                     }
                 }
 
@@ -218,8 +220,10 @@ class FormInputFilledProvider : BaseFormProvider() {
 
                 is OptionLoadResult.Empty -> {
                     TooltipCompat.setTooltipText(this, null)
-                    endIconMode = TextInputLayout.END_ICON_NONE
-                    endIconDrawable = null
+                    endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                    endIconDrawable = FormUtils.getIconChangeSize(
+                        context, R.drawable.ic_form_close, fontHeight
+                    )
                 }
             }
         }

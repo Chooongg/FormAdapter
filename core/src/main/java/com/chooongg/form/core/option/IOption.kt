@@ -4,12 +4,13 @@ import android.content.Context
 import android.text.SpannableString
 import android.text.style.RelativeSizeSpan
 
-interface IOption {
-    fun getOptionName(): String?
-    fun getOptionSecondaryName(): String?
-    fun getValue(): String?
+abstract class IOption {
 
-    fun getSpannableString(context: Context): SpannableString {
+    abstract fun getOptionName(): String?
+    abstract fun getOptionSecondaryName(): String?
+    abstract fun getValue(): String?
+
+    open fun getSpannableString(context: Context): SpannableString {
         val optionName = getOptionName()
         val optionSecondaryName =
             getOptionSecondaryName() ?: return SpannableString(getOptionName() ?: "")
@@ -27,4 +28,18 @@ interface IOption {
             )
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is IOption) return false
+
+        if (getValue() != other.getValue()) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
+    }
+
 }

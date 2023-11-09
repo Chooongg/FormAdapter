@@ -32,14 +32,12 @@ import kotlinx.coroutines.CoroutineScope
 
 class FormInputOutlinedProvider : BaseFormProvider() {
 
-    override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
-        return TextInputLayout(
+    override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
+        TextInputLayout(
             parent.context,
             null,
             com.google.android.material.R.attr.textInputOutlinedExposedDropdownMenuStyle
         ).also {
-            it.clipChildren = false
-            it.clipToPadding = false
             it.id = R.id.formInternalContentView
             it.setHintTextAppearance(formTextAppearance(it, R.attr.formTextAppearanceHint))
             it.setPrefixTextAppearance(formTextAppearance(it, R.attr.formTextAppearancePrefix))
@@ -101,7 +99,6 @@ class FormInputOutlinedProvider : BaseFormProvider() {
                 topMargin = 0
             }
         }
-    }
 
     override fun onBindViewHolder(
         scope: CoroutineScope,
@@ -193,8 +190,10 @@ class FormInputOutlinedProvider : BaseFormProvider() {
                             context, R.drawable.ic_form_arrow_down, fontHeight
                         )
                     } else {
-                        endIconMode = TextInputLayout.END_ICON_NONE
-                        endIconDrawable = null
+                        endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                        endIconDrawable = FormUtils.getIconChangeSize(
+                            context, R.drawable.ic_form_close, fontHeight
+                        )
                     }
                 }
 

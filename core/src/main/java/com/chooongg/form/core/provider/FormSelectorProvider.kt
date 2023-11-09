@@ -22,6 +22,7 @@ import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.BaseOptionForm
 import com.chooongg.form.core.item.FormSelector
 import com.chooongg.form.core.option.FormSelectorPageActivity
+import com.chooongg.form.core.option.Option
 import com.chooongg.form.core.option.OptionLoadResult
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
@@ -62,6 +63,9 @@ class FormSelectorProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
+        if (item is FormSelector && item.content is CharSequence) {
+            item.content = Option(null, (item.content as CharSequence).toString())
+        }
         configOption(view, item, enabled)
         with(view as MaterialButton) {
             isEnabled = enabled
@@ -97,28 +101,35 @@ class FormSelectorProvider : BaseFormProvider() {
                 null -> {
                     TooltipCompat.setTooltipText(this, null)
                     hint = FormUtils.getText(context, item.hint)
-                        ?: context.getString(R.string.formDefaultHintSelect)
+                        ?: context.getString(R.string.fromDefaultHintNone)
                     icon = null
                 }
 
                 is OptionLoadResult.Wait, is OptionLoadResult.Success -> {
                     TooltipCompat.setTooltipText(this, null)
-                    hint = FormUtils.getText(context, item.hint)
-                        ?: context.getString(R.string.formDefaultHintSelect)
+                    hint = if (enabled) {
+                        FormUtils.getText(context, item.hint)
+                            ?: context.getString(R.string.formDefaultHintSelect)
+                    } else {
+                        FormUtils.getText(context, item.disableHint)
+                            ?: context.getString(R.string.fromDefaultHintNone)
+                    }
                     if (enabled) setIconResource(R.drawable.ic_form_arrow_down) else icon = null
                 }
 
                 is OptionLoadResult.Loading -> {
                     TooltipCompat.setTooltipText(this, null)
-                    val fontHeight = FormUtils.getFontHeight(view)
-                    hint = context.getString(R.string.formOptionsLoading)
-                    val drawable = IndeterminateDrawable.createCircularDrawable(context,
-                        CircularProgressIndicatorSpec(context, null).apply {
-                            trackThickness = fontHeight / 10
-                            indicatorSize = fontHeight / 2
-                        })
-                    icon = drawable
-                    drawable.start()
+                    if (enabled) {
+                        val fontHeight = FormUtils.getFontHeight(view)
+                        hint = context.getString(R.string.formOptionsLoading)
+                        val drawable = IndeterminateDrawable.createCircularDrawable(context,
+                            CircularProgressIndicatorSpec(context, null).apply {
+                                trackThickness = fontHeight / 10
+                                indicatorSize = fontHeight / 2
+                            })
+                        icon = drawable
+                        drawable.start()
+                    } else icon = null
                 }
 
                 is OptionLoadResult.Error -> {
@@ -129,7 +140,13 @@ class FormSelectorProvider : BaseFormProvider() {
 
                 is OptionLoadResult.Empty -> {
                     TooltipCompat.setTooltipText(this, null)
-                    hint = context.getString(R.string.formOptionsEmpty)
+                    hint = if (enabled) {
+                        FormUtils.getText(context, item.hint)
+                            ?: context.getString(R.string.formDefaultHintSelect)
+                    } else {
+                        FormUtils.getText(context, item.disableHint)
+                            ?: context.getString(R.string.fromDefaultHintNone)
+                    }
                     icon = null
                 }
             }
