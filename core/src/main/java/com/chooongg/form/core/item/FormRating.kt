@@ -35,6 +35,12 @@ class FormRating : BaseForm {
 
     override fun getProvider(adapter: FormAdapter) = FormRatingProvider::class
 
+    override fun initContentValue(value: Any?) {
+        if (value == null) return
+        if (value is Float) return
+        content = value.toString().toFloatOrNull()
+    }
+
     override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
         val rating = content as? Float ?: return FormUtils.getText(context, content)
         return context.getString(R.string.formRatingFormat, rating)

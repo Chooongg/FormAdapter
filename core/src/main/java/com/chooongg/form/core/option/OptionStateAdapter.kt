@@ -56,11 +56,12 @@ class OptionStateAdapter(private val style: BaseStyle) :
             })
             it.addView(CircularProgressIndicator(it.context).apply {
                 id = R.id.formInternalContentChildSecondView
+                isIndeterminate = true
                 trackThickness = textHeight / 10
                 indicatorSize = textHeight / 2
-                setIndicatorColor(textView.hintTextColors.defaultColor)
             }, LinearLayoutCompat.LayoutParams(-2, -2).apply {
                 gravity = Gravity.CENTER_VERTICAL
+                marginStart = style.insideInfo.middleEnd
             })
         })
     }

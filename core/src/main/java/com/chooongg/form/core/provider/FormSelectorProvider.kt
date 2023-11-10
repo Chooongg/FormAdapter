@@ -22,7 +22,6 @@ import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.BaseOptionForm
 import com.chooongg.form.core.item.FormSelector
 import com.chooongg.form.core.option.FormSelectorPageActivity
-import com.chooongg.form.core.option.Option
 import com.chooongg.form.core.option.OptionLoadResult
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
@@ -63,9 +62,6 @@ class FormSelectorProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        if (item is FormSelector && item.content is CharSequence) {
-            item.content = Option(null, (item.content as CharSequence).toString())
-        }
         configOption(view, item, enabled)
         with(view as MaterialButton) {
             isEnabled = enabled

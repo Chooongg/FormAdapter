@@ -215,4 +215,15 @@ abstract class BaseForm(
     }
 
     //</editor-fold>
+
+    //<editor-fold desc="初始化方法 initialize">
+
+    /**
+     * 初始化 content 值
+     * 该操作主要作用为修复
+     */
+    open fun initContentValue(value: Any?) {
+    }
+
+    //</editor-fold>
 }

@@ -115,7 +115,6 @@ class FormRadioButtonProvider : BaseFormProvider() {
         childAdapter.provider = this
         childAdapter.formHolder = holder
         childAdapter.item = item
-        childAdapter.enabled = enabled
         childAdapter.update(item.options, enabled)
     }
 

@@ -33,6 +33,8 @@ abstract class IOption {
         if (this === other) return true
         if (other !is IOption) return false
 
+        if (getValue() == null) return false
+        if (other.getValue() == null) return false
         if (getValue() != other.getValue()) return false
 
         return true

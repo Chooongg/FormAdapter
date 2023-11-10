@@ -3,6 +3,7 @@ package com.chooongg.form.core
 import androidx.annotation.StringRes
 import com.chooongg.form.core.data.IFormCreator
 import com.chooongg.form.core.item.FormButton
+import com.chooongg.form.core.item.FormCheckBox
 import com.chooongg.form.core.item.FormDivider
 import com.chooongg.form.core.item.FormInput
 import com.chooongg.form.core.item.FormInputFilled
@@ -26,6 +27,14 @@ fun IFormCreator.addButton(
 fun IFormCreator.addButton(
     @StringRes nameRes: Int?, block: (FormButton.() -> Unit)? = null
 ) = addItem(FormButton(nameRes).apply { block?.invoke(this) })
+
+fun IFormCreator.addCheckBox(
+    name: CharSequence?, block: (FormCheckBox.() -> Unit)? = null
+) = addItem(FormCheckBox(name).apply { block?.invoke(this) })
+
+fun IFormCreator.addCheckBox(
+    @StringRes nameRes: Int?, block: (FormCheckBox.() -> Unit)? = null
+) = addItem(FormCheckBox(nameRes).apply { block?.invoke(this) })
 
 fun IFormCreator.addDivider(
     block: (FormDivider.() -> Unit)? = null

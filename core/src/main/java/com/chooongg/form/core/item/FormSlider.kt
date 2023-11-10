@@ -39,6 +39,12 @@ class FormSlider : BaseForm {
         formatter = block
     }
 
+    override fun initContentValue(value: Any?) {
+        if (value == null) return
+        if (value is Float) return
+        content = value.toString().toFloatOrNull()
+    }
+
     override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
         val value = content as? Float ?: return FormUtils.getText(context, content)
         return formatter?.invoke(value) ?: value.toString()

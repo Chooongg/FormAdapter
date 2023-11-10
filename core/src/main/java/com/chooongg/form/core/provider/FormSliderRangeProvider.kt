@@ -54,12 +54,7 @@ class FormSliderRangeProvider : BaseFormProvider() {
             valueFrom = itemSlider?.valueFrom ?: 0f
             valueTo = itemSlider?.valueTo ?: 100f
             stepSize = itemSlider?.stepSize ?: 0f
-            values = try {
-                if (item.content is List<*>) item.content as List<Float>
-                else listOf(valueFrom, valueTo)
-            } catch (e: Exception) {
-                listOf(valueFrom, valueTo)
-            }
+            values = item.content as? List<Float> ?: listOf(valueFrom, valueTo)
             item.content = values
             tickInactiveTintList = if (itemSlider?.showInactiveTick == true) {
                 trackActiveTintList

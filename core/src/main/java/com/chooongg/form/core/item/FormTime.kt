@@ -33,7 +33,23 @@ class FormTime : BaseForm {
     @TimeFormat
     var timeFormatMode: Int = TimeFormat.CLOCK_24H
 
+    var inputFormatPattern: String? = null
+
     var outputFormatPattern: String? = null
+
+    override fun initContentValue(value: Any?) {
+        if (value == null) return
+        content = if (inputFormatPattern != null) {
+            try {
+                SimpleDateFormat(showFormatPattern!!, Locale.getDefault())
+                    .parse(value.toString())?.time
+            } catch (e: Exception) {
+                null
+            }
+        } else if (value is Long) {
+            value
+        } else value.toString().toLongOrNull()
+    }
 
     override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
         val millis = content as? Long ?: return FormUtils.getText(context, content)
@@ -44,22 +60,18 @@ class FormTime : BaseForm {
                 FormUtils.getText(context, content)
             }
         }
-        return try {
-            when (timeMode) {
-                FormTimeMode.TIME -> DateFormat.getTimeInstance(
-                    DateFormat.SHORT, Locale.getDefault()
-                )
+        return when (timeMode) {
+            FormTimeMode.TIME -> DateFormat.getTimeInstance(
+                DateFormat.SHORT, Locale.getDefault()
+            )
 
-                FormTimeMode.DATE -> DateFormat.getDateInstance(
-                    DateFormat.DEFAULT, Locale.getDefault()
-                )
+            FormTimeMode.DATE -> DateFormat.getDateInstance(
+                DateFormat.DEFAULT, Locale.getDefault()
+            )
 
-                FormTimeMode.DATE_TIME -> DateFormat.getDateTimeInstance(
-                    DateFormat.DEFAULT, DateFormat.SHORT, Locale.getDefault()
-                )
-            }.format(millis)
-        } catch (e: Exception) {
-            FormUtils.getText(context, content)
-        }
+            FormTimeMode.DATE_TIME -> DateFormat.getDateTimeInstance(
+                DateFormat.DEFAULT, DateFormat.SHORT, Locale.getDefault()
+            )
+        }.format(millis)
     }
 }

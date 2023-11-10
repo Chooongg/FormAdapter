@@ -39,6 +39,26 @@ class FormSliderRange : BaseForm {
         formatter = block
     }
 
+    override fun initContentValue(value: Any?) {
+        if (value is List<*>) {
+            if (value.size < 2) {
+                content = null
+            } else {
+                if (value.size > 2) content = MutableList(2) { value[it] }
+                if (value[0] !is Float || value[1] !is Float) {
+                    val from = value[0].toString().toFloatOrNull()
+                    val to = value[1].toString().toFloatOrNull()
+                    content = if (from == null || to == null) {
+                        null
+                    } else mutableListOf<Float>().apply {
+                        add(from)
+                        add(to)
+                    }
+                }
+            }
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
         return try {

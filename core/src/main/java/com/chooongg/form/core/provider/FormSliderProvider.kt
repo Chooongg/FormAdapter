@@ -53,8 +53,7 @@ class FormSliderProvider : BaseFormProvider() {
             valueFrom = itemSlider?.valueFrom ?: 0f
             valueTo = itemSlider?.valueTo ?: 100f
             stepSize = itemSlider?.stepSize ?: 0f
-            val content = item.content as? Float
-            value = content ?: 0f
+            value = item.content as? Float ?: 0f
             tickInactiveTintList = if (itemSlider?.showInactiveTick == true) {
                 trackActiveTintList
             } else ColorStateList.valueOf(Color.TRANSPARENT)

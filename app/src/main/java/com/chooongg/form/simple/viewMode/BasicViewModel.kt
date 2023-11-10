@@ -4,6 +4,7 @@ import android.view.Gravity
 import androidx.lifecycle.ViewModel
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.addButton
+import com.chooongg.form.core.addCheckBox
 import com.chooongg.form.core.addDivider
 import com.chooongg.form.core.addInput
 import com.chooongg.form.core.addInputFilled
@@ -35,6 +36,16 @@ class BasicViewModel : ViewModel() {
                 addButton("Button(Tonal)") {
                     field = "button"
                     buttonStyle = FormButton.ButtonStyle.TONAL
+                }
+                addCheckBox("CheckBox") {
+                    optionLoader {
+                        delay(2000)
+                        val list = mutableListOf<Option>()
+                        for (i in 0..5) {
+                            list.add(Option("Test${i}", i.toString()))
+                        }
+                        list
+                    }
                 }
                 addDivider()
                 addInputFilled("InputFilled") {
@@ -90,6 +101,7 @@ class BasicViewModel : ViewModel() {
                 }
                 addRadioButton("RadioButton") {
                     optionLoader {
+                        delay(5000)
                         val list = mutableListOf<Option>()
                         for (i in 0..5) {
                             list.add(Option("Test${i}", i.toString()))
@@ -119,12 +131,12 @@ class BasicViewModel : ViewModel() {
                 }
                 addSlider("Slider") {
                     stepSize = 1f
-                    content = 50f
+                    content = "20"
                 }
                 addSliderRange("SliderRange") {
                     stepSize = 1f
                     valueTo = 5f
-                    content = listOf("1","2")
+                    content = listOf("1", "2")
                 }
                 addSwitch("Switch")
                 addSwitchMaterial("SwitchMaterial")
