@@ -50,7 +50,7 @@ abstract class BaseCardStyle : BaseStyle() {
 
     protected fun getShapeAppearanceModel(view: View, item: BaseForm) =
         ShapeAppearanceModel.builder().apply {
-            if (view.layoutDirection == View.LAYOUT_DIRECTION_LTR) {
+            if (view.layoutDirection != View.LAYOUT_DIRECTION_RTL) {
                 setTopLeftCornerSize(
                     if (item.marginBoundary.top != 0 && item.marginBoundary.start != 0) {
                         shapeAppearanceModel.topLeftCornerSize

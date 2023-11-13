@@ -2,6 +2,7 @@ package com.chooongg.form.core.item
 
 import android.content.Context
 import android.icu.text.DateFormat
+import androidx.annotation.IntDef
 import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormUtils
@@ -16,13 +17,24 @@ import java.util.Locale
 
 class FormTime : BaseForm {
 
+    companion object {
+        const val INPUT_MODE_SELECT = 0
+        const val INPUT_MODE_TEXT = 1
+    }
+
     constructor(name: CharSequence?) : super(name)
     constructor(@StringRes nameRes: Int?) : super(nameRes)
+
+    @IntDef(INPUT_MODE_SELECT, INPUT_MODE_TEXT)
+    annotation class InputMode
 
     override fun getProvider(adapter: FormAdapter) =
         if (adapter.isEnabled) FormTimeProvider::class else FormTextProvider::class
 
     var timeMode: FormTimeMode = FormTimeMode.DATE_TIME
+
+    @InputMode
+    var inputMode: Int = INPUT_MODE_SELECT
 
     var showFormatPattern: String? = null
 

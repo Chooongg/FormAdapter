@@ -41,8 +41,6 @@
 
     <style name="Form.Button.UnelevatedButton" parent="Widget.Material3.Button.UnelevatedButton" />
 
-    <style name="Temp" parent="ThemeOverlay.Material3.AutoCompleteTextView" />
-
     <style name="Form.ShapeAppearance.Search" parent="ShapeAppearance.Material3.Corner.Full" />
 
 </resources>

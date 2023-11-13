@@ -31,9 +31,7 @@ class FormButton : BaseForm {
 
     override var typeset: BaseTypeset? = NoneTypeset()
 
-    override var contentGravity: Int? = Gravity.NO_GRAVITY
-
-    override var multiColumnContentGravity: Int? = Gravity.NO_GRAVITY
+    override var gravity: Int? = Gravity.NO_GRAVITY
 
     override fun getProvider(adapter: FormAdapter) = FormButtonProvider::class
 

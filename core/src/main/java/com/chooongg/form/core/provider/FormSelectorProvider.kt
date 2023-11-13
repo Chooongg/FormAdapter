@@ -2,6 +2,7 @@ package com.chooongg.form.core.provider
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -49,6 +50,7 @@ class FormSelectorProvider : BaseFormProvider() {
         iconGravity = MaterialButton.ICON_GRAVITY_END
         iconSize = FormUtils.getFontHeight(this)
         iconPadding = context.resources.getDimensionPixelSize(R.dimen.formIconPadding)
+        backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
         setPaddingRelative(
             style.insideInfo.middleStart, style.insideInfo.middleTop,
             style.insideInfo.middleEnd, style.insideInfo.middleBottom
@@ -74,22 +76,19 @@ class FormSelectorProvider : BaseFormProvider() {
         loadOption(holder, item)
     }
 
-    override fun onBindViewHolder(
+    override fun onBindViewHolderOtherPayload(
         scope: CoroutineScope,
         holder: FormViewHolder,
         view: View,
         item: BaseForm,
         enabled: Boolean,
-        payloads: MutableList<Any>
+        payload: Any
     ) {
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(scope, holder, view, item, enabled, payloads)
-            return
-        }
-        if (payloads.contains("changeOption")) {
+        if (payload == BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG) {
             configOption(view, item, enabled)
         }
     }
+
 
     private fun configOption(view: View, item: BaseForm, enabled: Boolean) {
         with(view as MaterialButton) {
@@ -110,7 +109,7 @@ class FormSelectorProvider : BaseFormProvider() {
                         FormUtils.getText(context, item.disableHint)
                             ?: context.getString(R.string.fromDefaultHintNone)
                     }
-                    if (enabled) setIconResource(R.drawable.ic_form_arrow_down) else icon = null
+                    if (enabled) setIconResource(R.drawable.ic_form_arrow_dropdown) else icon = null
                 }
 
                 is OptionLoadResult.Loading -> {
@@ -147,6 +146,13 @@ class FormSelectorProvider : BaseFormProvider() {
                 }
             }
         }
+        view.isChecked = false
+        view.isCheckable = when ((item as? FormSelector)?.openMode) {
+            FormSelectorOpenMode.POPUPMENU -> true
+            FormSelectorOpenMode.PAGE -> false
+            FormSelectorOpenMode.AUTO -> (item.options?.size ?: 0) <= 30
+            else -> false
+        }
     }
 
     private fun loadOption(holder: FormViewHolder, item: BaseForm?) {
@@ -157,7 +163,9 @@ class FormSelectorProvider : BaseFormProvider() {
                 holder.itemView.post {
                     val position = adapter.indexOf(item)
                     if (position != null) {
-                        adapter.notifyItemChanged(position, "changeOption")
+                        adapter.notifyItemChanged(
+                            position, BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG
+                        )
                     }
                 }
             }
@@ -234,7 +242,9 @@ class FormSelectorProvider : BaseFormProvider() {
             view.text = item.getContentText(view.context, true)
             true
         }
+        popupMenu.setOnDismissListener { view.isChecked = false }
         popupMenu.show()
+        view.isChecked = true
     }
 
     private fun showPage(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {

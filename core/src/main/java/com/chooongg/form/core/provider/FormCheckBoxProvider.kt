@@ -61,19 +61,15 @@ class FormCheckBoxProvider : BaseFormProvider() {
         loadOption(holder, item)
     }
 
-    override fun onBindViewHolder(
+    override fun onBindViewHolderOtherPayload(
         scope: CoroutineScope,
         holder: FormViewHolder,
         view: View,
         item: BaseForm,
         enabled: Boolean,
-        payloads: MutableList<Any>
+        payload: Any
     ) {
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(scope, holder, view, item, enabled, payloads)
-            return
-        }
-        if (payloads.contains("changeOption")) {
+        if (payload == BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG) {
             with(view as RecyclerView) {
                 val concatAdapter = adapter as ConcatAdapter
                 val optionStateAdapter = concatAdapter.adapters[0] as OptionStateAdapter
@@ -91,7 +87,9 @@ class FormCheckBoxProvider : BaseFormProvider() {
                 holder.itemView.post {
                     val position = adapter.indexOf(item)
                     if (position != null) {
-                        adapter.notifyItemChanged(position, "changeOption")
+                        adapter.notifyItemChanged(
+                            position, BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG
+                        )
                     }
                 }
             }
@@ -170,16 +168,18 @@ class FormCheckBoxProvider : BaseFormProvider() {
             with(holder.itemView as MaterialCheckBox) {
                 setOnCheckedChangeListener(null)
                 isEnabled = enabled
-                isChecked = item?.content == option
+                isChecked = (item?.content as? List<*>)?.contains(option) ?: false
                 text = option.getSpannableString(context)
                 if (provider != null && formHolder != null && item != null) {
                     setOnCheckedChangeListener { _, checked ->
                         FormUtils.hideIme(this)
-                        if (item!!.content is List<*>) {
-                            val content = ArrayList(item!!.content as List<IOption>)
-                            if (checked) content.add(option) else content.remove(option)
-                            provider!!.changeContentAndNotifyLinkage(formHolder!!, item!!, content)
-                        }
+                        val content = if (item!!.content is List<*>) {
+                            ArrayList<IOption>(item!!.content as List<IOption>)
+                        } else ArrayList()
+                        if (checked) {
+                            if (!content.contains(option)) content.add(option)
+                        } else content.remove(option)
+                        provider!!.changeContentAndNotifyLinkage(formHolder!!, item!!, content)
                     }
                 }
             }

@@ -51,7 +51,7 @@ class FormInputOutlinedProvider : BaseFormProvider() {
             val editText = MaterialAutoCompleteTextView(
                 ContextThemeWrapper(
                     it.context,
-                    com.google.android.material.R.style.ThemeOverlay_Material3_AutoCompleteTextView_FilledBox
+                    com.google.android.material.R.style.ThemeOverlay_Material3_AutoCompleteTextView_OutlinedBox
                 )
             ).apply {
                 id = R.id.formInternalContentChildView
@@ -60,10 +60,11 @@ class FormInputOutlinedProvider : BaseFormProvider() {
                 isVerticalFadingEdgeEnabled = true
                 setFadingEdgeLength(context.resources.getDimensionPixelSize(R.dimen.formFadingEdgeLength))
                 setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
-                setPaddingRelative(
-                    style.insideInfo.start, style.insideInfo.top,
-                    style.insideInfo.end, style.insideInfo.bottom
-                )
+                it.boxCollapsedPaddingTop
+//                setPaddingRelative(
+//                    style.insideInfo.start, style.insideInfo.top,
+//                    style.insideInfo.end, style.insideInfo.bottom
+//                )
             }
             it.addView(editText)
             it.setEndIconTintList(editText.hintTextColors)
@@ -114,6 +115,8 @@ class FormInputOutlinedProvider : BaseFormProvider() {
             prefixText = FormUtils.getText(context, itemInput?.prefix)
             suffixText = FormUtils.getText(context, itemInput?.suffix)
             placeholderText = FormUtils.getText(context, itemInput?.placeholder)
+            hint = FormUtils.getText(context, item.hint)
+                ?: context.getString(R.string.formDefaultHintInput)
             if (itemInput?.counterMaxLength != null && itemInput.counterMaxLength != Int.MAX_VALUE) {
                 isCounterEnabled = true
                 counterMaxLength = itemInput.counterMaxLength
@@ -122,12 +125,6 @@ class FormInputOutlinedProvider : BaseFormProvider() {
         }
         with(view.findViewById<MaterialAutoCompleteTextView>(R.id.formInternalContentChildView)) {
             if (tag is TextWatcher) removeTextChangedListener(tag as TextWatcher)
-            hint = when (itemInput?.placeholder) {
-                null -> FormUtils.getText(context, item.hint)
-                    ?: context.getString(R.string.formDefaultHintInput)
-
-                else -> null
-            }
             setText(item.getContentText(context, enabled))
             gravity = holder.typeset.obtainContentGravity(holder, item)
             if (itemInput != null && itemInput.maxLines <= 1) {
@@ -144,25 +141,22 @@ class FormInputOutlinedProvider : BaseFormProvider() {
         loadOption(holder, item)
     }
 
-    override fun onBindViewHolder(
+    override fun onBindViewHolderOtherPayload(
         scope: CoroutineScope,
         holder: FormViewHolder,
         view: View,
         item: BaseForm,
         enabled: Boolean,
-        payloads: MutableList<Any>
+        payload: Any
     ) {
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(scope, holder, view, item, enabled, payloads)
-            return
-        }
-        if (payloads.contains("changeOption")) {
+        if (payload == BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG) {
             configOption(holder, view, item, enabled)
         }
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun configOption(holder: FormViewHolder, view: View, item: BaseForm, enabled: Boolean) {
+        val inputLayout = view as TextInputLayout
         val editText =
             view.findViewById<MaterialAutoCompleteTextView>(R.id.formInternalContentChildView)
         val itemInput = item as? FormInput
@@ -172,7 +166,7 @@ class FormInputOutlinedProvider : BaseFormProvider() {
         } catch (_: Exception) {
         }
         val fontHeight = FormUtils.getFontHeight(editText)
-        with(view as TextInputLayout) {
+        with(inputLayout) {
             when (val result = itemInput?.optionLoadResult) {
                 null -> {
                     TooltipCompat.setTooltipText(this, null)
@@ -187,7 +181,7 @@ class FormInputOutlinedProvider : BaseFormProvider() {
                     if (enabled && item.options != null) {
                         endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
                         endIconDrawable = FormUtils.getIconChangeSize(
-                            context, R.drawable.ic_form_arrow_down, fontHeight
+                            context, R.drawable.ic_form_arrow_dropdown, fontHeight
                         )
                     } else {
                         endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
@@ -237,7 +231,9 @@ class FormInputOutlinedProvider : BaseFormProvider() {
                 holder.itemView.post {
                     val position = adapter.indexOf(item)
                     if (position != null) {
-                        adapter.notifyItemChanged(position, "changeOption")
+                        adapter.notifyItemChanged(
+                            position, BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG
+                        )
                     }
                 }
             }

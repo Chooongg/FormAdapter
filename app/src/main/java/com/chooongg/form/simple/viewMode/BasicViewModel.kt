@@ -38,6 +38,7 @@ class BasicViewModel : ViewModel() {
                     buttonStyle = FormButton.ButtonStyle.TONAL
                 }
                 addCheckBox("CheckBox") {
+                    loneLine = true
                     optionLoader {
                         delay(2000)
                         val list = mutableListOf<Option>()
@@ -163,5 +164,4 @@ class BasicViewModel : ViewModel() {
             }
         }
     }
-
 }

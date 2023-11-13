@@ -145,6 +145,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     abstract fun findOfField(
         field: String,
         update: Boolean = true,
+        hasPayload: Boolean = false,
         block: BaseForm.() -> Unit
     ): Boolean
 
@@ -214,9 +215,17 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             onBindViewHolder(holder, holder.typesetLayout, item)
         }
         formAdapter.getProvider4ItemViewType(holder.itemViewType).apply {
-            onBindViewHolder(
-                adapterScope, holder, holder.view, item, formAdapter.isEnabled, payloads
-            )
+            if (payloads.isNotEmpty()) {
+                payloads.forEach {
+                    if (it == FormAdapter.UPDATE_PAYLOAD_FLAG) {
+                        onBindViewHolderUpdate(
+                            adapterScope, holder, holder.view, item, formAdapter.isEnabled
+                        )
+                    } else onBindViewHolderOtherPayload(
+                        adapterScope, holder, holder.view, item, formAdapter.isEnabled, it
+                    )
+                }
+            } else onBindViewHolder(adapterScope, holder, holder.view, item, formAdapter.isEnabled)
         }
     }
 

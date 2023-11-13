@@ -66,19 +66,15 @@ class FormRadioButtonProvider : BaseFormProvider() {
         loadOption(holder, item)
     }
 
-    override fun onBindViewHolder(
+    override fun onBindViewHolderOtherPayload(
         scope: CoroutineScope,
         holder: FormViewHolder,
         view: View,
         item: BaseForm,
         enabled: Boolean,
-        payloads: MutableList<Any>
+        payload: Any
     ) {
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(scope, holder, view, item, enabled, payloads)
-            return
-        }
-        if (payloads.contains("changeOption")) {
+        if (payload == BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG) {
             with(view as RecyclerView) {
                 val concatAdapter = adapter as ConcatAdapter
                 val optionStateAdapter = concatAdapter.adapters[0] as OptionStateAdapter
@@ -96,7 +92,9 @@ class FormRadioButtonProvider : BaseFormProvider() {
                 holder.itemView.post {
                     val position = adapter.indexOf(item)
                     if (position != null) {
-                        adapter.notifyItemChanged(position, "changeOption")
+                        adapter.notifyItemChanged(
+                            position, BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG
+                        )
                     }
                 }
             }

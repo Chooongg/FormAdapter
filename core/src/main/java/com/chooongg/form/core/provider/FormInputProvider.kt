@@ -146,19 +146,15 @@ class FormInputProvider : BaseFormProvider() {
         loadOption(holder, item)
     }
 
-    override fun onBindViewHolder(
+    override fun onBindViewHolderOtherPayload(
         scope: CoroutineScope,
         holder: FormViewHolder,
         view: View,
         item: BaseForm,
         enabled: Boolean,
-        payloads: MutableList<Any>
+        payload: Any
     ) {
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(scope, holder, view, item, enabled, payloads)
-            return
-        }
-        if (payloads.contains("changeOption")) {
+        if (payload == BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG) {
             configOption(holder, view, item, enabled)
         }
     }
@@ -189,7 +185,7 @@ class FormInputProvider : BaseFormProvider() {
                     if (enabled && item.options != null) {
                         endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
                         endIconDrawable = FormUtils.getIconChangeSize(
-                            context, R.drawable.ic_form_arrow_down, fontHeight
+                            context, R.drawable.ic_form_arrow_dropdown, fontHeight
                         )
                     } else {
                         endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
@@ -239,7 +235,9 @@ class FormInputProvider : BaseFormProvider() {
                 holder.itemView.post {
                     val position = adapter.indexOf(item)
                     if (position != null) {
-                        adapter.notifyItemChanged(position, "changeOption")
+                        adapter.notifyItemChanged(
+                            position, BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG
+                        )
                     }
                 }
             }

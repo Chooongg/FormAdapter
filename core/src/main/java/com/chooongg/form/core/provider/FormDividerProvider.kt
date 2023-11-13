@@ -45,7 +45,7 @@ class FormDividerProvider : BaseFormProvider() {
             updateLayoutParams<MarginLayoutParams> {
                 topMargin = holder.style.insideInfo.middleTop
                 bottomMargin = holder.style.insideInfo.middleBottom
-                if (itemDivider?.matchParentStartEdge == true) {
+                if ((itemDivider?.matchParentStartEdge ?: itemDivider?.matchParentEdge) == true) {
                     dividerInsetStart = 0
                     marginStart =
                         -(holder.style.insideInfo.start - holder.style.insideInfo.middleStart)
@@ -53,7 +53,7 @@ class FormDividerProvider : BaseFormProvider() {
                     dividerInsetStart = holder.style.insideInfo.middleStart
                     marginStart = 0
                 }
-                if (itemDivider?.matchParentEndEdge == true) {
+                if ((itemDivider?.matchParentEndEdge ?: itemDivider?.matchParentEdge) == true) {
                     dividerInsetEnd = 0
                     marginEnd =
                         -(holder.style.insideInfo.end - holder.style.insideInfo.middleEnd)

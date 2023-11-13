@@ -5,7 +5,6 @@ import android.view.View.MeasureSpec
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import com.chooongg.form.core.boundary.Boundary
 import kotlin.math.max
 import kotlin.math.min
 
@@ -36,6 +35,7 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 24) {
     internal var formMarginEnd: Int = -1
 
     init {
+
         spanSizeLookup = object : SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val formAdapter = adapter as? FormAdapter ?: return spanCount

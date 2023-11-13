@@ -17,6 +17,10 @@ import com.chooongg.form.core.typeset.BaseTypeset
 open class FormAdapter(isEnabled: Boolean) :
     RecyclerView.Adapter<ViewHolder>() {
 
+    companion object {
+        const val UPDATE_PAYLOAD_FLAG = "UPDATE"
+    }
+
     internal var recyclerView: RecyclerView? = null
 
     private val concatAdapter = ConcatAdapter(
@@ -78,10 +82,11 @@ open class FormAdapter(isEnabled: Boolean) :
     fun findOfField(
         field: String,
         update: Boolean = true,
+        hasPayload: Boolean = false,
         block: BaseForm.() -> Unit
     ): Boolean {
         partAdapters.forEach {
-            if (it.findOfField(field, update, block)) return true
+            if (it.findOfField(field, update, hasPayload, block)) return true
         }
         return false
     }

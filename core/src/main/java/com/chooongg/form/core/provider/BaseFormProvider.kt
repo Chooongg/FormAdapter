@@ -24,14 +24,22 @@ abstract class BaseFormProvider {
         enabled: Boolean
     )
 
-    open fun onBindViewHolder(
+    open fun onBindViewHolderUpdate(
+        scope: CoroutineScope,
+        holder: FormViewHolder,
+        view: View,
+        item: BaseForm,
+        enabled: Boolean
+    ) = Unit
+
+    open fun onBindViewHolderOtherPayload(
         scope: CoroutineScope,
         holder: FormViewHolder,
         view: View,
         item: BaseForm,
         enabled: Boolean,
-        payloads: MutableList<Any>
-    ) = onBindViewHolder(scope, holder, view, item, enabled)
+        payload: Any
+    ) = Unit
 
     open fun isNeedParentLayoutSupport(): Boolean = false
 

@@ -88,8 +88,12 @@ class FormTimeProvider : BaseFormProvider() {
         when (item.timeMode) {
             FormTimeMode.TIME -> MaterialTimePicker.Builder()
                 .setTitleText(FormUtils.getText(view.context, item.name))
-                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                .setTimeFormat(item.timeFormatMode)
+                .setInputMode(
+                    when (item.inputMode) {
+                        FormTime.INPUT_MODE_TEXT -> 1
+                        else -> 0
+                    }
+                ).setTimeFormat(item.timeFormatMode)
                 .setHour(calendar.get(Calendar.HOUR_OF_DAY))
                 .setMinute(calendar.get(Calendar.MINUTE))
                 .build().apply {
@@ -103,8 +107,12 @@ class FormTimeProvider : BaseFormProvider() {
 
             FormTimeMode.DATE -> MaterialDatePicker.Builder.datePicker()
                 .setTitleText(FormUtils.getText(view.context, item.name))
-                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-                .setSelection(calendar.timeInMillis + calendar.timeZone.rawOffset)
+                .setInputMode(
+                    when (item.inputMode) {
+                        FormTime.INPUT_MODE_TEXT -> 1
+                        else -> 0
+                    }
+                ).setSelection(calendar.timeInMillis + calendar.timeZone.rawOffset)
                 .setCalendarConstraints(item.calendarConstraints)
                 .setDayViewDecorator(item.dayViewDecorator)
                 .build().apply {
@@ -120,8 +128,12 @@ class FormTimeProvider : BaseFormProvider() {
                 newCalendar.timeInMillis = calendar.timeInMillis
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText(FormUtils.getText(view.context, item.name))
-                    .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-                    .setSelection(newCalendar.timeInMillis + newCalendar.timeZone.rawOffset)
+                    .setInputMode(
+                        when (item.inputMode) {
+                            FormTime.INPUT_MODE_TEXT -> 1
+                            else -> 0
+                        }
+                    ).setSelection(newCalendar.timeInMillis + newCalendar.timeZone.rawOffset)
                     .setCalendarConstraints(item.calendarConstraints)
                     .setDayViewDecorator(item.dayViewDecorator)
                     .build().apply {
@@ -147,8 +159,12 @@ class FormTimeProvider : BaseFormProvider() {
                             }
                             MaterialTimePicker.Builder()
                                 .setTitleText(FormUtils.getText(view.context, item.name))
-                                .setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                                .setTimeFormat(item.timeFormatMode)
+                                .setInputMode(
+                                    when (item.inputMode) {
+                                        FormTime.INPUT_MODE_TEXT -> 1
+                                        else -> 0
+                                    }
+                                ).setTimeFormat(item.timeFormatMode)
                                 .setHour(newCalendar.get(Calendar.HOUR_OF_DAY))
                                 .setMinute(newCalendar.get(Calendar.MINUTE))
                                 .build().apply {

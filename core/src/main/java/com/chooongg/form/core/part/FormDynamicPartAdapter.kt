@@ -84,21 +84,30 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         }
     }
 
-    override fun findOfField(field: String, update: Boolean, block: (BaseForm) -> Unit): Boolean {
+    override fun findOfField(
+        field: String,
+        update: Boolean,
+        hasPayload: Boolean,
+        block: (BaseForm) -> Unit
+    ): Boolean {
         data.getGroups().forEach { group ->
-            group.getItems().forEach {
-                if (it.field == field) {
-                    block(it)
-                    if (update && itemList.contains(it)) {
+            group.getItems().forEachIndexed { index, item ->
+                if (item.field == field) {
+                    block(item)
+                    if (update && itemList.contains(item)) {
                         val tempEmpty = itemList.isEmpty()
-                        update()
-                        if (tempEmpty != itemList.isEmpty()) {
-                            val partIndex = formAdapter.partAdapters.indexOf(this)
-                            if (partIndex > 0) {
-                                formAdapter.partAdapters[partIndex - 1].update()
-                            }
-                            if (partIndex < formAdapter.partAdapters.size - 1) {
-                                formAdapter.partAdapters[partIndex + 1].update()
+                        if (hasPayload) {
+                            notifyItemChanged(index, FormAdapter.UPDATE_PAYLOAD_FLAG)
+                        } else {
+                            update()
+                            if (tempEmpty != itemList.isEmpty()) {
+                                val partIndex = formAdapter.partAdapters.indexOf(this)
+                                if (partIndex > 0) {
+                                    formAdapter.partAdapters[partIndex - 1].update()
+                                }
+                                if (partIndex < formAdapter.partAdapters.size - 1) {
+                                    formAdapter.partAdapters[partIndex + 1].update()
+                                }
                             }
                         }
                     }

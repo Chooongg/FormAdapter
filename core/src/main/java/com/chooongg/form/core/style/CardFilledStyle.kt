@@ -18,7 +18,7 @@ class CardFilledStyle : BaseCardStyle {
     }
 
     @ColorRes
-    private var colorResId: Int? = null
+    var colorResId: Int? = null
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewGroup? = null
 

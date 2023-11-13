@@ -19,14 +19,19 @@ class FormDivider : BaseForm(null) {
     var thickness: Int? = null
 
     /**
+     * 匹配父布局边缘
+     */
+    var matchParentEdge: Boolean = false
+
+    /**
      * 匹配父布局起始边缘
      */
-    var matchParentStartEdge: Boolean = false
+    var matchParentStartEdge: Boolean? = null
 
     /**
      * 匹配父布局结束边缘
      */
-    var matchParentEndEdge: Boolean = false
+    var matchParentEndEdge: Boolean? = null
 
     override var loneLine: Boolean = true
 

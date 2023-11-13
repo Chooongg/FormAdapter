@@ -2,62 +2,20 @@ package com.chooongg.form.simple.fragment
 
 import android.os.Bundle
 import android.view.View
-import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.addButton
-import com.chooongg.form.core.addInput
-import com.chooongg.form.core.addInputFilled
-import com.chooongg.form.core.addInputOutlined
-import com.chooongg.form.core.addText
-import com.chooongg.form.core.item.FormButton
+import androidx.fragment.app.viewModels
 import com.chooongg.form.simple.R
+import com.chooongg.form.simple.viewMode.AdvancedViewModel
 
 class AdvancedFragment : BaseFragment() {
 
-    private val adapter = FormAdapter(true)
+    private val model by viewModels<AdvancedViewModel>()
 
     override fun change() {
-        adapter.isEnabled = !adapter.isEnabled
+        model.adapter.isEnabled = !model.adapter.isEnabled
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setTitle(R.string.advanced)
-        formView.setFormAdapter(adapter)
-        adapter.setNewInstance {
-            addPart {
-                addText("Text") {
-                    content = "测试内容"
-                }
-                addText("Text") {
-                    content = "测试内容"
-                }
-                addInput("Input") {
-                    hint = "请输入"
-                    content = "测试"
-                    maxLines = 1
-//                    counterMaxLength = 11
-                }
-                addInputFilled("InputFilled") {
-                    hint = "请输入"
-                }
-                addInputOutlined("InputOutlined") {
-                    hint = "请输入"
-                }
-                addButton("测试") {
-                    buttonStyle = FormButton.ButtonStyle.ELEVATED
-                }
-                addButton("测试") {
-                    buttonStyle = FormButton.ButtonStyle.UN_ELEVATED
-                }
-                addButton("测试") {
-                    buttonStyle = FormButton.ButtonStyle.TEXT
-                }
-                addButton("测试") {
-                    buttonStyle = FormButton.ButtonStyle.OUTLINED
-                }
-                addButton("测试") {
-                    buttonStyle = FormButton.ButtonStyle.TONAL
-                }
-            }
-        }
+        formView.setFormAdapter(model.adapter)
     }
 }

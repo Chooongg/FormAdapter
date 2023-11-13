@@ -67,6 +67,9 @@ abstract class BaseForm(
      */
     open var typeset: BaseTypeset? = null
 
+    @GravityInt
+    open var gravity:Int? = null
+
     /**
      * 内容重力
      */

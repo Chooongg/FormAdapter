@@ -17,6 +17,10 @@ import kotlinx.coroutines.withContext
 
 abstract class BaseOptionForm<T>(name: Any?) : BaseForm(name) {
 
+    companion object {
+        const val CHANGE_OPTION_PAYLOAD_FLAG = "CHANGE_OPTION"
+    }
+
     abstract fun hasOpenOperation(): Boolean
 
     /**
@@ -76,19 +80,27 @@ abstract class BaseOptionForm<T>(name: Any?) : BaseForm(name) {
         val adapter = holder.bindingAdapter as? BaseFormPartAdapter ?: return
         holder.job = adapter.adapterScope.launch {
             try {
-                optionLoadResult = OptionLoadResult.Loading()
-                withContext(Dispatchers.Main) { notifyUpdate.invoke() }
-                val result = optionLoader!!.invoke(this@BaseOptionForm)
-                optionLoadResult = if (result.isNullOrEmpty()) {
-                    OptionLoadResult.Empty()
-                } else OptionLoadResult.Success(result)
-                withContext(Dispatchers.Main) { notifyUpdate.invoke() }
+                withContext(Dispatchers.Main) {
+                    optionLoadResult = OptionLoadResult.Loading()
+                    notifyUpdate.invoke()
+                }
+                val result = withContext(Dispatchers.IO) {
+                    optionLoader!!.invoke(this@BaseOptionForm)
+                }
+                withContext(Dispatchers.Main) {
+                    optionLoadResult = if (result.isNullOrEmpty()) {
+                        OptionLoadResult.Empty()
+                    } else OptionLoadResult.Success(result)
+                    notifyUpdate.invoke()
+                }
             } catch (e: CancellationException) {
                 optionLoadResult = OptionLoadResult.Wait()
                 holder.job = null
             } catch (e: Exception) {
-                optionLoadResult = OptionLoadResult.Error(e)
-                withContext(Dispatchers.Main) { notifyUpdate.invoke() }
+                withContext(Dispatchers.Main) {
+                    optionLoadResult = OptionLoadResult.Error(e)
+                    notifyUpdate.invoke()
+                }
             }
         }
     }
