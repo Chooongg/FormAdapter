@@ -36,6 +36,11 @@ open class FormInput : BaseOptionForm<CharSequence> {
     var placeholder: Any? = null
 
     /**
+     * 显示清除图标
+     */
+    var showClearIcon: Boolean = true
+
+    /**
      * 计数器最大长度
      */
     var counterMaxLength: Int = Int.MAX_VALUE

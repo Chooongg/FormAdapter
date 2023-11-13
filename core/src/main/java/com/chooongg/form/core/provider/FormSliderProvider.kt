@@ -11,6 +11,7 @@ import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.FormSlider
 import com.chooongg.form.core.style.BaseStyle
+import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
 import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope

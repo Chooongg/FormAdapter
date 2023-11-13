@@ -174,10 +174,15 @@ class FormInputProvider : BaseFormProvider() {
             when (val result = itemInput?.optionLoadResult) {
                 null -> {
                     TooltipCompat.setTooltipText(this, null)
-                    endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
-                    endIconDrawable = FormUtils.getIconChangeSize(
-                        context, R.drawable.ic_form_close, fontHeight
-                    )
+                    if (itemInput?.showClearIcon != false) {
+                        endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                        endIconDrawable = FormUtils.getIconChangeSize(
+                            context, R.drawable.ic_form_close, fontHeight
+                        )
+                    } else {
+                        endIconMode = TextInputLayout.END_ICON_NONE
+                        endIconDrawable = null
+                    }
                 }
 
                 is OptionLoadResult.Wait, is OptionLoadResult.Success -> {
@@ -187,11 +192,14 @@ class FormInputProvider : BaseFormProvider() {
                         endIconDrawable = FormUtils.getIconChangeSize(
                             context, R.drawable.ic_form_arrow_dropdown, fontHeight
                         )
-                    } else {
+                    } else if (itemInput.showClearIcon) {
                         endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
                         endIconDrawable = FormUtils.getIconChangeSize(
                             context, R.drawable.ic_form_close, fontHeight
                         )
+                    } else {
+                        endIconMode = TextInputLayout.END_ICON_NONE
+                        endIconDrawable = null
                     }
                 }
 
@@ -218,10 +226,15 @@ class FormInputProvider : BaseFormProvider() {
 
                 is OptionLoadResult.Empty -> {
                     TooltipCompat.setTooltipText(this, null)
-                    endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
-                    endIconDrawable = FormUtils.getIconChangeSize(
-                        context, R.drawable.ic_form_close, fontHeight
-                    )
+                    if (itemInput.showClearIcon) {
+                        endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
+                        endIconDrawable = FormUtils.getIconChangeSize(
+                            context, R.drawable.ic_form_close, fontHeight
+                        )
+                    } else {
+                        endIconMode = TextInputLayout.END_ICON_NONE
+                        endIconDrawable = null
+                    }
                 }
             }
         }

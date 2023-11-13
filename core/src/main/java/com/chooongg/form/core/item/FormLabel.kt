@@ -22,9 +22,7 @@ class FormLabel : BaseForm {
 
     override var typeset: BaseTypeset? = NoneTypeset()
 
-    override var contentGravity: Int? = Gravity.CENTER
-
-    override var multiColumnContentGravity: Int? = Gravity.CENTER
+    override var gravity: Int? = Gravity.NO_GRAVITY
 
     override fun getProvider(adapter: FormAdapter) = FormLabelProvider::class
 

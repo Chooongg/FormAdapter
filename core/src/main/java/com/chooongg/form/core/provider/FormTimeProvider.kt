@@ -1,5 +1,6 @@
 package com.chooongg.form.core.provider
 
+import android.icu.text.DateFormat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -17,6 +18,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import kotlinx.coroutines.CoroutineScope
 import java.util.Calendar
+import java.util.Locale
 
 class FormTimeProvider : BaseFormProvider() {
 
@@ -158,7 +160,9 @@ class FormTimeProvider : BaseFormProvider() {
                                 )
                             }
                             MaterialTimePicker.Builder()
-                                .setTitleText(FormUtils.getText(view.context, item.name))
+                                .setTitleText(DateFormat.getDateInstance(
+                                    DateFormat.DEFAULT, Locale.getDefault()
+                                ).format(newCalendar.timeInMillis))
                                 .setInputMode(
                                     when (item.inputMode) {
                                         FormTime.INPUT_MODE_TEXT -> 1
