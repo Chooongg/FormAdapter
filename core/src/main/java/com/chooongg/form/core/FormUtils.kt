@@ -11,7 +11,7 @@ import androidx.annotation.AttrRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.res.use
-import com.chooongg.form.core.nameProvider.BasePartNameProvider
+import com.chooongg.form.core.nameProvider.BaseGroupNameProvider
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.typeset.BaseTypeset
@@ -63,7 +63,7 @@ object FormUtils {
 fun BaseStyle.formTextAppearance(view: View, @AttrRes resId: Int): Int =
     getTextAppearance(view, resId)
 
-fun BasePartNameProvider.formTextAppearance(view: View, @AttrRes resId: Int): Int =
+fun BaseGroupNameProvider.formTextAppearance(view: View, @AttrRes resId: Int): Int =
     getTextAppearance(view, resId)
 
 fun BaseTypeset.formTextAppearance(view: View, @AttrRes resId: Int): Int =

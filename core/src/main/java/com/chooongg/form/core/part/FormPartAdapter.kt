@@ -3,6 +3,9 @@ package com.chooongg.form.core.part
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.item.ChildrenForm
+import com.chooongg.form.core.item.MultiColumnForm
+import com.chooongg.form.core.item.SingleLineForm
 import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,18 +37,26 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         }
         val tempList = mutableListOf<BaseForm>()
         if (data.partName != null) {
-            tempList.add(data.getPartNameItem {
+            tempList.add(data.getGroupNameItem {
                 it.name = data.partName
             })
         }
+        var diffIndex = 0
         data.getItems().forEach {
-            it.globalPosition = -1
-            it.groupItemCount = -1
-            it.groupIndex = -1
-            it.itemCountInGroup = -1
-            it.positionInGroup = -1
-            it.nextItemLoneLine = false
-            if (it.isRealVisible(formAdapter.isEnabled)) tempList.add(it)
+            it.resetInternalValues()
+            if (it is ChildrenForm) {
+                it.getItems().forEachIndexed { index, item ->
+                    item.variantIndexInGroup = diffIndex
+                    item.countInCurrentVariant = it.getItems().size
+                    item.indexInCurrentVariant = index
+                    if (it is SingleLineForm) {
+                        item.variantColumnCount
+                    } else if (it is MultiColumnForm) {
+
+                    }
+                }
+                diffIndex++
+            } else if (it.isRealVisible(formAdapter.isEnabled)) tempList.add(it)
         }
         while (tempList.size > 0 && !tempList[0].showAtEdge) {
             tempList.removeAt(0)
@@ -54,11 +65,11 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             tempList.removeAt(tempList.lastIndex)
         }
         tempList.forEachIndexed { index, item ->
-            item.groupItemCount = 1
+            item.groupCount = 1
             item.groupIndex = 0
-            item.itemCountInGroup = tempList.size
+            item.countInGroup = tempList.size
             item.positionInGroup = index
-            if (item.loneLine && index > 0) {
+            if (index > 0 && (item.loneLine)) {
                 tempList[index - 1].nextItemLoneLine = true
             }
         }
@@ -71,27 +82,20 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         hasPayload: Boolean,
         block: (BaseForm) -> Unit
     ): Boolean {
-        data.getItems().forEachIndexed { index, item ->
+        data.getItems().forEach { item ->
             if (item.field == field) {
                 block(item)
-                if (update && itemList.contains(item)) {
-                    val tempEmpty = itemList.isEmpty()
-                    if (hasPayload) {
-                        notifyItemChanged(index, FormAdapter.UPDATE_PAYLOAD_FLAG)
-                    } else {
-                        update()
-                        if (tempEmpty != itemList.isEmpty()) {
-                            val partIndex = formAdapter.partAdapters.indexOf(this)
-                            if (partIndex > 0) {
-                                formAdapter.partAdapters[partIndex - 1].update()
-                            }
-                            if (partIndex < formAdapter.partAdapters.size - 1) {
-                                formAdapter.partAdapters[partIndex + 1].update()
-                            }
-                        }
+                if (update) notifyChangeItem(item, hasPayload)
+                return true
+            }
+            if (item is ChildrenForm) {
+                item.getItems().forEach {
+                    if (it.field == field) {
+                        block(it)
+                        if (update) notifyChangeItem(it, hasPayload)
+                        return true
                     }
                 }
-                return true
             }
         }
         return false

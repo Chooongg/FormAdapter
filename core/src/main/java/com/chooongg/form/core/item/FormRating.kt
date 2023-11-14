@@ -31,6 +31,9 @@ class FormRating : BaseForm {
      */
     var needToChoose: Boolean = true
 
+    /**
+     * 色调
+     */
     var tint: FormColorStateListBlock? = null
 
     override fun getProvider(adapter: FormAdapter) = FormRatingProvider::class

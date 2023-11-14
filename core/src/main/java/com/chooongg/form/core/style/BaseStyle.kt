@@ -11,13 +11,13 @@ import com.chooongg.form.core.boundary.FormInsideInfo
 import com.chooongg.form.core.boundary.FormMarginInfo
 import com.chooongg.form.core.iconProvider.BaseIconProvider
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.nameProvider.BasePartNameProvider
+import com.chooongg.form.core.nameProvider.BaseGroupNameProvider
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.typeset.BaseTypeset
 
 abstract class BaseStyle {
 
-    var partNameProvider: BasePartNameProvider = FormManager.Default.partNameProvider
+    var partNameProvider: BaseGroupNameProvider = FormManager.Default.groupNameProvider
 
     var iconProvider: BaseIconProvider = FormManager.Default.iconProvider
 

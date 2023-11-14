@@ -8,7 +8,7 @@ import com.chooongg.form.core.provider.InternalFormPartNameProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
 
-class InternalFormPartName internal constructor() : BaseForm(null) {
+class InternalFormGroupName internal constructor() : BaseForm(null) {
 
     override var loneLine = true
 

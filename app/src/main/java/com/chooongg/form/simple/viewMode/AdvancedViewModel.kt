@@ -13,6 +13,8 @@ import com.chooongg.form.core.addInput
 import com.chooongg.form.core.addInputFilled
 import com.chooongg.form.core.addInputOutlined
 import com.chooongg.form.core.addLabel
+import com.chooongg.form.core.addRadioButton
+import com.chooongg.form.core.addRating
 import com.chooongg.form.core.addSelector
 import com.chooongg.form.core.addSlider
 import com.chooongg.form.core.addSliderRange
@@ -208,9 +210,43 @@ class AdvancedViewModel : ViewModel() {
             }
             addCardOutlinedPart {
                 partName = "RadioButton"
+                addRadioButton("Default") {
+                    options = listOf(
+                        Option("Option1", "1"),
+                        Option("Option2", "2"),
+                        Option("Option3", "3"),
+                        Option("Option4", "4")
+                    )
+                }
+                addRadioButton("Remote") {
+                    optionLoader {
+                        delay(5000)
+                        listOf(
+                            Option("RemoteOption1", "1"),
+                            Option("RemoteOption2", "2"),
+                            Option("RemoteOption3", "3"),
+                            Option("RemoteOption4", "4")
+                        )
+                    }
+                }
             }
             addCardOutlinedPart {
                 partName = "Rating"
+                addRating("Default")
+                addRating("3 Star") {
+                    numStars = 3
+                }
+                addRating("Step") {
+                    stepSize = 0.5f
+                }
+                addRating("Tint") {
+                    tint = { ColorStateList.valueOf(Color.YELLOW) }
+                }
+                addRating("OnlyShow") {
+                    enableMode = FormEnableMode.NEVER
+                    stepSize = 0.5f
+                    content = 2.5f
+                }
             }
             addCardOutlinedPart {
                 partName = "Selector"

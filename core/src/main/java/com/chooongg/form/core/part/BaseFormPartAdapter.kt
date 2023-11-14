@@ -56,10 +56,10 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         val partAdapters = formAdapter.partAdapters
         val partIndex = partAdapters.indexOf(this)
         var spanIndex = 0
-        val spanCount = 24
+        val spanCount = 2520
+        val maxColumn = 10
         itemList.forEachIndexed { index, item ->
-            item.spanSize = if (item.loneLine) spanCount
-            else {
+            item.spanSize = if (item.loneLine) spanCount else {
                 val span = spanCount / formAdapter.columnCount
                 if (item.nextItemLoneLine || (index >= itemList.lastIndex && spanIndex + span < spanCount)) {
                     spanCount - spanIndex
@@ -112,7 +112,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         }
         for (index in itemList.lastIndex downTo 0) {
             val item = getItem(index)
-            if (item.itemCountInGroup - 1 - item.positionInGroup == 0) {
+            if (item.countInGroup - 1 - item.positionInGroup == 0) {
                 var isLast = true
                 var lastIndex = partIndex
                 while (lastIndex + 1 < partAdapters.size) {
@@ -254,5 +254,29 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             .onViewDetachedFromWindow(holder, holder.typesetLayout)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)
             .onViewDetachedFromWindow(holder, holder.view)
+    }
+
+    fun notifyChangeItem(
+        item: BaseForm,
+        hasPayload: Boolean,
+    ) {
+        val position = itemList.indexOf(item)
+        if (position != -1) {
+            val tempEmpty = itemList.isEmpty()
+            if (hasPayload) {
+                notifyItemChanged(position, FormAdapter.UPDATE_PAYLOAD_FLAG)
+            } else {
+                update()
+                if (tempEmpty != itemList.isEmpty()) {
+                    val partIndex = formAdapter.partAdapters.indexOf(this)
+                    if (partIndex > 0) {
+                        formAdapter.partAdapters[partIndex - 1].update()
+                    }
+                    if (partIndex < formAdapter.partAdapters.size - 1) {
+                        formAdapter.partAdapters[partIndex + 1].update()
+                    }
+                }
+            }
+        }
     }
 }

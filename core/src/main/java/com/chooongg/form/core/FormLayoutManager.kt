@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.max
 import kotlin.math.min
 
-class FormLayoutManager(context: Context) : GridLayoutManager(context, 24) {
+class FormLayoutManager(context: Context) : GridLayoutManager(context, 2520) {
 
     private var recyclerView: RecyclerView? = null
 

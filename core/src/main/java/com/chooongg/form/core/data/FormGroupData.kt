@@ -1,19 +1,19 @@
 package com.chooongg.form.core.data
 
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.InternalFormPartName
+import com.chooongg.form.core.item.InternalFormGroupName
 
 open class FormGroupData : IFormCreator {
 
-    private var _partNameItem: InternalFormPartName? = null
+    private var _groupNameItem: InternalFormGroupName? = null
 
     private val _items = mutableListOf<BaseForm>()
 
     override fun getItems(): MutableList<BaseForm> = _items
 
-    fun getPartNameItem(block: (InternalFormPartName) -> Unit): InternalFormPartName {
-        if (_partNameItem == null) _partNameItem = InternalFormPartName()
-        block.invoke(_partNameItem!!)
-        return _partNameItem!!
+    fun getGroupNameItem(block: (InternalFormGroupName) -> Unit): InternalFormGroupName {
+        if (_groupNameItem == null) _groupNameItem = InternalFormGroupName()
+        block.invoke(_groupNameItem!!)
+        return _groupNameItem!!
     }
 }

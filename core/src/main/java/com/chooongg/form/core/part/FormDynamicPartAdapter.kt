@@ -4,6 +4,7 @@ import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.data.FormDynamicPartData
 import com.chooongg.form.core.data.FormGroupData
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.item.ChildrenForm
 import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,19 +47,22 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         data.getGroups().forEach { group ->
             val groupList = mutableListOf<BaseForm>()
             if (data.partName != null) {
-                groupList.add(group.getPartNameItem {
+                groupList.add(group.getGroupNameItem {
                     it.name = data.partName
                     it.dynamicPartNameFormatBlock = data.dynamicPartNameFormatter
                 })
             }
+            var diffIndex = 0
             group.getItems().forEach {
-                it.globalPosition = -1
-                it.groupItemCount = -1
-                it.groupIndex = -1
-                it.itemCountInGroup = -1
-                it.positionInGroup = -1
-                it.nextItemLoneLine = false
-                if (it.isRealVisible(formAdapter.isEnabled)) groupList.add(it)
+                it.resetInternalValues()
+                if (it is ChildrenForm) {
+                    it.getItems().forEachIndexed { index, item ->
+                        item.variantIndexInGroup = diffIndex
+                        item.countInCurrentVariant = it.getItems().size
+                        item.indexInCurrentVariant = index
+                    }
+                    diffIndex++
+                } else if (it.isRealVisible(formAdapter.isEnabled)) groupList.add(it)
             }
             while (groupList.size > 0 && !groupList[0].showAtEdge) {
                 groupList.removeAt(0)
@@ -70,9 +74,9 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         }
         tempList.forEachIndexed { index, group ->
             group.forEachIndexed { position, item ->
-                item.groupItemCount = tempList.size
+                item.groupCount = tempList.size
                 item.groupIndex = index
-                item.itemCountInGroup = group.size
+                item.countInGroup = group.size
                 item.positionInGroup = position
                 if (item.loneLine && position > 0) {
                     group[position - 1].nextItemLoneLine = true
@@ -91,27 +95,20 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         block: (BaseForm) -> Unit
     ): Boolean {
         data.getGroups().forEach { group ->
-            group.getItems().forEachIndexed { index, item ->
+            group.getItems().forEach { item ->
                 if (item.field == field) {
                     block(item)
-                    if (update && itemList.contains(item)) {
-                        val tempEmpty = itemList.isEmpty()
-                        if (hasPayload) {
-                            notifyItemChanged(index, FormAdapter.UPDATE_PAYLOAD_FLAG)
-                        } else {
-                            update()
-                            if (tempEmpty != itemList.isEmpty()) {
-                                val partIndex = formAdapter.partAdapters.indexOf(this)
-                                if (partIndex > 0) {
-                                    formAdapter.partAdapters[partIndex - 1].update()
-                                }
-                                if (partIndex < formAdapter.partAdapters.size - 1) {
-                                    formAdapter.partAdapters[partIndex + 1].update()
-                                }
-                            }
+                    if (update) notifyChangeItem(item, hasPayload)
+                    return true
+                }
+                if (item is ChildrenForm) {
+                    item.getItems().forEach {
+                        if (it.field == field) {
+                            block(it)
+                            if (update) notifyChangeItem(it, hasPayload)
+                            return true
                         }
                     }
-                    return true
                 }
             }
         }

@@ -1,9 +1,8 @@
 package com.chooongg.form.core
 
-import androidx.annotation.ColorRes
-import androidx.annotation.DimenRes
 import androidx.annotation.StringRes
-import com.chooongg.form.core.data.FormPartData
+import com.chooongg.form.core.data.FormMultiColumnData
+import com.chooongg.form.core.data.FormSingleLineData
 import com.chooongg.form.core.data.IFormCreator
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.item.FormCheckBox
@@ -22,39 +21,22 @@ import com.chooongg.form.core.item.FormSwitchMaterial
 import com.chooongg.form.core.item.FormText
 import com.chooongg.form.core.item.FormTime
 import com.chooongg.form.core.item.FormTip
-import com.chooongg.form.core.style.CardElevatedStyle
-import com.chooongg.form.core.style.CardFilledStyle
-import com.chooongg.form.core.style.CardOutlinedStyle
+import com.chooongg.form.core.item.MultiColumnForm
+import com.chooongg.form.core.item.SingleLineForm
 
-fun FormAdapter.addCardElevatedPart(
-    @DimenRes elevationResId: Int? = null,
-    updateAdjacentAdapter: Boolean = false,
-    block: FormPartData.() -> Unit
-) = addPart(
-    CardElevatedStyle { this.elevationResId = elevationResId },
-    updateAdjacentAdapter,
-    block
-)
+fun IFormCreator.singleLine(field: String? = null, block: FormSingleLineData.() -> Unit) =
+    addItem(SingleLineForm().apply {
+        val data = FormSingleLineData(field).apply(block)
+        this.field = data.field
+        setItems(data.getItems())
+    })
 
-fun FormAdapter.addCardFilledPart(
-    @ColorRes colorResId: Int? = null,
-    updateAdjacentAdapter: Boolean = false,
-    block: FormPartData.() -> Unit
-) = addPart(
-    CardFilledStyle { this.colorResId = colorResId },
-    updateAdjacentAdapter,
-    block
-)
-
-fun FormAdapter.addCardOutlinedPart(
-    @ColorRes strokeColorResId: Int? = null,
-    updateAdjacentAdapter: Boolean = false,
-    block: FormPartData.() -> Unit
-) = addPart(
-    CardOutlinedStyle { this.strokeColorResId = strokeColorResId },
-    updateAdjacentAdapter,
-    block
-)
+fun IFormCreator.multiColumn(field: String? = null, block: FormMultiColumnData.() -> Unit) =
+    addItem(MultiColumnForm().apply {
+        val data = FormMultiColumnData(field).apply(block)
+        this.field = data.field
+        setItems(data.getItems())
+    })
 
 fun IFormCreator.addButton(
     name: CharSequence?, block: (FormButton.() -> Unit)? = null

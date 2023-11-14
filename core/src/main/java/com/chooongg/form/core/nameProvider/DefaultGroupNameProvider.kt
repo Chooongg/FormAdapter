@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.formTextAppearance
-import com.chooongg.form.core.item.InternalFormPartName
+import com.chooongg.form.core.item.InternalFormGroupName
 import com.chooongg.form.core.style.BaseStyle
 import com.google.android.material.textview.MaterialTextView
 
-class DefaultPartNameProvider : BasePartNameProvider() {
-    override fun onCreatePartName(style: BaseStyle, parent: ViewGroup): View {
+class DefaultGroupNameProvider : BaseGroupNameProvider() {
+    override fun onCreateGroupName(style: BaseStyle, parent: ViewGroup): View {
         return MaterialTextView(parent.context).apply {
             setTextIsSelectable(true)
             setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceLabel))
@@ -21,10 +21,10 @@ class DefaultPartNameProvider : BasePartNameProvider() {
         }
     }
 
-    override fun onBindPartName(
+    override fun onBindGroupName(
         holder: FormViewHolder,
         view: View,
-        item: InternalFormPartName,
+        item: InternalFormGroupName,
         enabled: Boolean
     ) {
         with(view as MaterialTextView) {

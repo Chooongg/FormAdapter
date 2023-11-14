@@ -68,7 +68,7 @@ abstract class BaseForm(
     open var typeset: BaseTypeset? = null
 
     @GravityInt
-    open var gravity:Int? = null
+    open var gravity: Int? = null
 
     /**
      * 内容重力
@@ -137,7 +137,7 @@ abstract class BaseForm(
     /**
      * Part 组数量
      */
-    var groupItemCount = -1
+    var groupCount = -1
         internal set
 
     /**
@@ -149,7 +149,7 @@ abstract class BaseForm(
     /**
      * 组中项数
      */
-    var itemCountInGroup = -1
+    var countInGroup = -1
         internal set
 
     /**
@@ -158,9 +158,39 @@ abstract class BaseForm(
     var positionInGroup = -1
         internal set
 
+    /**
+     * 变体列数
+     */
+    var variantColumnCount = -1
+        internal set
+
+    /**
+     * 组中的变量索引
+     */
+    var variantIndexInGroup = -1
+        internal set
+
+    /**
+     * 当前变体中的项数
+     */
+    var countInCurrentVariant = -1
+        internal set
+
+    /**
+     * 当前变体中的索引
+     */
+    var indexInCurrentVariant = -1
+        internal set
+
+    /**
+     * 跨度
+     */
     var spanSize: Int = -1
         internal set
 
+    /**
+     * 跨度索引
+     */
     var spanIndex: Int = -1
         internal set
 
@@ -229,4 +259,17 @@ abstract class BaseForm(
     }
 
     //</editor-fold>
+
+    internal fun resetInternalValues() {
+        globalPosition = -1
+        groupCount = -1
+        groupIndex = -1
+        countInGroup = -1
+        positionInGroup = -1
+        nextItemLoneLine = false
+        variantColumnCount = -1
+        variantIndexInGroup = -1
+        countInCurrentVariant = -1
+        indexInCurrentVariant = -1
+    }
 }

@@ -10,8 +10,8 @@ import com.chooongg.form.core.format.BaseNameFormatter
 import com.chooongg.form.core.format.ColonNameFormatter
 import com.chooongg.form.core.iconProvider.BaseIconProvider
 import com.chooongg.form.core.iconProvider.DefaultIconProvider
-import com.chooongg.form.core.nameProvider.BasePartNameProvider
-import com.chooongg.form.core.nameProvider.DefaultPartNameProvider
+import com.chooongg.form.core.nameProvider.BaseGroupNameProvider
+import com.chooongg.form.core.nameProvider.DefaultGroupNameProvider
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.style.NoneNotAlignmentStyle
 import com.chooongg.form.core.typeset.BaseTypeset
@@ -40,7 +40,7 @@ object FormManager {
 
         var typeset: BaseTypeset = HorizontalTypeset()
 
-        var partNameProvider: BasePartNameProvider = DefaultPartNameProvider()
+        var groupNameProvider: BaseGroupNameProvider = DefaultGroupNameProvider()
 
         var iconProvider: BaseIconProvider = DefaultIconProvider()
 
