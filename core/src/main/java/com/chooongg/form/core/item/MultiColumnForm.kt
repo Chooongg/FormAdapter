@@ -1,6 +1,14 @@
 package com.chooongg.form.core.item
 
-class MultiColumnForm : ChildrenForm() {
+import androidx.annotation.IntRange
 
-    var column: Int = 1
+class MultiColumnForm : VariantForm() {
+
+    override var isTileToEnd: Boolean = false
+
+    @IntRange(from = 1)
+    var column: Int = 2
+
+    override fun getColumn(count: Int, layoutColumn: Int): Int =
+        if (layoutColumn * column > 12) 12 else column
 }

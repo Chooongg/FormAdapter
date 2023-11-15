@@ -1,18 +1,20 @@
 package com.chooongg.form.core.item
 
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.data.IFormCreator
 import com.chooongg.form.core.provider.BaseFormProvider
 import kotlin.reflect.KClass
 
-open class ChildrenForm: BaseForm(null) {
+abstract class VariantForm : BaseForm(null), IFormCreator {
 
     private var _items = mutableListOf<BaseForm>()
 
-    internal fun setItems(list: MutableList<BaseForm>) {
-        _items = list
-    }
+    open var isTileToEnd: Boolean = true
+        protected set
 
-    fun getItems() = _items
+    override fun getItems() = _items
+
+    abstract fun getColumn(count: Int, layoutColumn: Int): Int
 
     override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> {
         throw IllegalAccessException("Under normal circumstances, this output will not be called!")

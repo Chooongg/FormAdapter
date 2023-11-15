@@ -11,11 +11,15 @@ import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.boundary.Boundary
+import com.chooongg.form.core.boundary.BoundaryCalculator
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.item.VariantForm
 import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: BaseStyle) :
     RecyclerView.Adapter<FormViewHolder>() {
@@ -44,24 +48,83 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     val itemList get() = asyncDiffer.currentList
 
     fun update() {
-        executeUpdate {
-            calculateBoundary()
-            notifyItemRangeChanged(0, itemCount)
+        adapterScope.cancel()
+        adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+        adapterScope.launch {
+            val groups = getOriginalItemList()
+            val tempList = ArrayList<ArrayList<BaseForm>>()
+            groups.forEachIndexed { groupIndex, group ->
+                val tempGroup = ArrayList<BaseForm>()
+                var variantIndex = -1
+                group.forEachIndexed { index, item ->
+                    item.resetInternalValues()
+                    if (item.isRealVisible(formAdapter.isEnabled)) {
+                        if (item is VariantForm) {
+                            variantIndex++
+                            val tempChildList = ArrayList<BaseForm>()
+                            item.getItems().forEach { child ->
+                                child.resetInternalValues()
+                                if (child.isRealVisible(formAdapter.isEnabled)) {
+                                    tempChildList.add(child)
+                                }
+                            }
+                            tempGroup.forEachIndexed { i, child ->
+                                child.parentItem = item
+                                child.variantIndexInGroup = variantIndex
+                                child.countInCurrentVariant = tempGroup.size
+                                child.indexInCurrentVariant = i
+                            }
+                            tempGroup.addAll(tempChildList)
+                        } else tempGroup.add(item)
+                    }
+                }
+                while (tempGroup.size > 0 && !tempGroup[0].showAtEdge) {
+                    tempGroup.removeAt(0)
+                }
+                while (tempGroup.size > 1 && !tempGroup[tempGroup.lastIndex].showAtEdge) {
+                    tempGroup.removeAt(tempGroup.lastIndex)
+                }
+                tempList.add(tempGroup)
+            }
+            tempList.forEachIndexed { index, group ->
+                group.forEachIndexed { position, item ->
+                    item.groupCount = tempList.size
+                    item.groupIndex = index
+                    item.countInGroup = group.size
+                    item.positionInGroup = position
+                    if (position > 0) {
+                        if (item.indexInCurrentVariant == item.countInCurrentVariant - 1) {
+                            group[position - 1].nextIsVariant = true
+                        }
+                        if (item.loneLine) {
+                            group[position - 1].nextIsLoneLine = true
+                        }
+                    }
+                }
+            }
+            asyncDiffer.submitList(ArrayList<BaseForm>().apply { tempList.forEach { addAll(it) } }) {
+                calculateBoundary()
+                notifyItemRangeChanged(0, itemCount)
+            }
         }
     }
 
-    abstract fun executeUpdate(notifyBlock: () -> Unit)
+    abstract fun getOriginalItemList(): List<List<BaseForm>>
 
     fun calculateBoundary() {
+        BoundaryCalculator(formAdapter).calculate(this)
+    }
+
+    fun test() {
         val partAdapters = formAdapter.partAdapters
         val partIndex = partAdapters.indexOf(this)
         var spanIndex = 0
-        val spanCount = 2520
-        val maxColumn = 10
+        val spanCount = 27720
+        val maxColumn = 12
         itemList.forEachIndexed { index, item ->
             item.spanSize = if (item.loneLine) spanCount else {
                 val span = spanCount / formAdapter.columnCount
-                if (item.nextItemLoneLine || (index >= itemList.lastIndex && spanIndex + span < spanCount)) {
+                if (item.nextIsLoneLine || (index >= itemList.lastIndex && spanIndex + span < spanCount)) {
                     spanCount - spanIndex
                 } else span
             }
@@ -254,6 +317,12 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             .onViewDetachedFromWindow(holder, holder.typesetLayout)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)
             .onViewDetachedFromWindow(holder, holder.view)
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        adapterScope.cancel()
+        adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     fun notifyChangeItem(

@@ -4,7 +4,7 @@ import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.data.FormDynamicPartData
 import com.chooongg.form.core.data.FormGroupData
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.ChildrenForm
+import com.chooongg.form.core.item.VariantForm
 import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +28,33 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         return super.getItemViewType(position)
     }
 
-    override fun executeUpdate(notifyBlock: () -> Unit) {
+    override fun getOriginalItemList(): List<List<BaseForm>> {
+        data.getGroups().forEach { if (it.getItems().isEmpty()) data.getGroups().remove(it) }
+        if (data.dynamicGroupCreateBlock != null) {
+            while (data.getGroups().size < data.dynamicPartMinGroupCount) {
+                val groupData = FormGroupData()
+                data.dynamicGroupCreateBlock!!.invoke(groupData)
+                data.getGroups().add(groupData)
+            }
+        }
+        return if (data.isEnablePart) {
+            ArrayList<List<BaseForm>>().apply {
+                data.getGroups().forEach {
+                    val group = ArrayList<BaseForm>()
+                    if (data.partName != null || data.dynamicPartNameFormatter != null) {
+                        group.add(it.getGroupNameItem { item ->
+                            item.name = data.partName
+                            item.dynamicPartNameFormatBlock = data.dynamicPartNameFormatter
+                        })
+                    } else it.clearGroupNameItem()
+                    group.addAll(it.getItems())
+                    add(group)
+                }
+            }
+        } else emptyList()
+    }
+
+    fun executeUpdate(notifyBlock: () -> Unit) {
         adapterScope.cancel()
         adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         if (!data.isEnablePart) {
@@ -55,7 +81,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             var diffIndex = 0
             group.getItems().forEach {
                 it.resetInternalValues()
-                if (it is ChildrenForm) {
+                if (it is VariantForm) {
                     it.getItems().forEachIndexed { index, item ->
                         item.variantIndexInGroup = diffIndex
                         item.countInCurrentVariant = it.getItems().size
@@ -79,7 +105,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 item.countInGroup = group.size
                 item.positionInGroup = position
                 if (item.loneLine && position > 0) {
-                    group[position - 1].nextItemLoneLine = true
+                    group[position - 1].nextIsLoneLine = true
                 }
             }
         }
@@ -101,7 +127,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                     if (update) notifyChangeItem(item, hasPayload)
                     return true
                 }
-                if (item is ChildrenForm) {
+                if (item is VariantForm) {
                     item.getItems().forEach {
                         if (it.field == field) {
                             block(it)

@@ -21,7 +21,7 @@ class InternalFormGroupName internal constructor() : BaseForm(null) {
     fun getPartName(context: Context): CharSequence? {
         val tempName = FormUtils.getText(context, name)
         return if (dynamicPartNameFormatBlock != null) {
-            dynamicPartNameFormatBlock!!.invoke(context, tempName, groupIndex)
+            dynamicPartNameFormatBlock!!.invoke(context, tempName, groupIndex, groupCount)
         } else tempName
     }
 }

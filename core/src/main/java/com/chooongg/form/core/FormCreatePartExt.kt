@@ -29,10 +29,13 @@ fun FormAdapter.addCardFilledPart(
 
 fun FormAdapter.addCardOutlinedPart(
     @ColorRes strokeColorResId: Int? = null,
+    @DimenRes strokeWidthResId: Int? = null,
     updateAdjacentAdapter: Boolean = false,
     block: FormPartData.() -> Unit
 ) = addPart(
-    CardOutlinedStyle { this.strokeColorResId = strokeColorResId },
-    updateAdjacentAdapter,
+    CardOutlinedStyle {
+        this.strokeColorResId = strokeColorResId
+        this.strokeWidthResId = strokeWidthResId
+    }, updateAdjacentAdapter,
     block
 )

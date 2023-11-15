@@ -113,7 +113,7 @@ abstract class BaseForm(
     /**
      * 下一项为独占一行
      */
-    var nextItemLoneLine = false
+    var nextIsLoneLine = false
         internal set
 
     /**
@@ -126,12 +126,6 @@ abstract class BaseForm(
      * 填充信息
      */
     var insideBoundary: Boundary = Boundary()
-        internal set
-
-    /**
-     * 全局位置
-     */
-    var globalPosition = -1
         internal set
 
     /**
@@ -159,10 +153,9 @@ abstract class BaseForm(
         internal set
 
     /**
-     * 变体列数
+     * 下一项是变体
      */
-    var variantColumnCount = -1
-        internal set
+    var nextIsVariant: Boolean = false
 
     /**
      * 组中的变量索引
@@ -181,6 +174,8 @@ abstract class BaseForm(
      */
     var indexInCurrentVariant = -1
         internal set
+
+    var parentItem: VariantForm? = null
 
     /**
      * 跨度
@@ -261,15 +256,15 @@ abstract class BaseForm(
     //</editor-fold>
 
     internal fun resetInternalValues() {
-        globalPosition = -1
         groupCount = -1
         groupIndex = -1
         countInGroup = -1
         positionInGroup = -1
-        nextItemLoneLine = false
-        variantColumnCount = -1
+        nextIsLoneLine = false
+        nextIsVariant = false
         variantIndexInGroup = -1
         countInCurrentVariant = -1
         indexInCurrentVariant = -1
+        parentItem = null
     }
 }

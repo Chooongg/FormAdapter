@@ -16,4 +16,8 @@ open class FormGroupData : IFormCreator {
         block.invoke(_groupNameItem!!)
         return _groupNameItem!!
     }
+
+    fun clearGroupNameItem() {
+        _groupNameItem = null
+    }
 }

@@ -1,12 +1,13 @@
 package com.chooongg.form.core.data
 
-import com.chooongg.form.core.enum.FormEnableMode
 import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.item.BaseForm
 
-class FormMultiColumnData(val field: String?) : IFormCreator {
+class FormMultiColumnData : IFormCreator {
 
     private val _items = mutableListOf<BaseForm>()
+
+    var field: String? = null
 
     /**
      * 可见模式

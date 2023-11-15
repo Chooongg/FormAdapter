@@ -3,9 +3,7 @@ package com.chooongg.form.core.part
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.ChildrenForm
-import com.chooongg.form.core.item.MultiColumnForm
-import com.chooongg.form.core.item.SingleLineForm
+import com.chooongg.form.core.item.VariantForm
 import com.chooongg.form.core.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +24,14 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         this.data = data
     }
 
-    override fun executeUpdate(notifyBlock: () -> Unit) {
+    override fun getOriginalItemList(): List<List<BaseForm>> {
+        if (data.getItems().isEmpty()) return emptyList()
+        return if (data.isEnablePart) {
+            listOf(data.getItems())
+        } else emptyList()
+    }
+
+    fun executeUpdate(notifyBlock: () -> Unit) {
         adapterScope.cancel()
         adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         if (!data.isEnablePart) {
@@ -34,6 +39,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             return
         }
         adapterScope.launch {
+
         }
         val tempList = mutableListOf<BaseForm>()
         if (data.partName != null) {
@@ -41,22 +47,9 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 it.name = data.partName
             })
         }
-        var diffIndex = 0
         data.getItems().forEach {
             it.resetInternalValues()
-            if (it is ChildrenForm) {
-                it.getItems().forEachIndexed { index, item ->
-                    item.variantIndexInGroup = diffIndex
-                    item.countInCurrentVariant = it.getItems().size
-                    item.indexInCurrentVariant = index
-                    if (it is SingleLineForm) {
-                        item.variantColumnCount
-                    } else if (it is MultiColumnForm) {
-
-                    }
-                }
-                diffIndex++
-            } else if (it.isRealVisible(formAdapter.isEnabled)) tempList.add(it)
+            if (it.isRealVisible(formAdapter.isEnabled)) tempList.add(it)
         }
         while (tempList.size > 0 && !tempList[0].showAtEdge) {
             tempList.removeAt(0)
@@ -69,8 +62,13 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             item.groupIndex = 0
             item.countInGroup = tempList.size
             item.positionInGroup = index
-            if (index > 0 && (item.loneLine)) {
-                tempList[index - 1].nextItemLoneLine = true
+            if (index > 0) {
+                if (item.loneLine) {
+                    tempList[index - 1].nextIsLoneLine = true
+                }
+                if (item.indexInCurrentVariant == 0) {
+                    tempList[index - 1].nextIsVariant = true
+                }
             }
         }
         asyncDiffer.submitList(tempList) { notifyBlock.invoke() }
@@ -88,7 +86,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 if (update) notifyChangeItem(item, hasPayload)
                 return true
             }
-            if (item is ChildrenForm) {
+            if (item is VariantForm) {
                 item.getItems().forEach {
                     if (it.field == field) {
                         block(it)

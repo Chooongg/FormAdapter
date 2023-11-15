@@ -1,8 +1,6 @@
 package com.chooongg.form.core
 
 import androidx.annotation.StringRes
-import com.chooongg.form.core.data.FormMultiColumnData
-import com.chooongg.form.core.data.FormSingleLineData
 import com.chooongg.form.core.data.IFormCreator
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.item.FormCheckBox
@@ -24,19 +22,11 @@ import com.chooongg.form.core.item.FormTip
 import com.chooongg.form.core.item.MultiColumnForm
 import com.chooongg.form.core.item.SingleLineForm
 
-fun IFormCreator.singleLine(field: String? = null, block: FormSingleLineData.() -> Unit) =
-    addItem(SingleLineForm().apply {
-        val data = FormSingleLineData(field).apply(block)
-        this.field = data.field
-        setItems(data.getItems())
-    })
+fun IFormCreator.singleLine(block: SingleLineForm.() -> Unit) =
+    addItem(SingleLineForm().apply(block))
 
-fun IFormCreator.multiColumn(field: String? = null, block: FormMultiColumnData.() -> Unit) =
-    addItem(MultiColumnForm().apply {
-        val data = FormMultiColumnData(field).apply(block)
-        this.field = data.field
-        setItems(data.getItems())
-    })
+fun IFormCreator.multiColumn(block: MultiColumnForm.() -> Unit) =
+    addItem(MultiColumnForm().apply(block))
 
 fun IFormCreator.addButton(
     name: CharSequence?, block: (FormButton.() -> Unit)? = null

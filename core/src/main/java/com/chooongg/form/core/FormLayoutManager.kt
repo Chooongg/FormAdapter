@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.max
 import kotlin.math.min
 
-class FormLayoutManager(context: Context) : GridLayoutManager(context, 2520) {
+class FormLayoutManager(context: Context) : GridLayoutManager(context, 27720) {
 
     private var recyclerView: RecyclerView? = null
 
@@ -20,7 +20,7 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 2520) {
             if (width != 0) {
                 columnCount = max(
                     1,
-                    min(4, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / value)
+                    min(12, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / value)
                 )
             }
         }
@@ -60,7 +60,7 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 2520) {
         super.onMeasure(recycler, state, widthSpec, heightSpec)
         val width = MeasureSpec.getSize(widthSpec)
         columnCount =
-            max(1, min(4, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / maxItemWidth))
+            max(1, min(12, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / maxItemWidth))
     }
 
     override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
