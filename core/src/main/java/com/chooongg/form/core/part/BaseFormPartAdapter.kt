@@ -19,13 +19,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 
 abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: BaseStyle) :
     RecyclerView.Adapter<FormViewHolder>() {
 
     var adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         internal set
+
+    private val boundaryCalculator = BoundaryCalculator(this)
 
     protected val asyncDiffer = AsyncListDiffer(object : ListUpdateCallback {
         override fun onChanged(position: Int, count: Int, payload: Any?) = Unit
@@ -45,74 +46,78 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             oldItem.id == newItem.id && oldItem.typeset == newItem.typeset
     }).build())
 
-    val itemList get() = asyncDiffer.currentList
+    val itemList: List<BaseForm> get() = asyncDiffer.currentList
 
     fun update() {
         adapterScope.cancel()
         adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-        adapterScope.launch {
-            val groups = getOriginalItemList()
-            val tempList = ArrayList<ArrayList<BaseForm>>()
-            groups.forEachIndexed { groupIndex, group ->
-                val tempGroup = ArrayList<BaseForm>()
-                var variantIndex = -1
-                group.forEachIndexed { index, item ->
-                    item.resetInternalValues()
-                    if (item.isRealVisible(formAdapter.isEnabled)) {
-                        if (item is VariantForm) {
-                            variantIndex++
-                            val tempChildList = ArrayList<BaseForm>()
-                            item.getItems().forEach { child ->
-                                child.resetInternalValues()
-                                if (child.isRealVisible(formAdapter.isEnabled)) {
-                                    tempChildList.add(child)
-                                }
+        executeUpdate(true)
+    }
+
+    internal fun executeUpdate(isNotifyChanged: Boolean) {
+        val groups = getOriginalItemList()
+        val tempList = ArrayList<ArrayList<BaseForm>>()
+        groups.forEach { group ->
+            val tempGroup = ArrayList<BaseForm>()
+            var variantIndex = -1
+            group.forEach { item ->
+                item.resetInternalValues()
+                if (item.isRealVisible(formAdapter.isEnabled)) {
+                    if (item is VariantForm) {
+                        val tempChildList = ArrayList<BaseForm>()
+                        item.getItems().forEach { child ->
+                            child.resetInternalValues()
+                            if (child.isRealVisible(formAdapter.isEnabled)) {
+                                tempChildList.add(child)
                             }
-                            tempGroup.forEachIndexed { i, child ->
+                        }
+                        if (tempChildList.isNotEmpty()) {
+                            variantIndex++
+                            tempChildList.forEachIndexed { i, child ->
                                 child.parentItem = item
                                 child.variantIndexInGroup = variantIndex
                                 child.countInCurrentVariant = tempGroup.size
                                 child.indexInCurrentVariant = i
                             }
                             tempGroup.addAll(tempChildList)
-                        } else tempGroup.add(item)
+                        }
+                    } else tempGroup.add(item)
+                }
+            }
+            while (tempGroup.size > 0 && !tempGroup[0].showAtEdge) {
+                tempGroup.removeAt(0)
+            }
+            while (tempGroup.size > 1 && !tempGroup[tempGroup.lastIndex].showAtEdge) {
+                tempGroup.removeAt(tempGroup.lastIndex)
+            }
+            tempList.add(tempGroup)
+        }
+        tempList.forEachIndexed { index, group ->
+            group.forEachIndexed { position, item ->
+                item.groupCount = tempList.size
+                item.groupIndex = index
+                item.countInGroup = group.size
+                item.positionInGroup = position
+                if (position > 0) {
+                    if (item.indexInCurrentVariant == item.countInCurrentVariant - 1) {
+                        group[position - 1].nextIsVariant = true
+                    }
+                    if (item.loneLine) {
+                        group[position - 1].nextIsLoneLine = true
                     }
                 }
-                while (tempGroup.size > 0 && !tempGroup[0].showAtEdge) {
-                    tempGroup.removeAt(0)
-                }
-                while (tempGroup.size > 1 && !tempGroup[tempGroup.lastIndex].showAtEdge) {
-                    tempGroup.removeAt(tempGroup.lastIndex)
-                }
-                tempList.add(tempGroup)
             }
-            tempList.forEachIndexed { index, group ->
-                group.forEachIndexed { position, item ->
-                    item.groupCount = tempList.size
-                    item.groupIndex = index
-                    item.countInGroup = group.size
-                    item.positionInGroup = position
-                    if (position > 0) {
-                        if (item.indexInCurrentVariant == item.countInCurrentVariant - 1) {
-                            group[position - 1].nextIsVariant = true
-                        }
-                        if (item.loneLine) {
-                            group[position - 1].nextIsLoneLine = true
-                        }
-                    }
-                }
-            }
-            asyncDiffer.submitList(ArrayList<BaseForm>().apply { tempList.forEach { addAll(it) } }) {
-                calculateBoundary()
-                notifyItemRangeChanged(0, itemCount)
-            }
+        }
+        asyncDiffer.submitList(ArrayList<BaseForm>().apply { tempList.forEach { addAll(it) } }) {
+            calculateBoundary()
+            if (isNotifyChanged) notifyItemRangeChanged(0, itemCount)
         }
     }
 
     abstract fun getOriginalItemList(): List<List<BaseForm>>
 
     fun calculateBoundary() {
-        BoundaryCalculator(formAdapter).calculate(this)
+        BoundaryCalculator(this).calculate(this)
     }
 
     fun test() {
@@ -252,6 +257,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
         val item = getItem(position)
+        boundaryCalculator.calculateBoundary(item, position)
         val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
         formAdapter.getStyle4ItemViewType(holder.itemViewType).apply {
             onBindViewHolder(holder, holder.styleLayout, item)
@@ -270,25 +276,29 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         position: Int,
         payloads: MutableList<Any>
     ) {
+        val isHasBind = payloads.isEmpty()
         val item = getItem(position)
-        val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
-        style.onBindViewHolder(holder, holder.styleLayout, item)
-        formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
-            setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
-            onBindViewHolder(holder, holder.typesetLayout, item)
+        if (isHasBind) {
+            boundaryCalculator.calculateBoundary(item, position)
+            val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
+            style.onBindViewHolder(holder, holder.styleLayout, item)
+            formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
+                setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
+                onBindViewHolder(holder, holder.typesetLayout, item)
+            }
         }
         formAdapter.getProvider4ItemViewType(holder.itemViewType).apply {
-            if (payloads.isNotEmpty()) {
-                payloads.forEach {
-                    if (it == FormAdapter.UPDATE_PAYLOAD_FLAG) {
-                        onBindViewHolderUpdate(
-                            adapterScope, holder, holder.view, item, formAdapter.isEnabled
-                        )
-                    } else onBindViewHolderOtherPayload(
-                        adapterScope, holder, holder.view, item, formAdapter.isEnabled, it
+            if (isHasBind) {
+                onBindViewHolder(adapterScope, holder, holder.view, item, formAdapter.isEnabled)
+            } else payloads.forEach {
+                if (it == FormAdapter.UPDATE_PAYLOAD_FLAG) {
+                    onBindViewHolderUpdate(
+                        adapterScope, holder, holder.view, item, formAdapter.isEnabled
                     )
-                }
-            } else onBindViewHolder(adapterScope, holder, holder.view, item, formAdapter.isEnabled)
+                } else onBindViewHolderOtherPayload(
+                    adapterScope, holder, holder.view, item, formAdapter.isEnabled, it
+                )
+            }
         }
     }
 
@@ -322,7 +332,6 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         adapterScope.cancel()
         adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-        super.onDetachedFromRecyclerView(recyclerView)
     }
 
     fun notifyChangeItem(

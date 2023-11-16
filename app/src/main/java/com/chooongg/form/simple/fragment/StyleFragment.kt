@@ -5,10 +5,12 @@ import android.view.View
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.addText
 import com.chooongg.form.core.data.FormPartData
+import com.chooongg.form.core.singleLine
 import com.chooongg.form.core.style.CardElevatedStyle
 import com.chooongg.form.core.style.CardFilledStyle
 import com.chooongg.form.core.style.CardOutlinedStyle
 import com.chooongg.form.core.style.NoneStyle
+import com.chooongg.form.core.typeset.VerticalTypeset
 import com.chooongg.form.simple.R
 
 class StyleFragment : BaseFragment() {
@@ -55,6 +57,20 @@ class StyleFragment : BaseFragment() {
         }
         addText("Style") {
             content = "StyleTest"
+        }
+        singleLine {
+            addText("Style") {
+                typeset = VerticalTypeset()
+                content = "StyleTest"
+            }
+            addText("Style") {
+                typeset = VerticalTypeset()
+                content = "StyleTest"
+            }
+            addText("Style") {
+                typeset = VerticalTypeset()
+                content = "StyleTest"
+            }
         }
         addText("Style") {
             content = "StyleTest"

@@ -10,5 +10,5 @@ class MultiColumnForm : VariantForm() {
     var column: Int = 2
 
     override fun getColumn(count: Int, layoutColumn: Int): Int =
-        if (layoutColumn * column > 12) 12 else column
+        if (layoutColumn * column > 12) 12 else layoutColumn * column
 }

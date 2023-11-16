@@ -25,16 +25,17 @@ class Boundary(
     var bottom: Int = bottom
         internal set
 
-    constructor() : this(NONE)
+    constructor() : this(UNSET)
     constructor(any: Int) : this(any, any, any, any)
 
     companion object {
+        private const val UNSET = -1
         const val NONE = 0
         const val MIDDLE = 1
         const val GLOBAL = 2
     }
 
-    @IntDef(NONE, MIDDLE, GLOBAL)
+    @IntDef(UNSET, NONE, MIDDLE, GLOBAL)
     annotation class BoundaryInt
 
     override fun equals(other: Any?): Boolean {

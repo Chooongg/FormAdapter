@@ -41,10 +41,10 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             ArrayList<List<BaseForm>>().apply {
                 data.getGroups().forEach {
                     val group = ArrayList<BaseForm>()
-                    if (data.partName != null || data.dynamicPartNameFormatter != null) {
+                    if (data.partName != null || data.dynamicGroupNameFormatter != null) {
                         group.add(it.getGroupNameItem { item ->
                             item.name = data.partName
-                            item.dynamicPartNameFormatBlock = data.dynamicPartNameFormatter
+                            item.dynamicGroupNameFormatBlock = data.dynamicGroupNameFormatter
                         })
                     } else it.clearGroupNameItem()
                     group.addAll(it.getItems())
@@ -75,7 +75,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             if (data.partName != null) {
                 groupList.add(group.getGroupNameItem {
                     it.name = data.partName
-                    it.dynamicPartNameFormatBlock = data.dynamicPartNameFormatter
+                    it.dynamicGroupNameFormatBlock = data.dynamicGroupNameFormatter
                 })
             }
             var diffIndex = 0

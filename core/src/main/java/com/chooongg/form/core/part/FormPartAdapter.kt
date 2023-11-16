@@ -25,9 +25,15 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     }
 
     override fun getOriginalItemList(): List<List<BaseForm>> {
-        if (data.getItems().isEmpty()) return emptyList()
         return if (data.isEnablePart) {
-            listOf(data.getItems())
+            val group = ArrayList<BaseForm>()
+            if (data.partName != null) {
+                group.add(data.getGroupNameItem { item ->
+                    item.name = data.partName
+                })
+            } else data.clearGroupNameItem()
+            group.addAll(data.getItems())
+            listOf(group)
         } else emptyList()
     }
 

@@ -7,6 +7,7 @@ import com.chooongg.form.core.FormLayoutManager
 import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
+import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.boundary.FormInsideInfo
 import com.chooongg.form.core.boundary.FormMarginInfo
 import com.chooongg.form.core.iconProvider.BaseIconProvider
@@ -20,6 +21,9 @@ abstract class BaseStyle {
     var partNameProvider: BaseGroupNameProvider = FormManager.Default.groupNameProvider
 
     var iconProvider: BaseIconProvider = FormManager.Default.iconProvider
+
+    @Boundary.BoundaryInt
+    var horizontalMiddleBoundary: Int = FormManager.Default.horizontalMiddleBoundary
 
     var typeset: BaseTypeset? = null
 

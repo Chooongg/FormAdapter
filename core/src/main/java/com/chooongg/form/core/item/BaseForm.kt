@@ -111,12 +111,6 @@ abstract class BaseForm(
     //<editor-fold desc="内部 Internal">
 
     /**
-     * 下一项为独占一行
-     */
-    var nextIsLoneLine = false
-        internal set
-
-    /**
      * 边界信息
      */
     var marginBoundary: Boundary = Boundary()
@@ -150,6 +144,12 @@ abstract class BaseForm(
      * 组中位置
      */
     var positionInGroup = -1
+        internal set
+
+    /**
+     * 下一项为独占一行
+     */
+    var nextIsLoneLine = false
         internal set
 
     /**
@@ -256,6 +256,8 @@ abstract class BaseForm(
     //</editor-fold>
 
     internal fun resetInternalValues() {
+        marginBoundary = Boundary()
+        insideBoundary = Boundary()
         groupCount = -1
         groupIndex = -1
         countInGroup = -1

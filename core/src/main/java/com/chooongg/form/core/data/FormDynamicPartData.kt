@@ -2,7 +2,7 @@ package com.chooongg.form.core.data
 
 import androidx.annotation.IntRange
 import com.chooongg.form.core.FormGroupCreateBlock
-import com.chooongg.form.core.FormPartNameFormatter
+import com.chooongg.form.core.FormGroupNameFormatter
 
 class FormDynamicPartData : BaseFormPartData {
 
@@ -16,7 +16,7 @@ class FormDynamicPartData : BaseFormPartData {
 
     internal var dynamicGroupCreateBlock: FormGroupCreateBlock? = null
 
-    internal var dynamicPartNameFormatter: FormPartNameFormatter? = null
+    internal var dynamicGroupNameFormatter: FormGroupNameFormatter? = null
 
     @IntRange(from = 1)
     var dynamicPartMinGroupCount: Int = 1
@@ -34,7 +34,7 @@ class FormDynamicPartData : BaseFormPartData {
         dynamicGroupCreateBlock = block
     }
 
-    fun dynamicPartNameFormatter(block: FormPartNameFormatter?) {
-        dynamicPartNameFormatter = block
+    fun dynamicPartNameFormatter(block: FormGroupNameFormatter?) {
+        dynamicGroupNameFormatter = block
     }
 }

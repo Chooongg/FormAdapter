@@ -60,13 +60,16 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 27720) {
         super.onMeasure(recycler, state, widthSpec, heightSpec)
         val width = MeasureSpec.getSize(widthSpec)
         columnCount =
-            max(1, min(12, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / maxItemWidth))
+            max(
+                1,
+                min(12, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / maxItemWidth)
+            )
     }
 
     override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
         if (state.didStructureChange()) {
             (adapter as? FormAdapter)?.partAdapters?.forEach {
-                it.calculateBoundary()
+                it.executeUpdate(false)
             }
         }
         super.onLayoutChildren(recycler, state)
