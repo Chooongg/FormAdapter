@@ -11,9 +11,11 @@ class SingleLineForm : VariantForm() {
             val columnList = ArrayList<Int>()
             for (i in 2..12) {
                 var column = size
-                while (column / i > 12) {
-                    column /= i
-                }
+                do {
+                    column = if (column % i == 0) {
+                        column / i
+                    } else column / i + 1
+                } while (column > 12)
                 columnList.add(column)
             }
             columnList.max()

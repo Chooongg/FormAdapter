@@ -59,21 +59,13 @@ class StyleFragment : BaseFragment() {
             content = "StyleTest"
         }
         singleLine {
-            addText("Style") {
-                typeset = VerticalTypeset()
-                content = "StyleTest"
+            autoFill = false
+            for (i in 1..13) {
+                addText("Style") {
+                    typeset = VerticalTypeset()
+                    content = "StyleTest"
+                }
             }
-            addText("Style") {
-                typeset = VerticalTypeset()
-                content = "StyleTest"
-            }
-            addText("Style") {
-                typeset = VerticalTypeset()
-                content = "StyleTest"
-            }
-        }
-        addText("Style") {
-            content = "StyleTest"
         }
         addText("Style") {
             content = "StyleTest"

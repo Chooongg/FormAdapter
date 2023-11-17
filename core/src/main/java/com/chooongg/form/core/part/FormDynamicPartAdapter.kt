@@ -54,66 +54,6 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         } else emptyList()
     }
 
-    fun executeUpdate(notifyBlock: () -> Unit) {
-        adapterScope.cancel()
-        adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-        if (!data.isEnablePart) {
-            asyncDiffer.submitList(null)
-            return
-        }
-        val tempList = mutableListOf<MutableList<BaseForm>>()
-        data.getGroups().forEach { if (it.getItems().isEmpty()) data.getGroups().remove(it) }
-        if (data.dynamicGroupCreateBlock != null) {
-            while (data.getGroups().size < data.dynamicPartMinGroupCount) {
-                val groupData = FormGroupData()
-                data.dynamicGroupCreateBlock!!.invoke(groupData)
-                data.getGroups().add(groupData)
-            }
-        }
-        data.getGroups().forEach { group ->
-            val groupList = mutableListOf<BaseForm>()
-            if (data.partName != null) {
-                groupList.add(group.getGroupNameItem {
-                    it.name = data.partName
-                    it.dynamicGroupNameFormatBlock = data.dynamicGroupNameFormatter
-                })
-            }
-            var diffIndex = 0
-            group.getItems().forEach {
-                it.resetInternalValues()
-                if (it is VariantForm) {
-                    it.getItems().forEachIndexed { index, item ->
-                        item.variantIndexInGroup = diffIndex
-                        item.countInCurrentVariant = it.getItems().size
-                        item.indexInCurrentVariant = index
-                    }
-                    diffIndex++
-                } else if (it.isRealVisible(formAdapter.isEnabled)) groupList.add(it)
-            }
-            while (groupList.size > 0 && !groupList[0].showAtEdge) {
-                groupList.removeAt(0)
-            }
-            while (groupList.size > 1 && !groupList[groupList.lastIndex].showAtEdge) {
-                groupList.removeAt(groupList.lastIndex)
-            }
-            tempList.add(groupList)
-        }
-        tempList.forEachIndexed { index, group ->
-            group.forEachIndexed { position, item ->
-                item.groupCount = tempList.size
-                item.groupIndex = index
-                item.countInGroup = group.size
-                item.positionInGroup = position
-                if (item.loneLine && position > 0) {
-                    group[position - 1].nextIsLoneLine = true
-                }
-            }
-        }
-        asyncDiffer.submitList(ArrayList<BaseForm>().apply { tempList.forEach { addAll(it) } }) {
-            notifyBlock.invoke()
-        }
-    }
-
     override fun findOfField(
         field: String,
         update: Boolean,

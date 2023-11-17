@@ -9,9 +9,6 @@ abstract class VariantForm : BaseForm(null), IFormCreator {
 
     private var _items = mutableListOf<BaseForm>()
 
-    open var isTileToEnd: Boolean = true
-        protected set
-
     override fun getItems() = _items
 
     abstract fun getColumn(count: Int, layoutColumn: Int): Int

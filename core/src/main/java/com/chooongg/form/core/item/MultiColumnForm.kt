@@ -1,14 +1,15 @@
 package com.chooongg.form.core.item
 
-import androidx.annotation.IntRange
+import androidx.annotation.FloatRange
+import kotlin.math.max
 
 class MultiColumnForm : VariantForm() {
 
-    override var isTileToEnd: Boolean = false
+    @FloatRange(from = 1.0)
+    var column: Float = 2f
 
-    @IntRange(from = 1)
-    var column: Int = 2
+    override var autoFill: Boolean = false
 
     override fun getColumn(count: Int, layoutColumn: Int): Int =
-        if (layoutColumn * column > 12) 12 else layoutColumn * column
+        if (layoutColumn * column > 12) 12 else max((layoutColumn * column).toInt(), 1)
 }

@@ -12,8 +12,6 @@ import com.chooongg.form.core.iconProvider.BaseIconProvider
 import com.chooongg.form.core.iconProvider.DefaultIconProvider
 import com.chooongg.form.core.nameProvider.BaseGroupNameProvider
 import com.chooongg.form.core.nameProvider.DefaultGroupNameProvider
-import com.chooongg.form.core.style.BaseStyle
-import com.chooongg.form.core.style.NoneNotAlignmentStyle
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.HorizontalTypeset
 
@@ -43,8 +41,6 @@ object FormManager {
         var groupNameProvider: BaseGroupNameProvider = DefaultGroupNameProvider()
 
         var iconProvider: BaseIconProvider = DefaultIconProvider()
-
-        var style: BaseStyle = NoneNotAlignmentStyle()
     }
 
     fun defaultConfig(block: Default.() -> Unit) = apply {

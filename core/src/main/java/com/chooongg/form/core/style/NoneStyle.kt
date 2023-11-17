@@ -14,6 +14,8 @@ class NoneStyle : BaseStyle {
         block(this)
     }
 
+    override fun isDecorateNoneItem() = false
+
     override fun onCreateViewHolder(parent: ViewGroup): ViewGroup? = null
 
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {

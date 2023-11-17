@@ -35,7 +35,6 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 27720) {
     internal var formMarginEnd: Int = -1
 
     init {
-
         spanSizeLookup = object : SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val formAdapter = adapter as? FormAdapter ?: return spanCount

@@ -37,49 +37,6 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         } else emptyList()
     }
 
-    fun executeUpdate(notifyBlock: () -> Unit) {
-        adapterScope.cancel()
-        adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-        if (!data.isEnablePart) {
-            asyncDiffer.submitList(null)
-            return
-        }
-        adapterScope.launch {
-
-        }
-        val tempList = mutableListOf<BaseForm>()
-        if (data.partName != null) {
-            tempList.add(data.getGroupNameItem {
-                it.name = data.partName
-            })
-        }
-        data.getItems().forEach {
-            it.resetInternalValues()
-            if (it.isRealVisible(formAdapter.isEnabled)) tempList.add(it)
-        }
-        while (tempList.size > 0 && !tempList[0].showAtEdge) {
-            tempList.removeAt(0)
-        }
-        while (tempList.size > 1 && !tempList[tempList.lastIndex].showAtEdge) {
-            tempList.removeAt(tempList.lastIndex)
-        }
-        tempList.forEachIndexed { index, item ->
-            item.groupCount = 1
-            item.groupIndex = 0
-            item.countInGroup = tempList.size
-            item.positionInGroup = index
-            if (index > 0) {
-                if (item.loneLine) {
-                    tempList[index - 1].nextIsLoneLine = true
-                }
-                if (item.indexInCurrentVariant == 0) {
-                    tempList[index - 1].nextIsVariant = true
-                }
-            }
-        }
-        asyncDiffer.submitList(tempList) { notifyBlock.invoke() }
-    }
-
     override fun findOfField(
         field: String,
         update: Boolean,

@@ -34,6 +34,8 @@ abstract class BaseStyle {
 
     private var isInstanceMarginInsideInfo = false
 
+    open fun isDecorateNoneItem(): Boolean = true
+
     internal fun createSizeInfo(adapter: BaseFormPartAdapter) {
         if (isInstanceMarginInsideInfo) return
         val recyclerView = adapter.formAdapter.recyclerView ?: return

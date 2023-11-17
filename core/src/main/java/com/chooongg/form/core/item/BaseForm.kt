@@ -92,6 +92,11 @@ abstract class BaseForm(
      */
     open var showAtEdge = true
 
+    /**
+     * 自动填充
+     */
+    open var autoFill = true
+
     //</editor-fold>
 
     //<editor-fold desc="接口 interface">
@@ -145,17 +150,6 @@ abstract class BaseForm(
      */
     var positionInGroup = -1
         internal set
-
-    /**
-     * 下一项为独占一行
-     */
-    var nextIsLoneLine = false
-        internal set
-
-    /**
-     * 下一项是变体
-     */
-    var nextIsVariant: Boolean = false
 
     /**
      * 组中的变量索引
@@ -262,8 +256,6 @@ abstract class BaseForm(
         groupIndex = -1
         countInGroup = -1
         positionInGroup = -1
-        nextIsLoneLine = false
-        nextIsVariant = false
         variantIndexInGroup = -1
         countInCurrentVariant = -1
         indexInCurrentVariant = -1

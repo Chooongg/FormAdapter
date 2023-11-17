@@ -6,6 +6,16 @@ import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.style.CardElevatedStyle
 import com.chooongg.form.core.style.CardFilledStyle
 import com.chooongg.form.core.style.CardOutlinedStyle
+import com.chooongg.form.core.style.NotAlignmentStyle
+
+fun FormAdapter.addNotAlignmentPart(
+    updateAdjacentAdapter: Boolean = false,
+    block: FormPartData.() -> Unit
+) = addPart(
+    NotAlignmentStyle(),
+    updateAdjacentAdapter,
+    block
+)
 
 fun FormAdapter.addCardElevatedPart(
     @DimenRes elevationResId: Int? = null,

@@ -12,6 +12,7 @@ import com.chooongg.form.core.part.FormDynamicPartAdapter
 import com.chooongg.form.core.part.FormPartAdapter
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
+import com.chooongg.form.core.style.NoneStyle
 import com.chooongg.form.core.typeset.BaseTypeset
 
 open class FormAdapter(isEnabled: Boolean) :
@@ -94,7 +95,7 @@ open class FormAdapter(isEnabled: Boolean) :
     //<editor-fold desc="ConcatAdapter 覆写">
 
     fun addPart(
-        style: BaseStyle = FormManager.Default.style,
+        style: BaseStyle = NoneStyle(),
         updateAdjacentAdapter: Boolean = false,
         block: FormPartData.() -> Unit
     ) {
@@ -110,7 +111,7 @@ open class FormAdapter(isEnabled: Boolean) :
     }
 
     fun addDynamicPart(
-        style: BaseStyle = FormManager.Default.style,
+        style: BaseStyle = NoneStyle(),
         updateAdjacentAdapter: Boolean = false,
         block: FormDynamicPartData.() -> Unit
     ) {

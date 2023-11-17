@@ -8,12 +8,14 @@ import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.item.BaseForm
 
-class NoneNotAlignmentStyle : BaseStyle {
+class NotAlignmentStyle : BaseStyle {
 
     constructor() : super()
-    constructor(block: NoneNotAlignmentStyle.() -> Unit) : super() {
+    constructor(block: NotAlignmentStyle.() -> Unit) : super() {
         block(this)
     }
+
+    override fun isDecorateNoneItem() = false
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewGroup? = null
 

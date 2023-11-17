@@ -41,17 +41,12 @@ abstract class BaseFormProvider {
         payload: Any
     ) = Unit
 
-    open fun isNeedParentLayoutSupport(): Boolean = false
-
     open fun onViewRecycled(holder: FormViewHolder, view: View) {
         holder.job?.cancel()
     }
 
-    open fun onViewAttachedToWindow(holder: FormViewHolder, view: View) {
-    }
-
-    open fun onViewDetachedFromWindow(holder: FormViewHolder, view: View) {
-    }
+    open fun onViewAttachedToWindow(holder: FormViewHolder, view: View) = Unit
+    open fun onViewDetachedFromWindow(holder: FormViewHolder, view: View) = Unit
 
     open fun changeContentAndNotifyLinkage(
         holder: FormViewHolder,

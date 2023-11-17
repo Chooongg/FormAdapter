@@ -12,7 +12,7 @@ abstract class AbstractForm : CacheCleanable {
     /**
      * 表单项唯一标识
      */
-    val id = UUID.randomUUID().toString()
+    open val id = UUID.randomUUID().toString()
 
     /**
      * 可见模式
