@@ -37,7 +37,10 @@ open class FormAdapter(isEnabled: Boolean) :
         }
 
     var columnCount: Int = 1
-        internal set
+        internal set(value) {
+            field = value
+            partAdapters.forEach { it.executeUpdate(false) }
+        }
 
     private val dataObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {

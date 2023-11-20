@@ -106,7 +106,7 @@ class FormInputFilledProvider : BaseFormProvider() {
         val itemInput = item as? FormInput
         configOption(holder, view, item, enabled)
         with(view as TextInputLayout) {
-            isEnabled = item.isRealEnable(enabled)
+            isEnabled = enabled
             prefixText = FormUtils.getText(context, itemInput?.prefix)
             suffixText = FormUtils.getText(context, itemInput?.suffix)
             placeholderText = FormUtils.getText(context, itemInput?.placeholder)

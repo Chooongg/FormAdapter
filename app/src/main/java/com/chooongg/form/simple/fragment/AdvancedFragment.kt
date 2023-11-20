@@ -14,6 +14,10 @@ class AdvancedFragment : BaseFragment() {
         model.adapter.isEnabled = !model.adapter.isEnabled
     }
 
+    override fun smoothScroll() {
+        formView.smoothScrollToPosition(35)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setTitle(R.string.advanced)
         formView.setFormAdapter(model.adapter)

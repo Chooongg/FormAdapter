@@ -28,7 +28,7 @@ class VerticalTypeset : BaseTypeset() {
                     style.insideInfo.middleStart, style.insideInfo.middleTop,
                     style.insideInfo.middleEnd, style.insideInfo.middleBottom
                 )
-            }, LinearLayoutCompat.LayoutParams(-2, -2))
+            }, LinearLayoutCompat.LayoutParams(-1, -2))
         }
     }
 
@@ -40,7 +40,9 @@ class VerticalTypeset : BaseTypeset() {
     }
 
     override fun addView(style: BaseStyle, parentView: ViewGroup, child: View) {
-        parentView.addView(child, LinearLayoutCompat.LayoutParams(-1, -2))
+        parentView.addView(child, LinearLayoutCompat.LayoutParams(-1, -2).apply {
+            topMargin = -style.insideInfo.middleTop / 2
+        })
     }
 
 }

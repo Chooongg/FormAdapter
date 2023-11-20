@@ -3,8 +3,10 @@ package com.chooongg.form.simple.fragment
 import android.os.Bundle
 import android.view.View
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.addSlider
 import com.chooongg.form.core.addText
 import com.chooongg.form.core.data.FormPartData
+import com.chooongg.form.core.multiColumn
 import com.chooongg.form.core.singleLine
 import com.chooongg.form.core.style.CardElevatedStyle
 import com.chooongg.form.core.style.CardFilledStyle
@@ -19,6 +21,10 @@ class StyleFragment : BaseFragment() {
 
     override fun change() {
         adapter.isEnabled = !adapter.isEnabled
+    }
+
+    override fun smoothScroll() {
+        formView.smoothScrollToPosition(35)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,11 +65,17 @@ class StyleFragment : BaseFragment() {
             content = "StyleTest"
         }
         singleLine {
-            autoFill = false
-            for (i in 1..13) {
-                addText("Style") {
+            for (i in 1..5) {
+                addSlider("Style${i}") {
                     typeset = VerticalTypeset()
-                    content = "StyleTest"
+                }
+            }
+        }
+        multiColumn {
+            column = 2f
+            for (i in 1..5) {
+                addSlider("Style${i}") {
+                    typeset = VerticalTypeset()
                 }
             }
         }

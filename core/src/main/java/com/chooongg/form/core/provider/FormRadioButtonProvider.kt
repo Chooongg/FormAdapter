@@ -19,7 +19,6 @@ import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.BaseOptionForm
 import com.chooongg.form.core.item.FormRadioButton
 import com.chooongg.form.core.option.IOption
-import com.chooongg.form.core.option.Option
 import com.chooongg.form.core.option.OptionStateAdapter
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
@@ -47,9 +46,6 @@ class FormRadioButtonProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        if (item is FormRadioButton && item.content is CharSequence) {
-            item.content = Option(null, (item.content as CharSequence).toString())
-        }
         with(view as RecyclerView) {
             val concatAdapter = adapter as ConcatAdapter
             val optionStateAdapter = concatAdapter.adapters[0] as OptionStateAdapter

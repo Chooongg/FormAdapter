@@ -27,7 +27,7 @@ class FormCheckBox : BaseOptionForm<IOption> {
             }
 
             is IOption -> listOf(value)
-            is String -> listOf(Option(null, value))
+            is Number, is CharSequence -> listOf(Option(null, value.toString()))
             else -> null
         }
     }

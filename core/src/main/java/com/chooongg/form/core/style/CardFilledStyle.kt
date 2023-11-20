@@ -31,7 +31,7 @@ class CardFilledStyle : BaseCardStyle {
             if (colorResId != null) {
                 context.getColor(colorResId!!)
             } else {
-                context.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorSurfaceContainerHighest))
+                context.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorSurfaceContainerHigh))
                     .use { it.getColor(0, Color.GRAY) }
             }
         )

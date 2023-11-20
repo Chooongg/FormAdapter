@@ -25,17 +25,18 @@ class Boundary(
     var bottom: Int = bottom
         internal set
 
-    constructor() : this(UNSET)
+    constructor() : this(NONE)
     constructor(any: Int) : this(any, any, any, any)
 
     companion object {
-        private const val UNSET = -1
+        const val NOTIFY_BOUNDARY_FLAG = "FormUpdateBoundary"
+
         const val NONE = 0
         const val MIDDLE = 1
         const val GLOBAL = 2
     }
 
-    @IntDef(UNSET, NONE, MIDDLE, GLOBAL)
+    @IntDef(NONE, MIDDLE, GLOBAL)
     annotation class BoundaryInt
 
     override fun equals(other: Any?): Boolean {

@@ -27,8 +27,10 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 27720) {
 
     var columnCount = 1
         private set(value) {
-            field = value
-            (adapter as? FormAdapter)?.columnCount = value
+            if (field != value){
+                field = value
+                (adapter as? FormAdapter)?.columnCount = value
+            }
         }
 
     internal var formMarginStart: Int = -1
@@ -66,12 +68,12 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 27720) {
     }
 
     override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
-        if (state.didStructureChange()) {
-            (adapter as? FormAdapter)?.partAdapters?.forEach {
-                it.executeUpdate(false)
-            }
-        }
         super.onLayoutChildren(recycler, state)
+//        if (state.didStructureChange()) {
+//            (adapter as? FormAdapter)?.partAdapters?.forEach {
+//                it.executeUpdate(false)
+//            }
+//        }
     }
 
     override fun onAttachedToWindow(view: RecyclerView) {

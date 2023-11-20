@@ -1,6 +1,6 @@
 package com.chooongg.form.core.part
 
-import android.util.Log
+import android.annotation.SuppressLint
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
-import com.chooongg.form.core.boundary.BoundaryCalculator
+import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.InternalFormNone
 import com.chooongg.form.core.item.VariantForm
@@ -24,12 +25,10 @@ import kotlinx.coroutines.cancel
 abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: BaseStyle) :
     RecyclerView.Adapter<FormViewHolder>() {
 
-    val spanCount = 27720
+    private val spanCount = 27720
 
     var adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         internal set
-
-    private val boundaryCalculator = BoundaryCalculator(this)
 
     protected val asyncDiffer = AsyncListDiffer(object : ListUpdateCallback {
         override fun onChanged(position: Int, count: Int, payload: Any?) = Unit
@@ -57,6 +56,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         executeUpdate(true)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     internal fun executeUpdate(isNotifyChanged: Boolean) {
         val groups = getOriginalItemList()
         val tempList = ArrayList<ArrayList<BaseForm>>()
@@ -82,7 +82,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
                                 child.autoFill = item.autoFill
                                 child.parentItem = item
                                 child.variantIndexInGroup = variantIndex
-                                child.countInCurrentVariant = tempGroup.size
+                                child.countInCurrentVariant = tempChildList.size
                                 child.indexInCurrentVariant = i
                             }
                             tempGroup.addAll(tempChildList)
@@ -109,6 +109,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
                 item.spanSize = when {
                     item.loneLine -> {
                         item.spanIndex = 0
+                        spanIndex = 0
                         spanCount
                     }
 
@@ -117,9 +118,6 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
                             item.spanIndex = 0
                             spanIndex = 0
                         }
-//                        if (item.countInCurrentVariant - 1 - item.indexInCurrentVariant == 0) {
-//                            isVariantEnd = true
-//                        }
                         spanCount / item.parentItem!!.getColumn(
                             item.countInCurrentVariant, formAdapter.columnCount
                         )
@@ -127,21 +125,35 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
                     else -> spanCount / formAdapter.columnCount
                 }
-                if (position > 0 && item.spanIndex == 0) {
-                    val lastItem = group[position - 1]
-                    if (lastItem.spanIndex + lastItem.spanSize < spanCount) {
-                        if (lastItem.autoFill) {
-                            lastItem.spanSize = spanCount - lastItem.spanIndex
+                if (position > 0) {
+                    if (item.spanIndex == 0) {
+                        val lastItem = group[position - 1]
+                        if (lastItem.spanIndex + lastItem.spanSize < spanCount) {
+                            if (lastItem.autoFill) {
+                                lastItem.spanSize = spanCount - lastItem.spanIndex
+                            } else {
+                                val noneIndex = lastItem.spanIndex + lastItem.spanSize
+                                tempGroup.add(InternalFormNone(noneIndex, spanCount - noneIndex))
+                            }
+                        }
+                    }
+                }
+                spanIndex = if (item.countInCurrentVariant - 1 - item.indexInCurrentVariant == 0) {
+                    0
+                } else if (spanIndex + item.spanSize < spanCount) {
+                    spanIndex + item.spanSize
+                } else 0
+                tempGroup.add(item)
+                if (position == group.lastIndex) {
+                    if (item.spanIndex + item.spanSize < spanCount) {
+                        if (item.autoFill) {
+                            item.spanSize = spanCount - item.spanIndex
                         } else {
-                            val noneIndex = lastItem.spanIndex + lastItem.spanSize
+                            val noneIndex = item.spanIndex + item.spanSize
                             tempGroup.add(InternalFormNone(noneIndex, spanCount - noneIndex))
                         }
                     }
                 }
-                spanIndex = if (spanIndex + item.spanSize < spanCount) {
-                    spanIndex + item.spanSize
-                } else 0
-                tempGroup.add(item)
             }
             tempList2.add(tempGroup)
         }
@@ -151,15 +163,103 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
                 item.groupIndex = index
                 item.countInGroup = group.size
                 item.positionInGroup = position
-                val partIndex = formAdapter.partAdapters.indexOf(this)
-                Log.e(
-                    "Form",
-                    "Position: ${partIndex} ${position}, ${item.spanIndex}, ${item.spanSize}, ${item.javaClass.simpleName}"
-                )
             }
         }
         asyncDiffer.submitList(ArrayList<BaseForm>().apply { tempList2.forEach { addAll(it) } }) {
-            if (isNotifyChanged) notifyItemRangeChanged(0, itemCount)
+            calculateBoundary()
+            if (isNotifyChanged) {
+                notifyItemRangeChanged(0, itemCount)
+            } else {
+                notifyItemRangeChanged(0, itemCount, Boundary.NOTIFY_BOUNDARY_FLAG)
+            }
+        }
+    }
+
+    private fun calculateBoundary() {
+        val partAdapters = formAdapter.partAdapters
+        val partIndex = partAdapters.indexOf(this)
+        itemList.forEachIndexed { index, item ->
+            // Start
+            if (item.spanIndex == 0) {
+                item.marginBoundary.start = Boundary.GLOBAL
+                item.insideBoundary.start = Boundary.GLOBAL
+            } else {
+                item.marginBoundary.start = Boundary.NONE
+                item.insideBoundary.start = FormManager.Default.horizontalMiddleBoundary
+            }
+            // End
+            if (item.spanIndex + item.spanSize >= spanCount) {
+                item.marginBoundary.end = Boundary.GLOBAL
+                item.insideBoundary.end = Boundary.GLOBAL
+            } else {
+                item.marginBoundary.end = Boundary.NONE
+                item.insideBoundary.end = style.horizontalMiddleBoundary
+            }
+            // Top
+            if (item.positionInGroup == 0) {
+                var isFirst = true
+                var beginIndex = partIndex
+                while (beginIndex - 1 >= 0) {
+                    if (partAdapters[beginIndex - 1].itemList.isNotEmpty()) {
+                        isFirst = false
+                        break
+                    } else beginIndex--
+                }
+                if (isFirst) {
+                    item.marginBoundary.top = Boundary.GLOBAL
+                    item.insideBoundary.top = Boundary.GLOBAL
+                } else {
+                    item.marginBoundary.top = Boundary.MIDDLE
+                    item.insideBoundary.top = Boundary.GLOBAL
+                }
+            } else if (item.spanIndex == 0) {
+                item.marginBoundary.top = Boundary.NONE
+                item.insideBoundary.top = Boundary.MIDDLE
+            } else {
+                var beginIndex = index - 1
+                var beginItem = getItem(beginIndex)
+                while (beginItem.spanIndex != 0) {
+                    beginIndex--
+                    beginItem = getItem(beginIndex)
+                }
+                item.marginBoundary.top = beginItem.marginBoundary.top
+                item.insideBoundary.top = beginItem.insideBoundary.top
+            }
+        }
+        for (index in itemList.lastIndex downTo 0) {
+            val item = getItem(index)
+            // Bottom
+            if (item.countInGroup - 1 - item.positionInGroup == 0) {
+                var isLast = true
+                var lastIndex = partIndex
+                while (lastIndex + 1 < partAdapters.size) {
+                    if (partAdapters[lastIndex + 1].itemList.isNotEmpty()) {
+                        isLast = false
+                        break
+                    } else lastIndex++
+                }
+                if (isLast) {
+                    item.marginBoundary.bottom = Boundary.GLOBAL
+                    item.insideBoundary.bottom = Boundary.GLOBAL
+                } else {
+                    item.marginBoundary.bottom = Boundary.MIDDLE
+                    item.insideBoundary.bottom = Boundary.GLOBAL
+                }
+            } else if (item.spanIndex + item.spanSize == spanCount) {
+                item.marginBoundary.bottom = Boundary.NONE
+                item.insideBoundary.bottom = Boundary.MIDDLE
+            } else {
+                var lastIndex = index + 1
+                var lastItem = getItem(lastIndex)
+                while (lastIndex > 0 && lastItem.countInGroup - 1 - lastItem.positionInGroup != 0
+                    && (lastIndex + 1 < itemList.size && getItem(lastIndex + 1).spanIndex != 0)
+                ) {
+                    lastIndex++
+                    lastItem = getItem(lastIndex)
+                }
+                item.marginBoundary.bottom = getItem(lastIndex).marginBoundary.bottom
+                item.insideBoundary.bottom = getItem(lastIndex).insideBoundary.bottom
+            }
         }
     }
 
@@ -192,7 +292,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         val typeset = formAdapter.getTypeset4ItemViewType(viewType)
         val provider = formAdapter.getProvider4ItemViewType(viewType)
         style.createSizeInfo(this)
-        val styleLayout = if (provider !is InternalFormNoneProvider && style.isDecorateNoneItem()) {
+        val styleLayout = if (provider !is InternalFormNoneProvider || style.isDecorateNoneItem()) {
             style.onCreateViewHolder(parent)?.apply {
                 clipChildren = false
                 clipToPadding = false
@@ -214,20 +314,19 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
         val item = getItem(position)
-        boundaryCalculator.calculateBoundary(item, position)
         val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
         val provider = formAdapter.getProvider4ItemViewType(holder.itemViewType)
-        if (provider !is InternalFormNoneProvider && style.isDecorateNoneItem()) {
-            formAdapter.getStyle4ItemViewType(holder.itemViewType).apply {
-                onBindViewHolder(holder, holder.styleLayout, item)
-            }
+        if (provider !is InternalFormNoneProvider || style.isDecorateNoneItem()) {
+            style.onBindViewHolder(holder, holder.styleLayout, item)
         }
         formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
             setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
             onBindViewHolder(holder, holder.typesetLayout, item)
         }
         provider.apply {
-            onBindViewHolder(adapterScope, holder, holder.view, item, formAdapter.isEnabled)
+            onBindViewHolder(
+                adapterScope, holder, holder.view, item, item.isRealEnable(formAdapter.isEnabled)
+            )
         }
     }
 
@@ -238,28 +337,48 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     ) {
         val isHasBind = payloads.isEmpty()
         val item = getItem(position)
+        val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
+        val typeset = formAdapter.getTypeset4ItemViewType(holder.itemViewType)
+        val provider = formAdapter.getProvider4ItemViewType(holder.itemViewType)
         if (isHasBind) {
-            boundaryCalculator.calculateBoundary(item, position)
-            val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
-            val provider = formAdapter.getProvider4ItemViewType(holder.itemViewType)
-            if (provider !is InternalFormNoneProvider && style.isDecorateNoneItem()) {
+            if (provider !is InternalFormNoneProvider || style.isDecorateNoneItem()) {
                 style.onBindViewHolder(holder, holder.styleLayout, item)
             }
-            formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
-                setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
-                onBindViewHolder(holder, holder.typesetLayout, item)
-            }
+            typeset.setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
+            typeset.onBindViewHolder(holder, holder.typesetLayout, item)
         }
-        formAdapter.getProvider4ItemViewType(holder.itemViewType).apply {
-            if (isHasBind) {
-                onBindViewHolder(adapterScope, holder, holder.view, item, formAdapter.isEnabled)
-            } else payloads.forEach {
-                if (it == FormAdapter.UPDATE_PAYLOAD_FLAG) {
-                    onBindViewHolderUpdate(
-                        adapterScope, holder, holder.view, item, formAdapter.isEnabled
+        if (isHasBind) {
+            provider.onBindViewHolder(
+                adapterScope, holder, holder.view, item, item.isRealEnable(formAdapter.isEnabled)
+            )
+        } else payloads.forEach {
+            when (it) {
+                Boundary.NOTIFY_BOUNDARY_FLAG -> {
+                    if (provider !is InternalFormNoneProvider || style.isDecorateNoneItem()) {
+                        style.onBindViewHolder(holder, holder.styleLayout, item)
+                    }
+                    typeset.setTypesetLayoutPadding(
+                        holder, holder.typesetLayout, style.insideInfo, item
                     )
-                } else onBindViewHolderOtherPayload(
-                    adapterScope, holder, holder.view, item, formAdapter.isEnabled, it
+                }
+
+                FormAdapter.UPDATE_PAYLOAD_FLAG -> {
+                    provider.onBindViewHolderUpdate(
+                        adapterScope,
+                        holder,
+                        holder.view,
+                        item,
+                        item.isRealEnable(formAdapter.isEnabled)
+                    )
+                }
+
+                else -> provider.onBindViewHolderOtherPayload(
+                    adapterScope,
+                    holder,
+                    holder.view,
+                    item,
+                    item.isRealEnable(formAdapter.isEnabled),
+                    it
                 )
             }
         }

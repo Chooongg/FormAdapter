@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatRatingBar
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.res.use
 import androidx.core.view.updateLayoutParams
 import com.chooongg.form.core.FormViewHolder
@@ -35,13 +34,6 @@ class FormRatingProvider : BaseFormProvider() {
                     it.context, null, com.google.android.material.R.attr.ratingBarStyleIndicator
                 ).apply {
                     id = R.id.formInternalContentChildView
-                    val drawable = ResourcesCompat.getDrawable(
-                        context.resources, R.drawable.layer_form_star, context.theme
-                    )
-//                    progressDrawable = drawable
-//                    setIndeterminateDrawableTiled(drawable)
-                    setProgressDrawableTiled(drawable)
-                    progressDrawable
                 }, FrameLayout.LayoutParams(-2, -2)
             )
         }

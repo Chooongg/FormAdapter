@@ -250,8 +250,6 @@ abstract class BaseForm(
     //</editor-fold>
 
     internal fun resetInternalValues() {
-        marginBoundary = Boundary()
-        insideBoundary = Boundary()
         groupCount = -1
         groupIndex = -1
         countInGroup = -1

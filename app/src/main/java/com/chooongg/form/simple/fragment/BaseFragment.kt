@@ -30,13 +30,20 @@ abstract class BaseFragment : Fragment() {
         toolbar = view.findViewById(R.id.toolbar)
         formView = view.findViewById(R.id.formView)
         toolbar.setOnMenuItemClickListener {
-            change()
+            when (it.itemId) {
+                R.id.change -> change()
+                R.id.scroll -> smoothScroll()
+                else -> return@setOnMenuItemClickListener false
+            }
+
             true
         }
         return view
     }
 
     abstract fun change()
+
+    abstract fun smoothScroll()
 
     override fun onResume() {
         super.onResume()

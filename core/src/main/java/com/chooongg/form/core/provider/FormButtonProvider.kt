@@ -43,7 +43,7 @@ class FormButtonProvider : BaseFormProvider() {
     ) {
         val itemButton = item as? FormButton
         with(view as MaterialButton) {
-            isEnabled = item.isRealEnable(enabled)
+            isEnabled = enabled
             text = FormUtils.getText(context, item.name)
             hint = FormUtils.getText(context, item.hint)
             holder.style.iconProvider.setButtonIcon(this,itemButton?.icon)
