@@ -35,23 +35,23 @@ class StyleFragment : BaseFragment() {
         toolbar.setTitle(R.string.style)
         formView.setFormAdapter(adapter)
         adapter.setNewInstance {
-            addPart {
+            initPart {
                 partName = "NoneNotAlignmentStyle"
                 addChild()
             }
-            addPart(NoneStyle()) {
+            initPart(NoneStyle()) {
                 partName = "NoneStyle"
                 addChild()
             }
-            addPart(CardElevatedStyle()) {
+            initPart(CardElevatedStyle()) {
                 partName = "CardElevatedStyle"
                 addChild()
             }
-            addPart(CardFilledStyle()) {
+            initPart(CardFilledStyle()) {
                 partName = "CardFilledStyle"
                 addChild()
             }
-            addPart(CardOutlinedStyle()) {
+            initPart(CardOutlinedStyle()) {
                 partName = "CardOutlinedStyle"
                 addChild()
             }

@@ -32,7 +32,7 @@ class BasicViewModel : ViewModel() {
 
     init {
         adapter.setNewInstance {
-            addPart(CardElevatedStyle()) {
+            initPart(CardElevatedStyle()) {
                 addButton("Button(Tonal)") {
                     field = "button"
                     buttonStyle = FormButton.ButtonStyle.TONAL

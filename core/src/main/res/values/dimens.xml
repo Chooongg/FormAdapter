@@ -5,28 +5,21 @@
     <dimen name="formMarginTop">16dp</dimen>
     <dimen name="formMarginEnd">16dp</dimen>
     <dimen name="formMarginBottom">16dp</dimen>
-
     <dimen name="formMarginMiddleStart">8dp</dimen>
     <dimen name="formMarginMiddleTop">8dp</dimen>
     <dimen name="formMarginMiddleEnd">8dp</dimen>
     <dimen name="formMarginMiddleBottom">8dp</dimen>
-
     <dimen name="formInsideStart">16dp</dimen>
     <dimen name="formInsideTop">16dp</dimen>
     <dimen name="formInsideEnd">16dp</dimen>
     <dimen name="formInsideBottom">16dp</dimen>
-
     <dimen name="formInsideMiddleStart">8dp</dimen>
     <dimen name="formInsideMiddleTop">8dp</dimen>
     <dimen name="formInsideMiddleEnd">8dp</dimen>
     <dimen name="formInsideMiddleBottom">8dp</dimen>
-
     <dimen name="formErrorNotifyCorner">8dp</dimen>
-
-    <dimen name="formIconPadding">8dp</dimen>
-
-    <dimen name="formCardElevation">1dp</dimen>
-
     <dimen name="formFadingEdgeLength">16dp</dimen>
+    <dimen name="formIconPadding">8dp</dimen>
+    <dimen name="formCardElevation">1dp</dimen>
 
 </resources>

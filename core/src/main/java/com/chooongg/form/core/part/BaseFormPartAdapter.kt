@@ -30,7 +30,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     var adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
         internal set
 
-    protected val asyncDiffer = AsyncListDiffer(object : ListUpdateCallback {
+    private val asyncDiffer = AsyncListDiffer(object : ListUpdateCallback {
         override fun onChanged(position: Int, count: Int, payload: Any?) = Unit
 
         override fun onRemoved(position: Int, count: Int) =
@@ -48,7 +48,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             oldItem.id == newItem.id && oldItem.typeset == newItem.typeset
     }).build())
 
-    val itemList: List<BaseForm> get() = asyncDiffer.currentList
+    private val itemList: List<BaseForm> get() = asyncDiffer.currentList
 
     fun update() {
         adapterScope.cancel()
@@ -437,10 +437,10 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
                 if (tempEmpty != itemList.isEmpty()) {
                     val partIndex = formAdapter.partAdapters.indexOf(this)
                     if (partIndex > 0) {
-                        formAdapter.partAdapters[partIndex - 1].update()
+                        formAdapter.partAdapters[partIndex - 1].executeUpdate(false)
                     }
                     if (partIndex < formAdapter.partAdapters.size - 1) {
-                        formAdapter.partAdapters[partIndex + 1].update()
+                        formAdapter.partAdapters[partIndex + 1].executeUpdate(false)
                     }
                 }
             }

@@ -7,7 +7,6 @@ import android.graphics.drawable.TransitionDrawable
 import android.graphics.drawable.shapes.RoundRectShape
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.use
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.item.BaseForm
@@ -124,13 +123,10 @@ abstract class BaseFormProvider {
             val color = holder.itemView.context
                 .obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorPrimary))
                 .use { it.getColor(0, Color.GRAY) }
-            val corner =
-                holder.itemView.context.resources.getDimension(R.dimen.formErrorNotifyCorner)
+            val corner = holder.itemView.resources.getDimension(R.dimen.formErrorNotifyCorner)
             val shapeDrawable = ShapeDrawable(
                 RoundRectShape(
-                    floatArrayOf(
-                        corner, corner, corner, corner, corner, corner, corner, corner
-                    ),
+                    floatArrayOf(corner, corner, corner, corner, corner, corner, corner, corner),
                     null,
                     null
                 )
@@ -140,7 +136,7 @@ abstract class BaseFormProvider {
                 arrayOf(shapeDrawable, ColorDrawable(Color.TRANSPARENT))
             ).apply {
                 isCrossFadeEnabled = true
-                startTransition(1000)
+                startTransition(2000)
             }
             holder.itemView.foreground = drawable
         } else {

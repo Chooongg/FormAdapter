@@ -6,7 +6,6 @@ import android.view.Gravity
 import androidx.lifecycle.ViewModel
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.addButton
-import com.chooongg.form.core.addCardOutlinedPart
 import com.chooongg.form.core.addCheckBox
 import com.chooongg.form.core.addDivider
 import com.chooongg.form.core.addInput
@@ -27,6 +26,7 @@ import com.chooongg.form.core.enum.FormEnableMode
 import com.chooongg.form.core.enum.FormSelectorOpenMode
 import com.chooongg.form.core.enum.FormTimeMode
 import com.chooongg.form.core.enum.FormVisibilityMode
+import com.chooongg.form.core.initCardOutlinedPart
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.item.FormTime
 import com.chooongg.form.core.option.Option
@@ -38,7 +38,7 @@ class AdvancedViewModel : ViewModel() {
 
     init {
         adapter.setNewInstance {
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "VisibilityMode"
                 addButton("ENABLED") {
                     visibilityMode = FormVisibilityMode.ENABLED
@@ -53,7 +53,7 @@ class AdvancedViewModel : ViewModel() {
                     visibilityMode = FormVisibilityMode.NEVER
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "EnableMode"
                 addButton("ENABLED") {
                     enableMode = FormEnableMode.ENABLED
@@ -68,7 +68,7 @@ class AdvancedViewModel : ViewModel() {
                     enableMode = FormEnableMode.NEVER
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "ContentGravity"
                 addText("None") {
                     content = "Content"
@@ -86,7 +86,7 @@ class AdvancedViewModel : ViewModel() {
                     contentGravity = Gravity.CENTER
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "MultiColumnContentGravity"
                 addText("None") {
                     content = "Content"
@@ -104,7 +104,7 @@ class AdvancedViewModel : ViewModel() {
                     multiColumnContentGravity = Gravity.CENTER
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Button"
                 addButton("Default")
                 addButton("Text") {
@@ -132,7 +132,7 @@ class AdvancedViewModel : ViewModel() {
                     gravity = Gravity.CENTER
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "CheckBox"
                 addCheckBox("Default") {
                     options = listOf(
@@ -154,7 +154,7 @@ class AdvancedViewModel : ViewModel() {
                     }
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Divider"
                 addDivider()
                 addDivider {
@@ -174,7 +174,7 @@ class AdvancedViewModel : ViewModel() {
                     showAtEdge = true
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Input"
                 addInput("Default")
                 addInput("Remote") {
@@ -199,16 +199,16 @@ class AdvancedViewModel : ViewModel() {
                 addInputFilled("Filled")
                 addInputOutlined("Outlined")
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Label"
                 addLabel("Color") {
                     color = { ColorStateList.valueOf(Color.RED) }
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Menu"
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "RadioButton"
                 addRadioButton("Default") {
                     options = listOf(
@@ -230,7 +230,7 @@ class AdvancedViewModel : ViewModel() {
                     }
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Rating"
                 addRating("Default")
                 addRating("3 Star") {
@@ -248,7 +248,7 @@ class AdvancedViewModel : ViewModel() {
                     content = 2.5f
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Selector"
                 addSelector("Default") {
                     options = listOf(
@@ -280,7 +280,7 @@ class AdvancedViewModel : ViewModel() {
                     )
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Slider"
                 addSlider("Default")
                 addSlider("Step") {
@@ -302,18 +302,18 @@ class AdvancedViewModel : ViewModel() {
                     formatter { "${it.toInt()} Size" }
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Switch"
                 addSwitch("Default")
                 addSwitchMaterial("Material")
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Text"
                 addText("Default") {
                     content = "Content"
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Time"
                 addTime("Time") {
                     timeMode = FormTimeMode.TIME
@@ -331,7 +331,7 @@ class AdvancedViewModel : ViewModel() {
                     showFormatPattern = "yyyy-MM-dd HH:mm:ss"
                 }
             }
-            addCardOutlinedPart {
+            initCardOutlinedPart {
                 partName = "Tip"
                 addTip("Color") {
                     color = { ColorStateList.valueOf(Color.RED) }

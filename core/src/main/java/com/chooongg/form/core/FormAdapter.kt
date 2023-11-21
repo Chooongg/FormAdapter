@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.chooongg.form.core.data.FormAdapterData
 import com.chooongg.form.core.data.FormDynamicPartData
 import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.item.BaseForm
@@ -73,9 +74,11 @@ open class FormAdapter(isEnabled: Boolean) :
         concatAdapter.registerAdapterDataObserver(dataObserver)
     }
 
-    fun setNewInstance(block: FormAdapter.() -> Unit) {
+    fun setNewInstance(block: FormAdapterData.() -> Unit) {
         clear()
-        block(this)
+        val data = FormAdapterData(this)
+        block(data)
+        data.getParts().forEach { concatAdapter.addAdapter(it) }
         updateForm()
     }
 
@@ -126,7 +129,7 @@ open class FormAdapter(isEnabled: Boolean) :
 
     fun addPart(
         style: BaseStyle = NoneStyle(),
-        updateAdjacentAdapter: Boolean = false,
+        updateAdjacentAdapter: Boolean = true,
         block: FormPartData.() -> Unit
     ) {
         val adapter = FormPartAdapter(this, style)
@@ -134,15 +137,15 @@ open class FormAdapter(isEnabled: Boolean) :
         addPart(adapter, updateAdjacentAdapter)
     }
 
-    fun addPart(adapter: FormPartAdapter?, updateAdjacentAdapter: Boolean = false) {
+    fun addPart(adapter: FormPartAdapter?, updateAdjacentAdapter: Boolean = true) {
         if (adapter != null) concatAdapter.addAdapter(adapter)
         if (!updateAdjacentAdapter || recyclerView == null || concatAdapter.adapters.size - 2 < 0) return
-        partAdapters[concatAdapter.adapters.size - 2].update()
+        partAdapters[concatAdapter.adapters.size - 2].executeUpdate(false)
     }
 
     fun addDynamicPart(
         style: BaseStyle = NoneStyle(),
-        updateAdjacentAdapter: Boolean = false,
+        updateAdjacentAdapter: Boolean = true,
         block: FormDynamicPartData.() -> Unit
     ) {
         val adapter = FormDynamicPartAdapter(this, style)
@@ -150,10 +153,10 @@ open class FormAdapter(isEnabled: Boolean) :
         addDynamicPart(adapter, updateAdjacentAdapter)
     }
 
-    fun addDynamicPart(adapter: FormDynamicPartAdapter?, updateAdjacentAdapter: Boolean = false) {
+    fun addDynamicPart(adapter: FormDynamicPartAdapter?, updateAdjacentAdapter: Boolean = true) {
         if (adapter != null) concatAdapter.addAdapter(adapter)
         if (!updateAdjacentAdapter || recyclerView == null || concatAdapter.adapters.size - 2 < 0) return
-        partAdapters[concatAdapter.adapters.size - 2].update()
+        partAdapters[concatAdapter.adapters.size - 2].executeUpdate(false)
     }
 
     fun removeAdapter(adapter: RecyclerView.Adapter<ViewHolder>) {
