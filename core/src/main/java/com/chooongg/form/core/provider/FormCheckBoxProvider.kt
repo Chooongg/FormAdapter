@@ -7,10 +7,13 @@ import android.graphics.drawable.RippleDrawable
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.res.use
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.RecycledViewPool
 import com.chooongg.form.core.FormUtils
+import com.chooongg.form.core.FormViewChildHolder
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.getTextAppearance
@@ -18,24 +21,55 @@ import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.BaseOptionForm
 import com.chooongg.form.core.item.FormCheckBox
 import com.chooongg.form.core.option.IOption
-import com.chooongg.form.core.option.OptionStateAdapter
-import com.chooongg.form.core.part.BaseFormPartAdapter
+import com.chooongg.form.core.option.OptionLoadResult
 import com.chooongg.form.core.style.BaseStyle
 import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.google.android.material.checkbox.MaterialCheckBox
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.google.android.material.textview.MaterialTextView
 import kotlinx.coroutines.CoroutineScope
 import kotlin.math.min
 
 class FormCheckBoxProvider : BaseFormProvider() {
 
+    private val recycledPool = RecycledViewPool()
+
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
-        RecyclerView(parent.context).also {
-            it.id = R.id.formInternalContentView
-            it.isNestedScrollingEnabled = false
-            it.overScrollMode = View.OVER_SCROLL_NEVER
-            it.layoutManager = FlexboxLayoutManager(it.context)
-            it.adapter = ConcatAdapter(OptionStateAdapter(style), ChildAdapter(style))
+        FrameLayout(parent.context).also { outer ->
+            outer.addView(LinearLayoutCompat(outer.context).also {
+                it.orientation = LinearLayoutCompat.HORIZONTAL
+                it.setPaddingRelative(
+                    style.insideInfo.middleStart, style.insideInfo.middleTop,
+                    style.insideInfo.middleEnd, style.insideInfo.middleBottom
+                )
+                val textView = MaterialTextView(it.context).apply {
+                    id = R.id.formInternalContentChildView
+                    setTextAppearance(getTextAppearance(this, R.attr.formTextAppearanceContent))
+                }
+                val textHeight = FormUtils.getFontHeight(textView)
+                it.addView(textView, LinearLayoutCompat.LayoutParams(0, -2).apply {
+                    weight = 1f
+                    gravity = Gravity.CENTER_VERTICAL
+                })
+                it.addView(CircularProgressIndicator(it.context).apply {
+                    id = R.id.formInternalContentChildSecondView
+                    isIndeterminate = true
+                    trackThickness = textHeight / 10
+                    indicatorSize = textHeight / 2
+                }, LinearLayoutCompat.LayoutParams(-2, -2).apply {
+                    gravity = Gravity.CENTER_VERTICAL
+                    marginStart = style.insideInfo.middleEnd
+                })
+            })
+            outer.addView(RecyclerView(outer.context).apply {
+                id = R.id.formInternalContentView
+                isNestedScrollingEnabled = false
+                overScrollMode = View.OVER_SCROLL_NEVER
+                setRecycledViewPool(recycledPool)
+                layoutManager = FlexboxLayoutManager(context)
+                adapter = ChildAdapter(style)
+            })
         }
 
     override fun onBindViewHolder(
@@ -45,13 +79,10 @@ class FormCheckBoxProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        with(view as RecyclerView) {
-            val concatAdapter = adapter as ConcatAdapter
-            val optionStateAdapter = concatAdapter.adapters[0] as OptionStateAdapter
-            val childAdapter = concatAdapter.adapters[1] as ChildAdapter
-            configOption(holder, optionStateAdapter, childAdapter, item, enabled)
-            val flexboxLayoutManager = layoutManager as FlexboxLayoutManager
+        with(view.findViewById<RecyclerView>(R.id.formInternalContentView)) {
             val gravity = holder.typeset.obtainContentGravity(holder, item)
+            configOption(holder, adapter as ChildAdapter, item, gravity, enabled)
+            val flexboxLayoutManager = layoutManager as FlexboxLayoutManager
             flexboxLayoutManager.justifyContent = when {
                 gravity and Gravity.END == Gravity.END -> JustifyContent.FLEX_END
                 gravity and Gravity.CENTER == Gravity.CENTER -> JustifyContent.CENTER
@@ -70,41 +101,37 @@ class FormCheckBoxProvider : BaseFormProvider() {
         payload: Any
     ) {
         if (payload == BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG) {
-            with(view as RecyclerView) {
-                val concatAdapter = adapter as ConcatAdapter
-                val optionStateAdapter = concatAdapter.adapters[0] as OptionStateAdapter
-                val childAdapter = concatAdapter.adapters[1] as ChildAdapter
-                configOption(holder, optionStateAdapter, childAdapter, item, enabled)
-            }
-        }
-    }
-
-    private fun loadOption(holder: FormViewHolder, item: BaseForm?) {
-        val itemOption = item as? BaseOptionForm<*>
-        if (itemOption?.isNeedToLoadOption(holder) == true) {
-            val adapter = holder.bindingAdapter as? BaseFormPartAdapter ?: return
-            item.loadOption(holder) {
-                holder.itemView.post {
-                    val position = adapter.indexOf(item)
-                    if (position != null) {
-                        adapter.notifyItemChanged(
-                            position, BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG
-                        )
-                    }
-                }
+            with(view.findViewById<RecyclerView>(R.id.formInternalContentView)) {
+                configOption(holder, adapter as ChildAdapter, item, null, enabled)
             }
         }
     }
 
     private fun configOption(
         holder: FormViewHolder,
-        optionStateAdapter: OptionStateAdapter,
         childAdapter: ChildAdapter,
         item: BaseForm?,
+        gravity: Int?,
         enabled: Boolean
     ) {
         if (item !is FormCheckBox) return
-        optionStateAdapter.update(item.optionLoadResult, item.options.isNullOrEmpty(), enabled)
+        with(holder.itemView.findViewById<MaterialTextView>(R.id.formInternalContentChildView)) {
+            if (gravity != null) setGravity(gravity)
+            hint = when (item.optionLoadResult) {
+                is OptionLoadResult.Loading -> context.getString(R.string.formOptionsLoading)
+                is OptionLoadResult.Error -> context.getString(R.string.formOptionsError)
+                is OptionLoadResult.Empty -> context.getString(R.string.formOptionsEmpty)
+                else -> if (item.options.isNullOrEmpty()) {
+                    context.getString(R.string.formOptionsEmpty)
+                } else {
+                    null
+                }
+            }
+        }
+        with(holder.itemView.findViewById<CircularProgressIndicator>(R.id.formInternalContentChildSecondView)) {
+            visibility =
+                if (item.optionLoadResult is OptionLoadResult.Loading) View.VISIBLE else View.GONE
+        }
         childAdapter.provider = this
         childAdapter.formHolder = holder
         childAdapter.item = item
@@ -112,7 +139,7 @@ class FormCheckBoxProvider : BaseFormProvider() {
     }
 
     private class ChildAdapter(private val style: BaseStyle) :
-        RecyclerView.Adapter<ChildAdapter.ChildViewHolder>() {
+        RecyclerView.Adapter<FormViewChildHolder>() {
 
         var provider: FormCheckBoxProvider? = null
 
@@ -124,8 +151,6 @@ class FormCheckBoxProvider : BaseFormProvider() {
 
         private var options: List<IOption> = listOf()
 
-        private class ChildViewHolder(view: View) : RecyclerView.ViewHolder(view)
-
         @SuppressLint("NotifyDataSetChanged")
         fun update(options: List<IOption>?, enabled: Boolean) {
             this.options = options ?: listOf()
@@ -135,7 +160,7 @@ class FormCheckBoxProvider : BaseFormProvider() {
 
         override fun getItemCount() = options.size
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ChildViewHolder(
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = FormViewChildHolder(
             MaterialCheckBox(parent.context).apply {
                 minWidth = 0
                 minHeight = 0
@@ -163,7 +188,7 @@ class FormCheckBoxProvider : BaseFormProvider() {
         )
 
         @Suppress("UNCHECKED_CAST")
-        override fun onBindViewHolder(holder: ChildViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: FormViewChildHolder, position: Int) {
             val option = options[position]
             with(holder.itemView as MaterialCheckBox) {
                 setOnCheckedChangeListener(null)

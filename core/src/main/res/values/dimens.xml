@@ -21,6 +21,8 @@
     <dimen name="formInsideMiddleEnd">8dp</dimen>
     <dimen name="formInsideMiddleBottom">8dp</dimen>
 
+    <dimen name="formErrorNotifyCorner">8dp</dimen>
+
     <dimen name="formIconPadding">8dp</dimen>
 
     <dimen name="formCardElevation">1dp</dimen>

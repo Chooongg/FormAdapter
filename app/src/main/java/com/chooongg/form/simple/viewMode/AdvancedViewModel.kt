@@ -270,6 +270,7 @@ class AdvancedViewModel : ViewModel() {
                     }
                 }
                 addSelector("Page") {
+                    field = "selector"
                     openMode = FormSelectorOpenMode.PAGE
                     options = listOf(
                         Option("Option1", "1"),

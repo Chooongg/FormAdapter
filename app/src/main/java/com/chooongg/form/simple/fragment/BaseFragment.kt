@@ -33,6 +33,7 @@ abstract class BaseFragment : Fragment() {
             when (it.itemId) {
                 R.id.change -> change()
                 R.id.scroll -> smoothScroll()
+                R.id.error -> errorNotify()
                 else -> return@setOnMenuItemClickListener false
             }
 
@@ -44,6 +45,8 @@ abstract class BaseFragment : Fragment() {
     abstract fun change()
 
     abstract fun smoothScroll()
+
+    abstract fun errorNotify()
 
     override fun onResume() {
         super.onResume()

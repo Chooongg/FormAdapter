@@ -27,6 +27,10 @@ class StyleFragment : BaseFragment() {
         formView.smoothScrollToPosition(35)
     }
 
+    override fun errorNotify() {
+        adapter.errorNotifyOfField("input")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setTitle(R.string.style)
         formView.setFormAdapter(adapter)

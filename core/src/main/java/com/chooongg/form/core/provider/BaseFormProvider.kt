@@ -1,9 +1,17 @@
 package com.chooongg.form.core.provider
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.TransitionDrawable
+import android.graphics.drawable.shapes.RoundRectShape
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.use
 import com.chooongg.form.core.FormViewHolder
+import com.chooongg.form.core.R
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.item.BaseOptionForm
 import com.chooongg.form.core.item.LinkageForm
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
@@ -32,6 +40,14 @@ abstract class BaseFormProvider {
         enabled: Boolean
     ) = Unit
 
+    open fun onBindViewHolderErrorNotify(
+        scope: CoroutineScope,
+        holder: FormViewHolder,
+        view: View,
+        item: BaseForm,
+        enabled: Boolean
+    ) = errorNotify(holder, item)
+
     open fun onBindViewHolderOtherPayload(
         scope: CoroutineScope,
         holder: FormViewHolder,
@@ -43,6 +59,7 @@ abstract class BaseFormProvider {
 
     open fun onViewRecycled(holder: FormViewHolder, view: View) {
         holder.job?.cancel()
+        holder.itemView.foreground = null
     }
 
     open fun onViewAttachedToWindow(holder: FormViewHolder, view: View) = Unit
@@ -82,6 +99,53 @@ abstract class BaseFormProvider {
             field,
             content
         )
+    }
+
+    protected fun loadOption(holder: FormViewHolder, item: BaseForm?) {
+        val itemOption = item as? BaseOptionForm<*>
+        if (itemOption?.isNeedToLoadOption(holder) == true) {
+            val adapter = holder.bindingAdapter as? BaseFormPartAdapter ?: return
+            item.loadOption(holder) {
+                holder.itemView.post {
+                    val position = adapter.indexOf(item)
+                    if (position >= 0) {
+                        adapter.notifyItemChanged(
+                            position, BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    open fun errorNotify(holder: FormViewHolder, item: BaseForm) {
+        if (item.errorNotify) {
+            item.errorNotify = false
+            val color = holder.itemView.context
+                .obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorPrimary))
+                .use { it.getColor(0, Color.GRAY) }
+            val corner =
+                holder.itemView.context.resources.getDimension(R.dimen.formErrorNotifyCorner)
+            val shapeDrawable = ShapeDrawable(
+                RoundRectShape(
+                    floatArrayOf(
+                        corner, corner, corner, corner, corner, corner, corner, corner
+                    ),
+                    null,
+                    null
+                )
+            )
+            shapeDrawable.paint.color = (66 shl 24) + (0x00ffffff and color)
+            val drawable = TransitionDrawable(
+                arrayOf(shapeDrawable, ColorDrawable(Color.TRANSPARENT))
+            ).apply {
+                isCrossFadeEnabled = true
+                startTransition(1000)
+            }
+            holder.itemView.foreground = drawable
+        } else {
+            holder.itemView.foreground = null
+        }
     }
 
     override fun equals(other: Any?): Boolean {

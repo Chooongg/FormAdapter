@@ -23,6 +23,10 @@ class BasicFragment : BaseFragment() {
         formView.smoothScrollToPosition(10)
     }
 
+    override fun errorNotify() {
+        model.adapter.errorNotifyOfField("input")
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setTitle(R.string.basic)
         formView.setFormAdapter(model.adapter)

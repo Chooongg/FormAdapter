@@ -24,7 +24,6 @@ import com.chooongg.form.core.item.BaseOptionForm
 import com.chooongg.form.core.item.FormSelector
 import com.chooongg.form.core.option.FormSelectorPageActivity
 import com.chooongg.form.core.option.OptionLoadResult
-import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
@@ -152,23 +151,6 @@ class FormSelectorProvider : BaseFormProvider() {
             FormSelectorOpenMode.PAGE -> false
             FormSelectorOpenMode.AUTO -> (item.options?.size ?: 0) <= 30
             else -> false
-        }
-    }
-
-    private fun loadOption(holder: FormViewHolder, item: BaseForm?) {
-        val itemOption = item as? BaseOptionForm<*>
-        if (itemOption?.isNeedToLoadOption(holder) == true) {
-            val adapter = holder.bindingAdapter as? BaseFormPartAdapter ?: return
-            item.loadOption(holder) {
-                holder.itemView.post {
-                    val position = adapter.indexOf(item)
-                    if (position != null) {
-                        adapter.notifyItemChanged(
-                            position, BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG
-                        )
-                    }
-                }
-            }
         }
     }
 

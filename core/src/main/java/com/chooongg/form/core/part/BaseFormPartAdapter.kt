@@ -272,12 +272,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         block: BaseForm.() -> Unit
     ): Boolean
 
-    fun indexOf(item: BaseForm): Int? {
-        itemList.forEachIndexed { index, it ->
-            if (it.id == item.id) return index
-        }
-        return null
-    }
+    fun indexOf(item: BaseForm) = itemList.indexOf(item)
 
     override fun getItemCount() = itemList.size
 
@@ -327,6 +322,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             onBindViewHolder(
                 adapterScope, holder, holder.view, item, item.isRealEnable(formAdapter.isEnabled)
             )
+            errorNotify(holder, item)
         }
     }
 
@@ -351,6 +347,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             provider.onBindViewHolder(
                 adapterScope, holder, holder.view, item, item.isRealEnable(formAdapter.isEnabled)
             )
+            provider.errorNotify(holder, item)
         } else payloads.forEach {
             when (it) {
                 Boundary.NOTIFY_BOUNDARY_FLAG -> {
@@ -364,6 +361,16 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
                 FormAdapter.UPDATE_PAYLOAD_FLAG -> {
                     provider.onBindViewHolderUpdate(
+                        adapterScope,
+                        holder,
+                        holder.view,
+                        item,
+                        item.isRealEnable(formAdapter.isEnabled)
+                    )
+                }
+
+                FormAdapter.ERROR_NOTIFY_FLAG -> {
+                    provider.onBindViewHolderErrorNotify(
                         adapterScope,
                         holder,
                         holder.view,

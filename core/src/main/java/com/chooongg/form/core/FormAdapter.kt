@@ -20,6 +20,7 @@ open class FormAdapter(isEnabled: Boolean) :
 
     companion object {
         const val UPDATE_PAYLOAD_FLAG = "UPDATE"
+        const val ERROR_NOTIFY_FLAG = "ERROR_NOTIFY"
     }
 
     internal var recyclerView: RecyclerView? = null
@@ -93,6 +94,32 @@ open class FormAdapter(isEnabled: Boolean) :
             if (it.findOfField(field, update, hasPayload, block)) return true
         }
         return false
+    }
+
+    fun errorNotifyOfField(field: String) {
+        var position = 0
+        partAdapters.forEach {
+            if (it.findOfField(field, false, false) {
+                    errorNotify = true
+                    val indexOf = it.indexOf(this)
+                    if (indexOf >= 0) {
+                        position += indexOf
+                        val layoutManager = recyclerView?.layoutManager as? FormLayoutManager
+                        if (layoutManager != null) {
+                            val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
+                            val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
+                            if (position in firstVisiblePosition..lastVisiblePosition) {
+                                it.notifyItemChanged(indexOf, ERROR_NOTIFY_FLAG)
+                            }
+                        }
+                        recyclerView?.smoothScrollToPosition(position)
+                    }
+                }) {
+                return
+            } else {
+                position += it.itemCount
+            }
+        }
     }
 
     //<editor-fold desc="ConcatAdapter 覆写">
@@ -195,10 +222,6 @@ open class FormAdapter(isEnabled: Boolean) :
         concatAdapter.onDetachedFromRecyclerView(recyclerView)
         clearPool()
         this.recyclerView = null
-    }
-
-    fun scrollToPosition(globalPosition: Int) {
-        recyclerView?.smoothScrollToPosition(globalPosition)
     }
 
     //</editor-fold>

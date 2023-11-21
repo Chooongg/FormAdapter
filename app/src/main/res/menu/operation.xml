@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/error"
+        android:icon="@drawable/ic_error"
+        android:title="ErrorNotify"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/scroll"
         android:icon="@drawable/ic_smooth_scroll"
         android:title="SmoothScroll"

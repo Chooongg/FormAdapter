@@ -97,6 +97,11 @@ abstract class BaseForm(
      */
     open var autoFill = true
 
+    /**
+     * 错误通知
+     */
+    var errorNotify = false
+
     //</editor-fold>
 
     //<editor-fold desc="接口 interface">
