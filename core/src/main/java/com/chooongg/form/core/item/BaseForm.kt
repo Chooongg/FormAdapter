@@ -61,11 +61,6 @@ abstract class BaseForm(
     var required: Boolean = false
 
     /**
-     * 输出模式
-     */
-    var outputMode: FormOutputMode = FormOutputMode.VISIBLE
-
-    /**
      * 获取内容文本
      */
     open fun getContentText(context: Context, enabled: Boolean): CharSequence? {
@@ -225,8 +220,13 @@ abstract class BaseForm(
      * 执行数据正确性
      */
     @Throws(FormDataVerificationException::class)
-    fun executeDataVerification() {
+    fun executeDataVerification(adapter: FormAdapter) {
         if (ignoreVerification) return
+        val isRealVisible = isRealVisible(adapter.isEnabled)
+        val isRealEnable = isRealEnable(adapter.isEnabled)
+        if (outputMode == FormOutputMode.VISIBLE && !isRealVisible) return
+        if (outputMode == FormOutputMode.ENABLED && !isRealEnable) return
+        if (outputMode == FormOutputMode.VISIBLE_AND_ENABLED && !isRealVisible && !isRealEnable) return
 //        val provider = FormManager.getItemDataProvider(javaClass)
 //        if (provider != null) {
 //            provider.dataCorrectness(this)
@@ -248,6 +248,11 @@ abstract class BaseForm(
     //<editor-fold desc="输出 output">
 
     /**
+     * 输出模式
+     */
+    var outputMode: FormOutputMode = FormOutputMode.VISIBLE
+
+    /**
      * 自定义输出接口
      */
     private var customOutputBlock: ((json: JSONObject) -> Unit)? = null
@@ -266,8 +271,8 @@ abstract class BaseForm(
         val isRealVisible = isRealVisible(adapter.isEnabled)
         val isRealEnable = isRealEnable(adapter.isEnabled)
         if (outputMode == FormOutputMode.VISIBLE && !isRealVisible) return
-        if (outputMode == FormOutputMode.VISIBLE_AND_ENABLED && !isRealVisible && !isRealEnable) return
         if (outputMode == FormOutputMode.ENABLED && !isRealEnable) return
+        if (outputMode == FormOutputMode.VISIBLE_AND_ENABLED && !isRealVisible && !isRealEnable) return
         if (customOutputBlock != null) {
             customOutputBlock!!.invoke(json)
             return
