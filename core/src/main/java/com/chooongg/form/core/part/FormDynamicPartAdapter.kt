@@ -1,15 +1,12 @@
 package com.chooongg.form.core.part
 
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.FormDataVerificationException
 import com.chooongg.form.core.data.FormDynamicPartData
 import com.chooongg.form.core.data.FormGroupData
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.VariantForm
 import com.chooongg.form.core.style.BaseStyle
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import org.json.JSONObject
 
 class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
@@ -83,12 +80,20 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         return false
     }
 
+    @Throws(FormDataVerificationException::class)
     override fun executeDataVerification() {
-
-        TODO("Not yet implemented")
+        data.getGroups().forEach {
+            it.getItems().forEach { item ->
+                item.executeDataVerification(formAdapter)
+            }
+        }
     }
 
     override fun executeOutput(json: JSONObject) {
-        TODO("Not yet implemented")
+        data.getGroups().forEach {
+            it.getItems().forEach { item ->
+                item.executeOutput(formAdapter, json)
+            }
+        }
     }
 }

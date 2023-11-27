@@ -15,6 +15,7 @@ import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.style.NoneStyle
 import com.chooongg.form.core.typeset.BaseTypeset
+import org.json.JSONObject
 
 open class FormAdapter(isEnabled: Boolean) :
     RecyclerView.Adapter<ViewHolder>() {
@@ -99,6 +100,33 @@ open class FormAdapter(isEnabled: Boolean) :
         return false
     }
 
+    /**
+     * 执行数据效验
+     */
+    fun executeDataVerification() {
+        try {
+            partAdapters.forEach {
+                it.executeDataVerification()
+            }
+        } catch (e: FormDataVerificationException) {
+            e.id
+        }
+    }
+
+    /**
+     * 执行输出
+     */
+    fun executeOutput(): JSONObject {
+        val json = JSONObject()
+        partAdapters.forEach {
+            it.executeOutput(json)
+        }
+        return json
+    }
+
+    /**
+     * 错误通知
+     */
     fun errorNotifyOfField(field: String) {
         var position = 0
         partAdapters.forEach {

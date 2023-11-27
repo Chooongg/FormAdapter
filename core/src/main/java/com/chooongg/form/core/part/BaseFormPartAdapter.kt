@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.FormDataVerificationException
 import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.boundary.Boundary
@@ -276,6 +277,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     /**
      * 执行数据验证
      */
+    @Throws(FormDataVerificationException::class)
     abstract fun executeDataVerification()
 
     /**
