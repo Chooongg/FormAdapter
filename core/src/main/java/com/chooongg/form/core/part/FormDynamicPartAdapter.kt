@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import org.json.JSONObject
 
 class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     BaseFormPartAdapter(formAdapter, style) {
@@ -45,6 +46,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                         group.add(it.getGroupNameItem { item ->
                             item.name = data.partName
                             item.dynamicGroupNameFormatBlock = data.dynamicGroupNameFormatter
+                            item.dynamicGroupCreateBlock = data.dynamicGroupCreateBlock
                         })
                     } else it.clearGroupNameItem()
                     group.addAll(it.getItems())
@@ -79,5 +81,14 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             }
         }
         return false
+    }
+
+    override fun executeDataVerification() {
+
+        TODO("Not yet implemented")
+    }
+
+    override fun executeOutput(json: JSONObject) {
+        TODO("Not yet implemented")
     }
 }

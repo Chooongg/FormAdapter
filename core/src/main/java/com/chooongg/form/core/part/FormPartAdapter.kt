@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     BaseFormPartAdapter(formAdapter, style) {
@@ -60,5 +61,13 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             }
         }
         return false
+    }
+
+    override fun executeDataVerification() {
+        TODO("Not yet implemented")
+    }
+
+    override fun executeOutput(json: JSONObject) {
+        TODO("Not yet implemented")
     }
 }

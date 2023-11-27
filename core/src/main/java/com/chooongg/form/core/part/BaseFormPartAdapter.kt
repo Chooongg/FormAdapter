@@ -21,6 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
+import org.json.JSONObject
 
 abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: BaseStyle) :
     RecyclerView.Adapter<FormViewHolder>() {
@@ -107,12 +108,6 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             group.forEachIndexed { position, item ->
                 item.spanIndex = spanIndex
                 item.spanSize = when {
-                    item.loneLine -> {
-                        item.spanIndex = 0
-                        spanIndex = 0
-                        spanCount
-                    }
-
                     item.parentItem != null -> {
                         if (item.indexInCurrentVariant == 0) {
                             item.spanIndex = 0
@@ -121,6 +116,12 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
                         spanCount / item.parentItem!!.getColumn(
                             item.countInCurrentVariant, formAdapter.columnCount
                         )
+                    }
+
+                    item.loneLine -> {
+                        item.spanIndex = 0
+                        spanIndex = 0
+                        spanCount
                     }
 
                     else -> spanCount / formAdapter.columnCount
@@ -271,6 +272,16 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         hasPayload: Boolean = false,
         block: BaseForm.() -> Unit
     ): Boolean
+
+    /**
+     * 执行数据验证
+     */
+    abstract fun executeDataVerification()
+
+    /**
+     * 执行输出
+     */
+    abstract fun executeOutput(json: JSONObject)
 
     fun indexOf(item: BaseForm) = itemList.indexOf(item)
 

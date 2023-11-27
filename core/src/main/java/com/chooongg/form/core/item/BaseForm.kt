@@ -3,10 +3,11 @@ package com.chooongg.form.core.item
 import android.content.Context
 import androidx.annotation.GravityInt
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.FormDataVerificationException
 import com.chooongg.form.core.FormLinkageBlock
 import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.boundary.Boundary
-import com.chooongg.form.core.enum.FormValidateStatus
+import com.chooongg.form.core.enum.FormOutputMode
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import org.json.JSONObject
@@ -20,6 +21,17 @@ abstract class BaseForm(
 ) : AbstractForm() {
 
     abstract fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider>
+
+    //<editor-fold desc="初始化方法 initialize">
+
+    /**
+     * 初始化 content 值
+     * 该操作主要作用为修复
+     */
+    open fun initContentValue(value: Any?) {
+    }
+
+    //</editor-fold>
 
     //<editor-fold desc="基础 Basic">
 
@@ -49,14 +61,16 @@ abstract class BaseForm(
     var required: Boolean = false
 
     /**
-     * 验证表单项
+     * 输出模式
      */
-    var validate: Boolean = false
+    var outputMode: FormOutputMode = FormOutputMode.VISIBLE
 
     /**
-     * 效验的状态
+     * 获取内容文本
      */
-    var validateStatus: FormValidateStatus? = null
+    open fun getContentText(context: Context, enabled: Boolean): CharSequence? {
+        return FormUtils.getText(context, content)
+    }
 
     //</editor-fold>
 
@@ -101,20 +115,6 @@ abstract class BaseForm(
      * 错误通知
      */
     var errorNotify = false
-
-    //</editor-fold>
-
-    //<editor-fold desc="接口 interface">
-
-    /**
-     * 联动接口
-     */
-    internal var linkageBlock: FormLinkageBlock? = null
-
-    /**
-     * 自定义输出接口
-     */
-    private var customOutputBlock: ((json: JSONObject) -> Unit)? = null
 
     //</editor-fold>
 
@@ -188,6 +188,108 @@ abstract class BaseForm(
     var spanIndex: Int = -1
         internal set
 
+    internal fun resetInternalValues() {
+        groupCount = -1
+        groupIndex = -1
+        countInGroup = -1
+        positionInGroup = -1
+        variantIndexInGroup = -1
+        countInCurrentVariant = -1
+        indexInCurrentVariant = -1
+        parentItem = null
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="联动 linkage">
+
+    /**
+     * 联动接口
+     */
+    internal var linkageBlock: FormLinkageBlock? = null
+
+    /**
+     * 设置联动接口
+     */
+    fun setLinkage(block: FormLinkageBlock?) {
+        linkageBlock = block
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="验证 verification">
+
+    val ignoreVerification: Boolean = false
+
+    /**
+     * 执行数据正确性
+     */
+    @Throws(FormDataVerificationException::class)
+    fun executeDataVerification() {
+        if (ignoreVerification) return
+//        val provider = FormManager.getItemDataProvider(javaClass)
+//        if (provider != null) {
+//            provider.dataCorrectness(this)
+//            return
+//        }
+        dataVerification()
+    }
+
+    /**
+     * 数据验证
+     */
+    @Throws(FormDataVerificationException::class)
+    open fun dataVerification() {
+        if (required && content == null) throw FormDataVerificationException(id)
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc="输出 output">
+
+    /**
+     * 自定义输出接口
+     */
+    private var customOutputBlock: ((json: JSONObject) -> Unit)? = null
+
+    /**
+     * 设置自定义输出监听
+     */
+    fun customOutput(block: ((json: JSONObject) -> Unit)?) {
+        customOutputBlock = block
+    }
+
+    /**
+     * 执行输出
+     */
+    fun executeOutput(adapter: FormAdapter, json: JSONObject) {
+        val isRealVisible = isRealVisible(adapter.isEnabled)
+        val isRealEnable = isRealEnable(adapter.isEnabled)
+        if (outputMode == FormOutputMode.VISIBLE && !isRealVisible) return
+        if (outputMode == FormOutputMode.VISIBLE_AND_ENABLED && !isRealVisible && !isRealEnable) return
+        if (outputMode == FormOutputMode.ENABLED && !isRealEnable) return
+        if (customOutputBlock != null) {
+            customOutputBlock!!.invoke(json)
+            return
+        }
+//        val provider = FormManager.getItemDataProvider(javaClass)
+//        if (provider != null) {
+//            provider.output(this, json)
+//            return
+//        }
+        outputData(json)
+    }
+
+    /**
+     * 输出处理
+     */
+    protected open fun outputData(json: JSONObject) {
+        if (field != null && content != null) json.put(field!!, content)
+        extensionFieldAndContent?.forEach {
+            json.put(it.key, it.value)
+        }
+    }
+
     //</editor-fold>
 
     //<editor-fold desc="扩展 extend">
@@ -226,42 +328,4 @@ abstract class BaseForm(
     fun removeExtensionContent(key: String) = extensionFieldAndContent?.remove(key)
 
     //</editor-fold>
-
-    //<editor-fold desc="设置方法 set">
-
-    fun setLinkage(block: FormLinkageBlock?) {
-        linkageBlock = block
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="获取方法 get">
-
-    open fun getContentText(context: Context, enabled: Boolean): CharSequence? {
-        return FormUtils.getText(context, content)
-    }
-
-    //</editor-fold>
-
-    //<editor-fold desc="初始化方法 initialize">
-
-    /**
-     * 初始化 content 值
-     * 该操作主要作用为修复
-     */
-    open fun initContentValue(value: Any?) {
-    }
-
-    //</editor-fold>
-
-    internal fun resetInternalValues() {
-        groupCount = -1
-        groupIndex = -1
-        countInGroup = -1
-        positionInGroup = -1
-        variantIndexInGroup = -1
-        countInCurrentVariant = -1
-        indexInCurrentVariant = -1
-        parentItem = null
-    }
 }
