@@ -1,7 +1,9 @@
 package com.chooongg.form.simple.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.simple.R
@@ -19,8 +21,12 @@ class BasicFragment : BaseFragment() {
         model.adapter.isEnabled = !model.adapter.isEnabled
     }
 
-    override fun smoothScroll() {
-        formView.smoothScrollToPosition(10)
+    override fun output() {
+        if (model.adapter.executeDataVerification()) {
+            val output = model.adapter.executeOutput()
+            Log.e("Form", output.toString(4), null)
+            Toast.makeText(context, output.toString(2), Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun errorNotify() {

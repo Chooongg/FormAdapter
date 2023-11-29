@@ -1,5 +1,6 @@
 package com.chooongg.form.core.part
 
+import android.util.Log
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormDataVerificationException
 import com.chooongg.form.core.data.FormPartData
@@ -59,6 +60,31 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         return false
     }
 
+    override fun findOfId(
+        id: String,
+        update: Boolean,
+        hasPayload: Boolean,
+        block: BaseForm.() -> Unit
+    ): Boolean {
+        data.getItems().forEach { item ->
+            if (item.id == id) {
+                block(item)
+                if (update) notifyChangeItem(item, hasPayload)
+                return true
+            }
+            if (item is VariantForm) {
+                item.getItems().forEach {
+                    if (it.id == id) {
+                        block(it)
+                        if (update) notifyChangeItem(it, hasPayload)
+                        return true
+                    }
+                }
+            }
+        }
+        return false
+    }
+
     @Throws(FormDataVerificationException::class)
     override fun executeDataVerification() {
         data.getItems().forEach { item ->
@@ -68,6 +94,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
 
     override fun executeOutput(json: JSONObject) {
         data.getItems().forEach { item ->
+            Log.d("Form", "${item.javaClass.simpleName}   ${item.content}")
             item.executeOutput(formAdapter, json)
         }
     }

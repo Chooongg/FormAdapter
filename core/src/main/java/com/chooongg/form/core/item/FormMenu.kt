@@ -8,8 +8,8 @@ import com.chooongg.form.core.typeset.NoneTypeset
 
 class FormMenu : BaseForm {
 
-    constructor(name: CharSequence?) : super(name)
-    constructor(@StringRes nameRes: Int?) : super(nameRes)
+    constructor(name: CharSequence?, field: String?) : super(name, field)
+    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     override var typeset: BaseTypeset? = NoneTypeset()
 

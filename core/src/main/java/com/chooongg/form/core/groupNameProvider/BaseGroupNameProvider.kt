@@ -1,4 +1,4 @@
-package com.chooongg.form.core.nameProvider
+package com.chooongg.form.core.groupNameProvider
 
 import android.view.View
 import android.view.ViewGroup

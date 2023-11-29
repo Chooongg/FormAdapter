@@ -11,8 +11,8 @@ import com.chooongg.form.core.provider.FormRatingProvider
 
 class FormRating : BaseForm {
 
-    constructor(name: CharSequence?) : super(name)
-    constructor(@StringRes nameRes: Int?) : super(nameRes)
+    constructor(name: CharSequence?, field: String?) : super(name, field)
+    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     /**
      * 星星数量

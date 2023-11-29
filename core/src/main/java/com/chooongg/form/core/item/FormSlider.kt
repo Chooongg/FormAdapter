@@ -12,8 +12,8 @@ import com.google.android.material.slider.LabelFormatter
 
 class FormSlider : BaseForm {
 
-    constructor(name: CharSequence?) : super(name)
-    constructor(@StringRes nameRes: Int?) : super(nameRes)
+    constructor(name: CharSequence?, field: String?) : super(name, field)
+    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     @IntDef(
         LabelFormatter.LABEL_FLOATING,
@@ -50,8 +50,11 @@ class FormSlider : BaseForm {
     }
 
     override fun initContentValue(value: Any?) {
-        if (value == null) return
         if (value is Float) return
+        if (value == null) {
+            content = valueFrom
+            return
+        }
         content = value.toString().toFloatOrNull()
     }
 

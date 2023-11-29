@@ -114,8 +114,7 @@ class FormInputOutlinedProvider : BaseFormProvider() {
             prefixText = FormUtils.getText(context, itemInput?.prefix)
             suffixText = FormUtils.getText(context, itemInput?.suffix)
             placeholderText = FormUtils.getText(context, itemInput?.placeholder)
-            hint = FormUtils.getText(context, item.hint)
-                ?: context.getString(R.string.formDefaultHintInput)
+            hint = holder.typeset.obtainNameFormatter().format(context, item)
             if (itemInput?.counterMaxLength != null && itemInput.counterMaxLength != Int.MAX_VALUE) {
                 isCounterEnabled = true
                 counterMaxLength = itemInput.counterMaxLength

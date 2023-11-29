@@ -32,7 +32,7 @@ abstract class BaseFragment : Fragment() {
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.change -> change()
-                R.id.scroll -> smoothScroll()
+                R.id.output -> output()
                 R.id.error -> errorNotify()
                 else -> return@setOnMenuItemClickListener false
             }
@@ -44,7 +44,7 @@ abstract class BaseFragment : Fragment() {
 
     abstract fun change()
 
-    abstract fun smoothScroll()
+    abstract fun output()
 
     abstract fun errorNotify()
 

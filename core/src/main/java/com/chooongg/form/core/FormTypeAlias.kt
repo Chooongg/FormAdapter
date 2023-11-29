@@ -15,7 +15,7 @@ typealias FormMenuBlock = FormMenuItem.() -> Unit
 
 typealias FormGroupCreateBlock = FormGroupData.() -> Unit
 
-typealias FormGroupNameFormatter = (context: Context, name: CharSequence?, index: Int, count: Int) -> CharSequence
+typealias FormGroupNameFormatter = (context: Context, name: CharSequence?, index: Int, count: Int) -> CharSequence?
 
 typealias FormLinkageBlock = (linkage: LinkageForm, field: String?, content: Any?) -> Unit
 

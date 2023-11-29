@@ -5,7 +5,7 @@ import com.chooongg.form.core.data.IFormCreator
 import com.chooongg.form.core.provider.BaseFormProvider
 import kotlin.reflect.KClass
 
-abstract class VariantForm : BaseForm(null), IFormCreator {
+abstract class VariantForm : BaseForm(null, null), IFormCreator {
 
     private var _items = mutableListOf<BaseForm>()
 

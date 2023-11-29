@@ -2,15 +2,13 @@ package com.chooongg.form.core.item
 
 import android.content.Context
 import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.FormGroupCreateBlock
 import com.chooongg.form.core.FormGroupNameFormatter
 import com.chooongg.form.core.FormUtils
-import com.chooongg.form.core.data.FormGroupData
 import com.chooongg.form.core.provider.InternalFormPartNameProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
 
-class InternalFormGroupName internal constructor() : BaseForm(null) {
+class InternalFormGroupName internal constructor() : BaseForm(null, null) {
 
     override var loneLine = true
 
@@ -18,7 +16,7 @@ class InternalFormGroupName internal constructor() : BaseForm(null) {
 
     internal var dynamicGroupNameFormatBlock: FormGroupNameFormatter? = null
 
-    internal var dynamicGroupCreateBlock: FormGroupCreateBlock? = null
+    internal var dynamicGroupDeletingBlock: (() -> Unit)? = null
 
     override fun getProvider(adapter: FormAdapter) = InternalFormPartNameProvider::class
 
@@ -29,13 +27,9 @@ class InternalFormGroupName internal constructor() : BaseForm(null) {
         } else tempName
     }
 
-    fun isHasDynamicCreateBlock() = dynamicGroupCreateBlock != null
+    fun isShowDynamicDelete() = dynamicGroupDeletingBlock != null
 
-    fun createDynamicGroup(){
-        if (dynamicGroupCreateBlock != null) {
-            val groupData = FormGroupData()
-            dynamicGroupCreateBlock!!.invoke(groupData)
-            groupData
-        }
+    fun deleteDynamicGroup() {
+        dynamicGroupDeletingBlock?.invoke()
     }
 }

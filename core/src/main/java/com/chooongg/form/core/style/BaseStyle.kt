@@ -12,7 +12,7 @@ import com.chooongg.form.core.boundary.FormInsideInfo
 import com.chooongg.form.core.boundary.FormMarginInfo
 import com.chooongg.form.core.iconProvider.BaseIconProvider
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.nameProvider.BaseGroupNameProvider
+import com.chooongg.form.core.groupNameProvider.BaseGroupNameProvider
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.typeset.BaseTypeset
 

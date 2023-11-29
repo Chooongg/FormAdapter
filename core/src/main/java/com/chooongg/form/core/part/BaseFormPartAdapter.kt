@@ -1,6 +1,7 @@
 package com.chooongg.form.core.part
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -27,6 +28,9 @@ import org.json.JSONObject
 abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: BaseStyle) :
     RecyclerView.Adapter<FormViewHolder>() {
 
+    protected var context: Context? = null
+        private set
+
     private val spanCount = 27720
 
     var adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -50,7 +54,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             oldItem.id == newItem.id && oldItem.typeset == newItem.typeset
     }).build())
 
-    private val itemList: List<BaseForm> get() = asyncDiffer.currentList
+    protected val itemList: List<BaseForm> get() = asyncDiffer.currentList
 
     fun update() {
         adapterScope.cancel()
@@ -61,6 +65,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     @SuppressLint("NotifyDataSetChanged")
     internal fun executeUpdate(isNotifyChanged: Boolean) {
         val groups = getOriginalItemList()
+        val extraGroupsCount = getExtraGroupCount()
         val tempList = ArrayList<ArrayList<BaseForm>>()
         groups.forEach { group ->
             val tempGroup = ArrayList<BaseForm>()
@@ -161,7 +166,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         }
         tempList2.forEachIndexed { index, group ->
             group.forEachIndexed { position, item ->
-                item.groupCount = tempList.size
+                item.groupCount = tempList.size - extraGroupsCount
                 item.groupIndex = index
                 item.countInGroup = group.size
                 item.positionInGroup = position
@@ -178,8 +183,8 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     }
 
     private fun calculateBoundary() {
-        val partAdapters = formAdapter.partAdapters
-        val partIndex = partAdapters.indexOf(this)
+//        val partAdapters = formAdapter.partAdapters
+//        val partIndex = partAdapters.indexOf(this)
         itemList.forEachIndexed { index, item ->
             // Start
             if (item.spanIndex == 0) {
@@ -199,21 +204,22 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             }
             // Top
             if (item.positionInGroup == 0) {
-                var isFirst = true
-                var beginIndex = partIndex
-                while (beginIndex - 1 >= 0) {
-                    if (partAdapters[beginIndex - 1].itemList.isNotEmpty()) {
-                        isFirst = false
-                        break
-                    } else beginIndex--
-                }
-                if (isFirst) {
-                    item.marginBoundary.top = Boundary.GLOBAL
-                    item.insideBoundary.top = Boundary.GLOBAL
-                } else {
-                    item.marginBoundary.top = Boundary.MIDDLE
-                    item.insideBoundary.top = Boundary.GLOBAL
-                }
+//                // 使用ItemDecoration控制GLOBAL类型
+//                var isFirst = true
+//                var beginIndex = partIndex
+//                while (beginIndex - 1 >= 0) {
+//                    if (partAdapters[beginIndex - 1].itemList.isNotEmpty()) {
+//                        isFirst = false
+//                        break
+//                    } else beginIndex--
+//                }
+//                if (isFirst) {
+//                    item.marginBoundary.top = Boundary.GLOBAL
+//                    item.insideBoundary.top = Boundary.GLOBAL
+//                } else {
+                item.marginBoundary.top = Boundary.MIDDLE
+                item.insideBoundary.top = Boundary.GLOBAL
+//                }
             } else if (item.spanIndex == 0) {
                 item.marginBoundary.top = Boundary.NONE
                 item.insideBoundary.top = Boundary.MIDDLE
@@ -232,21 +238,22 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             val item = getItem(index)
             // Bottom
             if (item.countInGroup - 1 - item.positionInGroup == 0) {
-                var isLast = true
-                var lastIndex = partIndex
-                while (lastIndex + 1 < partAdapters.size) {
-                    if (partAdapters[lastIndex + 1].itemList.isNotEmpty()) {
-                        isLast = false
-                        break
-                    } else lastIndex++
-                }
-                if (isLast) {
-                    item.marginBoundary.bottom = Boundary.GLOBAL
-                    item.insideBoundary.bottom = Boundary.GLOBAL
-                } else {
-                    item.marginBoundary.bottom = Boundary.MIDDLE
-                    item.insideBoundary.bottom = Boundary.GLOBAL
-                }
+//                // 使用ItemDecoration控制GLOBAL类型
+//                var isLast = true
+//                var lastIndex = partIndex
+//                while (lastIndex + 1 < partAdapters.size) {
+//                    if (partAdapters[lastIndex + 1].itemList.isNotEmpty()) {
+//                        isLast = false
+//                        break
+//                    } else lastIndex++
+//                }
+//                if (isLast) {
+//                    item.marginBoundary.bottom = Boundary.GLOBAL
+//                    item.insideBoundary.bottom = Boundary.GLOBAL
+//                } else {
+                item.marginBoundary.bottom = Boundary.MIDDLE
+                item.insideBoundary.bottom = Boundary.GLOBAL
+//                }
             } else if (item.spanIndex + item.spanSize == spanCount) {
                 item.marginBoundary.bottom = Boundary.NONE
                 item.insideBoundary.bottom = Boundary.MIDDLE
@@ -267,8 +274,17 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     abstract fun getOriginalItemList(): List<List<BaseForm>>
 
+    open fun getExtraGroupCount() = 0
+
     abstract fun findOfField(
         field: String,
+        update: Boolean = true,
+        hasPayload: Boolean = false,
+        block: BaseForm.() -> Unit
+    ): Boolean
+
+    abstract fun findOfId(
+        id: String,
         update: Boolean = true,
         hasPayload: Boolean = false,
         block: BaseForm.() -> Unit
@@ -284,6 +300,10 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
      * 执行输出
      */
     abstract fun executeOutput(json: JSONObject)
+
+    open fun onItemClick(item: BaseForm) {
+
+    }
 
     fun indexOf(item: BaseForm) = itemList.indexOf(item)
 
@@ -431,7 +451,13 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             .onViewDetachedFromWindow(holder, holder.view)
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        context = recyclerView.context
+    }
+
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        context = null
         adapterScope.cancel()
         adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     }

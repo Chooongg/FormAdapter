@@ -79,8 +79,21 @@ open class FormAdapter(isEnabled: Boolean) :
         clear()
         val data = FormAdapterData(this)
         block(data)
-        data.getParts().forEach { concatAdapter.addAdapter(it) }
-        updateForm()
+        data.getParts().forEach {
+            when (it) {
+                is FormPartAdapter -> addPart(it, false)
+                is FormDynamicPartAdapter -> addDynamicPart(it, false)
+            }
+        }
+    }
+
+    fun getPartAdapter(position: Int): BaseFormPartAdapter {
+        return concatAdapter.getWrappedAdapterAndPosition(position).first as BaseFormPartAdapter
+    }
+
+    fun getItem(position: Int): BaseForm {
+        val pair = concatAdapter.getWrappedAdapterAndPosition(position)
+        return (pair.first as BaseFormPartAdapter).getItem(pair.second)
     }
 
     fun updateForm() {
@@ -100,16 +113,28 @@ open class FormAdapter(isEnabled: Boolean) :
         return false
     }
 
+    fun findOfId(
+        id: String,
+        update: Boolean = true,
+        hasPayload: Boolean = false,
+        block: BaseForm.() -> Unit
+    ): Boolean {
+        partAdapters.forEach {
+            if (it.findOfId(id, update, hasPayload, block)) return true
+        }
+        return false
+    }
+
     /**
      * 执行数据效验
      */
-    fun executeDataVerification() {
-        try {
-            partAdapters.forEach {
-                it.executeDataVerification()
-            }
+    fun executeDataVerification(): Boolean {
+        return try {
+            partAdapters.forEach { it.executeDataVerification() }
+            true
         } catch (e: FormDataVerificationException) {
-            e.id
+            errorNotifyOfId(e.id)
+            false
         }
     }
 
@@ -131,7 +156,7 @@ open class FormAdapter(isEnabled: Boolean) :
         var position = 0
         partAdapters.forEach {
             if (it.findOfField(field, false, false) {
-                    errorNotify = true
+                    errorNotify = System.currentTimeMillis()
                     val indexOf = it.indexOf(this)
                     if (indexOf >= 0) {
                         position += indexOf
@@ -153,6 +178,36 @@ open class FormAdapter(isEnabled: Boolean) :
         }
     }
 
+    /**
+     * 错误通知
+     */
+    fun errorNotifyOfId(id: String) {
+        var position = 0
+        partAdapters.forEach {
+            if (it.findOfId(id, false, false) {
+                    errorNotify = System.currentTimeMillis()
+                    val indexOf = it.indexOf(this)
+                    if (indexOf >= 0) {
+                        position += indexOf
+                        val layoutManager = recyclerView?.layoutManager as? FormLayoutManager
+                        if (layoutManager != null) {
+                            val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
+                            val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
+                            if (position in firstVisiblePosition..lastVisiblePosition) {
+                                it.notifyItemChanged(indexOf, ERROR_NOTIFY_FLAG)
+                            } else {
+                                recyclerView?.smoothScrollToPosition(position)
+                            }
+                        }
+                    }
+                }) {
+                return
+            } else {
+                position += it.itemCount
+            }
+        }
+    }
+
     //<editor-fold desc="ConcatAdapter 覆写">
 
     fun addPart(
@@ -161,8 +216,8 @@ open class FormAdapter(isEnabled: Boolean) :
         block: FormPartData.() -> Unit
     ) {
         val adapter = FormPartAdapter(this, style)
-        adapter.create { block(this) }
         addPart(adapter, updateAdjacentAdapter)
+        adapter.create { block(this) }
     }
 
     fun addPart(adapter: FormPartAdapter?, updateAdjacentAdapter: Boolean = true) {
@@ -246,6 +301,15 @@ open class FormAdapter(isEnabled: Boolean) :
             recyclerView.layoutManager = layoutManager
             columnCount = layoutManager.columnCount
         }
+        var hasAddItemDecoration = true
+        if (recyclerView.itemDecorationCount > 0) {
+            for (i in 0 until recyclerView.itemDecorationCount) {
+                if (recyclerView.getItemDecorationAt(i) is FormItemDecoration) {
+                    hasAddItemDecoration = false
+                }
+            }
+        }
+        if (hasAddItemDecoration) recyclerView.addItemDecoration(FormItemDecoration())
         this.recyclerView = recyclerView
     }
 

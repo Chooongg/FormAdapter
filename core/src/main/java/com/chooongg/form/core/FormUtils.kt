@@ -11,7 +11,7 @@ import androidx.annotation.AttrRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.res.use
-import com.chooongg.form.core.nameProvider.BaseGroupNameProvider
+import com.chooongg.form.core.groupNameProvider.BaseGroupNameProvider
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.typeset.BaseTypeset

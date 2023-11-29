@@ -15,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-abstract class BaseOptionForm<T>(name: Any?) : BaseForm(name) {
+abstract class BaseOptionForm<T>(name: Any?, field: String?) : BaseForm(name, field) {
 
     companion object {
         const val CHANGE_OPTION_PAYLOAD_FLAG = "CHANGE_OPTION"

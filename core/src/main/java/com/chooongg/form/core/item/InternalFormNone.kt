@@ -5,7 +5,7 @@ import com.chooongg.form.core.provider.InternalFormNoneProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
 
-class InternalFormNone internal constructor(spanIndex: Int, spanSize: Int) : BaseForm(null) {
+class InternalFormNone internal constructor(spanIndex: Int, spanSize: Int) : BaseForm(null, null) {
 
     override val id: String = ""
 

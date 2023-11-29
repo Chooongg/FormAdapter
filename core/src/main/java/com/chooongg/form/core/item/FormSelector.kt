@@ -8,11 +8,12 @@ import com.chooongg.form.core.enum.FormSelectorOpenMode
 import com.chooongg.form.core.option.IOption
 import com.chooongg.form.core.option.Option
 import com.chooongg.form.core.provider.FormSelectorProvider
+import org.json.JSONObject
 
 class FormSelector : BaseOptionForm<IOption> {
 
-    constructor(name: CharSequence?) : super(name)
-    constructor(@StringRes nameRes: Int?) : super(nameRes)
+    constructor(name: CharSequence?, field: String?) : super(name, field)
+    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     /**
      * 打开模式
@@ -32,5 +33,13 @@ class FormSelector : BaseOptionForm<IOption> {
     override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
         return if (content is IOption) (content as IOption).getSpannableString(context)
         else FormUtils.getText(context, content)
+    }
+
+    override fun outputData(json: JSONObject) {
+        if (field != null && content != null) {
+            if (content is IOption) {
+                json.put(field!!, (content as IOption).getValue())
+            } else json.put(field!!, content)
+        }
     }
 }

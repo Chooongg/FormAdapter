@@ -15,7 +15,6 @@ import com.chooongg.form.core.item.FormSelector
 import com.chooongg.form.core.item.FormSlider
 import com.chooongg.form.core.item.FormSliderRange
 import com.chooongg.form.core.item.FormSwitch
-import com.chooongg.form.core.item.FormSwitchMaterial
 import com.chooongg.form.core.item.FormText
 import com.chooongg.form.core.item.FormTime
 import com.chooongg.form.core.item.FormTip
@@ -29,133 +28,125 @@ fun IFormCreator.multiColumn(block: MultiColumnForm.() -> Unit) =
     addItem(MultiColumnForm().apply(block))
 
 fun IFormCreator.addButton(
-    name: CharSequence?, block: (FormButton.() -> Unit)? = null
-) = addItem(FormButton(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormButton.() -> Unit)? = null
+) = addItem(FormButton(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addButton(
-    @StringRes nameRes: Int?, block: (FormButton.() -> Unit)? = null
-) = addItem(FormButton(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormButton.() -> Unit)? = null
+) = addItem(FormButton(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addCheckBox(
-    name: CharSequence?, block: (FormCheckBox.() -> Unit)? = null
-) = addItem(FormCheckBox(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormCheckBox.() -> Unit)? = null
+) = addItem(FormCheckBox(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addCheckBox(
-    @StringRes nameRes: Int?, block: (FormCheckBox.() -> Unit)? = null
-) = addItem(FormCheckBox(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormCheckBox.() -> Unit)? = null
+) = addItem(FormCheckBox(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addDivider(
     block: (FormDivider.() -> Unit)? = null
 ) = addItem(FormDivider().apply { block?.invoke(this) })
 
 fun IFormCreator.addInput(
-    name: CharSequence?, block: (FormInput.() -> Unit)? = null
-) = addItem(FormInput(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormInput.() -> Unit)? = null
+) = addItem(FormInput(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addInput(
-    @StringRes nameRes: Int?, block: (FormInput.() -> Unit)? = null
-) = addItem(FormInput(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormInput.() -> Unit)? = null
+) = addItem(FormInput(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addInputFilled(
-    name: CharSequence?, block: (FormInputFilled.() -> Unit)? = null
-) = addItem(FormInputFilled(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormInputFilled.() -> Unit)? = null
+) = addItem(FormInputFilled(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addInputFilled(
-    @StringRes nameRes: Int?, block: (FormInputFilled.() -> Unit)? = null
-) = addItem(FormInputFilled(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormInputFilled.() -> Unit)? = null
+) = addItem(FormInputFilled(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addInputOutlined(
-    name: CharSequence?, block: (FormInputOutlined.() -> Unit)? = null
-) = addItem(FormInputOutlined(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormInputOutlined.() -> Unit)? = null
+) = addItem(FormInputOutlined(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addInputOutlined(
-    @StringRes nameRes: Int?, block: (FormInputOutlined.() -> Unit)? = null
-) = addItem(FormInputOutlined(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormInputOutlined.() -> Unit)? = null
+) = addItem(FormInputOutlined(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addLabel(
-    name: CharSequence?, block: (FormLabel.() -> Unit)? = null
-) = addItem(FormLabel(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormLabel.() -> Unit)? = null
+) = addItem(FormLabel(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addLabel(
-    @StringRes nameRes: Int?, block: (FormLabel.() -> Unit)? = null
-) = addItem(FormLabel(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormLabel.() -> Unit)? = null
+) = addItem(FormLabel(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addRadioButton(
-    name: CharSequence?, block: (FormRadioButton.() -> Unit)? = null
-) = addItem(FormRadioButton(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormRadioButton.() -> Unit)? = null
+) = addItem(FormRadioButton(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addRadioButton(
-    @StringRes nameRes: Int?, block: (FormRadioButton.() -> Unit)? = null
-) = addItem(FormRadioButton(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormRadioButton.() -> Unit)? = null
+) = addItem(FormRadioButton(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addRating(
-    name: CharSequence?, block: (FormRating.() -> Unit)? = null
-) = addItem(FormRating(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormRating.() -> Unit)? = null
+) = addItem(FormRating(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addRating(
-    @StringRes nameRes: Int?, block: (FormRating.() -> Unit)? = null
-) = addItem(FormRating(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormRating.() -> Unit)? = null
+) = addItem(FormRating(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addSelector(
-    name: CharSequence?, block: (FormSelector.() -> Unit)? = null
-) = addItem(FormSelector(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormSelector.() -> Unit)? = null
+) = addItem(FormSelector(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addSelector(
-    @StringRes nameRes: Int?, block: (FormSelector.() -> Unit)? = null
-) = addItem(FormSelector(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormSelector.() -> Unit)? = null
+) = addItem(FormSelector(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addSlider(
-    name: CharSequence?, block: (FormSlider.() -> Unit)? = null
-) = addItem(FormSlider(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormSlider.() -> Unit)? = null
+) = addItem(FormSlider(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addSlider(
-    @StringRes nameRes: Int?, block: (FormSlider.() -> Unit)? = null
-) = addItem(FormSlider(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormSlider.() -> Unit)? = null
+) = addItem(FormSlider(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addSliderRange(
-    name: CharSequence?, block: (FormSliderRange.() -> Unit)? = null
-) = addItem(FormSliderRange(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormSliderRange.() -> Unit)? = null
+) = addItem(FormSliderRange(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addSliderRange(
-    @StringRes nameRes: Int?, block: (FormSliderRange.() -> Unit)? = null
-) = addItem(FormSliderRange(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormSliderRange.() -> Unit)? = null
+) = addItem(FormSliderRange(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addSwitch(
-    name: CharSequence?, block: (FormSwitch.() -> Unit)? = null
-) = addItem(FormSwitch(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormSwitch.() -> Unit)? = null
+) = addItem(FormSwitch(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addSwitch(
-    @StringRes nameRes: Int?, block: (FormSwitch.() -> Unit)? = null
-) = addItem(FormSwitch(nameRes).apply { block?.invoke(this) })
-
-fun IFormCreator.addSwitchMaterial(
-    name: CharSequence?, block: (FormSwitchMaterial.() -> Unit)? = null
-) = addItem(FormSwitchMaterial(name).apply { block?.invoke(this) })
-
-fun IFormCreator.addSwitchMaterial(
-    @StringRes nameRes: Int?, block: (FormSwitchMaterial.() -> Unit)? = null
-) = addItem(FormSwitchMaterial(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormSwitch.() -> Unit)? = null
+) = addItem(FormSwitch(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addText(
-    name: CharSequence?, block: (FormText.() -> Unit)? = null
-) = addItem(FormText(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormText.() -> Unit)? = null
+) = addItem(FormText(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addText(
-    @StringRes nameRes: Int?, block: (FormText.() -> Unit)? = null
-) = addItem(FormText(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormText.() -> Unit)? = null
+) = addItem(FormText(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addTime(
-    name: CharSequence?, block: (FormTime.() -> Unit)? = null
-) = addItem(FormTime(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormTime.() -> Unit)? = null
+) = addItem(FormTime(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addTime(
-    @StringRes nameRes: Int?, block: (FormTime.() -> Unit)? = null
-) = addItem(FormTime(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormTime.() -> Unit)? = null
+) = addItem(FormTime(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addTip(
-    name: CharSequence?, block: (FormTip.() -> Unit)? = null
-) = addItem(FormTip(name).apply { block?.invoke(this) })
+    name: CharSequence?, field: String? = null, block: (FormTip.() -> Unit)? = null
+) = addItem(FormTip(name, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addTip(
-    @StringRes nameRes: Int?, block: (FormTip.() -> Unit)? = null
-) = addItem(FormTip(nameRes).apply { block?.invoke(this) })
+    @StringRes nameRes: Int?, field: String? = null, block: (FormTip.() -> Unit)? = null
+) = addItem(FormTip(nameRes, field).apply { block?.invoke(this) })

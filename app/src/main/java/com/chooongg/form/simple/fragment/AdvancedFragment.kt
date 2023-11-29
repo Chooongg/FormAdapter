@@ -14,7 +14,7 @@ class AdvancedFragment : BaseFragment() {
         model.adapter.isEnabled = !model.adapter.isEnabled
     }
 
-    override fun smoothScroll() {
+    override fun output() {
         formView.smoothScrollToPosition(35)
     }
 

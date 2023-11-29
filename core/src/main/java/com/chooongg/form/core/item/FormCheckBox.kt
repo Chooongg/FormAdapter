@@ -1,16 +1,17 @@
 package com.chooongg.form.core.item
 
-import android.content.Context
 import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.option.IOption
 import com.chooongg.form.core.option.Option
 import com.chooongg.form.core.provider.FormCheckBoxProvider
+import org.json.JSONArray
+import org.json.JSONObject
 
 class FormCheckBox : BaseOptionForm<IOption> {
 
-    constructor(name: CharSequence?) : super(name)
-    constructor(@StringRes nameRes: Int?) : super(nameRes)
+    constructor(name: CharSequence?, field: String?) : super(name, field)
+    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     override fun hasOpenOperation() = false
 
@@ -32,7 +33,19 @@ class FormCheckBox : BaseOptionForm<IOption> {
         }
     }
 
-    override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
-        return super.getContentText(context, enabled)
+    @Suppress("UNCHECKED_CAST")
+    override fun outputData(json: JSONObject) {
+        if (field != null && content != null) {
+            if (content is List<*>) {
+                val value = content as List<*>
+                if (value.isEmpty() || value[0] !is IOption) return
+                val tempValue = value as List<IOption>
+                json.put(field!!, JSONArray().apply {
+                    tempValue.forEach {
+                        put(it.getValue())
+                    }
+                })
+            } else json.put(field!!, content)
+        }
     }
 }

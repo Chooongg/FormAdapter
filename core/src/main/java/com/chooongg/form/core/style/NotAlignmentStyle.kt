@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.part.BaseFormPartAdapter
 
 class NotAlignmentStyle : BaseStyle {
 
@@ -22,11 +23,23 @@ class NotAlignmentStyle : BaseStyle {
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         holder.itemView.updateLayoutParams<GridLayoutManager.LayoutParams> {
             topMargin = when (item.marginBoundary.top) {
-                Boundary.MIDDLE -> -holder.style.marginInfo.middleTop
+                Boundary.MIDDLE -> {
+                    if (holder.absoluteAdapterPosition == 0) 0
+                    else -holder.style.marginInfo.middleTop
+                }
+
                 else -> 0
             }
+
+            holder.absoluteAdapterPosition
             bottomMargin = when (item.marginBoundary.bottom) {
-                Boundary.MIDDLE -> -holder.style.marginInfo.middleBottom
+                Boundary.MIDDLE -> {
+                    val adapter = holder.bindingAdapter as? BaseFormPartAdapter
+                    val itemCount = adapter?.formAdapter?.itemCount ?: 0
+                    if (holder.absoluteAdapterPosition == itemCount - 1) 0
+                    else -holder.style.marginInfo.middleBottom
+                }
+
                 else -> 0
             }
             marginStart = when (item.marginBoundary.start) {

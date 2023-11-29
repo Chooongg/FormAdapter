@@ -118,30 +118,35 @@ abstract class BaseFormProvider {
     }
 
     open fun errorNotify(holder: FormViewHolder, item: BaseForm) {
-        if (item.errorNotify) {
-            item.errorNotify = false
-            val color = holder.itemView.context
-                .obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorPrimary))
-                .use { it.getColor(0, Color.GRAY) }
-            val corner = holder.itemView.resources.getDimension(R.dimen.formErrorNotifyCorner)
-            val shapeDrawable = ShapeDrawable(
-                RoundRectShape(
-                    floatArrayOf(corner, corner, corner, corner, corner, corner, corner, corner),
-                    null,
-                    null
-                )
-            )
-            shapeDrawable.paint.color = (66 shl 24) + (0x00ffffff and color)
-            val drawable = TransitionDrawable(
-                arrayOf(shapeDrawable, ColorDrawable(Color.TRANSPARENT))
-            ).apply {
-                isCrossFadeEnabled = true
-                startTransition(2000)
-            }
-            holder.itemView.foreground = drawable
-        } else {
+        if (item.errorNotify == 0L) {
             holder.itemView.foreground = null
+            return
         }
+        if (System.currentTimeMillis() - item.errorNotify > 5000) {
+            item.errorNotify = 0L
+            holder.itemView.foreground = null
+            return
+        }
+        item.errorNotify = 0L
+        val color = holder.itemView.context
+            .obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorPrimary))
+            .use { it.getColor(0, Color.GRAY) }
+        val corner = holder.itemView.resources.getDimension(R.dimen.formErrorNotifyCorner)
+        val shapeDrawable = ShapeDrawable(
+            RoundRectShape(
+                floatArrayOf(corner, corner, corner, corner, corner, corner, corner, corner),
+                null,
+                null
+            )
+        )
+        shapeDrawable.paint.color = (66 shl 24) + (0x00ffffff and color)
+        val drawable = TransitionDrawable(
+            arrayOf(shapeDrawable, ColorDrawable(Color.TRANSPARENT))
+        ).apply {
+            isCrossFadeEnabled = true
+            startTransition(2000)
+        }
+        holder.itemView.foreground = drawable
     }
 
     override fun equals(other: Any?): Boolean {

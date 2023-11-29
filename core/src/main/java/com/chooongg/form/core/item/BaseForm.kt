@@ -17,7 +17,11 @@ abstract class BaseForm(
     /**
      * 名称: Int(StringRes), String, CharSequence
      */
-    var name: Any?
+    var name: Any?,
+    /**
+     * 字段
+     */
+    var field: String?
 ) : AbstractForm() {
 
     abstract fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider>
@@ -39,11 +43,6 @@ abstract class BaseForm(
      * 扩展字段和内容
      */
     private var extensionFieldAndContent: HashMap<String, Any?>? = null
-
-    /**
-     * 字段
-     */
-    var field: String? = null
 
     /**
      * 提示: Int(StringRes), String, CharSequence
@@ -109,7 +108,7 @@ abstract class BaseForm(
     /**
      * 错误通知
      */
-    var errorNotify = false
+    var errorNotify: Long = 0
 
     //</editor-fold>
 
@@ -283,6 +282,7 @@ abstract class BaseForm(
 //            return
 //        }
         outputData(json)
+        outputExtensionData(json)
     }
 
     /**
@@ -290,6 +290,12 @@ abstract class BaseForm(
      */
     protected open fun outputData(json: JSONObject) {
         if (field != null && content != null) json.put(field!!, content)
+    }
+
+    /**
+     * 扩展输出处理
+     */
+    protected open fun outputExtensionData(json: JSONObject) {
         extensionFieldAndContent?.forEach {
             json.put(it.key, it.value)
         }

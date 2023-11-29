@@ -22,8 +22,8 @@ class FormTime : BaseForm {
         const val INPUT_MODE_TEXT = 1
     }
 
-    constructor(name: CharSequence?) : super(name)
-    constructor(@StringRes nameRes: Int?) : super(nameRes)
+    constructor(name: CharSequence?, field: String?) : super(name, field)
+    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     @IntDef(INPUT_MODE_SELECT, INPUT_MODE_TEXT)
     annotation class InputMode

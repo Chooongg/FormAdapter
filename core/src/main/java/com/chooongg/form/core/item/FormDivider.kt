@@ -6,7 +6,7 @@ import com.chooongg.form.core.provider.FormDividerProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
 
-class FormDivider : BaseForm(null) {
+class FormDivider : BaseForm(null, null) {
 
     /**
      * 分割线颜色

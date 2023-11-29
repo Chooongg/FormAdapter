@@ -18,7 +18,6 @@ import com.chooongg.form.core.addSelector
 import com.chooongg.form.core.addSlider
 import com.chooongg.form.core.addSliderRange
 import com.chooongg.form.core.addSwitch
-import com.chooongg.form.core.addSwitchMaterial
 import com.chooongg.form.core.addText
 import com.chooongg.form.core.addTime
 import com.chooongg.form.core.addTip
@@ -26,6 +25,7 @@ import com.chooongg.form.core.enum.FormEnableMode
 import com.chooongg.form.core.enum.FormSelectorOpenMode
 import com.chooongg.form.core.enum.FormTimeMode
 import com.chooongg.form.core.enum.FormVisibilityMode
+import com.chooongg.form.core.initCardOutlinedDynamicPart
 import com.chooongg.form.core.initCardOutlinedPart
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.item.FormTime
@@ -38,6 +38,21 @@ class AdvancedViewModel : ViewModel() {
 
     init {
         adapter.setNewInstance {
+            initCardOutlinedDynamicPart {
+                dynamicPartMaxGroupCount = 10
+                addGroup {
+                    addSwitch("Switch")
+                    addText("Text") {
+                        content = "Test"
+                    }
+                }
+                dynamicGroupCreator {
+                    addSwitch("Switch")
+                    addText("Text") {
+                        content = "Test"
+                    }
+                }
+            }
             initCardOutlinedPart {
                 partName = "VisibilityMode"
                 addButton("ENABLED") {
@@ -304,8 +319,7 @@ class AdvancedViewModel : ViewModel() {
             }
             initCardOutlinedPart {
                 partName = "Switch"
-                addSwitch("Default")
-                addSwitchMaterial("Material")
+                addSwitch("Switch")
             }
             initCardOutlinedPart {
                 partName = "Text"

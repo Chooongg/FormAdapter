@@ -9,9 +9,9 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/scroll"
-        android:icon="@drawable/ic_smooth_scroll"
-        android:title="SmoothScroll"
+        android:id="@+id/output"
+        android:icon="@drawable/ic_output"
+        android:title="Output"
         app:showAsAction="ifRoom" />
 
     <item

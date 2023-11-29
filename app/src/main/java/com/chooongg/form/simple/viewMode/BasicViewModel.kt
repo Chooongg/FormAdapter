@@ -16,7 +16,6 @@ import com.chooongg.form.core.addSelector
 import com.chooongg.form.core.addSlider
 import com.chooongg.form.core.addSliderRange
 import com.chooongg.form.core.addSwitch
-import com.chooongg.form.core.addSwitchMaterial
 import com.chooongg.form.core.addText
 import com.chooongg.form.core.addTime
 import com.chooongg.form.core.addTip
@@ -33,8 +32,7 @@ class BasicViewModel : ViewModel() {
     init {
         adapter.setNewInstance {
             initPart(CardElevatedStyle()) {
-                addButton("Button(Tonal)") {
-                    field = "button"
+                addButton("Button(Tonal)", "button") {
                     buttonStyle = FormButton.ButtonStyle.TONAL
                 }
                 addCheckBox("CheckBox") {
@@ -49,7 +47,8 @@ class BasicViewModel : ViewModel() {
                     }
                 }
                 addDivider()
-                addInputFilled("InputFilled") {
+                addInputFilled("InputFilled", "inputFilled") {
+                    required = true
                     optionLoader {
                         delay(5000)
                         val list = mutableListOf<CharSequence>()
@@ -59,7 +58,8 @@ class BasicViewModel : ViewModel() {
                         list
                     }
                 }
-                addInputOutlined("InputOutlined") {
+                addInputOutlined("InputOutlined", "inputOutlined") {
+                    required = true
                     optionLoader {
                         delay(5000)
                         val list = mutableListOf<CharSequence>()
@@ -69,8 +69,7 @@ class BasicViewModel : ViewModel() {
                         list
                     }
                 }
-                addInput("Input") {
-                    field = "input"
+                addInput("Input", "input") {
                     maxLines = 1
                     optionLoader {
                         delay(5000)
@@ -81,8 +80,7 @@ class BasicViewModel : ViewModel() {
                         list
                     }
                 }
-                addInput("Input") {
-                    field = "input"
+                addInput("Input", "input") {
                     maxLines = 1
                     contentGravity = Gravity.NO_GRAVITY
                     counterMaxLength = 11
@@ -111,7 +109,8 @@ class BasicViewModel : ViewModel() {
                     }
                 }
                 addRating("Rating")
-                addSelector("Selector") {
+                addSelector("Selector", "selector") {
+                    required = true
                     optionLoader {
                         val list = mutableListOf<Option>()
                         for (i in 0..5) {
@@ -140,7 +139,6 @@ class BasicViewModel : ViewModel() {
                     content = listOf("1", "2")
                 }
                 addSwitch("Switch")
-                addSwitchMaterial("SwitchMaterial")
                 addText("Text") {
                     content = "Test"
                 }

@@ -12,6 +12,7 @@ import com.chooongg.form.core.style.CardElevatedStyle
 import com.chooongg.form.core.style.CardFilledStyle
 import com.chooongg.form.core.style.CardOutlinedStyle
 import com.chooongg.form.core.style.NoneStyle
+import com.chooongg.form.core.style.NotAlignmentStyle
 import com.chooongg.form.core.typeset.VerticalTypeset
 import com.chooongg.form.simple.R
 
@@ -23,7 +24,7 @@ class StyleFragment : BaseFragment() {
         adapter.isEnabled = !adapter.isEnabled
     }
 
-    override fun smoothScroll() {
+    override fun output() {
         formView.smoothScrollToPosition(35)
     }
 
@@ -35,12 +36,12 @@ class StyleFragment : BaseFragment() {
         toolbar.setTitle(R.string.style)
         formView.setFormAdapter(adapter)
         adapter.setNewInstance {
-            initPart {
-                partName = "NoneNotAlignmentStyle"
-                addChild()
-            }
             initPart(NoneStyle()) {
                 partName = "NoneStyle"
+                addChild()
+            }
+            initPart(NotAlignmentStyle()) {
+                partName = "NotAlignmentStyle"
                 addChild()
             }
             initPart(CardElevatedStyle()) {

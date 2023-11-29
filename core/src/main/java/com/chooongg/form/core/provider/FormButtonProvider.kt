@@ -15,13 +15,13 @@ import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.FormButton
+import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.theme.overlay.MaterialThemeOverlay
 import kotlinx.coroutines.CoroutineScope
 
-
-class FormButtonProvider : BaseFormProvider() {
+open class FormButtonProvider : BaseFormProvider() {
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
         return MaterialButton(parent.context).also {
             it.id = R.id.formInternalContentView
@@ -46,11 +46,12 @@ class FormButtonProvider : BaseFormProvider() {
             isEnabled = enabled
             text = FormUtils.getText(context, item.name)
             hint = FormUtils.getText(context, item.hint)
-            holder.style.iconProvider.setButtonIcon(this,itemButton?.icon)
+            holder.style.iconProvider.setButtonIcon(this, itemButton?.icon)
             iconSize = itemButton?.iconSize ?: FormUtils.getFontHeight(this)
             iconGravity = itemButton?.iconGravity ?: MaterialButton.ICON_GRAVITY_TEXT_START
             configButtonGravity(this, holder.typeset.obtainContentGravity(holder, item))
             configButtonStyle(this, itemButton)
+            configButtonClick(holder, view, item)
         }
     }
 
@@ -148,6 +149,13 @@ class FormButtonProvider : BaseFormProvider() {
                     gravity = contentGravity
                 }
             }
+        }
+    }
+
+    protected open fun configButtonClick(holder: FormViewHolder, view: View, item: BaseForm) {
+        view.setOnClickListener {
+            val adapter = holder.bindingAdapter as? BaseFormPartAdapter
+            adapter?.onItemClick(item)
         }
     }
 }

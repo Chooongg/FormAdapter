@@ -8,8 +8,8 @@ import com.chooongg.form.core.provider.FormSwitchProvider
 
 class FormSwitch : BaseForm {
 
-    constructor(name: CharSequence?) : super(name)
-    constructor(@StringRes nameRes: Int?) : super(nameRes)
+    constructor(name: CharSequence?, field: String?) : super(name, field)
+    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     override fun getProvider(adapter: FormAdapter) = FormSwitchProvider::class
 
@@ -20,6 +20,6 @@ class FormSwitch : BaseForm {
     }
 
     override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
-        return content?.toString() ?: FormUtils.getText(context,content)
+        return content?.toString() ?: FormUtils.getText(context, content)
     }
 }

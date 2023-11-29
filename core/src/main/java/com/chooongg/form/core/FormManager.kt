@@ -10,8 +10,8 @@ import com.chooongg.form.core.format.BaseNameFormatter
 import com.chooongg.form.core.format.ColonNameFormatter
 import com.chooongg.form.core.iconProvider.BaseIconProvider
 import com.chooongg.form.core.iconProvider.DefaultIconProvider
-import com.chooongg.form.core.nameProvider.BaseGroupNameProvider
-import com.chooongg.form.core.nameProvider.DefaultGroupNameProvider
+import com.chooongg.form.core.groupNameProvider.BaseGroupNameProvider
+import com.chooongg.form.core.groupNameProvider.DefaultGroupNameProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.HorizontalTypeset
 

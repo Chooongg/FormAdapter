@@ -7,8 +7,8 @@ import com.chooongg.form.core.provider.FormTextProvider
 
 open class FormInput : BaseOptionForm<CharSequence> {
 
-    constructor(name: CharSequence?) : super(name)
-    constructor(@StringRes nameRes: Int?) : super(nameRes)
+    constructor(name: CharSequence?, field: String?) : super(name, field)
+    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     /**
      * 最小行数

@@ -6,8 +6,8 @@ import com.chooongg.form.core.provider.FormTextProvider
 
 class FormText : BaseForm {
 
-    constructor(name: CharSequence?) : super(name)
-    constructor(@StringRes nameRes: Int?) : super(nameRes)
+    constructor(name: CharSequence?, field: String?) : super(name, field)
+    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     override fun getProvider(adapter: FormAdapter) = FormTextProvider::class
 

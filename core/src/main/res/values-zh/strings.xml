@@ -5,6 +5,7 @@
     <string name="fromDefaultHintNone">空</string>
     <string name="formDefaultHintSelect">请选择</string>
     <string name="formDefaultHintInput">请输入</string>
+    <string name="formDefaultGroupDelete">删除</string>
 
     <string name="formPickerOpenError">无法打开选择器</string>
 

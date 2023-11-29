@@ -9,14 +9,14 @@ import com.chooongg.form.core.R
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.style.BaseStyle
-import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.materialswitch.MaterialSwitch
 import kotlinx.coroutines.CoroutineScope
 
 class FormSwitchProvider : BaseFormProvider() {
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
         FrameLayout(parent.context).also {
             it.id = R.id.formInternalContentView
-            it.addView(SwitchMaterial(it.context).apply {
+            it.addView(MaterialSwitch(it.context).apply {
                 id = R.id.formInternalContentChildView
                 setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
                 setPaddingRelative(
@@ -35,7 +35,7 @@ class FormSwitchProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        with(view.findViewById<SwitchMaterial>(R.id.formInternalContentChildView)) {
+        with(view.findViewById<MaterialSwitch>(R.id.formInternalContentChildView)) {
             isEnabled = enabled
             setOnCheckedChangeListener(null)
             isChecked = item.content as? Boolean ?: false
