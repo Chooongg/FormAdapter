@@ -23,6 +23,7 @@ import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.option.Option
 import com.chooongg.form.core.style.CardElevatedStyle
+import com.chooongg.form.simple.R
 import kotlinx.coroutines.delay
 
 class BasicViewModel : ViewModel() {
@@ -132,6 +133,7 @@ class BasicViewModel : ViewModel() {
                 addSlider("Slider") {
                     stepSize = 1f
                     content = "20"
+                    menu = R.menu.main
                 }
                 addSliderRange("SliderRange") {
                     stepSize = 1f

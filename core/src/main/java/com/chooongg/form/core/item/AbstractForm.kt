@@ -1,10 +1,9 @@
 package com.chooongg.form.core.item
 
+import androidx.annotation.MenuRes
 import com.chooongg.form.core.CacheCleanable
-import com.chooongg.form.core.FormMenuBlock
 import com.chooongg.form.core.enum.FormEnableMode
 import com.chooongg.form.core.enum.FormVisibilityMode
-import com.chooongg.form.core.menu.FormMenuItem
 import java.util.UUID
 
 abstract class AbstractForm : CacheCleanable {
@@ -24,23 +23,11 @@ abstract class AbstractForm : CacheCleanable {
      */
     var enableMode: FormEnableMode = FormEnableMode.ENABLED
 
-    protected var menuInternal: FormMenuItem? = null
-
-    protected var menu: FormMenuItem? = null
-
-    protected var menu2: FormMenuItem? = null
-
-    fun menu(block: FormMenuBlock?) {
-        menu = if (block != null) {
-            FormMenuItem().apply(block)
-        } else null
-    }
-
-    fun menu2(block: FormMenuBlock?) {
-        menu2 = if (block != null) {
-            FormMenuItem().apply(block)
-        } else null
-    }
+    /**
+     * 菜单
+     */
+    @MenuRes
+    var menu: Int? = null
 
     /**
      * 真实的可见性

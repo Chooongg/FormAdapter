@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="formInternalNameView" type="id" />
+    <item name="formInternalMenuView" type="id" />
     <item name="formInternalContentView" type="id" />
     <item name="formInternalContentChildView" type="id" />
     <item name="formInternalContentChildSecondView" type="id" />

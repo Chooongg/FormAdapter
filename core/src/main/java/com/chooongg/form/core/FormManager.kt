@@ -8,12 +8,12 @@ import androidx.annotation.Px
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.format.BaseNameFormatter
 import com.chooongg.form.core.format.ColonNameFormatter
-import com.chooongg.form.core.iconProvider.BaseIconProvider
-import com.chooongg.form.core.iconProvider.DefaultIconProvider
 import com.chooongg.form.core.groupNameProvider.BaseGroupNameProvider
 import com.chooongg.form.core.groupNameProvider.DefaultGroupNameProvider
+import com.chooongg.form.core.iconProvider.BaseIconProvider
+import com.chooongg.form.core.iconProvider.DefaultIconProvider
 import com.chooongg.form.core.typeset.BaseTypeset
-import com.chooongg.form.core.typeset.HorizontalTypeset
+import com.chooongg.form.core.typeset.VerticalTypeset
 
 object FormManager {
 
@@ -36,7 +36,7 @@ object FormManager {
 
         var nameFormatter: BaseNameFormatter = ColonNameFormatter()
 
-        var typeset: BaseTypeset = HorizontalTypeset()
+        var typeset: BaseTypeset = VerticalTypeset()
 
         var groupNameProvider: BaseGroupNameProvider = DefaultGroupNameProvider()
 
