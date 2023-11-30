@@ -17,6 +17,8 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
 
     private var data = FormDynamicPartData()
 
+    private val addButton = InternalFormDynamicAddButton(null, null)
+
     fun create(data: FormDynamicPartData.() -> Unit) {
         create(FormDynamicPartData().apply(data))
     }
@@ -48,6 +50,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                     val group = ArrayList<BaseForm>()
                     group.add(it.getGroupNameItem { item ->
                         item.name = data.partName
+                        item.isHasDeleteConfirm = data.isHasDeleteConfirm
                         item.dynamicGroupNameFormatBlock = data.dynamicGroupNameFormatter
                         if (data.dynamicPartMinGroupCount <= index) {
                             item.dynamicGroupDeletingBlock = {
@@ -71,7 +74,8 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                             data.getGroups().size + 1
                         ) ?: FormUtils.getText(context!!, data.partName)
                     } else null
-                    group.add(InternalFormDynamicAddButton(addName, null).apply {
+                    group.add(addButton.apply {
+                        name = addName
                         buttonStyle = data.addButtonStyle
                         iconGravity = data.addIconGravity
                         icon = data.addIcon

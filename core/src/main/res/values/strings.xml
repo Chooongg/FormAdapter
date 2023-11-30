@@ -6,6 +6,7 @@
     <string name="formDefaultHintSelect">Please select</string>
     <string name="formDefaultHintInput">Please enter</string>
     <string name="formDefaultGroupDelete">Delete</string>
+    <string name="formDefaultGroupDeleteConfirm">You need to confirm this operation</string>
 
     <string name="formPickerOpenError">Failed to open selector</string>
 

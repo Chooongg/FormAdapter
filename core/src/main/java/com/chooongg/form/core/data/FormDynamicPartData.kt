@@ -17,6 +17,8 @@ class FormDynamicPartData : BaseFormPartData {
 
     private val _groups = mutableListOf<FormGroupData>()
 
+    var isHasDeleteConfirm: Boolean = true
+
     internal var dynamicGroupCreateBlock: FormGroupCreateBlock? = null
 
     internal var dynamicGroupNameFormatter: FormGroupNameFormatter? = { _, name, index, count ->

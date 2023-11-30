@@ -14,9 +14,11 @@ class InternalFormGroupName internal constructor() : BaseForm(null, null) {
 
     override var typeset: BaseTypeset? = NoneTypeset()
 
-    internal var dynamicGroupNameFormatBlock: FormGroupNameFormatter? = null
+    var isHasDeleteConfirm: Boolean = true
 
     internal var dynamicGroupDeletingBlock: (() -> Unit)? = null
+
+    internal var dynamicGroupNameFormatBlock: FormGroupNameFormatter? = null
 
     override fun getProvider(adapter: FormAdapter) = InternalFormPartNameProvider::class
 
