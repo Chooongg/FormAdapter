@@ -9,6 +9,7 @@ import com.chooongg.form.core.enum.FormEmsMode
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.menu.FormMenuView
+import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
 import com.google.android.material.textview.MaterialTextView
 
@@ -56,6 +57,14 @@ class HorizontalTypeset : BaseTypeset {
                     item.menu!!,
                     item.isRealMenuEnable(enabled),
                     item.getMenuCreateOptionCallback(),
+                    {
+                        val isIntercept = item.getMenuClickListener()?.onMenuClick(it, item)
+                        if (isIntercept != true) {
+                            (holder.bindingAdapter as? BaseFormPartAdapter)?.formAdapter
+                                ?.getMenuClickListener()?.onMenuClick(it, item)
+                        }
+                        true
+                    },
                     item.menuShowTitle
                 )
             } else {

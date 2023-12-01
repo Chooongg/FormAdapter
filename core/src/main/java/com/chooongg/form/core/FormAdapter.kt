@@ -45,6 +45,8 @@ open class FormAdapter(isEnabled: Boolean) :
             partAdapters.forEach { it.executeUpdate(false) }
         }
 
+    private var menuClickListener: OnMenuClickGlobalListener? = null
+
     private val dataObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
             notifyItemRangeChanged(positionStart, itemCount)
@@ -100,6 +102,12 @@ open class FormAdapter(isEnabled: Boolean) :
         recyclerView?.focusedChild?.clearFocus()
         partAdapters.forEach { it.update() }
     }
+
+    fun onMenuClickListener(menuClickListener: OnMenuClickGlobalListener?) {
+        this.menuClickListener = menuClickListener
+    }
+
+    fun getMenuClickListener() = menuClickListener
 
     fun findOfField(
         field: String,

@@ -13,8 +13,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.MenuRes
 import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.widget.ActionMenuView.OnMenuItemClickListener
 import androidx.core.content.res.use
-import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.core.R
@@ -43,17 +43,18 @@ class FormMenuView constructor(
         @MenuRes menuRes: Int,
         enabled: Boolean,
         menuCreateOptionCallback: (MenuBuilder.() -> Unit)?,
+        onMenuItemClickListener: OnMenuItemClickListener?,
         isShowTitle: Boolean
     ) {
         menu.clearAll()
         MenuInflater(context).inflate(menuRes, menu)
         menuCreateOptionCallback?.invoke(menu)
-        menuAdapter.setMenu(menu, enabled, isShowTitle)
+        menuAdapter.setMenu(menu, enabled, onMenuItemClickListener, isShowTitle)
     }
 
     fun clearMenu() {
         menu.clearAll()
-        menuAdapter.setMenu(null, false, false)
+        menuAdapter.setMenu(null, false, null, false)
     }
 
     private class Adapter(private val style: BaseStyle) : RecyclerView.Adapter<Adapter.Holder>() {
@@ -64,10 +65,18 @@ class FormMenuView constructor(
 
         private var enabled: Boolean = false
 
+        private var onMenuClickListener: OnMenuItemClickListener? = null
+
         @SuppressLint("NotifyDataSetChanged")
-        fun setMenu(menu: MenuBuilder?, enabled: Boolean, isShowTitle: Boolean) {
+        fun setMenu(
+            menu: MenuBuilder?,
+            enabled: Boolean,
+            onMenuClickListener: OnMenuItemClickListener?,
+            isShowTitle: Boolean
+        ) {
             this.isShowTitle = isShowTitle
             this.enabled = enabled
+            this.onMenuClickListener = onMenuClickListener
             items.clear()
             menu?.visibleItems?.forEach {
                 it.shouldShowIcon()
@@ -121,6 +130,7 @@ class FormMenuView constructor(
                     iconTintMode = item.iconTintMode
                     tooltipText = item.tooltipText ?: item.title
                 }
+                setOnClickListener { onMenuClickListener?.onMenuItemClick(item) }
             }
         }
 
