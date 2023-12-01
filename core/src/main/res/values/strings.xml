@@ -5,8 +5,11 @@
     <string name="fromDefaultHintNone">None</string>
     <string name="formDefaultHintSelect">Please select</string>
     <string name="formDefaultHintInput">Please enter</string>
+
     <string name="formDefaultGroupDelete">Delete</string>
-    <string name="formDefaultGroupDeleteConfirm">You need to confirm this operation</string>
+    <string name="formDefaultGroupDeleteConfirm">Delete Confirmation</string>
+    <string name="formDefaultGroupDeleteMessage">You need to confirm the delete %s</string>
+    <string name="formDefaultGroupCancel">Cancel</string>
 
     <string name="formPickerOpenError">Failed to open selector</string>
 

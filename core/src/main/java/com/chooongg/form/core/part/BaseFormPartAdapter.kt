@@ -349,7 +349,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         }
         formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
             setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
-            onBindViewHolder(holder, holder.typesetLayout, item)
+            onBindViewHolder(holder, holder.typesetLayout, item, formAdapter.isEnabled)
         }
         provider.apply {
             onBindViewHolder(
@@ -374,7 +374,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
                 style.onBindViewHolder(holder, holder.styleLayout, item)
             }
             typeset.setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
-            typeset.onBindViewHolder(holder, holder.typesetLayout, item)
+            typeset.onBindViewHolder(holder, holder.typesetLayout, item, formAdapter.isEnabled)
         }
         if (isHasBind) {
             provider.onBindViewHolder(
@@ -468,20 +468,10 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     ) {
         val position = itemList.indexOf(item)
         if (position != -1) {
-            val tempEmpty = itemList.isEmpty()
             if (hasPayload) {
                 notifyItemChanged(position, FormAdapter.UPDATE_PAYLOAD_FLAG)
             } else {
                 update()
-                if (tempEmpty != itemList.isEmpty()) {
-                    val partIndex = formAdapter.partAdapters.indexOf(this)
-                    if (partIndex > 0) {
-                        formAdapter.partAdapters[partIndex - 1].executeUpdate(false)
-                    }
-                    if (partIndex < formAdapter.partAdapters.size - 1) {
-                        formAdapter.partAdapters[partIndex + 1].executeUpdate(false)
-                    }
-                }
             }
         }
     }

@@ -8,6 +8,7 @@ import com.chooongg.form.core.R
 import com.chooongg.form.core.enum.FormEmsMode
 import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.menu.FormMenuView
 import com.chooongg.form.core.style.BaseStyle
 import com.google.android.material.textview.MaterialTextView
 
@@ -32,17 +33,35 @@ class HorizontalTypeset : BaseTypeset {
                     0, style.insideInfo.middleBottom
                 )
             }, LinearLayoutCompat.LayoutParams(-2, -2))
+            it.addView(FormMenuView(it.context, style).apply {
+                id = R.id.formInternalMenuView
+            }, LinearLayoutCompat.LayoutParams(-2, -2))
         }
     }
 
     override fun onBindViewHolder(
         holder: FormViewHolder,
         layout: ViewGroup,
-        item: BaseForm
+        item: BaseForm,
+        enabled: Boolean
     ) {
         layout.findViewById<MaterialTextView>(R.id.formInternalNameView)?.apply {
             setNameViewEms(holder, this)
             text = obtainNameFormatter().format(context, item)
+        }
+        layout.findViewById<FormMenuView>(R.id.formInternalMenuView).apply {
+            if (item.isRealMenuVisible(enabled) && item.menu != null) {
+                visibility = View.VISIBLE
+                inflateMenu(
+                    item.menu!!,
+                    item.isRealMenuEnable(enabled),
+                    item.getMenuCreateOptionCallback(),
+                    item.menuShowTitle
+                )
+            } else {
+                visibility = View.GONE
+                clearMenu()
+            }
         }
     }
 

@@ -1,9 +1,13 @@
 package com.chooongg.form.core.data
 
 import androidx.annotation.IntRange
+import androidx.annotation.MenuRes
+import androidx.appcompat.view.menu.MenuBuilder
 import com.chooongg.form.core.FormGroupCreateBlock
 import com.chooongg.form.core.FormGroupNameFormatter
 import com.chooongg.form.core.R
+import com.chooongg.form.core.enum.FormEnableMode
+import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.item.FormButton
 import com.google.android.material.button.MaterialButton
 
@@ -38,11 +42,49 @@ class FormDynamicPartData : BaseFormPartData {
     @IntRange(from = 1)
     var dynamicPartMaxGroupCount: Int = 1
 
+    /**
+     * 菜单
+     */
+    @MenuRes
+    var menu: Int? = null
+
+    /**
+     * 菜单显示标题
+     */
+    var menuShowTitle: Boolean = false
+
+    private var menuCreateOptionCallback: (MenuBuilder.() -> Unit)? = null
+
+    /**
+     * 菜单可见模式
+     */
+    var menuVisibilityMode: FormVisibilityMode = FormVisibilityMode.ENABLED
+
+    /**
+     * 菜单启用模式
+     */
+    var menuEnableMode: FormEnableMode = FormEnableMode.ENABLED
+
+    /**
+     * 菜单创建选项时的监听
+     */
+    fun menuCreateOptionCallback(block: (MenuBuilder.() -> Unit)?) {
+        menuCreateOptionCallback = block
+    }
+
+    fun getMenuCreateOptionCallback() = menuCreateOptionCallback
+
     fun addGroup(block: FormGroupData.() -> Unit) {
         _groups.add(FormGroupData().apply(block))
     }
 
+    fun <T> initGroup(list: Iterable<T>, block: FormGroupData.(T) -> Unit) {
+        list.forEach { _groups.add(FormGroupData().apply { block.invoke(this, it) }) }
+    }
+
     fun getGroups(): MutableList<FormGroupData> = _groups
+
+    fun clearGroups() = _groups.clear()
 
     fun dynamicGroupCreator(block: FormGroupCreateBlock?) {
         dynamicGroupCreateBlock = block

@@ -10,6 +10,7 @@ import com.chooongg.form.core.item.InternalFormDynamicAddButton
 import com.chooongg.form.core.item.VariantForm
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.style.NotAlignmentStyle
+import org.json.JSONArray
 import org.json.JSONObject
 
 class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
@@ -60,6 +61,10 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                         } else {
                             item.dynamicGroupDeletingBlock = null
                         }
+                        item.menu = data.menu
+                        item.menuVisibilityMode = data.menuVisibilityMode
+                        item.menuEnableMode = data.menuEnableMode
+                        item.menuCreateOptionCallback = data.getMenuCreateOptionCallback()
                     })
                     group.addAll(it.getItems())
                     add(group)
@@ -171,9 +176,30 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     }
 
     override fun executeOutput(json: JSONObject) {
-        data.getGroups().forEach {
-            it.getItems().forEach { item ->
-                item.executeOutput(formAdapter, json)
+        if (data.partField != null) {
+            val jsonArray = JSONArray()
+            data.getGroups().forEach {
+                val childJson = JSONObject()
+                it.getItems().forEach { item -> item.executeOutput(formAdapter, childJson) }
+                jsonArray.put(childJson)
+            }
+            json.put(data.partField!!, jsonArray)
+        } else {
+            data.getGroups().forEach {
+                it.getItems().forEach { item ->
+                    val tempJson = JSONObject()
+                    item.executeOutput(formAdapter, tempJson)
+                    tempJson.keys().forEach { key ->
+                        val jsonArray = json.optJSONArray(key)
+                        if (jsonArray != null) {
+                            jsonArray.put(tempJson.get(key))
+                        } else {
+                            val newJsonArray = JSONArray()
+                            newJsonArray.put(tempJson.get(key))
+                            json.put(key, newJsonArray)
+                        }
+                    }
+                }
             }
         }
     }

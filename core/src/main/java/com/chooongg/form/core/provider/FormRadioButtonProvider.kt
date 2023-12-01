@@ -116,14 +116,28 @@ class FormRadioButtonProvider : BaseFormProvider() {
         if (item !is FormRadioButton) return
         with(holder.itemView.findViewById<MaterialTextView>(R.id.formInternalContentChildView)) {
             if (gravity != null) setGravity(gravity)
-            hint = when (item.optionLoadResult) {
-                is OptionLoadResult.Loading -> context.getString(R.string.formOptionsLoading)
-                is OptionLoadResult.Error -> context.getString(R.string.formOptionsError)
-                is OptionLoadResult.Empty -> context.getString(R.string.formOptionsEmpty)
+            when (item.optionLoadResult) {
+                is OptionLoadResult.Loading -> {
+                    visibility = View.VISIBLE
+                    hint = context.getString(R.string.formOptionsLoading)
+                }
+
+                is OptionLoadResult.Error -> {
+                    visibility = View.VISIBLE
+                    hint = context.getString(R.string.formOptionsError)
+                }
+
+                is OptionLoadResult.Empty -> {
+                    visibility = View.VISIBLE
+                    hint = context.getString(R.string.formOptionsEmpty)
+                }
+
                 else -> if (item.options.isNullOrEmpty()) {
-                    context.getString(R.string.formOptionsEmpty)
+                    visibility = View.VISIBLE
+                    hint = context.getString(R.string.formOptionsEmpty)
                 } else {
-                    null
+                    visibility = View.GONE
+                    hint = null
                 }
             }
         }

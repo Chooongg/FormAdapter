@@ -1,6 +1,5 @@
 package com.chooongg.form.core.part
 
-import android.util.Log
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormDataVerificationException
 import com.chooongg.form.core.data.FormPartData
@@ -28,6 +27,10 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             if (data.partName != null) {
                 group.add(data.getGroupNameItem { item ->
                     item.name = data.partName
+                    item.menu = data.menu
+                    item.menuVisibilityMode = data.menuVisibilityMode
+                    item.menuEnableMode = data.menuEnableMode
+                    item.menuCreateOptionCallback = data.getMenuCreateOptionCallback()
                 })
             } else data.clearGroupNameItem()
             group.addAll(data.getItems())
@@ -87,15 +90,14 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
 
     @Throws(FormDataVerificationException::class)
     override fun executeDataVerification() {
-        data.getItems().forEach { item ->
-            item.executeDataVerification(formAdapter)
-        }
+        data.getItems().forEach { item -> item.executeDataVerification(formAdapter) }
     }
 
     override fun executeOutput(json: JSONObject) {
-        data.getItems().forEach { item ->
-            Log.d("Form", "${item.javaClass.simpleName}   ${item.content}")
-            item.executeOutput(formAdapter, json)
-        }
+        if (data.partField != null) {
+            val childJson = JSONObject()
+            data.getItems().forEach { item -> item.executeOutput(formAdapter, childJson) }
+            json.put(data.partField!!, childJson)
+        } else data.getItems().forEach { item -> item.executeOutput(formAdapter, json) }
     }
 }

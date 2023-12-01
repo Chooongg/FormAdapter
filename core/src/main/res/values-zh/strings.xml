@@ -5,8 +5,11 @@
     <string name="fromDefaultHintNone">空</string>
     <string name="formDefaultHintSelect">请选择</string>
     <string name="formDefaultHintInput">请输入</string>
+
     <string name="formDefaultGroupDelete">删除</string>
-    <string name="formDefaultGroupDeleteConfirm">你需要确认此操作</string>
+    <string name="formDefaultGroupDeleteConfirm">删除确认</string>
+    <string name="formDefaultGroupDeleteMessage">你需要确认删除 %s</string>
+    <string name="formDefaultGroupCancel">取消</string>
 
     <string name="formPickerOpenError">无法打开选择器</string>
 

@@ -81,8 +81,8 @@ open class FormAdapter(isEnabled: Boolean) :
         block(data)
         data.getParts().forEach {
             when (it) {
-                is FormPartAdapter -> addPart(it, false)
-                is FormDynamicPartAdapter -> addDynamicPart(it, false)
+                is FormPartAdapter -> addPart(it)
+                is FormDynamicPartAdapter -> addDynamicPart(it)
             }
         }
     }
@@ -212,34 +212,28 @@ open class FormAdapter(isEnabled: Boolean) :
 
     fun addPart(
         style: BaseStyle = NoneStyle(),
-        updateAdjacentAdapter: Boolean = true,
         block: FormPartData.() -> Unit
     ) {
         val adapter = FormPartAdapter(this, style)
-        addPart(adapter, updateAdjacentAdapter)
+        addPart(adapter)
         adapter.create { block(this) }
     }
 
-    fun addPart(adapter: FormPartAdapter?, updateAdjacentAdapter: Boolean = true) {
+    fun addPart(adapter: FormPartAdapter?) {
         if (adapter != null) concatAdapter.addAdapter(adapter)
-        if (!updateAdjacentAdapter || recyclerView == null || concatAdapter.adapters.size - 2 < 0) return
-        partAdapters[concatAdapter.adapters.size - 2].executeUpdate(false)
     }
 
     fun addDynamicPart(
         style: BaseStyle = NoneStyle(),
-        updateAdjacentAdapter: Boolean = true,
         block: FormDynamicPartData.() -> Unit
     ) {
         val adapter = FormDynamicPartAdapter(this, style)
         adapter.create { block(this) }
-        addDynamicPart(adapter, updateAdjacentAdapter)
+        addDynamicPart(adapter)
     }
 
-    fun addDynamicPart(adapter: FormDynamicPartAdapter?, updateAdjacentAdapter: Boolean = true) {
+    fun addDynamicPart(adapter: FormDynamicPartAdapter?) {
         if (adapter != null) concatAdapter.addAdapter(adapter)
-        if (!updateAdjacentAdapter || recyclerView == null || concatAdapter.adapters.size - 2 < 0) return
-        partAdapters[concatAdapter.adapters.size - 2].executeUpdate(false)
     }
 
     fun removeAdapter(adapter: RecyclerView.Adapter<ViewHolder>) {

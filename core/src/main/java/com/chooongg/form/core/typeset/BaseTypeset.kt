@@ -38,7 +38,8 @@ abstract class BaseTypeset {
     abstract fun onBindViewHolder(
         holder: FormViewHolder,
         layout: ViewGroup,
-        item: BaseForm
+        item: BaseForm,
+        enabled: Boolean
     )
 
     protected abstract fun addView(style: BaseStyle, parentView: ViewGroup, child: View)

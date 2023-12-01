@@ -58,10 +58,6 @@ class FormInputFilledProvider : BaseFormProvider() {
                 isVerticalFadingEdgeEnabled = true
                 setFadingEdgeLength(context.resources.getDimensionPixelSize(R.dimen.formFadingEdgeLength))
                 setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
-//                setPaddingRelative(
-//                    style.insideInfo.start, style.insideInfo.top,
-//                    style.insideInfo.end, style.insideInfo.bottom
-//                )
             }
             it.addView(editText)
             it.setEndIconTintList(editText.hintTextColors)

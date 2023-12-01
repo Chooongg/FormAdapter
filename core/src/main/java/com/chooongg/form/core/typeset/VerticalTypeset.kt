@@ -33,22 +33,36 @@ class VerticalTypeset : BaseTypeset() {
                         style.insideInfo.middleEnd, style.insideInfo.middleBottom
                     )
                 }, LinearLayoutCompat.LayoutParams(0, -2).apply { weight = 1f })
-                child.addView(FormMenuView(child.context).apply {
+                child.addView(FormMenuView(child.context, style).apply {
                     id = R.id.formInternalMenuView
                 }, LinearLayoutCompat.LayoutParams(-2, -2))
             }, LinearLayoutCompat.LayoutParams(-1, -2))
         }
     }
 
-    override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup, item: BaseForm) {
+    override fun onBindViewHolder(
+        holder: FormViewHolder,
+        layout: ViewGroup,
+        item: BaseForm,
+        enabled: Boolean
+    ) {
         layout.findViewById<MaterialTextView>(R.id.formInternalNameView).apply {
             setNameViewEms(holder, this)
             text = obtainNameFormatter().format(context, item)
         }
         layout.findViewById<FormMenuView>(R.id.formInternalMenuView).apply {
-            if (item.menu != null) {
-                inflateMenu(item.menu!!)
-            } else clearMenu()
+            if (item.isRealMenuVisible(enabled) && item.menu != null) {
+                visibility = View.VISIBLE
+                inflateMenu(
+                    item.menu!!,
+                    item.isRealMenuEnable(enabled),
+                    item.getMenuCreateOptionCallback(),
+                    item.menuShowTitle
+                )
+            } else {
+                visibility = View.GONE
+                clearMenu()
+            }
         }
     }
 
