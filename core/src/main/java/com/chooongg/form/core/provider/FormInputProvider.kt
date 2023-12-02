@@ -30,7 +30,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 
-class FormInputProvider : BaseFormProvider() {
+open class FormInputProvider : BaseFormProvider() {
 
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
         TextInputLayout(
@@ -159,7 +159,7 @@ class FormInputProvider : BaseFormProvider() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun configOption(holder: FormViewHolder, view: View, item: BaseForm, enabled: Boolean) {
+    protected fun configOption(holder: FormViewHolder, view: View, item: BaseForm, enabled: Boolean) {
         val editText =
             view.findViewById<MaterialAutoCompleteTextView>(R.id.formInternalContentChildView)
         val itemInput = item as? FormInput

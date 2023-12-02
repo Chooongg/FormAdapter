@@ -58,10 +58,10 @@ class HorizontalTypeset : BaseTypeset {
                     item.isRealMenuEnable(enabled),
                     item.getMenuCreateOptionCallback(),
                     {
-                        val isIntercept = item.getMenuClickListener()?.onMenuClick(it, item)
+                        val isIntercept = item.getMenuClickListener()?.invoke(context, it, item)
                         if (isIntercept != true) {
-                            (holder.bindingAdapter as? BaseFormPartAdapter)?.formAdapter
-                                ?.getMenuClickListener()?.onMenuClick(it, item)
+                            val adapter = holder.bindingAdapter as? BaseFormPartAdapter
+                            adapter?.formAdapter?.getMenuClickListener()?.invoke(context, it, item)
                         }
                         true
                     },

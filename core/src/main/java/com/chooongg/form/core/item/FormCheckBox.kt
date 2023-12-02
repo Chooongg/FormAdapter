@@ -8,7 +8,7 @@ import com.chooongg.form.core.provider.FormCheckBoxProvider
 import org.json.JSONArray
 import org.json.JSONObject
 
-class FormCheckBox : BaseOptionForm<IOption> {
+open class FormCheckBox : BaseOptionForm<IOption> {
 
     constructor(name: CharSequence?, field: String?) : super(name, field)
     constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)

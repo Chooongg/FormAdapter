@@ -1,9 +1,9 @@
 package com.chooongg.form.core.option
 
 data class Option(
-    val _name: String?,
-    val _secondaryName: String?,
-    val _value: String?
+    private val _name: String?,
+    private val _secondaryName: String?,
+    private val _value: String?
 ) : IOption() {
 
     constructor(name: String?) : this(name, null, name)

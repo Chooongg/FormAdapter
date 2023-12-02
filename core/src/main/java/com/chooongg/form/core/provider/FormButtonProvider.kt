@@ -4,10 +4,7 @@ import android.animation.AnimatorInflater
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.MarginLayoutParams
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.updateLayoutParams
 import com.chooongg.form.core.FormUtils
@@ -23,14 +20,19 @@ import kotlinx.coroutines.CoroutineScope
 
 open class FormButtonProvider : BaseFormProvider() {
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
-        return MaterialButton(parent.context).also {
-            it.id = R.id.formInternalContentView
-            it.layoutParams = MarginLayoutParams(-1, -2).apply {
-                topMargin = style.insideInfo.middleTop - it.insetTop
-                bottomMargin = style.insideInfo.middleBottom - it.insetBottom
-                marginStart = style.insideInfo.middleStart
-                marginEnd = style.insideInfo.middleEnd
-            }
+        return ConstraintLayout(parent.context).also {
+            it.addView(MaterialButton(parent.context).apply {
+                id = R.id.formInternalContentView
+                layoutParams = ConstraintLayout.LayoutParams(0, -2).apply {
+                    matchConstraintMaxWidth = maxWidth
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    topMargin = style.insideInfo.middleTop - insetTop
+                    bottomMargin = style.insideInfo.middleBottom - insetBottom
+                    marginStart = style.insideInfo.middleStart
+                    marginEnd = style.insideInfo.middleEnd
+                }
+            })
         }
     }
 
@@ -42,7 +44,7 @@ open class FormButtonProvider : BaseFormProvider() {
         enabled: Boolean
     ) {
         val itemButton = item as? FormButton
-        with(view as MaterialButton) {
+        with(view.findViewById<MaterialButton>(R.id.formInternalContentView)) {
             isEnabled = enabled
             text = FormUtils.getText(context, item.name)
             hint = FormUtils.getText(context, item.hint)
@@ -51,7 +53,7 @@ open class FormButtonProvider : BaseFormProvider() {
             iconGravity = itemButton?.iconGravity ?: MaterialButton.ICON_GRAVITY_TEXT_START
             configButtonGravity(this, holder.typeset.obtainContentGravity(holder, item))
             configButtonStyle(this, itemButton)
-            configButtonClick(holder, view, item)
+            configButtonClick(holder, this, item)
         }
     }
 
@@ -116,37 +118,33 @@ open class FormButtonProvider : BaseFormProvider() {
 
     private fun configButtonGravity(view: MaterialButton, contentGravity: Int) {
         if (contentGravity == Gravity.NO_GRAVITY) {
-            view.updateLayoutParams<ViewGroup.LayoutParams> {
-                width = ViewGroup.LayoutParams.MATCH_PARENT
-            }
-            when (view.parent) {
-                is FrameLayout -> view.updateLayoutParams<FrameLayout.LayoutParams> {
-                    gravity = Gravity.NO_GRAVITY
-                }
-
-                is LinearLayout -> view.updateLayoutParams<LinearLayout.LayoutParams> {
-                    gravity = Gravity.NO_GRAVITY
-                }
-
-                is LinearLayoutCompat -> view.updateLayoutParams<LinearLayoutCompat.LayoutParams> {
-                    gravity = Gravity.NO_GRAVITY
-                }
+            view.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
             }
         } else {
-            view.updateLayoutParams<ViewGroup.LayoutParams> {
+            view.updateLayoutParams<ConstraintLayout.LayoutParams> {
                 width = ViewGroup.LayoutParams.WRAP_CONTENT
-            }
-            when (view.parent) {
-                is FrameLayout -> view.updateLayoutParams<FrameLayout.LayoutParams> {
-                    gravity = contentGravity
-                }
+                when {
+                    contentGravity and Gravity.START == Gravity.START -> {
+                        startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                        endToEnd = ConstraintLayout.LayoutParams.UNSET
+                    }
 
-                is LinearLayout -> view.updateLayoutParams<LinearLayout.LayoutParams> {
-                    gravity = contentGravity
-                }
+                    contentGravity and Gravity.END == Gravity.END -> {
+                        startToStart = ConstraintLayout.LayoutParams.UNSET
+                        endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    }
 
-                is LinearLayoutCompat -> view.updateLayoutParams<LinearLayoutCompat.LayoutParams> {
-                    gravity = contentGravity
+                    contentGravity and Gravity.CENTER == Gravity.CENTER -> {
+                        startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                        endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    }
+
+                    contentGravity and Gravity.CENTER_HORIZONTAL == Gravity.CENTER_HORIZONTAL -> {
+                        startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                        endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    }
                 }
             }
         }

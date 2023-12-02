@@ -1,14 +1,12 @@
 package com.chooongg.form.simple.fragment
 
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import com.chooongg.form.core.OnMenuClickGlobalListener
 import com.chooongg.form.core.enum.FormVisibilityMode
-import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.simple.R
 import com.chooongg.form.simple.viewMode.BasicViewModel
 
@@ -16,12 +14,17 @@ class BasicFragment : BaseFragment() {
 
     private val model by viewModels<BasicViewModel>()
 
-    override fun onViewCreated() {
-        model.adapter.onMenuClickListener(object : OnMenuClickGlobalListener {
-            override fun onMenuClick(menu: MenuItem, item: BaseForm) {
-
-            }
-        })
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        model.adapter.setOnMenuClickListener { context, menu, item ->
+            Toast.makeText(context, "${item.name}, ${menu.title}", Toast.LENGTH_SHORT)
+                .show()
+        }
+        return view
     }
 
     override fun change() {
@@ -35,8 +38,9 @@ class BasicFragment : BaseFragment() {
     override fun output() {
         if (model.adapter.executeDataVerification()) {
             val output = model.adapter.executeOutput()
-            Log.e("Form", output.toString(4), null)
-            Toast.makeText(context, output.toString(2), Toast.LENGTH_SHORT).show()
+            model.adapter.findOfField("output", true, true) {
+                content = output.toString(4)
+            }
         }
     }
 

@@ -8,7 +8,7 @@ import com.chooongg.form.core.provider.FormLabelProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
 
-class FormLabel : BaseForm {
+open class FormLabel : BaseForm {
 
     constructor(name: CharSequence?, field: String?) : super(name, field)
     constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)

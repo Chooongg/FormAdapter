@@ -6,7 +6,7 @@ import com.chooongg.form.core.provider.FormMenuProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
 
-class FormMenu : BaseForm {
+open class FormMenu : BaseForm {
 
     constructor(name: CharSequence?, field: String?) : super(name, field)
     constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)

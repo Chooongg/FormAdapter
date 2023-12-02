@@ -1,6 +1,7 @@
 package com.chooongg.form.simple.viewMode
 
 import android.view.Gravity
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.addButton
@@ -19,6 +20,7 @@ import com.chooongg.form.core.addSwitch
 import com.chooongg.form.core.addText
 import com.chooongg.form.core.addTime
 import com.chooongg.form.core.addTip
+import com.chooongg.form.core.enum.FormOutputMode
 import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.option.Option
@@ -37,7 +39,7 @@ class BasicViewModel : ViewModel() {
                 addButton("Button(Tonal)", "button") {
                     buttonStyle = FormButton.ButtonStyle.TONAL
                 }
-                addCheckBox("CheckBox") {
+                addCheckBox("CheckBox", "checkBox") {
                     loneLine = true
                     optionLoader {
                         delay(2000)
@@ -50,7 +52,6 @@ class BasicViewModel : ViewModel() {
                 }
                 addDivider()
                 addInputFilled("InputFilled", "inputFilled") {
-                    required = true
                     optionLoader {
                         delay(5000)
                         val list = mutableListOf<CharSequence>()
@@ -61,7 +62,6 @@ class BasicViewModel : ViewModel() {
                     }
                 }
                 addInputOutlined("InputOutlined", "inputOutlined") {
-                    required = true
                     optionLoader {
                         delay(5000)
                         val list = mutableListOf<CharSequence>()
@@ -82,7 +82,7 @@ class BasicViewModel : ViewModel() {
                         list
                     }
                 }
-                addInput("Input", "input") {
+                addInput("Input", "input2") {
                     maxLines = 1
                     contentGravity = Gravity.NO_GRAVITY
                     counterMaxLength = 11
@@ -100,19 +100,18 @@ class BasicViewModel : ViewModel() {
                     visibilityMode = FormVisibilityMode.ENABLED
                     enableBottomPadding = true
                 }
-                addRadioButton("RadioButton") {
+                addRadioButton("RadioButton", "radioButton") {
                     optionLoader {
                         delay(5000)
                         val list = mutableListOf<Option>()
                         for (i in 0..5) {
-                            list.add(Option("Test${i}", i.toString()))
+                            list.add(Option("Test${i}"))
                         }
                         list
                     }
                 }
-                addRating("Rating")
+                addRating("Rating", "rating")
                 addSelector("Selector", "selector") {
-                    required = true
                     optionLoader {
                         val list = mutableListOf<Option>()
                         for (i in 0..5) {
@@ -121,7 +120,7 @@ class BasicViewModel : ViewModel() {
                         list
                     }
                 }
-                addSelector("Selector") {
+                addSelector("Selector", "selector2") {
                     optionLoader {
                         delay(5000)
                         val list = mutableListOf<Option>()
@@ -131,24 +130,33 @@ class BasicViewModel : ViewModel() {
                         list
                     }
                 }
-                addSlider("Slider") {
+                addSlider("Slider", "slider") {
                     stepSize = 1f
                     content = "20"
                     menu = R.menu.operation
                     menuVisibilityMode = FormVisibilityMode.ALWAYS
+                    onMenuClickListener { context, menu, item ->
+                        if (menu.itemId == R.id.error) {
+                            Toast.makeText(context, "${item.name}", Toast.LENGTH_SHORT).show()
+                            true
+                        } else false
+                    }
                 }
-                addSliderRange("SliderRange") {
+                addSliderRange("SliderRange", "sliderRange") {
                     stepSize = 1f
                     valueTo = 5f
                     content = listOf("1", "2")
                     typeset = VerticalTypeset()
                     menu = R.menu.operation
                 }
-                addSwitch("Switch")
+                addSwitch("Switch", "switch") {
+                    customOutputTrue = "1"
+                    customOutputFalse = "2"
+                }
                 addText("Text") {
                     content = "Test"
                 }
-                addTime("Time")
+                addTime("Time", "time")
                 addDivider {
                     matchParentStartEdge = true
                     matchParentEndEdge = true
@@ -164,6 +172,10 @@ class BasicViewModel : ViewModel() {
                 }
                 addButton("Button(OutLined)") {
                     buttonStyle = FormButton.ButtonStyle.OUTLINED
+                }
+                addText("输出", "output") {
+                    outputMode = FormOutputMode.NEVER
+                    typeset = VerticalTypeset()
                 }
             }
         }

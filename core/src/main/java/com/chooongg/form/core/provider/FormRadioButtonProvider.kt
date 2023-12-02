@@ -203,19 +203,24 @@ class FormRadioButtonProvider : BaseFormProvider() {
         override fun onBindViewHolder(holder: FormViewChildHolder, position: Int) {
             val option = options[position]
             with(holder.itemView as MaterialRadioButton) {
-                setOnCheckedChangeListener(null)
                 isEnabled = enabled
                 isChecked = item?.content == option
                 text = option.getSpannableString(context)
                 if (provider != null && formHolder != null && item != null) {
-                    setOnCheckedChangeListener { _, checked ->
-                        if (!checked) return@setOnCheckedChangeListener
+                    setOnClickListener {
                         FormUtils.hideIme(this)
                         val selectedPosition =
                             options.indexOfFirst { item!!.content == it }
-                        provider!!.changeContentAndNotifyLinkage(formHolder!!, item!!, option)
-                        if (selectedPosition != -1 && selectedPosition != position) {
-                            post { notifyItemChanged(selectedPosition, "uncheck") }
+                        if (selectedPosition == position) {
+                            if (!item!!.required) {
+                                provider!!.changeContentAndNotifyLinkage(formHolder!!, item!!, null)
+                                post { isChecked = false }
+                            }
+                        } else {
+                            provider!!.changeContentAndNotifyLinkage(formHolder!!, item!!, option)
+                            if (selectedPosition != -1) {
+                                post { notifyItemChanged(selectedPosition, "uncheck") }
+                            }
                         }
                     }
                 }

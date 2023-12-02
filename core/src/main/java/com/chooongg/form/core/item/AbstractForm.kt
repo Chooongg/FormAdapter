@@ -3,7 +3,7 @@ package com.chooongg.form.core.item
 import androidx.annotation.MenuRes
 import androidx.appcompat.view.menu.MenuBuilder
 import com.chooongg.form.core.CacheCleanable
-import com.chooongg.form.core.OnMenuClickListener
+import com.chooongg.form.core.FormMenuClickBlock
 import com.chooongg.form.core.enum.FormEnableMode
 import com.chooongg.form.core.enum.FormVisibilityMode
 import java.util.UUID
@@ -48,7 +48,7 @@ abstract class AbstractForm : CacheCleanable {
      */
     var menuEnableMode: FormEnableMode = FormEnableMode.ENABLED
 
-    private var menuClickListener: OnMenuClickListener? = null
+    private var menuClickListener: FormMenuClickBlock? = null
 
     /**
      * 真实的可见性
@@ -83,7 +83,7 @@ abstract class AbstractForm : CacheCleanable {
 
     fun getMenuCreateOptionCallback() = menuCreateOptionCallback
 
-    fun onMenuClickListener(menuClickListener: OnMenuClickListener?) {
+    fun onMenuClickListener(menuClickListener: FormMenuClickBlock?) {
         this.menuClickListener = menuClickListener
     }
 

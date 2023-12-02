@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
@@ -96,10 +97,10 @@ class DefaultGroupNameProvider : BaseGroupNameProvider() {
                     item.isRealMenuEnable(enabled),
                     item.getMenuCreateOptionCallback(),
                     {
-                        val isIntercept = item.getMenuClickListener()?.onMenuClick(it, item)
+                        val isIntercept = item.getMenuClickListener()?.invoke(context, it, item)
                         if (isIntercept != true) {
                             (holder.bindingAdapter as? BaseFormPartAdapter)?.formAdapter
-                                ?.getMenuClickListener()?.onMenuClick(it, item)
+                                ?.getMenuClickListener()?.invoke(context, it, item)
                         }
                         true
                     },
@@ -115,15 +116,22 @@ class DefaultGroupNameProvider : BaseGroupNameProvider() {
             visibility = if (enabled && item.isShowDynamicDelete()) View.VISIBLE else View.GONE
             setOnClickListener {
                 if (item.isHasDeleteConfirm) {
-                    MaterialAlertDialogBuilder(context).setTitle(R.string.formDefaultGroupDeleteConfirm)
-                        .setMessage(
-                            context.getString(R.string.formDefaultGroupDeleteMessage, title.text)
-                        ).setPositiveButton(R.string.formDefaultGroupDelete) { dialog, _ ->
-                            item.deleteDynamicGroup()
-                            dialog.dismiss()
-                        }.setNegativeButton(R.string.formDefaultGroupCancel) { dialog, _ ->
-                            dialog.dismiss()
-                        }.show()
+                    val alertDialog =
+                        MaterialAlertDialogBuilder(context).setTitle(R.string.formDefaultGroupDeleteConfirm)
+                            .setMessage(
+                                context.getString(
+                                    R.string.formDefaultGroupDeleteMessage,
+                                    title.text
+                                )
+                            ).setPositiveButton(R.string.formDefaultGroupDelete) { dialog, _ ->
+                                item.deleteDynamicGroup()
+                                dialog.dismiss()
+                            }.setNegativeButton(R.string.formDefaultGroupCancel) { dialog, _ ->
+                                dialog.dismiss()
+                            }.create()
+                    alertDialog.show()
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColors)
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(hintTextColors)
                 } else item.deleteDynamicGroup()
             }
         }

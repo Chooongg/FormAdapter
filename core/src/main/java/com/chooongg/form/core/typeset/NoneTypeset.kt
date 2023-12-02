@@ -41,10 +41,10 @@ class NoneTypeset : BaseTypeset() {
                     item.isRealMenuEnable(enabled),
                     item.getMenuCreateOptionCallback(),
                     {
-                        val isIntercept = item.getMenuClickListener()?.onMenuClick(it, item)
+                        val isIntercept = item.getMenuClickListener()?.invoke(context, it, item)
                         if (isIntercept != true) {
                             (holder.bindingAdapter as? BaseFormPartAdapter)?.formAdapter
-                                ?.getMenuClickListener()?.onMenuClick(it, item)
+                                ?.getMenuClickListener()?.invoke(context, it, item)
                         }
                         true
                     },

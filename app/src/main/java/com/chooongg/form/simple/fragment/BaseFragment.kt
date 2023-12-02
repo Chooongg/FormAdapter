@@ -42,12 +42,6 @@ abstract class BaseFragment : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        onViewCreated()
-    }
-
-    open fun onViewCreated() {}
-
     abstract fun change()
 
     abstract fun output()

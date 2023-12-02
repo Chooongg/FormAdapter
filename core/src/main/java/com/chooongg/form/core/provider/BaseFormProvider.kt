@@ -37,7 +37,9 @@ abstract class BaseFormProvider {
         view: View,
         item: BaseForm,
         enabled: Boolean
-    ) = Unit
+    ) {
+        onBindViewHolder(scope, holder, view, item, enabled)
+    }
 
     open fun onBindViewHolderErrorNotify(
         scope: CoroutineScope,
@@ -87,7 +89,7 @@ abstract class BaseFormProvider {
         }
     }
 
-    fun notifyLinkage(
+    private fun notifyLinkage(
         holder: FormViewHolder,
         item: BaseForm,
         field: String?,

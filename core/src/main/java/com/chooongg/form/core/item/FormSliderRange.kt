@@ -7,6 +7,8 @@ import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormSliderFormatter
 import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.provider.FormSliderRangeProvider
+import org.json.JSONArray
+import org.json.JSONObject
 
 class FormSliderRange : BaseForm {
 
@@ -74,6 +76,18 @@ class FormSliderRange : BaseForm {
             } else FormUtils.getText(context, content)
         } catch (e: Exception) {
             FormUtils.getText(context, content)
+        }
+    }
+
+    override fun outputData(json: JSONObject) {
+        if (field != null && content != null) {
+            if (content is List<*>) {
+                val jsonArray = JSONArray()
+                (content as List<*>).forEach {
+                    jsonArray.put(it)
+                }
+                json.put(field!!, jsonArray)
+            } else json.put(field!!, content)
         }
     }
 }

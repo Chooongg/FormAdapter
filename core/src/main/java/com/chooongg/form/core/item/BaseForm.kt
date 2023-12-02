@@ -221,6 +221,7 @@ abstract class BaseForm(
     @Throws(FormDataVerificationException::class)
     fun executeDataVerification(adapter: FormAdapter) {
         if (ignoreVerification) return
+        if (outputMode == FormOutputMode.NEVER) return
         val isRealVisible = isRealVisible(adapter.isEnabled)
         val isRealEnable = isRealEnable(adapter.isEnabled)
         if (outputMode == FormOutputMode.VISIBLE && !isRealVisible) return
@@ -267,6 +268,7 @@ abstract class BaseForm(
      * 执行输出
      */
     fun executeOutput(adapter: FormAdapter, json: JSONObject) {
+        if (outputMode == FormOutputMode.NEVER) return
         val isRealVisible = isRealVisible(adapter.isEnabled)
         val isRealEnable = isRealEnable(adapter.isEnabled)
         if (outputMode == FormOutputMode.VISIBLE && !isRealVisible) return

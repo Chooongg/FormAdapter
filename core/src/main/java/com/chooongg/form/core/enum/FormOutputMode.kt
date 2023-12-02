@@ -22,5 +22,10 @@ enum class FormOutputMode {
     /**
      * 启用时输出 (忽略可见性)
      */
-    ENABLED
+    ENABLED,
+
+    /**
+     * 从不输出
+     */
+    NEVER
 }

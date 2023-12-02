@@ -8,7 +8,7 @@ import com.chooongg.form.core.provider.FormInputOutlinedProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
 
-class FormInputOutlined : FormInput {
+open class FormInputOutlined : FormInput {
 
     constructor(name: CharSequence?, field: String?) : super(name, field)
     constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)

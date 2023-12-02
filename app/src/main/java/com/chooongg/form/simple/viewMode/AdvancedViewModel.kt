@@ -39,6 +39,7 @@ class AdvancedViewModel : ViewModel() {
     init {
         adapter.setNewInstance {
             initCardOutlinedDynamicPart {
+                dynamicPartMinGroupCount = 0
                 dynamicPartMaxGroupCount = 10
                 addGroup {
                     addSwitch("Switch")

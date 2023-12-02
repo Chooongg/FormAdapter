@@ -11,8 +11,8 @@ import com.google.android.material.R
 
 class ColonNameFormatter : BaseNameFormatter() {
     override fun format(context: Context, item: BaseForm): CharSequence? {
-        val name = FormUtils.getText(context, item.name)
-        if (!item.required) return name
+        val name = FormUtils.getText(context, item.name) ?: return null
+        if (!item.required) return "⋆${name}:"
         return SpannableString("⋆${name}:").apply {
             val foregroundColorSpan = ForegroundColorSpan(
                 context.obtainStyledAttributes(

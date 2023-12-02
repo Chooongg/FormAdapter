@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
@@ -19,16 +18,13 @@ import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.BaseOptionForm
 import com.chooongg.form.core.item.FormInput
 import com.chooongg.form.core.option.FormArrayAdapter
-import com.chooongg.form.core.option.OptionLoadResult
 import com.chooongg.form.core.style.BaseStyle
 import com.google.android.material.internal.CheckableImageButton
-import com.google.android.material.progressindicator.CircularProgressIndicatorSpec
-import com.google.android.material.progressindicator.IndeterminateDrawable
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
 
-class FormInputFilledProvider : BaseFormProvider() {
+class FormInputFilledProvider : FormInputProvider() {
 
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
         TextInputLayout(
@@ -140,88 +136,6 @@ class FormInputFilledProvider : BaseFormProvider() {
     ) {
         if (payload == BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG) {
             configOption(holder, view, item, enabled)
-        }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun configOption(holder: FormViewHolder, view: View, item: BaseForm, enabled: Boolean) {
-        val inputLayout = view as TextInputLayout
-        val editText =
-            view.findViewById<MaterialAutoCompleteTextView>(R.id.formInternalContentChildView)
-        val itemInput = item as? FormInput
-        try {
-            val adapter = editText.adapter as FormArrayAdapter<CharSequence>
-            adapter.setNewData(itemInput?.options, editText.gravity)
-        } catch (_: Exception) {
-        }
-        val fontHeight = FormUtils.getFontHeight(editText)
-        with(inputLayout) {
-            when (val result = itemInput?.optionLoadResult) {
-                null -> {
-                    TooltipCompat.setTooltipText(this, null)
-                    if (itemInput?.showClearIcon != false) {
-                        endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
-                        endIconDrawable = FormUtils.getIconChangeSize(
-                            context, R.drawable.ic_form_close, fontHeight
-                        )
-                    } else {
-                        endIconMode = TextInputLayout.END_ICON_NONE
-                        endIconDrawable = null
-                    }
-                }
-
-                is OptionLoadResult.Wait, is OptionLoadResult.Success -> {
-                    TooltipCompat.setTooltipText(this, null)
-                    if (enabled && item.options != null) {
-                        endIconMode = TextInputLayout.END_ICON_DROPDOWN_MENU
-                        endIconDrawable = FormUtils.getIconChangeSize(
-                            context, R.drawable.ic_form_arrow_dropdown, fontHeight
-                        )
-                    } else if (itemInput.showClearIcon) {
-                        endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
-                        endIconDrawable = FormUtils.getIconChangeSize(
-                            context, R.drawable.ic_form_close, fontHeight
-                        )
-                    } else {
-                        endIconMode = TextInputLayout.END_ICON_NONE
-                        endIconDrawable = null
-                    }
-                }
-
-                is OptionLoadResult.Loading -> {
-                    TooltipCompat.setTooltipText(this, null)
-                    val drawable = IndeterminateDrawable.createCircularDrawable(context,
-                        CircularProgressIndicatorSpec(context, null).apply {
-                            trackThickness = fontHeight / 10
-                            indicatorSize = fontHeight / 2
-                        })
-                    endIconMode = TextInputLayout.END_ICON_CUSTOM
-                    endIconDrawable = drawable
-                    drawable.start()
-                }
-
-                is OptionLoadResult.Error -> {
-                    TooltipCompat.setTooltipText(this, result.e.message)
-                    endIconMode = TextInputLayout.END_ICON_CUSTOM
-                    endIconDrawable = FormUtils.getIconChangeSize(
-                        context, R.drawable.ic_form_error, fontHeight
-                    )
-                    setEndIconOnClickListener { loadOption(holder, item) }
-                }
-
-                is OptionLoadResult.Empty -> {
-                    TooltipCompat.setTooltipText(this, null)
-                    if (itemInput.showClearIcon) {
-                        endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
-                        endIconDrawable = FormUtils.getIconChangeSize(
-                            context, R.drawable.ic_form_close, fontHeight
-                        )
-                    } else {
-                        endIconMode = TextInputLayout.END_ICON_NONE
-                        endIconDrawable = null
-                    }
-                }
-            }
         }
     }
 

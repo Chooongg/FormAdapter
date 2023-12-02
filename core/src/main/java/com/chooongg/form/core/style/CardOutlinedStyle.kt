@@ -1,8 +1,6 @@
 package com.chooongg.form.core.style
 
 import android.graphics.Color
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RectShape
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +10,6 @@ import androidx.core.content.res.use
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.view.OutlinedCutoutDrawable
-import com.google.android.material.shape.MaterialShapeDrawable
 
 class CardOutlinedStyle : BaseCardStyle {
 
@@ -57,71 +54,11 @@ class CardOutlinedStyle : BaseCardStyle {
         }
         shapeDrawable.setStroke(strokeWidth, strokeColor)
         holder.itemView.background = shapeDrawable
-//        holder.itemView.background = LayerDrawable(arrayOf(shapeDrawable)).apply {
-//            val size = shapeDrawable.strokeWidth.toInt()
-//            if (item.marginBoundary.top <= 0) {
-//                addLayer(createShapeDrawable(shapeDrawable))
-//                setLayerHeight(numberOfLayers - 1, size)
-//                setLayerInsetLeft(numberOfLayers - 1, size)
-//                setLayerInsetRight(numberOfLayers - 1, size)
-//                setLayerGravity(numberOfLayers - 1, Gravity.TOP)
-//            }
-//            if (item.marginBoundary.bottom <= 0) {
-//                addLayer(createShapeDrawable(shapeDrawable))
-//                setLayerHeight(numberOfLayers - 1, size)
-//                setLayerInsetLeft(numberOfLayers - 1, size)
-//                setLayerInsetRight(numberOfLayers - 1, size)
-//                setLayerGravity(numberOfLayers - 1, Gravity.BOTTOM)
-//            }
-//            if (item.marginBoundary.start <= 0) {
-//                addLayer(createShapeDrawable(shapeDrawable))
-//                setLayerWidth(numberOfLayers - 1, size)
-//                setLayerInsetTop(numberOfLayers - 1, size)
-//                setLayerInsetBottom(numberOfLayers - 1, size)
-//                setLayerGravity(numberOfLayers - 1, Gravity.START)
-//            }
-//            if (item.marginBoundary.end <= 0) {
-//                addLayer(createShapeDrawable(shapeDrawable))
-//                setLayerWidth(numberOfLayers - 1, size)
-//                setLayerInsetTop(numberOfLayers - 1, size)
-//                setLayerInsetBottom(numberOfLayers - 1, size)
-//                setLayerGravity(numberOfLayers - 1, Gravity.END)
-//            }
-//            if (item.marginBoundary.top <= 0 && item.marginBoundary.start <= 0) {
-//                addLayer(createShapeDrawable(shapeDrawable))
-//                setLayerWidth(numberOfLayers - 1, size)
-//                setLayerHeight(numberOfLayers - 1, size)
-//                setLayerGravity(numberOfLayers - 1, Gravity.TOP or Gravity.START)
-//            }
-//            if (item.marginBoundary.top <= 0 && item.marginBoundary.end <= 0) {
-//                addLayer(createShapeDrawable(shapeDrawable))
-//                setLayerWidth(numberOfLayers - 1, size)
-//                setLayerHeight(numberOfLayers - 1, size)
-//                setLayerGravity(numberOfLayers - 1, Gravity.TOP or Gravity.END)
-//            }
-//            if (item.marginBoundary.bottom <= 0 && item.marginBoundary.start <= 0) {
-//                addLayer(createShapeDrawable(shapeDrawable))
-//                setLayerWidth(numberOfLayers - 1, size)
-//                setLayerHeight(numberOfLayers - 1, size)
-//                setLayerGravity(numberOfLayers - 1, Gravity.BOTTOM or Gravity.START)
-//            }
-//            if (item.marginBoundary.bottom <= 0 && item.marginBoundary.end <= 0) {
-//                addLayer(createShapeDrawable(shapeDrawable))
-//                setLayerWidth(numberOfLayers - 1, size)
-//                setLayerHeight(numberOfLayers - 1, size)
-//                setLayerGravity(numberOfLayers - 1, Gravity.BOTTOM or Gravity.END)
-//            }
-//        }
     }
 
     override fun addView(parentView: ViewGroup, child: View) {
         parentView.addView(child)
     }
-
-    private fun createShapeDrawable(drawable: MaterialShapeDrawable) =
-        ShapeDrawable(RectShape()).apply {
-            paint.color = drawable.fillColor?.defaultColor ?: Color.GRAY
-        }
 
     override fun equals(other: Any?): Boolean {
         if (other !is CardOutlinedStyle) return false

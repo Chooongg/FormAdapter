@@ -45,7 +45,7 @@ open class FormAdapter(isEnabled: Boolean) :
             partAdapters.forEach { it.executeUpdate(false) }
         }
 
-    private var menuClickListener: OnMenuClickGlobalListener? = null
+    private var menuClickListener: FormMenuClickGlobalBlock? = null
 
     private val dataObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
@@ -103,7 +103,7 @@ open class FormAdapter(isEnabled: Boolean) :
         partAdapters.forEach { it.update() }
     }
 
-    fun onMenuClickListener(menuClickListener: OnMenuClickGlobalListener?) {
+    fun setOnMenuClickListener(menuClickListener: FormMenuClickGlobalBlock?) {
         this.menuClickListener = menuClickListener
     }
 
@@ -112,7 +112,7 @@ open class FormAdapter(isEnabled: Boolean) :
     fun findOfField(
         field: String,
         update: Boolean = true,
-        hasPayload: Boolean = false,
+        hasPayload: Boolean = true,
         block: BaseForm.() -> Unit
     ): Boolean {
         partAdapters.forEach {
@@ -124,7 +124,7 @@ open class FormAdapter(isEnabled: Boolean) :
     fun findOfId(
         id: String,
         update: Boolean = true,
-        hasPayload: Boolean = false,
+        hasPayload: Boolean = true,
         block: BaseForm.() -> Unit
     ): Boolean {
         partAdapters.forEach {
@@ -192,7 +192,7 @@ open class FormAdapter(isEnabled: Boolean) :
     fun errorNotifyOfId(id: String) {
         var position = 0
         partAdapters.forEach {
-            if (it.findOfId(id, false, false) {
+            if (it.findOfId(id, update = false, hasPayload = false) {
                     errorNotify = System.currentTimeMillis()
                     val indexOf = it.indexOf(this)
                     if (indexOf >= 0) {

@@ -30,6 +30,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                     item.menu = data.menu
                     item.menuVisibilityMode = data.menuVisibilityMode
                     item.menuEnableMode = data.menuEnableMode
+                    item.menuShowTitle = data.menuShowTitle
                     item.menuCreateOptionCallback = data.getMenuCreateOptionCallback()
                 })
             } else data.clearGroupNameItem()
