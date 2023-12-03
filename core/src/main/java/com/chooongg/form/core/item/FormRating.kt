@@ -7,7 +7,9 @@ import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormColorStateListBlock
 import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.R
+import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.provider.FormRatingProvider
+import kotlin.reflect.KClass
 
 class FormRating : BaseForm {
 
@@ -36,7 +38,8 @@ class FormRating : BaseForm {
      */
     var tint: FormColorStateListBlock? = null
 
-    override fun getProvider(adapter: FormAdapter) = FormRatingProvider::class
+    override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
+        FormRatingProvider::class
 
     override fun initContentValue(value: Any?) {
         if (value == null) return

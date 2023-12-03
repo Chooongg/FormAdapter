@@ -4,9 +4,11 @@ import android.view.Gravity
 import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormColorStateListBlock
+import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.provider.FormLabelProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
+import kotlin.reflect.KClass
 
 open class FormLabel : BaseForm {
 
@@ -24,6 +26,7 @@ open class FormLabel : BaseForm {
 
     override var gravity: Int? = Gravity.NO_GRAVITY
 
-    override fun getProvider(adapter: FormAdapter) = FormLabelProvider::class
+    override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
+        FormLabelProvider::class
 
 }

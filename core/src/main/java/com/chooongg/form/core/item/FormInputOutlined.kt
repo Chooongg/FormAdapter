@@ -4,9 +4,11 @@ import android.view.Gravity
 import androidx.annotation.GravityInt
 import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.provider.FormInputOutlinedProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
+import kotlin.reflect.KClass
 
 open class FormInputOutlined : FormInput {
 
@@ -21,6 +23,7 @@ open class FormInputOutlined : FormInput {
     @GravityInt
     override var multiColumnContentGravity: Int? = Gravity.NO_GRAVITY
 
-    override fun getProvider(adapter: FormAdapter) = FormInputOutlinedProvider::class
+    override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
+        FormInputOutlinedProvider::class
 
 }

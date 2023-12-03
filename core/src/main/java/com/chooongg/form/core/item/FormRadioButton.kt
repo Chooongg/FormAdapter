@@ -4,8 +4,10 @@ import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.option.IOption
 import com.chooongg.form.core.option.Option
+import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.provider.FormRadioButtonProvider
 import org.json.JSONObject
+import kotlin.reflect.KClass
 
 class FormRadioButton : BaseOptionForm<IOption> {
 
@@ -14,7 +16,8 @@ class FormRadioButton : BaseOptionForm<IOption> {
 
     override fun hasOpenOperation() = false
 
-    override fun getProvider(adapter: FormAdapter) = FormRadioButtonProvider::class
+    override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
+        FormRadioButtonProvider::class
 
     override fun initContentValue(value: Any?) {
         if (value == null) return

@@ -7,8 +7,10 @@ import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.enum.FormSelectorOpenMode
 import com.chooongg.form.core.option.IOption
 import com.chooongg.form.core.option.Option
+import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.provider.FormSelectorProvider
 import org.json.JSONObject
+import kotlin.reflect.KClass
 
 class FormSelector : BaseOptionForm<IOption> {
 
@@ -22,7 +24,8 @@ class FormSelector : BaseOptionForm<IOption> {
 
     override fun hasOpenOperation() = true
 
-    override fun getProvider(adapter: FormAdapter) = FormSelectorProvider::class
+    override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
+        FormSelectorProvider::class
 
     override fun initContentValue(value: Any?) {
         if (value == null) return

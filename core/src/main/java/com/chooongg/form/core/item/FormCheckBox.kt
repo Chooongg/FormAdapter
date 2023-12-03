@@ -4,9 +4,11 @@ import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.option.IOption
 import com.chooongg.form.core.option.Option
+import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.provider.FormCheckBoxProvider
 import org.json.JSONArray
 import org.json.JSONObject
+import kotlin.reflect.KClass
 
 open class FormCheckBox : BaseOptionForm<IOption> {
 
@@ -15,7 +17,8 @@ open class FormCheckBox : BaseOptionForm<IOption> {
 
     override fun hasOpenOperation() = false
 
-    override fun getProvider(adapter: FormAdapter) = FormCheckBoxProvider::class
+    override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
+        FormCheckBoxProvider::class
 
     override fun initContentValue(value: Any?) {
         if (value == null) return

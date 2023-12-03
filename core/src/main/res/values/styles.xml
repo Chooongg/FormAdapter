@@ -43,4 +43,8 @@
 
     <style name="Form.ShapeAppearance.Search" parent="ShapeAppearance.Material3.Corner.Full" />
 
+    <style name="Form.ShapeAppearance.Bubble" parent="ShapeAppearance.Material3.Corner.Medium">
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

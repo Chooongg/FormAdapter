@@ -106,6 +106,11 @@ abstract class BaseForm(
     open var autoFill = true
 
     /**
+     * 阻止调整边界
+     */
+    open var preventAdjustmentBoundaries: Boolean = false
+
+    /**
      * 错误通知
      */
     var errorNotify: Long = 0

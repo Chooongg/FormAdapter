@@ -24,14 +24,11 @@ class NotAlignmentStyle : BaseStyle {
         holder.itemView.updateLayoutParams<GridLayoutManager.LayoutParams> {
             topMargin = when (item.marginBoundary.top) {
                 Boundary.MIDDLE -> {
-                    if (holder.absoluteAdapterPosition == 0) 0
-                    else -holder.style.marginInfo.middleTop
+                    if (holder.absoluteAdapterPosition == 0) 0 else -holder.style.marginInfo.middleTop
                 }
 
                 else -> 0
             }
-
-            holder.absoluteAdapterPosition
             bottomMargin = when (item.marginBoundary.bottom) {
                 Boundary.MIDDLE -> {
                     val adapter = holder.bindingAdapter as? BaseFormPartAdapter

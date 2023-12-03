@@ -2,6 +2,9 @@ package com.chooongg.form.core.item
 
 class SingleLineForm : VariantForm() {
 
+    /**
+     * 自动等分
+     */
     var autoEquipartition: Boolean = true
 
     override fun getColumn(count: Int, layoutColumn: Int): Int {

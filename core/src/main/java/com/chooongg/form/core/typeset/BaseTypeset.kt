@@ -68,6 +68,7 @@ abstract class BaseTypeset {
         insideInfo: FormInsideInfo,
         item: BaseForm
     ) {
+        if (item.preventAdjustmentBoundaries) return
         layout?.setPaddingRelative(
             when (item.insideBoundary.start) {
                 Boundary.GLOBAL -> insideInfo.start - insideInfo.middleStart

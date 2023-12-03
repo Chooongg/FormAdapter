@@ -5,6 +5,9 @@ import kotlin.math.max
 
 class MultiColumnForm : VariantForm() {
 
+    /**
+     * 当前列容纳的列数
+     */
     @FloatRange(from = 1.0)
     var column: Float = 2f
 

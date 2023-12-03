@@ -4,9 +4,11 @@ import android.view.Gravity
 import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormColorStateListBlock
+import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.provider.FormTipProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
+import kotlin.reflect.KClass
 
 class FormTip : BaseForm {
 
@@ -36,6 +38,7 @@ class FormTip : BaseForm {
 
     override var multiColumnContentGravity: Int? = Gravity.CENTER
 
-    override fun getProvider(adapter: FormAdapter) = FormTipProvider::class
+    override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
+        FormTipProvider::class
 
 }

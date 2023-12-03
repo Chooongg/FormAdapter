@@ -9,6 +9,7 @@ import com.chooongg.form.core.item.FormInput
 import com.chooongg.form.core.item.FormInputFilled
 import com.chooongg.form.core.item.FormInputOutlined
 import com.chooongg.form.core.item.FormLabel
+import com.chooongg.form.core.item.FormMenu
 import com.chooongg.form.core.item.FormRadioButton
 import com.chooongg.form.core.item.FormRating
 import com.chooongg.form.core.item.FormSelector
@@ -78,6 +79,14 @@ fun IFormCreator.addLabel(
 fun IFormCreator.addLabel(
     @StringRes nameRes: Int?, field: String? = null, block: (FormLabel.() -> Unit)? = null
 ) = addItem(FormLabel(nameRes, field).apply { block?.invoke(this) })
+
+fun IFormCreator.addMenu(
+    name: CharSequence?, field: String? = null, block: (FormMenu.() -> Unit)? = null
+) = addItem(FormMenu(name, field).apply { block?.invoke(this) })
+
+fun IFormCreator.addMenu(
+    @StringRes nameRes: Int?, field: String? = null, block: (FormMenu.() -> Unit)? = null
+) = addItem(FormMenu(nameRes, field).apply { block?.invoke(this) })
 
 fun IFormCreator.addRadioButton(
     name: CharSequence?, field: String? = null, block: (FormRadioButton.() -> Unit)? = null

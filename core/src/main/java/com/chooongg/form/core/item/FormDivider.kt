@@ -2,9 +2,11 @@ package com.chooongg.form.core.item
 
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormColorBlock
+import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.provider.FormDividerProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.NoneTypeset
+import kotlin.reflect.KClass
 
 open class FormDivider : BaseForm(null, null) {
 
@@ -39,5 +41,6 @@ open class FormDivider : BaseForm(null, null) {
 
     override var typeset: BaseTypeset? = NoneTypeset()
 
-    override fun getProvider(adapter: FormAdapter) = FormDividerProvider::class
+    override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
+        FormDividerProvider::class
 }

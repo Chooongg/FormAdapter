@@ -12,6 +12,7 @@ import com.chooongg.form.core.provider.FormTimeProvider
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DayViewDecorator
 import com.google.android.material.timepicker.TimeFormat
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -31,30 +32,77 @@ class FormTime : BaseForm {
     override fun getProvider(adapter: FormAdapter) =
         if (adapter.isEnabled) FormTimeProvider::class else FormTextProvider::class
 
+    /**
+     * 时间模式
+     */
     var timeMode: FormTimeMode = FormTimeMode.DATE_TIME
 
+    /**
+     * 输入模式
+     */
     @InputMode
     var inputMode: Int = INPUT_MODE_SELECT
 
+    /**
+     * 展示的格式化模型
+     */
     var showFormatPattern: String? = null
+        set(value) {
+            field = value
+            showFormat = if (value != null) SimpleDateFormat(value, Locale.getDefault()) else null
+        }
 
+    /**
+     * 展示的格式化工具
+     */
+    var showFormat: SimpleDateFormat? = null
+
+    /**
+     * 日历限制
+     */
     var calendarConstraints: CalendarConstraints? = null
 
+    /**
+     * 日历视图装饰
+     */
     var dayViewDecorator: DayViewDecorator? = null
 
+    /**
+     * 时间格式类型
+     */
     @TimeFormat
     var timeFormatMode: Int = TimeFormat.CLOCK_24H
 
-    var inputFormatPattern: String? = null
+    /**
+     * 数据格式化模型
+     */
+    var formatPattern: String? = null
+        set(value) {
+            field = value
+            if (value != null) {
+                inputFormat = SimpleDateFormat(value, Locale.getDefault())
+                outputFormat = SimpleDateFormat(value, Locale.getDefault())
+            } else {
+                inputFormat = null
+                outputFormat = null
+            }
+        }
 
-    var outputFormatPattern: String? = null
+    /**
+     * 输入格式化工具
+     */
+    var inputFormat: SimpleDateFormat? = null
+
+    /**
+     * 输出格式化工具
+     */
+    var outputFormat: SimpleDateFormat? = null
 
     override fun initContentValue(value: Any?) {
         if (value == null) return
-        content = if (inputFormatPattern != null) {
+        content = if (inputFormat != null) {
             try {
-                SimpleDateFormat(showFormatPattern!!, Locale.getDefault())
-                    .parse(value.toString())?.time
+                inputFormat!!.parse(value.toString())?.time
             } catch (e: Exception) {
                 null
             }
@@ -63,11 +111,21 @@ class FormTime : BaseForm {
         } else value.toString().toLongOrNull()
     }
 
+    override fun outputData(json: JSONObject) {
+        if (field != null && content != null) {
+            if (outputFormat != null) {
+                json.put(field!!, outputFormat!!.format(content!!))
+            } else {
+                json.put(field!!, content)
+            }
+        }
+    }
+
     override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
         val millis = content as? Long ?: return FormUtils.getText(context, content)
-        if (showFormatPattern != null) {
+        if (showFormat != null) {
             return try {
-                SimpleDateFormat(showFormatPattern!!, Locale.getDefault()).format(millis)
+                showFormat!!.format(millis)
             } catch (e: Exception) {
                 FormUtils.getText(context, content)
             }

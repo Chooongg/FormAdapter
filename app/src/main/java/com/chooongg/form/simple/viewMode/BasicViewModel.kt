@@ -11,6 +11,7 @@ import com.chooongg.form.core.addInput
 import com.chooongg.form.core.addInputFilled
 import com.chooongg.form.core.addInputOutlined
 import com.chooongg.form.core.addLabel
+import com.chooongg.form.core.addMenu
 import com.chooongg.form.core.addRadioButton
 import com.chooongg.form.core.addRating
 import com.chooongg.form.core.addSelector
@@ -96,6 +97,11 @@ class BasicViewModel : ViewModel() {
                     }
                 }
                 addLabel("Label")
+                addMenu("Menu") {
+                    content = "Test"
+                    icon = R.drawable.ic_main_advanced
+                    hint = "测试"
+                }
                 addTip("Tip") {
                     visibilityMode = FormVisibilityMode.ENABLED
                     enableBottomPadding = true
@@ -176,6 +182,12 @@ class BasicViewModel : ViewModel() {
                 addText("输出", "output") {
                     outputMode = FormOutputMode.NEVER
                     typeset = VerticalTypeset()
+                }
+                addMenu("Menu") {
+                    content = "Test"
+                    icon = R.drawable.ic_main_advanced
+                    hint = "测试"
+                    bubbleText = "v2.9.6"
                 }
             }
         }
