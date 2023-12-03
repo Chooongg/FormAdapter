@@ -39,6 +39,7 @@ class AdvancedViewModel : ViewModel() {
     init {
         adapter.setNewInstance {
             initCardOutlinedDynamicPart {
+                partName = "Test Group"
                 dynamicPartMinGroupCount = 0
                 dynamicPartMaxGroupCount = 10
                 addGroup {

@@ -8,12 +8,14 @@ import com.chooongg.form.core.data.FormAdapterData
 import com.chooongg.form.core.data.FormDynamicPartData
 import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.item.BaseForm
+import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.part.FormDynamicPartAdapter
 import com.chooongg.form.core.part.FormPartAdapter
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.style.NoneStyle
+import com.chooongg.form.core.style.NotAlignmentStyle
 import com.chooongg.form.core.typeset.BaseTypeset
 import org.json.JSONObject
 
@@ -46,6 +48,8 @@ open class FormAdapter(isEnabled: Boolean) :
         }
 
     private var menuClickListener: FormMenuClickGlobalBlock? = null
+
+    private var itemClickListener: FormItemClickBlock? = null
 
     private val dataObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
@@ -103,11 +107,23 @@ open class FormAdapter(isEnabled: Boolean) :
         partAdapters.forEach { it.update() }
     }
 
-    fun setOnMenuClickListener(menuClickListener: FormMenuClickGlobalBlock?) {
-        this.menuClickListener = menuClickListener
+    /**
+     * 设置菜单点击事件
+     */
+    fun setOnMenuClickListener(block: FormMenuClickGlobalBlock?) {
+        menuClickListener = block
     }
 
-    fun getMenuClickListener() = menuClickListener
+    fun getOnMenuClickListener() = menuClickListener
+
+    /**
+     * 设置按钮点击事件
+     */
+    fun setOnItemClickListener(block: FormItemClickBlock?) {
+        itemClickListener = block
+    }
+
+    fun getOnItemClickListener() = itemClickListener
 
     fun findOfField(
         field: String,

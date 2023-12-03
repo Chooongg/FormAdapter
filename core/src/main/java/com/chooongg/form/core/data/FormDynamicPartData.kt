@@ -26,7 +26,7 @@ class FormDynamicPartData : BaseFormPartData {
     internal var dynamicGroupCreateBlock: FormGroupCreateBlock? = null
 
     internal var dynamicGroupNameFormatter: FormGroupNameFormatter? = { _, name, index, count ->
-        if (count == 1) name else "${name}${index + 1}"
+        if (count == 1) name else "$name ${index + 1}"
     }
 
     @MaterialButton.IconGravity

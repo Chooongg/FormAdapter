@@ -302,7 +302,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     abstract fun executeOutput(json: JSONObject)
 
     open fun onItemClick(item: BaseForm) {
-
+        formAdapter.getOnItemClickListener()?.invoke(item)
     }
 
     fun indexOf(item: BaseForm) = itemList.indexOf(item)

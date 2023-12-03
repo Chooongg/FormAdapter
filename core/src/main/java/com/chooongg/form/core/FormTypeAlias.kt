@@ -24,4 +24,6 @@ typealias FormLinkageBlock = (linkage: LinkageForm, field: String?, content: Any
 
 typealias FormOptionLoader<T> = suspend (BaseOptionForm<T>) -> List<T>?
 
+typealias FormItemClickBlock = (item: BaseForm) -> Unit
+
 typealias FormSliderFormatter = (Float) -> String

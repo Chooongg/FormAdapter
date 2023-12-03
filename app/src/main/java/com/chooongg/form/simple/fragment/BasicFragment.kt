@@ -24,6 +24,9 @@ class BasicFragment : BaseFragment() {
             Toast.makeText(context, "${item.name}, ${menu.title}", Toast.LENGTH_SHORT)
                 .show()
         }
+        model.adapter.setOnItemClickListener {
+            Toast.makeText(context, "点击了按钮", Toast.LENGTH_SHORT).show()
+        }
         return view
     }
 

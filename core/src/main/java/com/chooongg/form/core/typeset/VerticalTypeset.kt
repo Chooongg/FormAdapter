@@ -62,7 +62,7 @@ class VerticalTypeset : BaseTypeset() {
                         val isIntercept = item.getMenuClickListener()?.invoke(context, it, item)
                         if (isIntercept != true) {
                             (holder.bindingAdapter as? BaseFormPartAdapter)?.formAdapter
-                                ?.getMenuClickListener()?.invoke(context, it, item)
+                                ?.getOnMenuClickListener()?.invoke(context, it, item)
                         }
                         true
                     },
