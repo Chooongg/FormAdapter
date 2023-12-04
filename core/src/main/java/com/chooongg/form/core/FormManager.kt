@@ -7,6 +7,8 @@ import androidx.annotation.IntRange
 import androidx.annotation.Px
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.format.BaseNameFormatter
+import com.chooongg.form.core.error.DefaultErrorFormatter
+import com.chooongg.form.core.error.ErrorFormatter
 import com.chooongg.form.core.format.NormalNameFormatter
 import com.chooongg.form.core.groupNameProvider.BaseGroupNameProvider
 import com.chooongg.form.core.groupNameProvider.DefaultGroupNameProvider
@@ -41,6 +43,8 @@ object FormManager {
         var groupNameProvider: BaseGroupNameProvider = DefaultGroupNameProvider()
 
         var iconProvider: BaseIconProvider = DefaultIconProvider()
+
+        var errorFormatter: ErrorFormatter = DefaultErrorFormatter()
     }
 
     fun defaultConfig(block: Default.() -> Unit) = apply {

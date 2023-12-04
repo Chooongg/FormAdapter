@@ -20,4 +20,13 @@
     <string name="formSearchHint">Enter text to search</string>
 
     <string name="formRatingFormat">%f Star</string>
+
+    <string name="formErrorEmpty">%s cannot be empty</string>
+    <string name="formErrorFormat">%s format error</string>
+    <string name="formErrorLength">%s length must be %d</string>
+    <string name="formErrorLengthMin">%s minimum length must be %d</string>
+    <string name="formErrorLengthMax">%s maximum length must be %d</string>
+    <string name="formErrorSize">%s must be selected %d pieces</string>
+    <string name="formErrorSizeMin">%s minimum selection %d pieces</string>
+    <string name="formErrorSizeMax">%s maximum selection %d pieces</string>
 </resources>

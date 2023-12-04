@@ -55,7 +55,6 @@ class FormInputOutlinedProvider : FormInputProvider() {
                 isVerticalFadingEdgeEnabled = true
                 setFadingEdgeLength(context.resources.getDimensionPixelSize(R.dimen.formFadingEdgeLength))
                 setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
-                it.boxCollapsedPaddingTop
             }
             it.addView(editText)
             it.setEndIconTintList(editText.hintTextColors)
@@ -116,7 +115,6 @@ class FormInputOutlinedProvider : FormInputProvider() {
         with(view.findViewById<MaterialAutoCompleteTextView>(R.id.formInternalContentChildView)) {
             if (tag is TextWatcher) removeTextChangedListener(tag as TextWatcher)
             setText(item.getContentText(context, enabled))
-            gravity = holder.typeset.obtainContentGravity(holder, item)
             if (itemInput != null && itemInput.maxLines <= 1) {
                 setSingleLine()
             } else {
@@ -124,7 +122,9 @@ class FormInputOutlinedProvider : FormInputProvider() {
                 maxLines = itemInput?.maxLines ?: Int.MAX_VALUE
             }
             val watcher = doAfterTextChanged { editable ->
-                changeContentAndNotifyLinkage(holder, item, editable)
+                if (editable.isNullOrEmpty()) {
+                    changeContentAndNotifyLinkage(holder, item, null)
+                } else changeContentAndNotifyLinkage(holder, item, editable)
             }
             tag = watcher
         }

@@ -31,7 +31,6 @@ class CardOutlinedStyle : BaseCardStyle {
         val context = holder.itemView.context
         val shape = getShapeAppearanceModel(holder.itemView, item)
         val isRtl = holder.itemView.layoutDirection == View.LAYOUT_DIRECTION_RTL
-
         val shapeDrawable = OutlinedCutoutDrawable(shape, item.marginBoundary, isRtl)
         val defaultStyle = TypedValue().also {
             context.theme.resolveAttribute(

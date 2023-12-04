@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import kotlin.math.max
 
 class FormItemDecoration : ItemDecoration() {
-
     override fun getItemOffsets(
         outRect: Rect,
         view: View,
@@ -15,24 +14,26 @@ class FormItemDecoration : ItemDecoration() {
         state: RecyclerView.State
     ) {
         val adapter = parent.adapter as? FormAdapter ?: return
-        when (val position = parent.getChildAdapterPosition(view)) {
+        when (parent.getChildAdapterPosition(view)) {
             0 -> {
-                val part = adapter.getPartAdapter(position)
+                val style =
+                    adapter.getStyle4ItemViewType(parent.getChildViewHolder(view).itemViewType)
                 outRect.set(
                     0,
-                    max(part.style.marginInfo.top - part.style.marginInfo.middleTop, 0),
+                    max(style.marginInfo.top - style.marginInfo.middleTop, 0),
                     0,
                     0
                 )
             }
 
             adapter.itemCount - 1 -> {
-                val part = adapter.getPartAdapter(position)
+                val style =
+                    adapter.getStyle4ItemViewType(parent.getChildViewHolder(view).itemViewType)
                 outRect.set(
                     0,
                     0,
                     0,
-                    max(part.style.marginInfo.bottom - part.style.marginInfo.middleBottom, 0)
+                    max(style.marginInfo.bottom - style.marginInfo.middleBottom, 0)
                 )
             }
 

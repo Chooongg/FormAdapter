@@ -122,6 +122,25 @@ class AdvancedViewModel : ViewModel() {
                 }
             }
             initCardOutlinedPart {
+                partName = "Linkage"
+                addSelector("Selector") {
+                    options = listOf(Option("Item1"), Option("Item2"), Option("Item3"))
+                    setLinkage { linkage, _, content ->
+                        linkage.findItem("linkageText") {
+                            it.visibilityMode = if (content != null) {
+                                FormVisibilityMode.ALWAYS
+                            } else {
+                                FormVisibilityMode.NEVER
+                            }
+                        }
+                    }
+                }
+                addText("Text") {
+                    field = "linkageText"
+                    content = "selector is empty hide it"
+                }
+            }
+            initCardOutlinedPart {
                 partName = "Button"
                 addButton("Default")
                 addButton("Text") {

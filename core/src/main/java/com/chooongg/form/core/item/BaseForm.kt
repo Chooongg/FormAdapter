@@ -3,11 +3,11 @@ package com.chooongg.form.core.item
 import android.content.Context
 import androidx.annotation.GravityInt
 import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.FormDataVerificationException
 import com.chooongg.form.core.FormLinkageBlock
 import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.enum.FormOutputMode
+import com.chooongg.form.core.error.FormDataVerificationException
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.typeset.BaseTypeset
 import org.json.JSONObject
@@ -245,7 +245,9 @@ abstract class BaseForm(
      */
     @Throws(FormDataVerificationException::class)
     open fun dataVerification() {
-        if (required && content == null) throw FormDataVerificationException(id)
+        if (required && content == null) {
+            throw FormDataVerificationException(this, FormDataVerificationException.ErrorType.Empty)
+        }
     }
 
     //</editor-fold>

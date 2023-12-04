@@ -17,6 +17,7 @@ import androidx.appcompat.widget.ActionMenuView.OnMenuItemClickListener
 import androidx.core.content.res.use
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.chooongg.form.core.FormMenuCreateOptionBlock
 import com.chooongg.form.core.R
 import com.chooongg.form.core.getTextAppearance
 import com.chooongg.form.core.style.BaseStyle
@@ -42,7 +43,7 @@ class FormMenuView constructor(
     fun inflateMenu(
         @MenuRes menuRes: Int,
         enabled: Boolean,
-        menuCreateOptionCallback: (MenuBuilder.() -> Unit)?,
+        menuCreateOptionCallback: FormMenuCreateOptionBlock?,
         onMenuItemClickListener: OnMenuItemClickListener?,
         isShowTitle: Boolean
     ) {

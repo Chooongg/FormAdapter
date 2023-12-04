@@ -2,6 +2,7 @@ package com.chooongg.form.core.item
 
 import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
+import com.chooongg.form.core.FormColorStateListBlock
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.provider.FormInputProvider
 import kotlin.reflect.KClass
@@ -45,6 +46,16 @@ open class FormInput : BaseOptionForm<CharSequence> {
      * 计数器最大长度
      */
     var counterMaxLength: Int = Int.MAX_VALUE
+
+    /**
+     * 起始图标
+     */
+    var startIcon: Any? = null
+
+    /**
+     * 起始图标色调
+     */
+    var startIconTint: FormColorStateListBlock? = null
 
     override fun hasOpenOperation() = false
 

@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.res.use
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +46,8 @@ class FormCheckBoxProvider : BaseFormProvider() {
                 )
                 val textView = MaterialTextView(it.context).apply {
                     id = R.id.formInternalContentChildView
+//                    textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
+//                    textDirection = TextView.TEXT_DIRECTION_LOCALE
                     setTextAppearance(getTextAppearance(this, R.attr.formTextAppearanceContent))
                 }
                 val textHeight = FormUtils.getFontHeight(textView)

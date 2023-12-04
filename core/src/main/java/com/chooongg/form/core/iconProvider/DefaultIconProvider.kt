@@ -1,7 +1,9 @@
 package com.chooongg.form.core.iconProvider
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.button.MaterialButton
 
 class DefaultIconProvider : BaseIconProvider() {
@@ -19,6 +21,14 @@ class DefaultIconProvider : BaseIconProvider() {
             is Drawable -> button.icon = icon
             is Int -> button.setIconResource(icon)
             else -> button.icon = null
+        }
+    }
+
+    override fun getDrawable(context: Context, icon: Any?): Drawable? {
+        return when (icon) {
+            is Drawable -> icon
+            is Int -> ResourcesCompat.getDrawable(context.resources, icon, context.theme)
+            else -> null
         }
     }
 }

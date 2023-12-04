@@ -1,7 +1,7 @@
 package com.chooongg.form.core.part
 
 import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.FormDataVerificationException
+import com.chooongg.form.core.error.FormDataVerificationException
 import com.chooongg.form.core.data.FormPartData
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.VariantForm
@@ -11,7 +11,7 @@ import org.json.JSONObject
 class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     BaseFormPartAdapter(formAdapter, style) {
 
-    private var data = FormPartData()
+    internal var data = FormPartData()
 
     fun create(data: FormPartData.() -> Unit) {
         create(FormPartData().apply(data))
@@ -48,14 +48,18 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         data.getItems().forEach { item ->
             if (item.field == field) {
                 block(item)
-                if (update) notifyChangeItem(item, hasPayload)
+                if (update) {
+                    if (hasPayload) notifyChangeItem(item, true) else update()
+                }
                 return true
             }
             if (item is VariantForm) {
                 item.getItems().forEach {
                     if (it.field == field) {
                         block(it)
-                        if (update) notifyChangeItem(it, hasPayload)
+                        if (update) {
+                            if (hasPayload) notifyChangeItem(item, true) else update()
+                        }
                         return true
                     }
                 }

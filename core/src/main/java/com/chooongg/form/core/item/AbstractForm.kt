@@ -1,9 +1,9 @@
 package com.chooongg.form.core.item
 
 import androidx.annotation.MenuRes
-import androidx.appcompat.view.menu.MenuBuilder
 import com.chooongg.form.core.CacheCleanable
 import com.chooongg.form.core.FormMenuClickBlock
+import com.chooongg.form.core.FormMenuCreateOptionBlock
 import com.chooongg.form.core.enum.FormEnableMode
 import com.chooongg.form.core.enum.FormVisibilityMode
 import java.util.UUID
@@ -36,7 +36,7 @@ abstract class AbstractForm : CacheCleanable {
      */
     var menuShowTitle: Boolean = false
 
-    internal var menuCreateOptionCallback: (MenuBuilder.() -> Unit)? = null
+    internal var menuCreateOptionCallback: FormMenuCreateOptionBlock? = null
 
     /**
      * 菜单可见模式
@@ -77,7 +77,7 @@ abstract class AbstractForm : CacheCleanable {
     /**
      * 菜单创建选项时的监听
      */
-    fun menuCreateOptionCallback(block: (MenuBuilder.() -> Unit)?) {
+    fun menuCreateOptionCallback(block: FormMenuCreateOptionBlock?) {
         menuCreateOptionCallback = block
     }
 

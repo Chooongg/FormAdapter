@@ -19,7 +19,6 @@ class AdvancedFragment : BaseFragment() {
     }
 
     override fun errorNotify() {
-        model.adapter.errorNotifyOfField("selector")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

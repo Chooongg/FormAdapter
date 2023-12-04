@@ -7,6 +7,7 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.enum.FormEmsMode
+import com.chooongg.form.core.formTextAppearance
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.menu.FormMenuView
 import com.chooongg.form.core.part.BaseFormPartAdapter
@@ -29,6 +30,7 @@ class VerticalTypeset : BaseTypeset() {
                 child.gravity = Gravity.CENTER_VERTICAL
                 child.addView(MaterialTextView(child.context).apply {
                     id = R.id.formInternalNameView
+                    setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceName))
                     setPaddingRelative(
                         style.insideInfo.middleStart, style.insideInfo.middleTop,
                         style.insideInfo.middleEnd, style.insideInfo.middleBottom

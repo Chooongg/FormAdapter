@@ -21,4 +21,12 @@
 
     <string name="formRatingFormat">%f星</string>
 
+    <string name="formErrorEmpty">%s不可为空</string>
+    <string name="formErrorFormat">%s格式错误</string>
+    <string name="formErrorLength">%s长度必须为%d</string>
+    <string name="formErrorLengthMin">%s最小长度必须为%d</string>
+    <string name="formErrorLengthMax">%s最大长度必须为%d</string>
+    <string name="formErrorSize">%s必须选择%d个</string>
+    <string name="formErrorSizeMin">%s最少选择%d个</string>
+    <string name="formErrorSizeMax">%s最多选择%d个</string>
 </resources>

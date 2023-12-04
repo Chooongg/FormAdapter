@@ -2,9 +2,9 @@ package com.chooongg.form.core.data
 
 import androidx.annotation.IntRange
 import androidx.annotation.MenuRes
-import androidx.appcompat.view.menu.MenuBuilder
 import com.chooongg.form.core.FormGroupCreateBlock
 import com.chooongg.form.core.FormGroupNameFormatter
+import com.chooongg.form.core.FormMenuCreateOptionBlock
 import com.chooongg.form.core.R
 import com.chooongg.form.core.enum.FormEnableMode
 import com.chooongg.form.core.enum.FormVisibilityMode
@@ -53,7 +53,7 @@ class FormDynamicPartData : BaseFormPartData {
      */
     var menuShowTitle: Boolean = false
 
-    private var menuCreateOptionCallback: (MenuBuilder.() -> Unit)? = null
+    private var menuCreateOptionCallback: FormMenuCreateOptionBlock? = null
 
     /**
      * 菜单可见模式
@@ -68,7 +68,7 @@ class FormDynamicPartData : BaseFormPartData {
     /**
      * 菜单创建选项时的监听
      */
-    fun menuCreateOptionCallback(block: (MenuBuilder.() -> Unit)?) {
+    fun menuCreateOptionCallback(block: FormMenuCreateOptionBlock?) {
         menuCreateOptionCallback = block
     }
 

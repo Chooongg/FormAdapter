@@ -1,12 +1,12 @@
 package com.chooongg.form.core.provider
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.TransitionDrawable
-import android.graphics.drawable.shapes.RoundRectShape
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.use
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.R
 import com.chooongg.form.core.item.BaseForm
@@ -14,6 +14,8 @@ import com.chooongg.form.core.item.BaseOptionForm
 import com.chooongg.form.core.item.LinkageForm
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.style.BaseStyle
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -130,18 +132,25 @@ abstract class BaseFormProvider {
             return
         }
         item.errorNotify = 0L
-        val color = holder.itemView.context
-            .obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorPrimary))
-            .use { it.getColor(0, Color.GRAY) }
-        val corner = holder.itemView.resources.getDimension(R.dimen.formErrorNotifyCorner)
-        val shapeDrawable = ShapeDrawable(
-            RoundRectShape(
-                floatArrayOf(corner, corner, corner, corner, corner, corner, corner, corner),
-                null,
-                null
-            )
+        val shapeResId =
+            holder.itemView.context.obtainStyledAttributes(intArrayOf(R.attr.formShapeAppearanceCorner))
+                .use {
+                    it.getResourceId(
+                        0,
+                        com.google.android.material.R.style.ShapeAppearance_Material3_Corner_Medium
+                    )
+                }
+        val shapeDrawable = MaterialShapeDrawable(
+            ShapeAppearanceModel.builder(
+                holder.itemView.context,
+                shapeResId,
+                0
+            ).build()
         )
-        shapeDrawable.paint.color = (66 shl 24) + (0x00ffffff and color)
+        val color = holder.itemView.context
+            .obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorError))
+            .use { it.getColor(0, Color.GRAY) }
+        shapeDrawable.fillColor = ColorStateList.valueOf((44 shl 24) + (0x00ffffff and color))
         val drawable = TransitionDrawable(
             arrayOf(shapeDrawable, ColorDrawable(Color.TRANSPARENT))
         ).apply {

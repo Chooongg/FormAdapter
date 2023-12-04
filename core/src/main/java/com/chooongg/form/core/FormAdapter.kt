@@ -7,15 +7,15 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.chooongg.form.core.data.FormAdapterData
 import com.chooongg.form.core.data.FormDynamicPartData
 import com.chooongg.form.core.data.FormPartData
+import com.chooongg.form.core.error.FormDataVerificationException
 import com.chooongg.form.core.item.BaseForm
-import com.chooongg.form.core.item.FormButton
+import com.chooongg.form.core.item.LinkageForm
 import com.chooongg.form.core.part.BaseFormPartAdapter
 import com.chooongg.form.core.part.FormDynamicPartAdapter
 import com.chooongg.form.core.part.FormPartAdapter
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.style.NoneStyle
-import com.chooongg.form.core.style.NotAlignmentStyle
 import com.chooongg.form.core.typeset.BaseTypeset
 import org.json.JSONObject
 
@@ -46,6 +46,8 @@ open class FormAdapter(isEnabled: Boolean) :
             field = value
             partAdapters.forEach { it.executeUpdate(false) }
         }
+
+    var refreshLinkageWhileCreate: Boolean = true
 
     private var menuClickListener: FormMenuClickGlobalBlock? = null
 
@@ -91,6 +93,26 @@ open class FormAdapter(isEnabled: Boolean) :
                 is FormDynamicPartAdapter -> addDynamicPart(it)
             }
         }
+        if (refreshLinkageWhileCreate) {
+            partAdapters.forEach {
+                when (it) {
+                    is FormPartAdapter -> {
+                        it.data.getItems().forEach { item ->
+                            item.linkageBlock?.invoke(LinkageForm(it), item.field, item.content)
+                        }
+                    }
+
+                    is FormDynamicPartAdapter -> {
+                        it.data.getGroups().forEach { group ->
+                            group.getItems().forEach { item ->
+                                item.linkageBlock?.invoke(LinkageForm(it), item.field, item.content)
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
     fun getPartAdapter(position: Int): BaseFormPartAdapter {
@@ -106,6 +128,8 @@ open class FormAdapter(isEnabled: Boolean) :
         recyclerView?.focusedChild?.clearFocus()
         partAdapters.forEach { it.update() }
     }
+
+    //<editor-fold desc="listener 监听事件">
 
     /**
      * 设置菜单点击事件
@@ -124,6 +148,8 @@ open class FormAdapter(isEnabled: Boolean) :
     }
 
     fun getOnItemClickListener() = itemClickListener
+
+    //</editor-fold>
 
     fun findOfField(
         field: String,
@@ -157,7 +183,10 @@ open class FormAdapter(isEnabled: Boolean) :
             partAdapters.forEach { it.executeDataVerification() }
             true
         } catch (e: FormDataVerificationException) {
-            errorNotifyOfId(e.id)
+            errorNotify(e.item)
+            if (recyclerView != null) {
+                FormManager.Default.errorFormatter.errorOutput(recyclerView!!.context, e)
+            }
             false
         }
     }
@@ -176,56 +205,24 @@ open class FormAdapter(isEnabled: Boolean) :
     /**
      * 错误通知
      */
-    fun errorNotifyOfField(field: String) {
+    fun errorNotify(item: BaseForm) {
         var position = 0
         partAdapters.forEach {
-            if (it.findOfField(field, false, false) {
-                    errorNotify = System.currentTimeMillis()
-                    val indexOf = it.indexOf(this)
-                    if (indexOf >= 0) {
-                        position += indexOf
-                        val layoutManager = recyclerView?.layoutManager as? FormLayoutManager
-                        if (layoutManager != null) {
-                            val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
-                            val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
-                            if (position in firstVisiblePosition..lastVisiblePosition) {
-                                it.notifyItemChanged(indexOf, ERROR_NOTIFY_FLAG)
-                            }
-                        }
-                        recyclerView?.smoothScrollToPosition(position)
+            val indexOf = it.indexOf(item)
+            if (it.indexOf(item) != -1) {
+                item.errorNotify = System.currentTimeMillis()
+                position += indexOf
+                val layoutManager = recyclerView?.layoutManager as? FormLayoutManager
+                if (layoutManager != null) {
+                    val firstVisiblePosition =
+                        layoutManager.findFirstVisibleItemPosition()
+                    val lastVisiblePosition =
+                        layoutManager.findLastVisibleItemPosition()
+                    if (position in firstVisiblePosition..lastVisiblePosition) {
+                        it.notifyItemChanged(indexOf, ERROR_NOTIFY_FLAG)
                     }
-                }) {
-                return
-            } else {
-                position += it.itemCount
-            }
-        }
-    }
-
-    /**
-     * 错误通知
-     */
-    fun errorNotifyOfId(id: String) {
-        var position = 0
-        partAdapters.forEach {
-            if (it.findOfId(id, update = false, hasPayload = false) {
-                    errorNotify = System.currentTimeMillis()
-                    val indexOf = it.indexOf(this)
-                    if (indexOf >= 0) {
-                        position += indexOf
-                        val layoutManager = recyclerView?.layoutManager as? FormLayoutManager
-                        if (layoutManager != null) {
-                            val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
-                            val lastVisiblePosition = layoutManager.findLastVisibleItemPosition()
-                            if (position in firstVisiblePosition..lastVisiblePosition) {
-                                it.notifyItemChanged(indexOf, ERROR_NOTIFY_FLAG)
-                            } else {
-                                recyclerView?.smoothScrollToPosition(position)
-                            }
-                        }
-                    }
-                }) {
-                return
+                    recyclerView?.smoothScrollToPosition(position)
+                }
             } else {
                 position += it.itemCount
             }

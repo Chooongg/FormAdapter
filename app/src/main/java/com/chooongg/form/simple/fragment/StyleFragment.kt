@@ -29,7 +29,7 @@ class StyleFragment : BaseFragment() {
     }
 
     override fun errorNotify() {
-        adapter.errorNotifyOfField("input")
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

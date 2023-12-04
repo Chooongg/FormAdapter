@@ -24,7 +24,7 @@ class BasicFragment : BaseFragment() {
             Toast.makeText(context, "${item.name}, ${menu.title}", Toast.LENGTH_SHORT)
                 .show()
         }
-        model.adapter.setOnItemClickListener {
+        model.adapter.setOnItemClickListener { item, view ->
             Toast.makeText(context, "点击了按钮", Toast.LENGTH_SHORT).show()
         }
         return view
@@ -41,14 +41,13 @@ class BasicFragment : BaseFragment() {
     override fun output() {
         if (model.adapter.executeDataVerification()) {
             val output = model.adapter.executeOutput()
-            model.adapter.findOfField("output", true, true) {
+            model.adapter.findOfField("output", update = true, hasPayload = true) {
                 content = output.toString(4)
             }
         }
     }
 
     override fun errorNotify() {
-        model.adapter.errorNotifyOfField("input")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

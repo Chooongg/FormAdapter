@@ -2,7 +2,9 @@ package com.chooongg.form.core.part
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -10,10 +12,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.FormDataVerificationException
 import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormViewHolder
 import com.chooongg.form.core.boundary.Boundary
+import com.chooongg.form.core.error.FormDataVerificationException
 import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.item.InternalFormNone
 import com.chooongg.form.core.item.VariantForm
@@ -301,8 +303,8 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
      */
     abstract fun executeOutput(json: JSONObject)
 
-    open fun onItemClick(item: BaseForm) {
-        formAdapter.getOnItemClickListener()?.invoke(item)
+    open fun onItemClick(item: BaseForm, view: View) {
+        formAdapter.getOnItemClickListener()?.invoke(item, view)
     }
 
     fun indexOf(item: BaseForm) = itemList.indexOf(item)
@@ -334,6 +336,8 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         val itemView = provider.onCreateViewHolder(style, typesetLayout)
         typeset.executeAddView(style, typesetLayout, itemView)
         val view = styleLayout ?: typesetLayout
+        view.textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
+        view.textDirection = TextView.TEXT_DIRECTION_LOCALE
         view.layoutParams =
             if (view.layoutParams != null) GridLayoutManager.LayoutParams(view.layoutParams!!)
             else GridLayoutManager.LayoutParams(-1, -2)

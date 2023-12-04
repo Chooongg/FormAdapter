@@ -1,5 +1,7 @@
 package com.chooongg.form.simple.viewMode
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.Gravity
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -23,9 +25,10 @@ import com.chooongg.form.core.addTime
 import com.chooongg.form.core.addTip
 import com.chooongg.form.core.enum.FormOutputMode
 import com.chooongg.form.core.enum.FormVisibilityMode
+import com.chooongg.form.core.initCardOutlinedPart
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.option.Option
-import com.chooongg.form.core.style.CardElevatedStyle
+import com.chooongg.form.core.style.CardOutlinedStyle
 import com.chooongg.form.core.typeset.VerticalTypeset
 import com.chooongg.form.simple.R
 import kotlinx.coroutines.delay
@@ -36,12 +39,18 @@ class BasicViewModel : ViewModel() {
 
     init {
         adapter.setNewInstance {
-            initPart(CardElevatedStyle()) {
+            initCardOutlinedPart {
+
+            }
+            initPart(CardOutlinedStyle()) {
                 addButton("Button(Tonal)", "button") {
                     buttonStyle = FormButton.ButtonStyle.TONAL
                 }
                 addCheckBox("CheckBox", "checkBox") {
+                    required = true
                     loneLine = true
+                    minSelectCount = 2
+                    maxSelectCount = 4
                     optionLoader {
                         delay(2000)
                         val list = mutableListOf<Option>()
@@ -84,6 +93,7 @@ class BasicViewModel : ViewModel() {
                     }
                 }
                 addInput("Input", "input2") {
+                    required = true
                     maxLines = 1
                     contentGravity = Gravity.NO_GRAVITY
                     counterMaxLength = 11
@@ -141,6 +151,9 @@ class BasicViewModel : ViewModel() {
                     content = "20"
                     menu = R.menu.operation
                     menuVisibilityMode = FormVisibilityMode.ALWAYS
+                    menuCreateOptionCallback {
+                        it.findItem(R.id.error).isVisible = false
+                    }
                     onMenuClickListener { context, menu, item ->
                         if (menu.itemId == R.id.error) {
                             Toast.makeText(context, "${item.name}", Toast.LENGTH_SHORT).show()
@@ -183,11 +196,13 @@ class BasicViewModel : ViewModel() {
                     outputMode = FormOutputMode.NEVER
                     typeset = VerticalTypeset()
                 }
-                addMenu("Menu") {
-                    content = "Test"
+                addMenu("Menu", "menu") {
+                    nameColor = {
+                        ColorStateList.valueOf(Color.GRAY)
+                    }
                     icon = R.drawable.ic_main_advanced
-                    hint = "测试"
-                    bubbleText = "v2.9.6"
+                    hint = "有新版本"
+                    bubbleText = "v1.0.0"
                 }
             }
         }

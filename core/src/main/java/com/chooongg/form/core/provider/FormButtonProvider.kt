@@ -4,6 +4,7 @@ import android.animation.AnimatorInflater
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.use
 import androidx.core.view.updateLayoutParams
@@ -23,6 +24,8 @@ open class FormButtonProvider : BaseFormProvider() {
         return ConstraintLayout(parent.context).also {
             it.addView(MaterialButton(parent.context).apply {
                 id = R.id.formInternalContentView
+//                textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
+//                textDirection = TextView.TEXT_DIRECTION_LOCALE
                 layoutParams = ConstraintLayout.LayoutParams(0, -2).apply {
                     matchConstraintMaxWidth = maxWidth
                     startToStart = ConstraintLayout.LayoutParams.PARENT_ID
@@ -153,7 +156,7 @@ open class FormButtonProvider : BaseFormProvider() {
     protected open fun configButtonClick(holder: FormViewHolder, view: View, item: BaseForm) {
         view.setOnClickListener {
             val adapter = holder.bindingAdapter as? BaseFormPartAdapter
-            adapter?.onItemClick(item)
+            adapter?.onItemClick(item, it)
         }
     }
 }

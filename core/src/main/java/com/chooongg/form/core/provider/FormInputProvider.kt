@@ -120,12 +120,26 @@ open class FormInputProvider : BaseFormProvider() {
                 counterMaxLength = itemInput.counterMaxLength
                 getChildAt(1).updatePadding(top = 0, bottom = holder.style.insideInfo.middleBottom)
             } else isCounterEnabled = false
+            val startIcon = holder.style.iconProvider.getDrawable(context, itemInput?.startIcon)
+            if (startIcon != null) {
+                startIconDrawable = startIcon
+                if (itemInput?.startIconTint != null) {
+                    setStartIconTintList(itemInput.startIconTint!!.invoke(context))
+                } else {
+                    setStartIconTintList(null)
+                    TODO()
+                }
+            } else {
+                startIconDrawable = null
+            }
         }
         with(view.findViewById<MaterialAutoCompleteTextView>(R.id.formInternalContentChildView)) {
             if (tag is TextWatcher) removeTextChangedListener(tag as TextWatcher)
             hint = when (itemInput?.placeholder) {
                 null -> FormUtils.getText(context, item.hint)
-                    ?: context.getString(R.string.formDefaultHintInput)
+                    ?: if (item.isRealEnable(enabled)) {
+                        context.getString(R.string.formDefaultHintInput)
+                    } else resources.getString(R.string.fromDefaultHintNone)
 
                 else -> null
             }
@@ -138,7 +152,9 @@ open class FormInputProvider : BaseFormProvider() {
                 maxLines = itemInput?.maxLines ?: Int.MAX_VALUE
             }
             val watcher = doAfterTextChanged { editable ->
-                changeContentAndNotifyLinkage(holder, item, editable)
+                if (editable.isNullOrEmpty()) {
+                    changeContentAndNotifyLinkage(holder, item, null)
+                } else changeContentAndNotifyLinkage(holder, item, editable)
             }
             tag = watcher
         }
@@ -159,7 +175,12 @@ open class FormInputProvider : BaseFormProvider() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected fun configOption(holder: FormViewHolder, view: View, item: BaseForm, enabled: Boolean) {
+    protected fun configOption(
+        holder: FormViewHolder,
+        view: View,
+        item: BaseForm,
+        enabled: Boolean
+    ) {
         val editText =
             view.findViewById<MaterialAutoCompleteTextView>(R.id.formInternalContentChildView)
         val itemInput = item as? FormInput

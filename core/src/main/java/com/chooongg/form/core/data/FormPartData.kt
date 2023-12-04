@@ -1,11 +1,11 @@
 package com.chooongg.form.core.data
 
 import androidx.annotation.MenuRes
-import androidx.appcompat.view.menu.MenuBuilder
+import com.chooongg.form.core.FormMenuCreateOptionBlock
 import com.chooongg.form.core.enum.FormEnableMode
 import com.chooongg.form.core.enum.FormVisibilityMode
 
-class FormPartData : FormGroupData(),BaseFormPartData {
+class FormPartData : FormGroupData(), BaseFormPartData {
 
     override var isEnablePart: Boolean = true
 
@@ -24,7 +24,7 @@ class FormPartData : FormGroupData(),BaseFormPartData {
      */
     var menuShowTitle: Boolean = false
 
-    private var menuCreateOptionCallback: (MenuBuilder.() -> Unit)? = null
+    private var menuCreateOptionCallback: FormMenuCreateOptionBlock? = null
 
     /**
      * 菜单可见模式
@@ -39,7 +39,7 @@ class FormPartData : FormGroupData(),BaseFormPartData {
     /**
      * 菜单创建选项时的监听
      */
-    fun menuCreateOptionCallback(block: (MenuBuilder.() -> Unit)?) {
+    fun menuCreateOptionCallback(block: FormMenuCreateOptionBlock?) {
         menuCreateOptionCallback = block
     }
 

@@ -1,6 +1,7 @@
 package com.chooongg.form.core
 
 import android.content.Context
+import android.util.DisplayMetrics
 import android.view.View.MeasureSpec
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller

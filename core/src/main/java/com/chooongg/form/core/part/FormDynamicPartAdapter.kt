@@ -1,7 +1,7 @@
 package com.chooongg.form.core.part
 
 import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.FormDataVerificationException
+import com.chooongg.form.core.error.FormDataVerificationException
 import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.data.FormDynamicPartData
 import com.chooongg.form.core.data.FormGroupData
@@ -16,7 +16,7 @@ import org.json.JSONObject
 class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     BaseFormPartAdapter(formAdapter, style) {
 
-    private var data = FormDynamicPartData()
+    internal var data = FormDynamicPartData()
 
     private val addButton = InternalFormDynamicAddButton(null, null)
 
@@ -123,14 +123,18 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             group.getItems().forEach { item ->
                 if (item.field == field) {
                     block(item)
-                    if (update) notifyChangeItem(item, hasPayload)
+                    if (update) {
+                        if (hasPayload) notifyChangeItem(item, true) else update()
+                    }
                     return true
                 }
                 if (item is VariantForm) {
                     item.getItems().forEach {
                         if (it.field == field) {
                             block(it)
-                            if (update) notifyChangeItem(it, hasPayload)
+                            if (update) {
+                                if (hasPayload) notifyChangeItem(item, true) else update()
+                            }
                             return true
                         }
                     }
@@ -150,14 +154,18 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             group.getItems().forEach { item ->
                 if (item.id == id) {
                     block(item)
-                    if (update) notifyChangeItem(item, hasPayload)
+                    if (update) {
+                        if (hasPayload) notifyChangeItem(item, true) else update()
+                    }
                     return true
                 }
                 if (item is VariantForm) {
                     item.getItems().forEach {
                         if (it.id == id) {
                             block(it)
-                            if (update) notifyChangeItem(it, hasPayload)
+                            if (update) {
+                                if (hasPayload) notifyChangeItem(item, true) else update()
+                            }
                             return true
                         }
                     }
