@@ -2,6 +2,7 @@ package com.chooongg.form.core.item
 
 import android.content.Context
 import android.icu.text.DateFormat
+import android.icu.text.SimpleDateFormat
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
 import com.chooongg.form.core.FormAdapter
@@ -13,7 +14,6 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DayViewDecorator
 import com.google.android.material.timepicker.TimeFormat
 import org.json.JSONObject
-import java.text.SimpleDateFormat
 import java.util.Locale
 
 class FormTime : BaseForm {
@@ -130,7 +130,7 @@ class FormTime : BaseForm {
                 FormUtils.getText(context, content)
             }
         }
-        return when (timeMode) {
+        val formatter = when (timeMode) {
             FormTimeMode.TIME -> DateFormat.getTimeInstance(
                 DateFormat.SHORT, Locale.getDefault()
             )
@@ -142,6 +142,15 @@ class FormTime : BaseForm {
             FormTimeMode.DATE_TIME -> DateFormat.getDateTimeInstance(
                 DateFormat.DEFAULT, DateFormat.SHORT, Locale.getDefault()
             )
-        }.format(millis)
+        }
+        if (formatter is SimpleDateFormat) {
+            formatter.applyPattern(
+                formatter.toPattern()
+                    .replace('h', 'H')
+                    .replace('k', 'K')
+                    .replace("a", "")
+            )
+        }
+        return formatter.format(millis)
     }
 }

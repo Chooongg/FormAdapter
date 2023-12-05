@@ -37,14 +37,13 @@ class FormTipProvider : BaseFormProvider() {
         val itemTip = item as? FormTip
         with(view as MaterialTextView) {
             text = FormUtils.getText(context, item.name)
-            if (itemTip?.color != null) {
-                setTextColor(itemTip.color!!.invoke(context))
-            } else {
-                setTextColor(context.obtainStyledAttributes(
+            //  (如果不想使用默认色调, 请实现Block返回null)
+            setTextColor(
+                itemTip?.color?.invoke(context) ?: context.obtainStyledAttributes(
                     formTextAppearance(this, R.attr.formTextAppearanceTip),
                     intArrayOf(android.R.attr.textColor)
-                ).use { it.getColorStateList(0) })
-            }
+                ).use { it.getColorStateList(0) }
+            )
             gravity = holder.typeset.obtainContentGravity(holder, item)
             updatePaddingRelative(
                 top = if (itemTip?.enableTopPadding == true) holder.style.insideInfo.middleTop else 0,

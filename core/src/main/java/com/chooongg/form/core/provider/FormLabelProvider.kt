@@ -36,15 +36,13 @@ class FormLabelProvider : BaseFormProvider() {
         val itemLabel = item as? FormLabel
         with(view as MaterialTextView) {
             text = FormUtils.getText(context, item.name)
-            val color = itemLabel?.color?.invoke(context)
-            if (color != null) {
-                setTextColor(color)
-            } else {
-                setTextColor(context.obtainStyledAttributes(
-                    formTextAppearance(this, R.attr.formTextAppearanceLabel),
-                    intArrayOf(android.R.attr.textColor)
-                ).use { it.getColorStateList(0) })
-            }
+            setTextColor(
+                itemLabel?.color?.invoke(context)
+                    ?: context.obtainStyledAttributes(
+                        formTextAppearance(this, R.attr.formTextAppearanceLabel),
+                        intArrayOf(android.R.attr.textColor)
+                    ).use { it.getColorStateList(0) }
+            )
             gravity = holder.typeset.obtainContentGravity(holder, item)
         }
     }

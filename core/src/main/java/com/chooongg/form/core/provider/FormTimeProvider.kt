@@ -22,6 +22,8 @@ import java.util.Locale
 
 class FormTimeProvider : BaseFormProvider() {
 
+    private var isShow: Boolean = false
+
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
         MaterialButton(
             parent.context, null, com.google.android.material.R.attr.borderlessButtonStyle
@@ -70,6 +72,7 @@ class FormTimeProvider : BaseFormProvider() {
         view: View,
         item: BaseForm
     ) {
+        if (isShow) return
         if (item !is FormTime) return
         val anchor = view as MaterialButton
         val activity = FormUtils.getActivity(view.context) as? AppCompatActivity
@@ -77,6 +80,7 @@ class FormTimeProvider : BaseFormProvider() {
             Toast.makeText(view.context, R.string.formPickerOpenError, Toast.LENGTH_SHORT).show()
             return
         }
+        isShow = true
         val calendar = Calendar.getInstance()
         val content = item.content as? Long
         if (content != null) {
@@ -99,6 +103,7 @@ class FormTimeProvider : BaseFormProvider() {
                 .setHour(calendar.get(Calendar.HOUR_OF_DAY))
                 .setMinute(calendar.get(Calendar.MINUTE))
                 .build().apply {
+                    addOnDismissListener { isShow = false }
                     addOnPositiveButtonClickListener {
                         calendar.set(Calendar.HOUR_OF_DAY, hour)
                         calendar.set(Calendar.MINUTE, minute)
@@ -118,6 +123,7 @@ class FormTimeProvider : BaseFormProvider() {
                 .setCalendarConstraints(item.calendarConstraints)
                 .setDayViewDecorator(item.dayViewDecorator)
                 .build().apply {
+                    addOnDismissListener { isShow = false }
                     addOnPositiveButtonClickListener {
                         calendar.timeInMillis = it - calendar.timeZone.rawOffset
                         changeContentAndNotifyLinkage(holder, item, calendar.timeInMillis)
@@ -139,6 +145,7 @@ class FormTimeProvider : BaseFormProvider() {
                     .setCalendarConstraints(item.calendarConstraints)
                     .setDayViewDecorator(item.dayViewDecorator)
                     .build().apply {
+                        addOnDismissListener { isShow = false }
                         addOnPositiveButtonClickListener {
                             newCalendar.timeInMillis = it - newCalendar.timeZone.rawOffset
 
@@ -160,9 +167,11 @@ class FormTimeProvider : BaseFormProvider() {
                                 )
                             }
                             MaterialTimePicker.Builder()
-                                .setTitleText(DateFormat.getDateInstance(
-                                    DateFormat.DEFAULT, Locale.getDefault()
-                                ).format(newCalendar.timeInMillis))
+                                .setTitleText(
+                                    DateFormat.getDateInstance(
+                                        DateFormat.DEFAULT, Locale.getDefault()
+                                    ).format(newCalendar.timeInMillis)
+                                )
                                 .setInputMode(
                                     when (item.inputMode) {
                                         FormTime.INPUT_MODE_TEXT -> 1

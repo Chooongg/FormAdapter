@@ -34,6 +34,7 @@ class FormRatingProvider : BaseFormProvider() {
                     it.context, null, com.google.android.material.R.attr.ratingBarStyleIndicator
                 ).apply {
                     id = R.id.formInternalContentChildView
+                    secondaryProgressTintList = ColorStateList.valueOf(Color.TRANSPARENT)
                 }, FrameLayout.LayoutParams(-2, -2)
             )
         }

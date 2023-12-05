@@ -130,7 +130,12 @@ class BasicViewModel : ViewModel() {
                         list
                     }
                 }
-                addRating("Rating", "rating")
+                addRating("Rating", "rating") {
+                    stepSize = 0.2f
+                    tint = {
+                        ColorStateList.valueOf(Color.parseColor("#ea9518"))
+                    }
+                }
                 addSelector("Selector", "selector") {
                     optionLoader {
                         val list = mutableListOf<Option>()

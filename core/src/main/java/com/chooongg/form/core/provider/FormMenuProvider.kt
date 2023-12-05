@@ -86,7 +86,6 @@ class FormMenuProvider : BaseFormProvider() {
                 AppCompatImageView(layout.context).apply {
                     id = R.id.formInternalContentChildSecondView
                     setImageResource(R.drawable.ic_form_arrow_end)
-                    imageTintList = contentView.hintTextColors
                 },
                 LinearLayoutCompat.LayoutParams(
                     FormUtils.getFontHeight(contentView),
@@ -135,11 +134,7 @@ class FormMenuProvider : BaseFormProvider() {
         val nameView = view.findViewById<MaterialTextView>(R.id.formInternalNameView).apply {
             visibility = if (item.name != null) {
                 text = FormUtils.getText(context, item.name)
-                if (itemMenu?.nameColor != null) {
-                    setTextColor(itemMenu.nameColor!!.invoke(context))
-                } else {
-                    setTextColor(tag as ColorStateList)
-                }
+                setTextColor(itemMenu?.nameColor?.invoke(context) ?: tag as ColorStateList)
                 View.VISIBLE
             } else {
                 View.GONE
@@ -168,11 +163,7 @@ class FormMenuProvider : BaseFormProvider() {
         with(view.findViewById<MaterialTextView>(R.id.formInternalContentView)) {
             visibility = if (item.hint != null) {
                 text = FormUtils.getText(context, item.hint)
-                if (itemMenu?.contentColor != null) {
-                    setTextColor(itemMenu.contentColor!!.invoke(context))
-                } else {
-                    setTextColor(tag as ColorStateList)
-                }
+                setTextColor(itemMenu?.contentColor?.invoke(context) ?: tag as ColorStateList)
                 View.VISIBLE
             } else {
                 View.GONE
@@ -185,21 +176,16 @@ class FormMenuProvider : BaseFormProvider() {
                     else -> bubble.toString()
                 }
                 val bubbleBackground = background as MaterialShapeDrawable
-                if (itemMenu.bubbleColor != null) {
-                    bubbleBackground.fillColor = itemMenu.bubbleColor!!.invoke(context)
-                } else {
-                    bubbleBackground.fillColor =
-                        ColorStateList.valueOf(context.obtainStyledAttributes(
-                            intArrayOf(com.google.android.material.R.attr.colorError)
-                        ).use { it.getColor(0, Color.GRAY) })
-                }
-                if (itemMenu.bubbleOnColor != null) {
-                    setTextColor(itemMenu.bubbleOnColor!!.invoke(context))
-                } else {
-                    setTextColor(context.obtainStyledAttributes(
-                        intArrayOf(com.google.android.material.R.attr.colorOnError)
+                bubbleBackground.fillColor = itemMenu.bubbleColor?.invoke(context)
+                    ?: ColorStateList.valueOf(context.obtainStyledAttributes(
+                        intArrayOf(com.google.android.material.R.attr.colorError)
                     ).use { it.getColor(0, Color.GRAY) })
-                }
+                setTextColor(
+                    itemMenu.bubbleOnColor?.invoke(context)
+                        ?: ColorStateList.valueOf(context.obtainStyledAttributes(
+                            intArrayOf(com.google.android.material.R.attr.colorOnError)
+                        ).use { it.getColor(0, Color.GRAY) })
+                )
                 View.VISIBLE
             } else {
                 View.GONE
