@@ -16,7 +16,7 @@ open class FormLabel : BaseForm {
     constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     /**
-     * 文字颜色
+     * 文字颜色 (如果不想使用默认色调, 请实现Block返回null)
      */
     var color: FormColorStateListBlock? = null
 

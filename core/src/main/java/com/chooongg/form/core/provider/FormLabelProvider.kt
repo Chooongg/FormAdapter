@@ -36,8 +36,9 @@ class FormLabelProvider : BaseFormProvider() {
         val itemLabel = item as? FormLabel
         with(view as MaterialTextView) {
             text = FormUtils.getText(context, item.name)
-            if (itemLabel?.color != null) {
-                setTextColor(itemLabel.color!!.invoke(context))
+            val color = itemLabel?.color?.invoke(context)
+            if (color != null) {
+                setTextColor(color)
             } else {
                 setTextColor(context.obtainStyledAttributes(
                     formTextAppearance(this, R.attr.formTextAppearanceLabel),

@@ -77,7 +77,7 @@ open class FormInput : BaseOptionForm<CharSequence> {
     var startIcon: Any? = null
 
     /**
-     * 起始图标色调
+     * 起始图标色调 (如果不想使用默认色调, 请实现Block返回null)
      */
     var startIconTint: FormColorStateListBlock? = null
 

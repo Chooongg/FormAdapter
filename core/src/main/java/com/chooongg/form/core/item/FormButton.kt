@@ -43,7 +43,7 @@ open class FormButton : BaseForm {
     var iconSize: Int? = null
 
     /**
-     * 图标色调
+     * 图标色调 (如果不想使用默认色调, 请实现Block返回null)
      */
     var iconTint: FormColorStateListBlock? = null
 
