@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
-import android.util.Log
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
@@ -83,8 +82,8 @@ class FormMenuView constructor(
                 it.shouldShowIcon()
                 items.add(it)
             }
-            Log.e("Form", "setMenu: ${items.size}")
             notifyDataSetChanged()
+
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {

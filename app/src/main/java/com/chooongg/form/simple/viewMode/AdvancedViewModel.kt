@@ -27,6 +27,9 @@ import com.chooongg.form.core.enum.FormTimeMode
 import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.initCardOutlinedDynamicPart
 import com.chooongg.form.core.initCardOutlinedPart
+import com.chooongg.form.core.inputMode.InputModeDecimal
+import com.chooongg.form.core.inputMode.InputModeNumber
+import com.chooongg.form.core.inputMode.InputModePassword
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.item.FormTime
 import com.chooongg.form.core.option.Option
@@ -230,10 +233,19 @@ class AdvancedViewModel : ViewModel() {
                     loneLine = true
                     showClearIcon = false
                     minLines = 3
-                    counterMaxLength = 100
+                    showCounter = true
                 }
                 addInputFilled("Filled")
                 addInputOutlined("Outlined")
+                addInput("Number") {
+                    inputMode = InputModeNumber()
+                }
+                addInput("Decimal") {
+                    inputMode = InputModeDecimal()
+                }
+                addInput("Password") {
+                    inputMode = InputModePassword()
+                }
             }
             initCardOutlinedPart {
                 partName = "Label"

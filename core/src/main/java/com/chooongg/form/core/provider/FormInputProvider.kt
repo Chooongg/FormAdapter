@@ -1,10 +1,18 @@
 package com.chooongg.form.core.provider
 
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.drawable.LayerDrawable
+import android.graphics.drawable.RippleDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.OvalShape
+import android.text.InputFilter.LengthFilter
+import android.text.InputType
 import android.text.TextWatcher
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
-import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.view.ContextThemeWrapper
@@ -29,77 +37,125 @@ import com.google.android.material.progressindicator.IndeterminateDrawable
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.CoroutineScope
+import kotlin.math.min
 
 open class FormInputProvider : BaseFormProvider() {
 
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
         TextInputLayout(
-            parent.context,
-            null,
+            parent.context, null,
             com.google.android.material.R.attr.textInputOutlinedExposedDropdownMenuStyle
         ).also {
-            it.id = R.id.formInternalContentView
-            it.isHintEnabled = false
-            it.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
-            it.boxStrokeWidth = 0
-            it.boxStrokeWidthFocused = 0
-            it.setHintTextAppearance(formTextAppearance(it, R.attr.formTextAppearanceHint))
-            it.setPrefixTextAppearance(formTextAppearance(it, R.attr.formTextAppearancePrefix))
-            it.setSuffixTextAppearance(formTextAppearance(it, R.attr.formTextAppearanceSuffix))
-            it.placeholderTextAppearance =
-                formTextAppearance(it, R.attr.formTextAppearancePlaceholder)
-            it.setPaddingRelative(0, 0, 0, 0)
             val editText = MaterialAutoCompleteTextView(
                 ContextThemeWrapper(
                     it.context,
                     com.google.android.material.R.style.ThemeOverlay_Material3_AutoCompleteTextView
                 )
             ).apply {
-                id = R.id.formInternalContentChildView
-                imeOptions = EditorInfo.IME_ACTION_DONE
-                isHorizontalFadingEdgeEnabled = true
-                isVerticalFadingEdgeEnabled = true
-                setFadingEdgeLength(context.resources.getDimensionPixelSize(R.dimen.formFadingEdgeLength))
-                setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceContent))
+                onCreateInputEdit(this)
                 setPaddingRelative(
                     style.insideInfo.middleStart, style.insideInfo.middleTop,
                     style.insideInfo.middleEnd, style.insideInfo.middleBottom
                 )
             }
             it.addView(editText)
-            it.setEndIconTintList(editText.hintTextColors)
-            it.findViewById<CheckableImageButton>(
-                com.google.android.material.R.id.text_input_end_icon
-            ).apply {
-                val iconPadding = context.resources.getDimensionPixelSize(R.dimen.formIconPadding)
-                background = null
-                scaleType = ImageView.ScaleType.CENTER_INSIDE
-                minimumHeight = 0
-                minimumWidth = 0
-                setPaddingRelative(
-                    iconPadding, style.insideInfo.middleTop,
-                    style.insideInfo.middleEnd, style.insideInfo.middleBottom
-                )
-                val fontHeight = FormUtils.getFontHeight(editText)
-                val realHeight = fontHeight + iconPadding + style.insideInfo.middleEnd
-                updateLayoutParams<MarginLayoutParams> {
-                    marginStart = 0
-                    width = realHeight
-                    height = fontHeight + style.insideInfo.middleTop + style.insideInfo.middleBottom
-                }
-                editText.setAdapter(
-                    FormArrayAdapter<CharSequence>(
-                        Boundary(
-                            style.insideInfo.middleStart, style.insideInfo.middleTop,
-                            realHeight, style.insideInfo.middleBottom
-                        )
-                    )
-                )
-            }
+            onCreateInputLayout(
+                it, editText,
+                style.insideInfo.middleStart, style.insideInfo.middleTop,
+                style.insideInfo.middleEnd, style.insideInfo.middleBottom
+            )
+            it.isHintEnabled = false
+            it.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
+            it.boxStrokeWidth = 0
+            it.boxStrokeWidthFocused = 0
+            it.setPaddingRelative(0, 0, 0, 0)
             it.getChildAt(0).updateLayoutParams<LinearLayout.LayoutParams> {
                 topMargin = 0
             }
         }
+
+    protected fun onCreateInputLayout(
+        layout: TextInputLayout,
+        editText: MaterialAutoCompleteTextView,
+        start: Int,
+        top: Int,
+        end: Int,
+        bottom: Int
+    ) {
+        layout.id = R.id.formInternalContentView
+        layout.setHintTextAppearance(formTextAppearance(layout, R.attr.formTextAppearanceHint))
+        layout.setPrefixTextAppearance(formTextAppearance(layout, R.attr.formTextAppearancePrefix))
+        layout.setSuffixTextAppearance(formTextAppearance(layout, R.attr.formTextAppearanceSuffix))
+        layout.placeholderTextAppearance =
+            formTextAppearance(layout, R.attr.formTextAppearancePlaceholder)
+        layout.setCounterTextAppearance(
+            formTextAppearance(layout, R.attr.formTextAppearanceCounter)
+        )
+        layout.setCounterOverflowTextAppearance(
+            formTextAppearance(layout, R.attr.formTextAppearanceCounter)
+        )
+        layout.tag = editText.textColors
+        // StartIcon
+        layout.findViewById<CheckableImageButton>(
+            com.google.android.material.R.id.text_input_start_icon
+        ).apply {
+            val iconPadding = resources.getDimensionPixelSize(R.dimen.formIconPadding)
+            scaleType = ImageView.ScaleType.CENTER_INSIDE
+            minimumHeight = 0
+            minimumWidth = 0
+            setPaddingRelative(start, top, iconPadding, bottom)
+            val fontHeight = FormUtils.getFontHeight(editText)
+            val realWidth = fontHeight + iconPadding + start
+            updateLayoutParams<MarginLayoutParams> {
+                marginEnd = 0
+                width = realWidth
+                height = fontHeight + top + bottom
+            }
+            val a =
+                context.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorControlHighlight))
+            val color = a.getColorStateList(0) ?: ColorStateList.valueOf(Color.GRAY)
+            a.recycle()
+            background = RippleDrawable(color, null, LayerDrawable(arrayOf(ShapeDrawable().apply {
+                paint.color = Color.GRAY
+                shape = OvalShape()
+            })).apply {
+                setLayerGravity(0, Gravity.END or Gravity.CENTER_VERTICAL)
+                val size = fontHeight + min(iconPadding, start) * 2
+                setLayerWidth(0, size)
+                setLayerHeight(0, size)
+            })
+        }
+        // EndIcon
+        layout.setEndIconTintList(editText.hintTextColors)
+        layout.findViewById<CheckableImageButton>(
+            com.google.android.material.R.id.text_input_end_icon
+        ).apply {
+            val iconPadding = resources.getDimensionPixelSize(R.dimen.formIconPadding)
+            background = null
+            scaleType = ImageView.ScaleType.CENTER_INSIDE
+            minimumHeight = 0
+            minimumWidth = 0
+            setPaddingRelative(iconPadding, top, end, bottom)
+            val fontHeight = FormUtils.getFontHeight(editText)
+            val realWidth = fontHeight + iconPadding + end
+            updateLayoutParams<MarginLayoutParams> {
+                marginStart = 0
+                width = realWidth
+                height = fontHeight + top + top
+            }
+            editText.setAdapter(
+                FormArrayAdapter<CharSequence>(Boundary(start, top, realWidth, bottom))
+            )
+        }
+    }
+
+    protected fun onCreateInputEdit(edit: MaterialAutoCompleteTextView) {
+        edit.id = R.id.formInternalContentChildView
+        edit.isHorizontalFadingEdgeEnabled = true
+        edit.isVerticalFadingEdgeEnabled = true
+        edit.setFadingEdgeLength(edit.context.resources.getDimensionPixelSize(R.dimen.formFadingEdgeLength))
+        edit.setTextAppearance(formTextAppearance(edit, R.attr.formTextAppearanceContent))
+    }
 
     override fun onBindViewHolder(
         scope: CoroutineScope,
@@ -111,30 +167,10 @@ open class FormInputProvider : BaseFormProvider() {
         val itemInput = item as? FormInput
         configOption(holder, view, item, enabled)
         with(view as TextInputLayout) {
-            isEnabled = enabled
-            prefixText = FormUtils.getText(context, itemInput?.prefix)
-            suffixText = FormUtils.getText(context, itemInput?.suffix)
-            placeholderText = FormUtils.getText(context, itemInput?.placeholder)
-            if (itemInput?.counterMaxLength != null && itemInput.counterMaxLength != Int.MAX_VALUE) {
-                isCounterEnabled = true
-                counterMaxLength = itemInput.counterMaxLength
-                getChildAt(1).updatePadding(top = 0, bottom = holder.style.insideInfo.middleBottom)
-            } else isCounterEnabled = false
-            val startIcon = holder.style.iconProvider.getDrawable(context, itemInput?.startIcon)
-            if (startIcon != null) {
-                startIconDrawable = startIcon
-                if (itemInput?.startIconTint != null) {
-                    setStartIconTintList(itemInput.startIconTint!!.invoke(context))
-                } else {
-                    setStartIconTintList(null)
-                    TODO()
-                }
-            } else {
-                startIconDrawable = null
-            }
+            onBindInputLayout(holder, this, item, enabled)
         }
         with(view.findViewById<MaterialAutoCompleteTextView>(R.id.formInternalContentChildView)) {
-            if (tag is TextWatcher) removeTextChangedListener(tag as TextWatcher)
+            onBindInputEdit(holder, this, item, enabled)
             hint = when (itemInput?.placeholder) {
                 null -> FormUtils.getText(context, item.hint)
                     ?: if (item.isRealEnable(enabled)) {
@@ -143,22 +179,81 @@ open class FormInputProvider : BaseFormProvider() {
 
                 else -> null
             }
-            setText(item.getContentText(context, enabled))
-            gravity = holder.typeset.obtainContentGravity(holder, item)
-            if (itemInput != null && itemInput.maxLines <= 1) {
-                setSingleLine()
-            } else {
-                minLines = itemInput?.minLines ?: 0
-                maxLines = itemInput?.maxLines ?: Int.MAX_VALUE
-            }
-            val watcher = doAfterTextChanged { editable ->
-                if (editable.isNullOrEmpty()) {
-                    changeContentAndNotifyLinkage(holder, item, null)
-                } else changeContentAndNotifyLinkage(holder, item, editable)
-            }
-            tag = watcher
         }
         loadOption(holder, item)
+    }
+
+    protected fun onBindInputLayout(
+        holder: FormViewHolder,
+        layout: TextInputLayout,
+        item: BaseForm,
+        enabled: Boolean
+    ) {
+        val itemInput = item as? FormInput
+        layout.isEnabled = enabled
+        layout.prefixText = FormUtils.getText(layout.context, itemInput?.prefix)
+        layout.suffixText = FormUtils.getText(layout.context, itemInput?.suffix)
+        layout.placeholderText = FormUtils.getText(layout.context, itemInput?.placeholder)
+        if (itemInput?.showCounter == true) {
+            layout.isCounterEnabled = true
+            layout.counterMaxLength = itemInput.counterMaxLength ?: itemInput.maxLength ?: -1
+            layout.getChildAt(1)
+                .updatePadding(top = 0, bottom = holder.style.insideInfo.middleBottom)
+        } else layout.isCounterEnabled = false
+        val startIcon = holder.style.iconProvider.getDrawable(layout.context, itemInput?.startIcon)
+        if (startIcon != null) {
+            layout.startIconDrawable = startIcon
+            if (itemInput?.startIconTint != null) {
+                layout.setStartIconTintList(itemInput.startIconTint!!.invoke(layout.context))
+            } else {
+                layout.setStartIconTintList(layout.tag as? ColorStateList)
+            }
+            if (itemInput?.getStartIconOnClickListener() != null) {
+                layout.setStartIconOnClickListener {
+                    itemInput.getStartIconOnClickListener()!!.invoke(item, layout)
+                }
+            } else layout.setStartIconOnClickListener(null)
+        } else {
+            layout.startIconDrawable = null
+            layout.setStartIconOnClickListener(null)
+        }
+    }
+
+    protected fun onBindInputEdit(
+        holder: FormViewHolder,
+        edit: MaterialAutoCompleteTextView,
+        item: BaseForm,
+        enabled: Boolean
+    ) {
+        val itemInput = item as? FormInput
+        if (edit.tag is TextWatcher) edit.removeTextChangedListener(edit.tag as TextWatcher)
+        edit.setText(item.getContentText(edit.context, enabled))
+        edit.gravity = holder.typeset.obtainContentGravity(holder, item)
+        if (itemInput != null && itemInput.maxLines <= 1) {
+            edit.setSingleLine()
+        } else {
+            edit.minLines = itemInput?.minLines ?: 0
+            edit.maxLines = itemInput?.maxLines ?: Int.MAX_VALUE
+        }
+        if (itemInput != null) {
+            edit.inputType = if (itemInput.maxLines <= 1) {
+                itemInput.inputMode.getInputType()
+            } else itemInput.inputMode.getInputType() or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            edit.transformationMethod = itemInput.inputMode.getTransformationMethod()
+            edit.filters = itemInput.inputMode.getFilters().apply {
+                if (itemInput.maxLength != null) add(LengthFilter(itemInput.maxLength!!))
+            }.toTypedArray()
+        } else {
+            edit.inputType = InputType.TYPE_CLASS_TEXT
+            edit.transformationMethod = null
+            edit.filters = arrayOf()
+        }
+        val watcher = edit.doAfterTextChanged { editable ->
+            if (editable.isNullOrEmpty()) {
+                changeContentAndNotifyLinkage(holder, item, null)
+            } else changeContentAndNotifyLinkage(holder, item, editable)
+        }
+        edit.tag = watcher
     }
 
     override fun onBindViewHolderOtherPayload(
@@ -194,7 +289,9 @@ open class FormInputProvider : BaseFormProvider() {
             when (val result = itemInput?.optionLoadResult) {
                 null -> {
                     TooltipCompat.setTooltipText(this, null)
-                    if (itemInput?.showClearIcon != false) {
+                    if (itemInput?.inputMode?.isNeedPasswordToggle() == true) {
+                        endIconMode = TextInputLayout.END_ICON_PASSWORD_TOGGLE
+                    } else if (itemInput?.showClearIcon != false) {
                         endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
                         endIconDrawable = FormUtils.getIconChangeSize(
                             context, R.drawable.ic_form_close, fontHeight
@@ -212,6 +309,8 @@ open class FormInputProvider : BaseFormProvider() {
                         endIconDrawable = FormUtils.getIconChangeSize(
                             context, R.drawable.ic_form_arrow_dropdown, fontHeight
                         )
+                    } else if (itemInput.inputMode.isNeedPasswordToggle()) {
+                        endIconMode = TextInputLayout.END_ICON_PASSWORD_TOGGLE
                     } else if (itemInput.showClearIcon) {
                         endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
                         endIconDrawable = FormUtils.getIconChangeSize(
@@ -246,7 +345,9 @@ open class FormInputProvider : BaseFormProvider() {
 
                 is OptionLoadResult.Empty -> {
                     TooltipCompat.setTooltipText(this, null)
-                    if (itemInput.showClearIcon) {
+                    if (itemInput.inputMode.isNeedPasswordToggle()) {
+                        endIconMode = TextInputLayout.END_ICON_PASSWORD_TOGGLE
+                    } else if (itemInput.showClearIcon) {
                         endIconMode = TextInputLayout.END_ICON_CLEAR_TEXT
                         endIconDrawable = FormUtils.getIconChangeSize(
                             context, R.drawable.ic_form_close, fontHeight

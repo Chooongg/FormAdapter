@@ -26,9 +26,9 @@ import com.chooongg.form.core.addTip
 import com.chooongg.form.core.enum.FormOutputMode
 import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.core.initCardOutlinedPart
+import com.chooongg.form.core.inputMode.InputModePassword
 import com.chooongg.form.core.item.FormButton
 import com.chooongg.form.core.option.Option
-import com.chooongg.form.core.style.CardOutlinedStyle
 import com.chooongg.form.core.typeset.VerticalTypeset
 import com.chooongg.form.simple.R
 import kotlinx.coroutines.delay
@@ -40,11 +40,9 @@ class BasicViewModel : ViewModel() {
     init {
         adapter.setNewInstance {
             initCardOutlinedPart {
-
-            }
-            initPart(CardOutlinedStyle()) {
                 addButton("Button(Tonal)", "button") {
                     buttonStyle = FormButton.ButtonStyle.TONAL
+                    icon = R.drawable.ic_main_advanced
                 }
                 addCheckBox("CheckBox", "checkBox") {
                     required = true
@@ -62,6 +60,10 @@ class BasicViewModel : ViewModel() {
                 }
                 addDivider()
                 addInputFilled("InputFilled", "inputFilled") {
+                    startIcon = R.drawable.ic_main_basic
+                    startIconOnClickListener { item, view ->
+                        Toast.makeText(view.context, "点击了", Toast.LENGTH_SHORT).show()
+                    }
                     optionLoader {
                         delay(5000)
                         val list = mutableListOf<CharSequence>()
@@ -72,6 +74,10 @@ class BasicViewModel : ViewModel() {
                     }
                 }
                 addInputOutlined("InputOutlined", "inputOutlined") {
+                    startIcon = R.drawable.ic_main_style
+                    startIconOnClickListener { item, view ->
+                        Toast.makeText(view.context, "点击了", Toast.LENGTH_SHORT).show()
+                    }
                     optionLoader {
                         delay(5000)
                         val list = mutableListOf<CharSequence>()
@@ -82,7 +88,6 @@ class BasicViewModel : ViewModel() {
                     }
                 }
                 addInput("Input", "input") {
-                    maxLines = 1
                     optionLoader {
                         delay(5000)
                         val list = mutableListOf<CharSequence>()
@@ -94,17 +99,16 @@ class BasicViewModel : ViewModel() {
                 }
                 addInput("Input", "input2") {
                     required = true
-                    maxLines = 1
-                    contentGravity = Gravity.NO_GRAVITY
-                    counterMaxLength = 11
-                    optionLoader {
-                        delay(5000)
-                        val list = mutableListOf<CharSequence>()
-                        for (i in 0..100) {
-                            list.add("Test${i}")
-                        }
-                        list
+                    startIcon = R.drawable.ic_main_advanced
+                    startIconOnClickListener { item, view ->
+                        Toast.makeText(view.context, "点击了", Toast.LENGTH_SHORT).show()
                     }
+                    maxLines = 1
+                    minLength = 6
+                    maxLength = 16
+                    showCounter = true
+                    inputMode = InputModePassword()
+                    contentGravity = Gravity.NO_GRAVITY
                 }
                 addLabel("Label")
                 addMenu("Menu") {

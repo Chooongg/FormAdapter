@@ -34,7 +34,7 @@ open class FormCheckBox : BaseOptionForm<IOption> {
     override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
         FormCheckBoxProvider::class
 
-    override fun initContentValue(value: Any?) {
+    override fun initValue(value: Any?) {
         if (value == null) return
         content = when (value) {
             is List<*> -> {

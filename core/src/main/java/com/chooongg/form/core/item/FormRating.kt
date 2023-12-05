@@ -41,7 +41,7 @@ class FormRating : BaseForm {
     override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
         FormRatingProvider::class
 
-    override fun initContentValue(value: Any?) {
+    override fun initValue(value: Any?) {
         if (value == null) return
         if (value is Float) return
         content = value.toString().toFloatOrNull()

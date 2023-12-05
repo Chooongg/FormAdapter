@@ -12,6 +12,7 @@
     <attr name="formTextAppearancePlaceholder" format="reference" />
     <attr name="formTextAppearanceLabel" format="reference" />
     <attr name="formTextAppearanceTip" format="reference" />
+    <attr name="formTextAppearanceCounter" format="reference" />
 
     <attr name="formButtonStyle" format="reference" />
     <attr name="formButtonTextStyle" format="reference" />

@@ -98,7 +98,7 @@ class FormTime : BaseForm {
      */
     var outputFormat: SimpleDateFormat? = null
 
-    override fun initContentValue(value: Any?) {
+    override fun initValue(value: Any?) {
         if (value == null) return
         content = if (inputFormat != null) {
             try {

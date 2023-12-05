@@ -32,7 +32,7 @@ abstract class BaseForm(
      * 初始化 content 值
      * 该操作主要作用为修复
      */
-    open fun initContentValue(value: Any?) {
+    open fun initValue(value: Any?) {
     }
 
     //</editor-fold>

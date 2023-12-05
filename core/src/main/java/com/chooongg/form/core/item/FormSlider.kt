@@ -63,7 +63,7 @@ class FormSlider : BaseForm {
         formatter = block
     }
 
-    override fun initContentValue(value: Any?) {
+    override fun initValue(value: Any?) {
         if (value is Float) return
         if (value == null) {
             content = valueFrom

@@ -19,7 +19,7 @@ class FormRadioButton : BaseOptionForm<IOption> {
     override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
         FormRadioButtonProvider::class
 
-    override fun initContentValue(value: Any?) {
+    override fun initValue(value: Any?) {
         if (value == null) return
         if (value is IOption) return
         content = Option(null, value.toString())

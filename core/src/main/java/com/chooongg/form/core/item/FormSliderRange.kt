@@ -65,7 +65,7 @@ class FormSliderRange : BaseForm {
         formatter = block
     }
 
-    override fun initContentValue(value: Any?) {
+    override fun initValue(value: Any?) {
         if (value is List<*>) {
             if (value.size < 2) {
                 content = null

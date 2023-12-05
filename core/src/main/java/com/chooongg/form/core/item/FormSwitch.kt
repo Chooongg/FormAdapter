@@ -27,7 +27,7 @@ class FormSwitch : BaseForm {
     override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
         FormSwitchProvider::class
 
-    override fun initContentValue(value: Any?) {
+    override fun initValue(value: Any?) {
         if (value == null) {
             content = false
             return

@@ -29,6 +29,8 @@
         <item name="android:textColor">@color/form_input_indicator_text_color</item>
     </style>
 
+    <style name="Form.TextAppearance.Counter" parent="TextAppearance.MaterialComponents.Overline" />
+
     <style name="Form.Button" parent="Widget.Material3.Button" />
 
     <style name="Form.Button.TextButton" parent="Widget.Material3.Button.TextButton" />

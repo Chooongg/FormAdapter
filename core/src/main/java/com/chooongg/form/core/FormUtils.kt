@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.drawable.Drawable
+import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -15,15 +16,17 @@ import com.chooongg.form.core.groupNameProvider.BaseGroupNameProvider
 import com.chooongg.form.core.provider.BaseFormProvider
 import com.chooongg.form.core.style.BaseStyle
 import com.chooongg.form.core.typeset.BaseTypeset
-import java.lang.reflect.ParameterizedType
-import java.lang.reflect.Type
 
 
 object FormUtils {
 
     fun getFontHeight(textView: TextView): Int {
-        val fm = textView.paint.fontMetricsInt
-        return textView.paint.getFontMetricsInt(fm)
+        val tempView = TextView(textView.context)
+        tempView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textView.textSize)
+        tempView.measure(0, 0)
+        return tempView.measuredHeight
+//        val fm = textView.paint.fontMetricsInt
+//        return textView.paint.getFontMetricsInt(fm)
     }
 
     fun getText(context: Context, any: Any?) = when (any) {
@@ -53,11 +56,6 @@ object FormUtils {
         }
         return null
     }
-
-    fun getListActualType(list: List<*>): Type {
-        val type = list.javaClass.genericSuperclass as ParameterizedType
-        return type.actualTypeArguments[0]
-    }
 }
 
 fun BaseStyle.formTextAppearance(view: View, @AttrRes resId: Int): Int =
@@ -85,6 +83,7 @@ internal fun getTextAppearance(view: View, @AttrRes resId: Int): Int =
                 R.attr.formTextAppearancePlaceholder -> R.style.Form_TextAppearance_Placeholder
                 R.attr.formTextAppearanceLabel -> R.style.Form_TextAppearance_Label
                 R.attr.formTextAppearanceTip -> R.style.Form_TextAppearance_Tip
+                R.attr.formTextAppearanceCounter -> R.style.Form_TextAppearance_Counter
                 else -> 0
             }
         )

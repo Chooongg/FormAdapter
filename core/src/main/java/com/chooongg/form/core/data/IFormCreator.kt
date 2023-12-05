@@ -7,7 +7,7 @@ interface IFormCreator {
     fun getItems(): MutableList<BaseForm>
 
     fun addItem(item: BaseForm): Boolean {
-        item.initContentValue(item.content)
+        item.initValue(item.content)
         return getItems().add(item)
     }
 }
