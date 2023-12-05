@@ -18,7 +18,7 @@ typealias FormColorBlock = Context.() -> Int
 /**
  * 颜色状态列表 Block
  */
-typealias FormColorStateListBlock = Context.() -> ColorStateList
+typealias FormColorStateListBlock = Context.() -> ColorStateList?
 
 /**
  * 菜单点击 Block
