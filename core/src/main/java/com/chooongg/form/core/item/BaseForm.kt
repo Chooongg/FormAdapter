@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.annotation.GravityInt
 import com.chooongg.form.core.FormAdapter
 import com.chooongg.form.core.FormLinkageBlock
+import com.chooongg.form.core.FormManager
 import com.chooongg.form.core.FormUtils
 import com.chooongg.form.core.boundary.Boundary
 import com.chooongg.form.core.enum.FormOutputMode
@@ -232,11 +233,12 @@ abstract class BaseForm(
         if (outputMode == FormOutputMode.VISIBLE && !isRealVisible) return
         if (outputMode == FormOutputMode.ENABLED && !isRealEnable) return
         if (outputMode == FormOutputMode.VISIBLE_AND_ENABLED && !isRealVisible && !isRealEnable) return
-//        val provider = FormManager.getItemDataProvider(javaClass)
-//        if (provider != null) {
-//            provider.dataCorrectness(this)
-//            return
-//        }
+        FormManager.findItemDataActuator(javaClass)?.also {
+            if (it.coverDataVerification()) {
+                it.dataVerification(this)
+                return
+            }
+        }
         dataVerification()
     }
 
@@ -285,13 +287,11 @@ abstract class BaseForm(
             customOutputBlock!!.invoke(json)
             return
         }
-//        val provider = FormManager.getItemDataProvider(javaClass)
-//        if (provider != null) {
-//            provider.output(this, json)
-//            return
-//        }
-        outputData(json)
-        outputExtensionData(json)
+        val actuator = FormManager.findItemDataActuator(javaClass)
+        if (actuator != null) actuator.output(this, json) else outputData(json)
+        if (actuator?.coverOutputExtensionData() == true) {
+            actuator.outputExtensionData(this, extensionFieldAndContent, json)
+        } else outputExtensionData(json)
     }
 
     /**

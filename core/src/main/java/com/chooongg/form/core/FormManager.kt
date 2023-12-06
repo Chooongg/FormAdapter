@@ -6,6 +6,7 @@ import androidx.annotation.GravityInt
 import androidx.annotation.IntRange
 import androidx.annotation.Px
 import com.chooongg.form.core.boundary.Boundary
+import com.chooongg.form.core.dataActuator.FormDataActuator
 import com.chooongg.form.core.error.DefaultErrorFormatter
 import com.chooongg.form.core.error.ErrorFormatter
 import com.chooongg.form.core.format.BaseNameFormatter
@@ -16,10 +17,13 @@ import com.chooongg.form.core.iconProvider.BaseIconProvider
 import com.chooongg.form.core.iconProvider.DefaultIconProvider
 import com.chooongg.form.core.inputMode.InputMode
 import com.chooongg.form.core.inputMode.InputModeText
+import com.chooongg.form.core.item.BaseForm
 import com.chooongg.form.core.typeset.BaseTypeset
 import com.chooongg.form.core.typeset.HorizontalTypeset
 
 object FormManager {
+
+    private val formItemDataActuators = HashSet<FormDataActuator>()
 
     object Default {
 
@@ -53,5 +57,17 @@ object FormManager {
 
     fun defaultConfig(block: Default.() -> Unit) = apply {
         block(Default)
+    }
+
+    fun addItemDataActuator(actuator: FormDataActuator) {
+        formItemDataActuators.add(actuator)
+    }
+
+    fun clearAddItemDataActuator() {
+        formItemDataActuators.clear()
+    }
+
+    internal fun findItemDataActuator(clazz: Class<out BaseForm>): FormDataActuator? {
+        return formItemDataActuators.find { it.getTargetClass() == clazz }
     }
 }
