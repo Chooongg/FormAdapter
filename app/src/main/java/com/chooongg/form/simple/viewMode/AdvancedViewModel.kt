@@ -22,7 +22,6 @@ import com.chooongg.form.addText
 import com.chooongg.form.addTime
 import com.chooongg.form.addTip
 import com.chooongg.form.enum.FormSelectorOpenMode
-import com.chooongg.form.initCardOutlinedDynamicPart
 import com.chooongg.form.initCardOutlinedPart
 import com.chooongg.form.initCardSeparateOutlinedDynamicPart
 import com.chooongg.form.inputMode.InputModeDecimal

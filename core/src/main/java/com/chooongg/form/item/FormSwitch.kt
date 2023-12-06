@@ -12,14 +12,19 @@ import kotlin.reflect.KClass
 class FormSwitch : BaseForm {
 
     /**
+     * 值为空时
+     */
+    var valueWhenEmpty: Boolean = false
+
+    /**
      * 自定义输出(真)
      */
-    var customOutputTrue: Any? = null
+    var customTrueValue: Any? = null
 
     /**
      * 自定义输出(假)
      */
-    var customOutputFalse: Any? = null
+    var customFalseValue: Any? = null
 
     constructor(name: CharSequence?, field: String?) : super(name, field)
     constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
@@ -29,11 +34,17 @@ class FormSwitch : BaseForm {
 
     override fun initValue(value: Any?) {
         if (value == null) {
-            content = false
+            content = valueWhenEmpty
             return
         }
         if (value is Boolean) return
-        content = value.toString().toBooleanStrictOrNull() ?: false
+        content = if (customTrueValue != null && value == customTrueValue) {
+            true
+        } else if (customFalseValue != null && value == customFalseValue) {
+            false
+        } else {
+            value.toString().toBooleanStrictOrNull() ?: false
+        }
     }
 
     override fun getContentText(context: Context, enabled: Boolean): CharSequence? {
@@ -42,10 +53,10 @@ class FormSwitch : BaseForm {
 
     override fun outputData(json: JSONObject) {
         if (field != null && content != null) {
-            if (content == true && customOutputTrue != null) {
-                json.put(field!!, customOutputTrue!!)
-            } else if (content == false && customOutputFalse != null) {
-                json.put(field!!, customOutputFalse!!)
+            if (customTrueValue != null && content == true) {
+                json.put(field!!, customTrueValue!!)
+            } else if (customFalseValue != null && content == false) {
+                json.put(field!!, customFalseValue!!)
             } else json.put(field!!, content)
         }
     }

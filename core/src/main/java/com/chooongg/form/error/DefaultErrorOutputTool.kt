@@ -39,19 +39,19 @@ class DefaultErrorOutputTool : ErrorOutputTool {
                 Toast.LENGTH_SHORT
             ).show()
 
-            is FormDataVerificationException.ErrorType.SelectSize -> Toast.makeText(
+            is FormDataVerificationException.ErrorType.Count -> Toast.makeText(
                 context,
                 context.getString(R.string.formErrorSize, name, exception.type.count),
                 Toast.LENGTH_SHORT
             ).show()
 
-            is FormDataVerificationException.ErrorType.SelectMinSize -> Toast.makeText(
+            is FormDataVerificationException.ErrorType.MinCount -> Toast.makeText(
                 context,
                 context.getString(R.string.formErrorSizeMin, name, exception.type.count),
                 Toast.LENGTH_SHORT
             ).show()
 
-            is FormDataVerificationException.ErrorType.SelectMaxSize -> Toast.makeText(
+            is FormDataVerificationException.ErrorType.MaxCount -> Toast.makeText(
                 context,
                 context.getString(R.string.formErrorSizeMax, name, exception.type.count),
                 Toast.LENGTH_SHORT

@@ -8,7 +8,9 @@ import com.chooongg.form.data.FormPartData
 import com.chooongg.form.initCardElevatedPart
 import com.chooongg.form.initCardFilledPart
 import com.chooongg.form.initCardOutlinedPart
-import com.chooongg.form.initNotAlignmentDynamicPart
+import com.chooongg.form.initCardSeparateElevatedPart
+import com.chooongg.form.initCardSeparateFilledPart
+import com.chooongg.form.initCardSeparateOutlinedPart
 import com.chooongg.form.initNotAlignmentPart
 import com.chooongg.form.multiColumn
 import com.chooongg.form.singleLine
@@ -38,6 +40,18 @@ class StyleViewModel : ViewModel() {
             }
             initCardOutlinedPart {
                 partName = "CardOutlinedStyle"
+                addChild()
+            }
+            initCardSeparateElevatedPart {
+                partName = "CardSeparateElevatedStyle"
+                addChild()
+            }
+            initCardSeparateFilledPart {
+                partName = "CardSeparateFilledStyle"
+                addChild()
+            }
+            initCardSeparateOutlinedPart {
+                partName = "CardSeparateOutlinedStyle"
                 addChild()
             }
         }

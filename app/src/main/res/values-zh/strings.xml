@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FormAdapter2</string>
+    <string name="app_name">FormAdapter</string>
 
     <string name="basic">基础</string>
     <string name="style">样式</string>

@@ -64,12 +64,6 @@ class FormView @JvmOverloads constructor(
         super.setLayoutManager(layout)
     }
 
-    fun setFormMargin(start: Int, end: Int) {
-        formMarginStart = start
-        formMarginEnd = end
-        updateFormMargin4LayoutManager()
-    }
-
     fun updateFormMargin(
         start: Int = formMarginStart,
         end: Int = formMarginEnd,

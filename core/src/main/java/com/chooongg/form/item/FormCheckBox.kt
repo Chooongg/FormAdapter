@@ -62,13 +62,17 @@ open class FormCheckBox : BaseOptionForm<IOption> {
                     throw FormDataVerificationException(
                         this, FormDataVerificationException.ErrorType.Empty
                     )
+                } else if (minSelectCount > 0 && minSelectCount == maxSelectCount) {
+                    throw FormDataVerificationException(
+                        this, FormDataVerificationException.ErrorType.Count(minSelectCount)
+                    )
                 } else if (list.size < minSelectCount) {
                     throw FormDataVerificationException(
-                        this, FormDataVerificationException.ErrorType.SelectMinSize(minSelectCount)
+                        this, FormDataVerificationException.ErrorType.MinCount(minSelectCount)
                     )
                 } else if (list.size > maxSelectCount) {
                     throw FormDataVerificationException(
-                        this, FormDataVerificationException.ErrorType.SelectMaxSize(maxSelectCount)
+                        this, FormDataVerificationException.ErrorType.MaxCount(maxSelectCount)
                     )
                 }
             }

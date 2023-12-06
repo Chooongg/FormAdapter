@@ -26,7 +26,7 @@
     <string name="formErrorLength">%s长度必须为%d</string>
     <string name="formErrorLengthMin">%s长度不能小于%d</string>
     <string name="formErrorLengthMax">%s长度不能大于%d</string>
-    <string name="formErrorSize">%s必须选择%d个</string>
-    <string name="formErrorSizeMin">%s最少选择%d个</string>
-    <string name="formErrorSizeMax">%s最多选择%d个</string>
+    <string name="formErrorSize">%s必须选择%d项</string>
+    <string name="formErrorSizeMin">%s最少选择%d项</string>
+    <string name="formErrorSizeMax">%s最多选择%d项</string>
 </resources>

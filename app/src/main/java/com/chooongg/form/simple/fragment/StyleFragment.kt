@@ -2,26 +2,17 @@ package com.chooongg.form.simple.fragment
 
 import android.os.Bundle
 import android.view.View
-import com.chooongg.form.FormAdapter
-import com.chooongg.form.addSlider
-import com.chooongg.form.addText
-import com.chooongg.form.data.FormPartData
-import com.chooongg.form.multiColumn
-import com.chooongg.form.singleLine
-import com.chooongg.form.style.CardElevatedStyle
-import com.chooongg.form.style.CardFilledStyle
-import com.chooongg.form.style.CardOutlinedStyle
-import com.chooongg.form.style.NoneStyle
-import com.chooongg.form.style.NotAlignmentStyle
-import com.chooongg.form.typeset.VerticalTypeset
+import androidx.fragment.app.viewModels
 import com.chooongg.form.simple.R
+import com.chooongg.form.simple.viewMode.StyleViewModel
 
 class StyleFragment : BaseFragment() {
 
-    private val adapter = FormAdapter(true)
+    private val model by viewModels<StyleViewModel>()
+
 
     override fun change() {
-        adapter.isEnabled = !adapter.isEnabled
+        model.adapter.isEnabled = !model.adapter.isEnabled
     }
 
     override fun output() {
@@ -34,9 +25,6 @@ class StyleFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setTitle(R.string.style)
-        formView.setFormAdapter(adapter)
-
+        formView.setFormAdapter(model.adapter)
     }
-
-
 }

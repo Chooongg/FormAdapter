@@ -59,7 +59,7 @@ class BasicViewModel : ViewModel() {
                 addDivider()
                 addInputFilled("InputFilled", "inputFilled") {
                     startIcon = R.drawable.ic_main_basic
-                    startIconOnClickListener { item, view ->
+                    setStartIconOnClickListener { item, view ->
                         Toast.makeText(view.context, "点击了", Toast.LENGTH_SHORT).show()
                     }
                     optionLoader {
@@ -73,7 +73,7 @@ class BasicViewModel : ViewModel() {
                 }
                 addInputOutlined("InputOutlined", "inputOutlined") {
                     startIcon = R.drawable.ic_main_style
-                    startIconOnClickListener { item, view ->
+                    setStartIconOnClickListener { item, view ->
                         Toast.makeText(view.context, "点击了", Toast.LENGTH_SHORT).show()
                     }
                     optionLoader {
@@ -98,7 +98,7 @@ class BasicViewModel : ViewModel() {
                 addInput("Input", "input2") {
                     required = true
                     startIcon = R.drawable.ic_main_advanced
-                    startIconOnClickListener { item, view ->
+                    setStartIconOnClickListener { item, view ->
                         Toast.makeText(view.context, "点击了", Toast.LENGTH_SHORT).show()
                     }
                     maxLines = 1
@@ -176,8 +176,8 @@ class BasicViewModel : ViewModel() {
                     menu = R.menu.operation
                 }
                 addSwitch("Switch", "switch") {
-                    customOutputTrue = "1"
-                    customOutputFalse = "2"
+                    customTrueValue = "1"
+                    customFalseValue = "2"
                 }
                 addText("Text") {
                     content = "Test"

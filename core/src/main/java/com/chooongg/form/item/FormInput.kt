@@ -81,16 +81,16 @@ open class FormInput : BaseOptionForm<CharSequence> {
      */
     var startIconTint: FormColorStateListBlock? = null
 
-    private var startIconClickBlock: FormItemClickBlock? = null
+    private var startIconOnClickBlock: FormItemClickBlock? = null
 
     /**
      * 起始图标点击事件
      */
-    fun startIconOnClickListener(block: FormItemClickBlock?) {
-        startIconClickBlock = block
+    fun setStartIconOnClickListener(block: FormItemClickBlock?) {
+        startIconOnClickBlock = block
     }
 
-    fun getStartIconOnClickListener() = startIconClickBlock
+    fun getStartIconOnClickListener() = startIconOnClickBlock
 
     override fun hasOpenOperation() = false
 

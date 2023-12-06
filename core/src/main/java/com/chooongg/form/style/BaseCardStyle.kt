@@ -18,7 +18,7 @@ abstract class BaseCardStyle : BaseStyle() {
     @StyleRes
     var shapeAppearanceResId: Int? = null
 
-    protected lateinit var shapeAppearanceModel: ShapeAppearanceModel
+    private lateinit var shapeAppearanceModel: ShapeAppearanceModel
 
     @CallSuper
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {

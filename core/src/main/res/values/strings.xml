@@ -26,7 +26,7 @@
     <string name="formErrorLength">%s length must be %d</string>
     <string name="formErrorLengthMin">%s length cannot be less than %d</string>
     <string name="formErrorLengthMax">%s length cannot be greater than %d</string>
-    <string name="formErrorSize">%s must be selected %d pieces</string>
-    <string name="formErrorSizeMin">%s minimum selection %d pieces</string>
-    <string name="formErrorSizeMax">%s maximum selection %d pieces</string>
+    <string name="formErrorSize">%s %d 2 items must be selected</string>
+    <string name="formErrorSizeMin">%s select up to %d items</string>
+    <string name="formErrorSizeMax">%s select at least %d items</string>
 </resources>

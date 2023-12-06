@@ -219,6 +219,9 @@ abstract class BaseForm(
 
     //<editor-fold desc="验证 verification">
 
+    /**
+     * 忽略数据验证
+     */
     val ignoreVerification: Boolean = false
 
     /**

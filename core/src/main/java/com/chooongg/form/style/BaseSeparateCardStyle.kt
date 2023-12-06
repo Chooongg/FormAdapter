@@ -12,6 +12,8 @@ import com.google.android.material.shape.ShapeAppearanceModel
 
 abstract class BaseSeparateCardStyle : BaseStyle() {
 
+    override var horizontalIsSeparateItem: Boolean = true
+
     override var horizontalMiddleBoundary: Int = Boundary.GLOBAL
 
     @StyleRes
@@ -46,14 +48,6 @@ abstract class BaseSeparateCardStyle : BaseStyle() {
             bottomMargin = when (item.marginBoundary.bottom) {
                 Boundary.GLOBAL -> marginInfo.bottom
                 else -> marginInfo.middleBottom
-            }
-            marginStart = when (item.marginBoundary.start) {
-                Boundary.GLOBAL -> 0
-                else -> marginInfo.middleStart
-            }
-            marginEnd = when (item.marginBoundary.end) {
-                Boundary.GLOBAL -> 0
-                else -> marginInfo.middleEnd
             }
         }
     }

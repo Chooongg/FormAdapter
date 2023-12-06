@@ -47,6 +47,11 @@ abstract class BaseStyle {
     var insideInfo: FormInsideInfo = FormInsideInfo(0, 0, 0, 0)
         private set
 
+    /**
+     * 水平是否是独立项目
+     */
+    protected open var horizontalIsSeparateItem: Boolean = false
+
     private var isInstanceMarginInsideInfo = false
 
     open fun isDecorateNoneItem(): Boolean = true
@@ -110,11 +115,14 @@ abstract class BaseStyle {
         }
     }
 
+    internal fun getHorizontalIsSeparateItem() = horizontalIsSeparateItem
+
     override fun equals(other: Any?): Boolean {
         if (other !is BaseStyle) return false
         if (javaClass != other.javaClass) return false
         if (partNameProvider != other.partNameProvider) return false
         if (typeset != other.typeset) return false
+        if (horizontalIsSeparateItem != other.horizontalIsSeparateItem) return false
         return true
     }
 
