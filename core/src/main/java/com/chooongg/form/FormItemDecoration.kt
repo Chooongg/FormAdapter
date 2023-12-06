@@ -39,7 +39,7 @@ class FormItemDecoration : ItemDecoration() {
         } else 0
         val item = adapter.getItem(position)
         val columns = 27720 / item.spanSize
-
+        val mSize = columns * 2 - 2
 
         if (view.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
             outRect.set(end, top, start, bottom)
