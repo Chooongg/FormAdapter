@@ -21,6 +21,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "FormAdapter2"
+rootProject.name = "FormAdapter"
 include ':app'
 include ':core'
