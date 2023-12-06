@@ -35,57 +35,8 @@ class StyleFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         toolbar.setTitle(R.string.style)
         formView.setFormAdapter(adapter)
-        adapter.setNewInstance {
-            initPart(NoneStyle()) {
-                partName = "NoneStyle"
-                addChild()
-            }
-            initPart(NotAlignmentStyle()) {
-                partName = "NotAlignmentStyle"
-                addChild()
-            }
-            initPart(CardElevatedStyle()) {
-                partName = "CardElevatedStyle"
-                addChild()
-            }
-            initPart(CardFilledStyle()) {
-                partName = "CardFilledStyle"
-                addChild()
-            }
-            initPart(CardOutlinedStyle()) {
-                partName = "CardOutlinedStyle"
-                addChild()
-            }
-        }
+
     }
 
-    private fun FormPartData.addChild() {
-        addText("Style") {
-            content = "StyleTest"
-        }
-        addText("Style") {
-            content = "StyleTest"
-        }
-        addText("Style") {
-            content = "StyleTest"
-        }
-        singleLine {
-            for (i in 1..5) {
-                addSlider("Style${i}") {
-                    typeset = VerticalTypeset()
-                }
-            }
-        }
-        multiColumn {
-            column = 2f
-            for (i in 1..5) {
-                addSlider("Style${i}") {
-                    typeset = VerticalTypeset()
-                }
-            }
-        }
-        addText("Style") {
-            content = "StyleTest"
-        }
-    }
+
 }

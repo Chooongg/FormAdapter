@@ -11,7 +11,7 @@ import com.chooongg.form.FormViewHolder
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.view.OutlinedCutoutDrawable
 
-class CardOutlinedStyle : BaseCardStyle() {
+class CardSeparateOutlinedStyle : BaseSeparateCardStyle() {
 
     @ColorRes
     var strokeColorResId: Int? = null
@@ -24,9 +24,9 @@ class CardOutlinedStyle : BaseCardStyle() {
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         super.onBindViewHolder(holder, layout, item)
         val context = holder.itemView.context
-        val shape = getShapeAppearanceModel(holder.itemView, item)
         val isRtl = holder.itemView.layoutDirection == View.LAYOUT_DIRECTION_RTL
-        val shapeDrawable = OutlinedCutoutDrawable(shape, item.marginBoundary, isRtl)
+        val shapeDrawable =
+            OutlinedCutoutDrawable(shapeAppearanceModel, item.marginBoundary, isRtl)
         val defaultStyle = TypedValue().also {
             context.theme.resolveAttribute(
                 com.google.android.material.R.attr.materialCardViewOutlinedStyle, it, true
@@ -55,7 +55,7 @@ class CardOutlinedStyle : BaseCardStyle() {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other !is CardOutlinedStyle) return false
+        if (other !is CardSeparateOutlinedStyle) return false
         if (!super.equals(other)) return false
         if (strokeColorResId != other.strokeColorResId) return false
         if (strokeWidthResId != other.strokeWidthResId) return false

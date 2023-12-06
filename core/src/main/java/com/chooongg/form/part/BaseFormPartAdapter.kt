@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.FormAdapter
-import com.chooongg.form.FormManager
 import com.chooongg.form.FormViewHolder
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.error.FormDataVerificationException
@@ -185,8 +184,6 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     }
 
     private fun calculateBoundary() {
-//        val partAdapters = formAdapter.partAdapters
-//        val partIndex = partAdapters.indexOf(this)
         itemList.forEachIndexed { index, item ->
             // Start
             if (item.spanIndex == 0) {
@@ -194,7 +191,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
                 item.insideBoundary.start = Boundary.GLOBAL
             } else {
                 item.marginBoundary.start = Boundary.NONE
-                item.insideBoundary.start = FormManager.Default.horizontalMiddleBoundary
+                item.insideBoundary.start = style.horizontalMiddleBoundary
             }
             // End
             if (item.spanIndex + item.spanSize >= spanCount) {
@@ -207,21 +204,8 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             // Top
             if (item.positionInGroup == 0) {
 //                // 使用ItemDecoration控制GLOBAL类型
-//                var isFirst = true
-//                var beginIndex = partIndex
-//                while (beginIndex - 1 >= 0) {
-//                    if (partAdapters[beginIndex - 1].itemList.isNotEmpty()) {
-//                        isFirst = false
-//                        break
-//                    } else beginIndex--
-//                }
-//                if (isFirst) {
-//                    item.marginBoundary.top = Boundary.GLOBAL
-//                    item.insideBoundary.top = Boundary.GLOBAL
-//                } else {
                 item.marginBoundary.top = Boundary.MIDDLE
                 item.insideBoundary.top = Boundary.GLOBAL
-//                }
             } else if (item.spanIndex == 0) {
                 item.marginBoundary.top = Boundary.NONE
                 item.insideBoundary.top = Boundary.MIDDLE

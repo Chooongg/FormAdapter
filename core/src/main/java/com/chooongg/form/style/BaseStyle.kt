@@ -35,7 +35,7 @@ abstract class BaseStyle {
      * 水平中间的边界类型
      */
     @Boundary.BoundaryInt
-    var horizontalMiddleBoundary: Int = FormManager.Default.horizontalMiddleBoundary
+    open var horizontalMiddleBoundary: Int = FormManager.Default.horizontalMiddleBoundary
 
     /**
      * 排版

@@ -11,12 +11,7 @@ import com.chooongg.form.core.R
 import com.chooongg.form.item.BaseForm
 import com.google.android.material.shape.MaterialShapeDrawable
 
-class CardElevatedStyle : BaseCardStyle {
-
-    constructor() : super()
-    constructor(block: CardElevatedStyle.() -> Unit) : super() {
-        block(this)
-    }
+class CardElevatedStyle : BaseCardStyle() {
 
     @DimenRes
     var elevationResId: Int? = null

@@ -7,12 +7,7 @@ import com.chooongg.form.FormViewHolder
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.item.BaseForm
 
-class NoneStyle : BaseStyle {
-
-    constructor() : super()
-    constructor(block: NoneStyle.() -> Unit) : super() {
-        block(this)
-    }
+class NoneStyle : BaseStyle() {
 
     override fun isDecorateNoneItem() = false
 

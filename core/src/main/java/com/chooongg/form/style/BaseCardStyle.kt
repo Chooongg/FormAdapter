@@ -3,17 +3,19 @@ package com.chooongg.form.style
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.annotation.StyleRes
 import androidx.core.content.res.use
 import androidx.core.view.updateLayoutParams
 import com.chooongg.form.FormViewHolder
-import com.chooongg.form.core.R
 import com.chooongg.form.boundary.Boundary
+import com.chooongg.form.core.R
 import com.chooongg.form.item.BaseForm
 import com.google.android.material.shape.AbsoluteCornerSize
 import com.google.android.material.shape.ShapeAppearanceModel
 
 abstract class BaseCardStyle : BaseStyle() {
 
+    @StyleRes
     var shapeAppearanceResId: Int? = null
 
     protected lateinit var shapeAppearanceModel: ShapeAppearanceModel

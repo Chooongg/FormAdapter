@@ -10,7 +10,7 @@ import com.chooongg.form.FormViewHolder
 import com.chooongg.form.item.BaseForm
 import com.google.android.material.shape.MaterialShapeDrawable
 
-class CardFilledStyle : BaseCardStyle() {
+class CardSeparateFilledStyle : BaseSeparateCardStyle() {
 
     @ColorRes
     var colorResId: Int? = null
@@ -20,8 +20,7 @@ class CardFilledStyle : BaseCardStyle() {
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         super.onBindViewHolder(holder, layout, item)
         val context = holder.itemView.context
-        val shape = getShapeAppearanceModel(holder.itemView, item)
-        val shapeDrawable = MaterialShapeDrawable(shape)
+        val shapeDrawable = MaterialShapeDrawable(shapeAppearanceModel)
         shapeDrawable.fillColor = ColorStateList.valueOf(
             if (colorResId != null) {
                 context.getColor(colorResId!!)
@@ -38,7 +37,7 @@ class CardFilledStyle : BaseCardStyle() {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other !is CardFilledStyle) return false
+        if (other !is CardSeparateFilledStyle) return false
         if (!super.equals(other)) return false
         if (colorResId != other.colorResId) return false
         return true

@@ -4,31 +4,30 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
 import androidx.core.content.res.use
 import com.chooongg.form.FormViewHolder
+import com.chooongg.form.core.R
 import com.chooongg.form.item.BaseForm
 import com.google.android.material.shape.MaterialShapeDrawable
 
-class CardFilledStyle : BaseCardStyle() {
+class CardSeparateElevatedStyle : BaseSeparateCardStyle() {
 
-    @ColorRes
-    var colorResId: Int? = null
+    @DimenRes
+    var elevationResId: Int? = null
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewGroup? = null
 
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         super.onBindViewHolder(holder, layout, item)
         val context = holder.itemView.context
-        val shape = getShapeAppearanceModel(holder.itemView, item)
-        val shapeDrawable = MaterialShapeDrawable(shape)
+        holder.itemView.elevation = if (elevationResId == null) {
+            context.resources.getDimension(R.dimen.formCardElevation)
+        } else context.resources.getDimension(elevationResId!!)
+        val shapeDrawable = MaterialShapeDrawable(shapeAppearanceModel)
         shapeDrawable.fillColor = ColorStateList.valueOf(
-            if (colorResId != null) {
-                context.getColor(colorResId!!)
-            } else {
-                context.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorSurfaceContainerHigh))
-                    .use { it.getColor(0, Color.GRAY) }
-            }
+            context.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.colorSurfaceContainerLow))
+                .use { it.getColor(0, Color.GRAY) }
         )
         holder.itemView.background = shapeDrawable
     }
@@ -38,9 +37,9 @@ class CardFilledStyle : BaseCardStyle() {
     }
 
     override fun equals(other: Any?): Boolean {
-        if (other !is CardFilledStyle) return false
+        if (other !is CardSeparateElevatedStyle) return false
         if (!super.equals(other)) return false
-        if (colorResId != other.colorResId) return false
+        if (elevationResId != other.elevationResId) return false
         return true
     }
 

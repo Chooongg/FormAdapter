@@ -24,6 +24,7 @@ import com.chooongg.form.addTip
 import com.chooongg.form.enum.FormSelectorOpenMode
 import com.chooongg.form.initCardOutlinedDynamicPart
 import com.chooongg.form.initCardOutlinedPart
+import com.chooongg.form.initCardSeparateOutlinedDynamicPart
 import com.chooongg.form.inputMode.InputModeDecimal
 import com.chooongg.form.inputMode.InputModeNumber
 import com.chooongg.form.inputMode.InputModePassword
@@ -38,7 +39,7 @@ class AdvancedViewModel : ViewModel() {
 
     init {
         adapter.setNewInstance {
-            initCardOutlinedDynamicPart {
+            initCardSeparateOutlinedDynamicPart {
                 partName = "Test Group"
                 minGroupCount = 0
                 maxGroupCount = 10

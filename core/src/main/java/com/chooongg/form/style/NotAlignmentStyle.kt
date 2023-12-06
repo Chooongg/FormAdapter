@@ -9,12 +9,7 @@ import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.part.BaseFormPartAdapter
 
-class NotAlignmentStyle : BaseStyle {
-
-    constructor() : super()
-    constructor(block: NotAlignmentStyle.() -> Unit) : super() {
-        block(this)
-    }
+class NotAlignmentStyle : BaseStyle() {
 
     override fun isDecorateNoneItem() = false
 
