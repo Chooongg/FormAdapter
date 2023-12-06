@@ -34,7 +34,10 @@ open class FormMenu : BaseForm {
      */
     var nameColor: FormColorStateListBlock? = null
 
-    var contentColor: FormColorStateListBlock? = null
+    /**
+     * 内容颜色
+     */
+    var hintColor: FormColorStateListBlock? = null
 
     /**
      * 气泡文本

@@ -163,7 +163,7 @@ class FormMenuProvider : BaseFormProvider() {
         with(view.findViewById<MaterialTextView>(R.id.formInternalContentView)) {
             visibility = if (item.hint != null) {
                 text = FormUtils.getText(context, item.hint)
-                setTextColor(itemMenu?.contentColor?.invoke(context) ?: tag as ColorStateList)
+                setTextColor(itemMenu?.hintColor?.invoke(context) ?: tag as ColorStateList)
                 View.VISIBLE
             } else {
                 View.GONE
