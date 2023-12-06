@@ -3,7 +3,7 @@
 
     <application>
         <activity
-            android:name="com.chooongg.form.core.option.FormSelectorPageActivity"
+            android:name="com.chooongg.form.core.com.chooongg.form.option.FormSelectorPageActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustNothing" />
     </application>

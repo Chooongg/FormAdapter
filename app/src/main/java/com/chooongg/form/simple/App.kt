@@ -1,7 +1,7 @@
 package com.chooongg.form.simple
 
 import android.app.Application
-import com.chooongg.form.core.FormManager
+import com.chooongg.form.FormManager
 
 class App : Application() {
 

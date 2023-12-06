@@ -4,35 +4,32 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.Gravity
 import androidx.lifecycle.ViewModel
-import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.addButton
-import com.chooongg.form.core.addCheckBox
-import com.chooongg.form.core.addDivider
-import com.chooongg.form.core.addInput
-import com.chooongg.form.core.addInputFilled
-import com.chooongg.form.core.addInputOutlined
-import com.chooongg.form.core.addLabel
-import com.chooongg.form.core.addRadioButton
-import com.chooongg.form.core.addRating
-import com.chooongg.form.core.addSelector
-import com.chooongg.form.core.addSlider
-import com.chooongg.form.core.addSliderRange
-import com.chooongg.form.core.addSwitch
-import com.chooongg.form.core.addText
-import com.chooongg.form.core.addTime
-import com.chooongg.form.core.addTip
-import com.chooongg.form.core.enum.FormEnableMode
-import com.chooongg.form.core.enum.FormSelectorOpenMode
-import com.chooongg.form.core.enum.FormTimeMode
-import com.chooongg.form.core.enum.FormVisibilityMode
-import com.chooongg.form.core.initCardOutlinedDynamicPart
-import com.chooongg.form.core.initCardOutlinedPart
-import com.chooongg.form.core.inputMode.InputModeDecimal
-import com.chooongg.form.core.inputMode.InputModeNumber
-import com.chooongg.form.core.inputMode.InputModePassword
-import com.chooongg.form.core.item.FormButton
-import com.chooongg.form.core.item.FormTime
-import com.chooongg.form.core.option.Option
+import com.chooongg.form.FormAdapter
+import com.chooongg.form.addButton
+import com.chooongg.form.addCheckBox
+import com.chooongg.form.addDivider
+import com.chooongg.form.addInput
+import com.chooongg.form.addInputFilled
+import com.chooongg.form.addInputOutlined
+import com.chooongg.form.addLabel
+import com.chooongg.form.addRadioButton
+import com.chooongg.form.addRating
+import com.chooongg.form.addSelector
+import com.chooongg.form.addSlider
+import com.chooongg.form.addSliderRange
+import com.chooongg.form.addSwitch
+import com.chooongg.form.addText
+import com.chooongg.form.addTime
+import com.chooongg.form.addTip
+import com.chooongg.form.enum.FormSelectorOpenMode
+import com.chooongg.form.initCardOutlinedDynamicPart
+import com.chooongg.form.initCardOutlinedPart
+import com.chooongg.form.inputMode.InputModeDecimal
+import com.chooongg.form.inputMode.InputModeNumber
+import com.chooongg.form.inputMode.InputModePassword
+import com.chooongg.form.item.FormButton
+import com.chooongg.form.item.FormTime
+import com.chooongg.form.option.Option
 import kotlinx.coroutines.delay
 
 class AdvancedViewModel : ViewModel() {
@@ -43,8 +40,8 @@ class AdvancedViewModel : ViewModel() {
         adapter.setNewInstance {
             initCardOutlinedDynamicPart {
                 partName = "Test Group"
-                dynamicPartMinGroupCount = 0
-                dynamicPartMaxGroupCount = 10
+                minGroupCount = 0
+                maxGroupCount = 10
                 addGroup {
                     addSwitch("Switch")
                     addText("Text") {
@@ -61,31 +58,31 @@ class AdvancedViewModel : ViewModel() {
             initCardOutlinedPart {
                 partName = "VisibilityMode"
                 addButton("ENABLED") {
-                    visibilityMode = FormVisibilityMode.ENABLED
+                    visibilityMode = com.chooongg.form.enum.FormVisibilityMode.ENABLED
                 }
                 addButton("ALWAYS") {
-                    visibilityMode = FormVisibilityMode.ALWAYS
+                    visibilityMode = com.chooongg.form.enum.FormVisibilityMode.ALWAYS
                 }
                 addButton("DISABLED") {
-                    visibilityMode = FormVisibilityMode.DISABLED
+                    visibilityMode = com.chooongg.form.enum.FormVisibilityMode.DISABLED
                 }
                 addButton("NEVER") {
-                    visibilityMode = FormVisibilityMode.NEVER
+                    visibilityMode = com.chooongg.form.enum.FormVisibilityMode.NEVER
                 }
             }
             initCardOutlinedPart {
                 partName = "EnableMode"
                 addButton("ENABLED") {
-                    enableMode = FormEnableMode.ENABLED
+                    enableMode = com.chooongg.form.enum.FormEnableMode.ENABLED
                 }
                 addButton("ALWAYS") {
-                    enableMode = FormEnableMode.ALWAYS
+                    enableMode = com.chooongg.form.enum.FormEnableMode.ALWAYS
                 }
                 addButton("DISABLED") {
-                    enableMode = FormEnableMode.DISABLED
+                    enableMode = com.chooongg.form.enum.FormEnableMode.DISABLED
                 }
                 addButton("NEVER") {
-                    enableMode = FormEnableMode.NEVER
+                    enableMode = com.chooongg.form.enum.FormEnableMode.NEVER
                 }
             }
             initCardOutlinedPart {
@@ -131,9 +128,9 @@ class AdvancedViewModel : ViewModel() {
                     setLinkage { linkage, _, content ->
                         linkage.findItem("linkageText") {
                             it.visibilityMode = if (content != null) {
-                                FormVisibilityMode.ALWAYS
+                                com.chooongg.form.enum.FormVisibilityMode.ALWAYS
                             } else {
-                                FormVisibilityMode.NEVER
+                                com.chooongg.form.enum.FormVisibilityMode.NEVER
                             }
                         }
                     }
@@ -291,7 +288,7 @@ class AdvancedViewModel : ViewModel() {
                     tint = { ColorStateList.valueOf(Color.YELLOW) }
                 }
                 addRating("OnlyShow") {
-                    enableMode = FormEnableMode.NEVER
+                    enableMode = com.chooongg.form.enum.FormEnableMode.NEVER
                     stepSize = 0.5f
                     content = 2.5f
                 }
@@ -363,13 +360,13 @@ class AdvancedViewModel : ViewModel() {
             initCardOutlinedPart {
                 partName = "Time"
                 addTime("Time") {
-                    timeMode = FormTimeMode.TIME
+                    timeMode = com.chooongg.form.enum.FormTimeMode.TIME
                 }
                 addTime("Date") {
-                    timeMode = FormTimeMode.DATE
+                    timeMode = com.chooongg.form.enum.FormTimeMode.DATE
                 }
                 addTime("DateTime") {
-                    timeMode = FormTimeMode.DATE_TIME
+                    timeMode = com.chooongg.form.enum.FormTimeMode.DATE_TIME
                 }
                 addTime("InputMode") {
                     inputMode = FormTime.INPUT_MODE_TEXT

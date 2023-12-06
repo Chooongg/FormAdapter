@@ -18,7 +18,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.chooongg.form.core.FormView
+    <com.chooongg.form.FormView
         android:id="@+id/formView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import com.chooongg.form.core.enum.FormVisibilityMode
 import com.chooongg.form.simple.R
 import com.chooongg.form.simple.viewMode.BasicViewModel
 
@@ -33,7 +32,7 @@ class BasicFragment : BaseFragment() {
     override fun change() {
         model.adapter.findOfField("button", false) {
             visibilityMode =
-                if (visibilityMode == FormVisibilityMode.ALWAYS) FormVisibilityMode.NEVER else FormVisibilityMode.ALWAYS
+                if (visibilityMode == com.chooongg.form.enum.FormVisibilityMode.ALWAYS) com.chooongg.form.enum.FormVisibilityMode.NEVER else com.chooongg.form.enum.FormVisibilityMode.ALWAYS
         }
         model.adapter.isEnabled = !model.adapter.isEnabled
     }

@@ -5,31 +5,29 @@ import android.graphics.Color
 import android.view.Gravity
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
-import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.addButton
-import com.chooongg.form.core.addCheckBox
-import com.chooongg.form.core.addDivider
-import com.chooongg.form.core.addInput
-import com.chooongg.form.core.addInputFilled
-import com.chooongg.form.core.addInputOutlined
-import com.chooongg.form.core.addLabel
-import com.chooongg.form.core.addMenu
-import com.chooongg.form.core.addRadioButton
-import com.chooongg.form.core.addRating
-import com.chooongg.form.core.addSelector
-import com.chooongg.form.core.addSlider
-import com.chooongg.form.core.addSliderRange
-import com.chooongg.form.core.addSwitch
-import com.chooongg.form.core.addText
-import com.chooongg.form.core.addTime
-import com.chooongg.form.core.addTip
-import com.chooongg.form.core.enum.FormOutputMode
-import com.chooongg.form.core.enum.FormVisibilityMode
-import com.chooongg.form.core.initCardOutlinedPart
-import com.chooongg.form.core.inputMode.InputModePassword
-import com.chooongg.form.core.item.FormButton
-import com.chooongg.form.core.option.Option
-import com.chooongg.form.core.typeset.VerticalTypeset
+import com.chooongg.form.FormAdapter
+import com.chooongg.form.addButton
+import com.chooongg.form.addCheckBox
+import com.chooongg.form.addDivider
+import com.chooongg.form.addInput
+import com.chooongg.form.addInputFilled
+import com.chooongg.form.addInputOutlined
+import com.chooongg.form.addLabel
+import com.chooongg.form.addMenu
+import com.chooongg.form.addRadioButton
+import com.chooongg.form.addRating
+import com.chooongg.form.addSelector
+import com.chooongg.form.addSlider
+import com.chooongg.form.addSliderRange
+import com.chooongg.form.addSwitch
+import com.chooongg.form.addText
+import com.chooongg.form.addTime
+import com.chooongg.form.addTip
+import com.chooongg.form.initCardOutlinedPart
+import com.chooongg.form.inputMode.InputModePassword
+import com.chooongg.form.item.FormButton
+import com.chooongg.form.option.Option
+import com.chooongg.form.typeset.VerticalTypeset
 import com.chooongg.form.simple.R
 import kotlinx.coroutines.delay
 
@@ -117,7 +115,7 @@ class BasicViewModel : ViewModel() {
                     hint = "测试"
                 }
                 addTip("Tip") {
-                    visibilityMode = FormVisibilityMode.ENABLED
+                    visibilityMode = com.chooongg.form.enum.FormVisibilityMode.ENABLED
                     enableBottomPadding = true
                 }
                 addRadioButton("RadioButton", "radioButton") {
@@ -159,7 +157,7 @@ class BasicViewModel : ViewModel() {
                     stepSize = 1f
                     content = "20"
                     menu = R.menu.operation
-                    menuVisibilityMode = FormVisibilityMode.ALWAYS
+                    menuVisibilityMode = com.chooongg.form.enum.FormVisibilityMode.ALWAYS
                     menuCreateOptionCallback {
                         it.findItem(R.id.error).isVisible = false
                     }
@@ -202,7 +200,7 @@ class BasicViewModel : ViewModel() {
                     buttonStyle = FormButton.ButtonStyle.OUTLINED
                 }
                 addText("输出", "output") {
-                    outputMode = FormOutputMode.NEVER
+                    outputMode = com.chooongg.form.enum.FormOutputMode.NEVER
                     typeset = VerticalTypeset()
                 }
                 addMenu("Menu", "menu") {

@@ -2,18 +2,18 @@ package com.chooongg.form.simple.fragment
 
 import android.os.Bundle
 import android.view.View
-import com.chooongg.form.core.FormAdapter
-import com.chooongg.form.core.addSlider
-import com.chooongg.form.core.addText
-import com.chooongg.form.core.data.FormPartData
-import com.chooongg.form.core.multiColumn
-import com.chooongg.form.core.singleLine
-import com.chooongg.form.core.style.CardElevatedStyle
-import com.chooongg.form.core.style.CardFilledStyle
-import com.chooongg.form.core.style.CardOutlinedStyle
-import com.chooongg.form.core.style.NoneStyle
-import com.chooongg.form.core.style.NotAlignmentStyle
-import com.chooongg.form.core.typeset.VerticalTypeset
+import com.chooongg.form.FormAdapter
+import com.chooongg.form.addSlider
+import com.chooongg.form.addText
+import com.chooongg.form.data.FormPartData
+import com.chooongg.form.multiColumn
+import com.chooongg.form.singleLine
+import com.chooongg.form.style.CardElevatedStyle
+import com.chooongg.form.style.CardFilledStyle
+import com.chooongg.form.style.CardOutlinedStyle
+import com.chooongg.form.style.NoneStyle
+import com.chooongg.form.style.NotAlignmentStyle
+import com.chooongg.form.typeset.VerticalTypeset
 import com.chooongg.form.simple.R
 
 class StyleFragment : BaseFragment() {
