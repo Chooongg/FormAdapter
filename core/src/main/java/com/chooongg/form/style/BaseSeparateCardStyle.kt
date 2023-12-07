@@ -21,6 +21,8 @@ abstract class BaseSeparateCardStyle : BaseStyle() {
 
     protected lateinit var shapeAppearanceModel: ShapeAppearanceModel
 
+    override fun isDecorateNoneItem(): Boolean = false
+
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         holder.itemView.clipToOutline = true
         if (!this::shapeAppearanceModel.isInitialized) {

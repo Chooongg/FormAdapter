@@ -224,22 +224,8 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             val item = getItem(index)
             // Bottom
             if (item.countInGroup - 1 - item.positionInGroup == 0) {
-//                // 使用ItemDecoration控制GLOBAL类型
-//                var isLast = true
-//                var lastIndex = partIndex
-//                while (lastIndex + 1 < partAdapters.size) {
-//                    if (partAdapters[lastIndex + 1].itemList.isNotEmpty()) {
-//                        isLast = false
-//                        break
-//                    } else lastIndex++
-//                }
-//                if (isLast) {
-//                    item.marginBoundary.bottom = Boundary.GLOBAL
-//                    item.insideBoundary.bottom = Boundary.GLOBAL
-//                } else {
                 item.marginBoundary.bottom = Boundary.MIDDLE
                 item.insideBoundary.bottom = Boundary.GLOBAL
-//                }
             } else if (item.spanIndex + item.spanSize == spanCount) {
                 item.marginBoundary.bottom = Boundary.NONE
                 item.insideBoundary.bottom = Boundary.MIDDLE
@@ -334,16 +320,14 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         val provider = formAdapter.getProvider4ItemViewType(holder.itemViewType)
         if (provider !is InternalFormNoneProvider || style.isDecorateNoneItem()) {
             style.onBindViewHolder(holder, holder.styleLayout, item)
-        }
-        formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
-            setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
-            onBindViewHolder(holder, holder.typesetLayout, item, formAdapter.isEnabled)
-        }
-        provider.apply {
-            onBindViewHolder(
+            formAdapter.getTypeset4ItemViewType(holder.itemViewType).apply {
+                setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
+                onBindViewHolder(holder, holder.typesetLayout, item, formAdapter.isEnabled)
+            }
+            provider.onBindViewHolder(
                 adapterScope, holder, holder.view, item, item.isRealEnable(formAdapter.isEnabled)
             )
-            errorNotify(holder, item)
+            provider.errorNotify(holder, item)
         }
     }
 
@@ -352,24 +336,21 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         position: Int,
         payloads: MutableList<Any>
     ) {
-        val isHasBind = payloads.isEmpty()
+        val payloadEmpty = payloads.isEmpty()
         val item = getItem(position)
         val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
         val typeset = formAdapter.getTypeset4ItemViewType(holder.itemViewType)
         val provider = formAdapter.getProvider4ItemViewType(holder.itemViewType)
-        if (isHasBind) {
-            if (provider !is InternalFormNoneProvider || style.isDecorateNoneItem()) {
-                style.onBindViewHolder(holder, holder.styleLayout, item)
-            }
+        if (payloadEmpty && (provider !is InternalFormNoneProvider || style.isDecorateNoneItem())) {
+            style.onBindViewHolder(holder, holder.styleLayout, item)
             typeset.setTypesetLayoutPadding(holder, holder.typesetLayout, style.insideInfo, item)
             typeset.onBindViewHolder(holder, holder.typesetLayout, item, formAdapter.isEnabled)
-        }
-        if (isHasBind) {
             provider.onBindViewHolder(
                 adapterScope, holder, holder.view, item, item.isRealEnable(formAdapter.isEnabled)
             )
             provider.errorNotify(holder, item)
-        } else payloads.forEach {
+        }
+        if (!payloadEmpty) payloads.forEach {
             when (it) {
                 Boundary.NOTIFY_BOUNDARY_FLAG -> {
                     if (provider !is InternalFormNoneProvider || style.isDecorateNoneItem()) {

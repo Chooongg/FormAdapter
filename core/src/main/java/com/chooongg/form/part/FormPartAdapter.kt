@@ -77,14 +77,18 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         data.getItems().forEach { item ->
             if (item.id == id) {
                 block(item)
-                if (update) notifyChangeItem(item, hasPayload)
+                if (update) {
+                    if (hasPayload) notifyChangeItem(item, true) else update()
+                }
                 return true
             }
             if (item is VariantForm) {
                 item.getItems().forEach {
                     if (it.id == id) {
                         block(it)
-                        if (update) notifyChangeItem(it, hasPayload)
+                        if (update) {
+                            if (hasPayload) notifyChangeItem(item, true) else update()
+                        }
                         return true
                     }
                 }

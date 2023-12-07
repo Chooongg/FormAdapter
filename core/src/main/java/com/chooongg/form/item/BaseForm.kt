@@ -9,6 +9,7 @@ import com.chooongg.form.FormUtils
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.enum.FormOutputMode
 import com.chooongg.form.error.FormDataVerificationException
+import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.typeset.BaseTypeset
 import org.json.JSONObject
@@ -206,13 +207,19 @@ abstract class BaseForm(
     /**
      * 联动接口
      */
-    internal var linkageBlock: FormLinkageBlock? = null
+    private var linkageBlock: FormLinkageBlock? = null
 
     /**
      * 设置联动接口
      */
     fun setLinkage(block: FormLinkageBlock?) {
         linkageBlock = block
+    }
+
+    fun getLinkageBlock() = linkageBlock
+
+    fun triggerLinkage(partAdapter: BaseFormPartAdapter) {
+        linkageBlock?.invoke(LinkageForm(partAdapter), field, content)
     }
 
     //</editor-fold>

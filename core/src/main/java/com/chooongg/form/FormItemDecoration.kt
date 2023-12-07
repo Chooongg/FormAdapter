@@ -19,6 +19,7 @@ class FormItemDecoration : ItemDecoration() {
         val adapter = parent.adapter as? FormAdapter ?: return
         val style = adapter.getStyle4ItemViewType(parent.getChildViewHolder(view).itemViewType)
         val position = parent.getChildAdapterPosition(view)
+        val item = adapter.getItem(position)
         val top = if (position == 0) {
             max(style.marginInfo.top - style.marginInfo.middleTop, 0)
         } else 0
@@ -26,21 +27,25 @@ class FormItemDecoration : ItemDecoration() {
             max(style.marginInfo.bottom - style.marginInfo.middleBottom, 0)
         } else 0
         val start = if (style.getHorizontalIsSeparateItem()) {
-            when (adapter.getItem(position).marginBoundary.start) {
+            when (item.marginBoundary.start) {
                 Boundary.GLOBAL -> 0
-                else -> style.marginInfo.middleStart
+                else -> {
+                    val columns = 27720 / item.spanSize
+                    val index = item.spanIndex / item.spanSize
+                    (style.marginInfo.middleStart + style.marginInfo.middleEnd) / columns * index
+                }
             }
         } else 0
         val end = if (style.getHorizontalIsSeparateItem()) {
-            when (adapter.getItem(position).marginBoundary.end) {
+            when (item.marginBoundary.end) {
                 Boundary.GLOBAL -> 0
-                else -> style.marginInfo.middleStart
+                else -> {
+                    val columns = 27720 / item.spanSize
+                    val index = item.spanIndex / item.spanSize
+                    (style.marginInfo.middleStart + style.marginInfo.middleEnd) / columns * (columns - 1 - index)
+                }
             }
         } else 0
-        val item = adapter.getItem(position)
-        val columns = 27720 / item.spanSize
-        val mSize = columns * 2 - 2
-
         if (view.layoutDirection == View.LAYOUT_DIRECTION_RTL) {
             outRect.set(end, top, start, bottom)
         } else {

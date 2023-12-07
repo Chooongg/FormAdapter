@@ -98,14 +98,16 @@ open class FormAdapter(isEnabled: Boolean) :
                 when (it) {
                     is FormPartAdapter -> {
                         it.data.getItems().forEach { item ->
-                            item.linkageBlock?.invoke(LinkageForm(it), item.field, item.content)
+                            item.getLinkageBlock()
+                                ?.invoke(LinkageForm(it), item.field, item.content)
                         }
                     }
 
                     is FormDynamicPartAdapter -> {
                         it.data.getGroups().forEach { group ->
                             group.getItems().forEach { item ->
-                                item.linkageBlock?.invoke(LinkageForm(it), item.field, item.content)
+                                item.getLinkageBlock()
+                                    ?.invoke(LinkageForm(it), item.field, item.content)
                             }
                         }
                     }

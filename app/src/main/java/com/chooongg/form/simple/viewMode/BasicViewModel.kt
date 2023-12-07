@@ -27,8 +27,8 @@ import com.chooongg.form.initCardOutlinedPart
 import com.chooongg.form.inputMode.InputModePassword
 import com.chooongg.form.item.FormButton
 import com.chooongg.form.option.Option
-import com.chooongg.form.typeset.VerticalTypeset
 import com.chooongg.form.simple.R
+import com.chooongg.form.typeset.VerticalTypeset
 import kotlinx.coroutines.delay
 
 class BasicViewModel : ViewModel() {
@@ -202,6 +202,7 @@ class BasicViewModel : ViewModel() {
                 addText("输出", "output") {
                     outputMode = com.chooongg.form.enum.FormOutputMode.NEVER
                     typeset = VerticalTypeset()
+                    menu = R.menu.operation
                 }
                 addMenu("Menu", "menu") {
                     nameColor = {

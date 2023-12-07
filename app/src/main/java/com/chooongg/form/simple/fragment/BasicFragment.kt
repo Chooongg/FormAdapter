@@ -8,11 +8,10 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.chooongg.form.simple.R
 import com.chooongg.form.simple.viewMode.BasicViewModel
-import com.chooongg.form.simple.viewMode.StyleViewModel
 
 class BasicFragment : BaseFragment() {
 
-    private val model by viewModels<StyleViewModel>()
+    private val model by viewModels<BasicViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

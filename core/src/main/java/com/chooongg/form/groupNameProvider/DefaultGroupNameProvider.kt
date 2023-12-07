@@ -91,7 +91,6 @@ class DefaultGroupNameProvider : BaseGroupNameProvider() {
         }
         view.findViewById<FormMenuView>(R.id.formInternalMenuView).apply {
             if (item.isRealMenuVisible(enabled) && item.menu != null) {
-                visibility = View.VISIBLE
                 inflateMenu(
                     item.menu!!,
                     item.isRealMenuEnable(enabled),
@@ -106,10 +105,7 @@ class DefaultGroupNameProvider : BaseGroupNameProvider() {
                     },
                     item.menuShowTitle
                 )
-            } else {
-                visibility = View.GONE
-                clearMenu()
-            }
+            } else clearMenu()
         }
         view.findViewById<MaterialButton>(R.id.formInternalContentChildSecondView).apply {
             setText(R.string.formDefaultGroupDelete)

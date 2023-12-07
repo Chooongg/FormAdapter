@@ -97,7 +97,7 @@ abstract class BaseFormProvider {
         field: String?,
         content: Any?
     ) {
-        item.linkageBlock?.invoke(
+        item.getLinkageBlock()?.invoke(
             LinkageForm(holder.bindingAdapter as? BaseFormPartAdapter),
             field,
             content

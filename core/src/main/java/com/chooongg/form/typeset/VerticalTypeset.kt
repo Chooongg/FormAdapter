@@ -55,7 +55,6 @@ class VerticalTypeset : BaseTypeset() {
         }
         layout.findViewById<FormMenuView>(R.id.formInternalMenuView).apply {
             if (item.isRealMenuVisible(enabled) && item.menu != null) {
-                visibility = View.VISIBLE
                 inflateMenu(
                     item.menu!!,
                     item.isRealMenuEnable(enabled),
@@ -70,10 +69,7 @@ class VerticalTypeset : BaseTypeset() {
                     },
                     item.menuShowTitle
                 )
-            } else {
-                visibility = View.GONE
-                clearMenu()
-            }
+            } else clearMenu()
         }
     }
 

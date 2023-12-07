@@ -14,6 +14,7 @@ import androidx.annotation.MenuRes
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.ActionMenuView.OnMenuItemClickListener
 import androidx.core.content.res.use
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.FormMenuCreateOptionBlock
@@ -49,17 +50,23 @@ class FormMenuView constructor(
         menu.clearAll()
         MenuInflater(context).inflate(menuRes, menu)
         menuCreateOptionCallback?.invoke(menu)
-        menuAdapter.setMenu(menu, enabled, onMenuItemClickListener, isShowTitle)
+        val items = ArrayList<MenuItem>()
+        menu.visibleItems.forEach {
+            items.add(it)
+        }
+        menuAdapter.setMenu(items, enabled, onMenuItemClickListener, isShowTitle)
+        visibility = if (items.isEmpty()) View.GONE else View.VISIBLE
     }
 
     fun clearMenu() {
         menu.clearAll()
         menuAdapter.setMenu(null, false, null, false)
+        visibility = View.GONE
     }
 
     private class Adapter(private val style: BaseStyle) : RecyclerView.Adapter<Adapter.Holder>() {
 
-        private val items = ArrayList<MenuItem>()
+        private var items = ArrayList<MenuItem>()
 
         private var isShowTitle: Boolean = false
 
@@ -69,21 +76,16 @@ class FormMenuView constructor(
 
         @SuppressLint("NotifyDataSetChanged")
         fun setMenu(
-            menu: MenuBuilder?,
+            items: ArrayList<MenuItem>?,
             enabled: Boolean,
             onMenuClickListener: OnMenuItemClickListener?,
             isShowTitle: Boolean
         ) {
-            this.isShowTitle = isShowTitle
+            this.items = items ?: ArrayList()
             this.enabled = enabled
             this.onMenuClickListener = onMenuClickListener
-            items.clear()
-            menu?.visibleItems?.forEach {
-                it.shouldShowIcon()
-                items.add(it)
-            }
+            this.isShowTitle = isShowTitle
             notifyDataSetChanged()
-
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -120,8 +122,9 @@ class FormMenuView constructor(
                 if (isShowTitle || tempIcon == null) {
                     text = item.titleCondensed
                 }
-                icon = tempIcon
+                icon = if (tempIcon != null) DrawableCompat.wrap(tempIcon) else null
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    item.iconTintMode
                     iconTint = item.iconTintList ?: ColorStateList.valueOf(
                         context.obtainStyledAttributes(
                             intArrayOf(com.google.android.material.R.attr.colorOutline)
