@@ -30,7 +30,6 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                     item.menu = data.menu
                     item.menuVisibilityMode = data.menuVisibilityMode
                     item.menuEnableMode = data.menuEnableMode
-                    item.menuShowTitle = data.menuShowTitle
                     item.menuCreateOptionCallback(data.getMenuCreateOptionCallback())
                 })
             } else data.clearGroupNameItem()
@@ -72,6 +71,18 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     @Throws(FormDataVerificationException::class)
     override fun executeDataVerification() {
         data.getItems().forEach { item -> item.executeDataVerification(formAdapter) }
+    }
+
+    override fun getDataVerificationError(): List<FormDataVerificationException> {
+        val errors = ArrayList<FormDataVerificationException>()
+        data.getItems().forEach {
+            try {
+                it.executeDataVerification(formAdapter)
+            } catch (e: FormDataVerificationException) {
+                errors.add(e)
+            }
+        }
+        return errors
     }
 
     override fun executeOutput(json: JSONObject) {

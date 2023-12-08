@@ -1,7 +1,6 @@
 package com.chooongg.form.part
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -28,9 +27,6 @@ import org.json.JSONObject
 
 abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: BaseStyle) :
     RecyclerView.Adapter<FormViewHolder>() {
-
-    protected var context: Context? = null
-        private set
 
     private val spanCount = 27720
 
@@ -260,6 +256,8 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     @Throws(FormDataVerificationException::class)
     abstract fun executeDataVerification()
 
+    abstract fun getDataVerificationError(): List<FormDataVerificationException>
+
     /**
      * 执行输出
      */
@@ -269,7 +267,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         formAdapter.getOnItemClickListener()?.invoke(item, view)
     }
 
-    fun indexOf(item: BaseForm) = itemList.indexOf(item)
+    fun indexOfShow(item: BaseForm) = itemList.indexOf(item)
 
     override fun getItemCount() = itemList.size
 
@@ -414,11 +412,9 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        context = recyclerView.context
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
-        context = null
         adapterScope.cancel()
         adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     }

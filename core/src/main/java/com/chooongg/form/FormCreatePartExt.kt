@@ -12,99 +12,127 @@ import com.chooongg.form.style.CardSeparateOutlinedStyle
 import com.chooongg.form.style.NotAlignmentStyle
 
 fun IFormAdapterCreator.initNotAlignmentPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (NotAlignmentStyle.() -> Unit)? = null,
     block: FormPartData.() -> Unit
 ) = initPart(
-    NotAlignmentStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, NotAlignmentStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initNotAlignmentDynamicPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (NotAlignmentStyle.() -> Unit)? = null,
     block: FormDynamicPartData.() -> Unit
 ) = initDynamicPart(
-    NotAlignmentStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, NotAlignmentStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardElevatedPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardElevatedStyle.() -> Unit)? = null,
     block: FormPartData.() -> Unit
 ) = initPart(
-    CardElevatedStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardElevatedStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardElevatedDynamicPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardElevatedStyle.() -> Unit)? = null,
     block: FormDynamicPartData.() -> Unit
 ) = initDynamicPart(
-    CardElevatedStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardElevatedStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardFilledPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardFilledStyle.() -> Unit)? = null,
     block: FormPartData.() -> Unit
 ) = initPart(
-    CardFilledStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardFilledStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardFilledDynamicPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardFilledStyle.() -> Unit)? = null,
     block: FormDynamicPartData.() -> Unit
 ) = initDynamicPart(
-    CardFilledStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardFilledStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardOutlinedPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardOutlinedStyle.() -> Unit)? = null,
     block: FormPartData.() -> Unit
 ) = initPart(
-    CardOutlinedStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardOutlinedStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardOutlinedDynamicPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardOutlinedStyle.() -> Unit)? = null,
     block: FormDynamicPartData.() -> Unit
 ) = initDynamicPart(
-    CardOutlinedStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardOutlinedStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardSeparateElevatedPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardSeparateElevatedStyle.() -> Unit)? = null,
     block: FormPartData.() -> Unit
 ) = initPart(
-    CardSeparateElevatedStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardSeparateElevatedStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardSeparateElevatedDynamicPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardSeparateElevatedStyle.() -> Unit)? = null,
     block: FormDynamicPartData.() -> Unit
 ) = initDynamicPart(
-    CardSeparateElevatedStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardSeparateElevatedStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardSeparateFilledPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardSeparateFilledStyle.() -> Unit)? = null,
     block: FormPartData.() -> Unit
 ) = initPart(
-    CardSeparateFilledStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardSeparateFilledStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardSeparateFilledDynamicPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardSeparateFilledStyle.() -> Unit)? = null,
     block: FormDynamicPartData.() -> Unit
 ) = initDynamicPart(
-    CardSeparateFilledStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardSeparateFilledStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardSeparateOutlinedPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardSeparateOutlinedStyle.() -> Unit)? = null,
     block: FormPartData.() -> Unit
 ) = initPart(
-    CardSeparateOutlinedStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardSeparateOutlinedStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardSeparateOutlinedDynamicPart(
+    partName: Any? = null,
+    partField: String? = null,
     styleBlock: (CardSeparateOutlinedStyle.() -> Unit)? = null,
     block: FormDynamicPartData.() -> Unit
 ) = initDynamicPart(
-    CardSeparateOutlinedStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, CardSeparateOutlinedStyle().apply { styleBlock?.invoke(this) }, block
 )

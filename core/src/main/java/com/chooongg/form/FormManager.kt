@@ -7,14 +7,16 @@ import androidx.annotation.IntRange
 import androidx.annotation.Px
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.dataActuator.FormDataActuator
-import com.chooongg.form.error.DefaultErrorOutputTool
+import com.chooongg.form.error.NormalErrorOutputTool
+import com.chooongg.form.error.ErrorFormatter
 import com.chooongg.form.error.ErrorOutputTool
+import com.chooongg.form.error.NormalErrorFormatter
 import com.chooongg.form.format.BaseNameFormatter
 import com.chooongg.form.format.NormalNameFormatter
 import com.chooongg.form.groupNameProvider.BaseGroupNameProvider
 import com.chooongg.form.groupNameProvider.DefaultGroupNameProvider
 import com.chooongg.form.iconProvider.BaseIconProvider
-import com.chooongg.form.iconProvider.DefaultIconProvider
+import com.chooongg.form.iconProvider.NormalIconProvider
 import com.chooongg.form.inputMode.InputMode
 import com.chooongg.form.inputMode.InputModeText
 import com.chooongg.form.item.BaseForm
@@ -48,9 +50,13 @@ object FormManager {
 
         var groupNameProvider: BaseGroupNameProvider = DefaultGroupNameProvider()
 
-        var iconProvider: BaseIconProvider = DefaultIconProvider()
+        var iconProvider: BaseIconProvider = NormalIconProvider()
 
-        var errorOutputTool: ErrorOutputTool = DefaultErrorOutputTool()
+        var dataVerificationNotifyAllError: Boolean = true
+
+        var errorFormatter: ErrorFormatter = NormalErrorFormatter()
+
+        var errorOutputTool: ErrorOutputTool = NormalErrorOutputTool()
 
         var inputMode: InputMode = InputModeText()
     }

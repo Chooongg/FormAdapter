@@ -1,7 +1,6 @@
 package com.chooongg.form.part
 
 import com.chooongg.form.FormAdapter
-import com.chooongg.form.FormUtils
 import com.chooongg.form.data.FormDynamicPartData
 import com.chooongg.form.data.FormGroupData
 import com.chooongg.form.error.FormDataVerificationException
@@ -64,7 +63,6 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                         item.menu = data.menu
                         item.menuVisibilityMode = data.menuVisibilityMode
                         item.menuEnableMode = data.menuEnableMode
-                        item.menuShowTitle = data.menuShowTitle
                         item.menuCreateOptionCallback(data.getMenuCreateOptionCallback())
                     })
                     group.addAll(it.getItems())
@@ -72,16 +70,9 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 }
                 if (formAdapter.isEnabled && data.dynamicGroupCreateBlock != null && data.maxGroupCount > data.getGroups().size) {
                     val group = ArrayList<BaseForm>()
-                    val addName = if (context != null) {
-                        data.dynamicGroupNameFormatter?.invoke(
-                            context!!,
-                            FormUtils.getText(context!!, data.partName),
-                            data.getGroups().size,
-                            data.getGroups().size + 1
-                        ) ?: FormUtils.getText(context!!, data.partName)
-                    } else null
                     group.add(addButton.apply {
-                        name = addName
+                        name = data.partName
+                        dynamicGroupNameFormatter = data.dynamicGroupNameFormatter
                         buttonStyle = data.addButtonStyle
                         iconGravity = data.addIconGravity
                         icon = data.addIcon
@@ -156,6 +147,20 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 item.executeDataVerification(formAdapter)
             }
         }
+    }
+
+    override fun getDataVerificationError(): List<FormDataVerificationException> {
+        val errors = ArrayList<FormDataVerificationException>()
+        data.getGroups().forEach { group ->
+            group.getItems().forEach {
+                try {
+                    it.executeDataVerification(formAdapter)
+                } catch (e: FormDataVerificationException) {
+                    errors.add(e)
+                }
+            }
+        }
+        return errors
     }
 
     override fun executeOutput(json: JSONObject) {

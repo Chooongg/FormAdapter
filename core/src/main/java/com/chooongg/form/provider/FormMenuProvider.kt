@@ -192,6 +192,7 @@ class FormMenuProvider : BaseFormProvider() {
             }
         }
         with(view.findViewById<AppCompatImageView>(R.id.formInternalContentChildSecondView)) {
+            imageTintList = nameView.hintTextColors
             visibility = if (itemMenu?.showNextIcon == true) {
                 View.VISIBLE
             } else {

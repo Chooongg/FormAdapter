@@ -4,7 +4,13 @@ import com.chooongg.form.part.BaseFormPartAdapter
 
 class LinkageForm internal constructor(private val adapter: BaseFormPartAdapter?) {
 
-    fun findItem(
+    fun findItem(field: String, isGlobal: Boolean = false): BaseForm? {
+        return if (isGlobal) {
+            adapter?.formAdapter?.findItemOfField(field)
+        } else adapter?.findOfField(field)
+    }
+
+    fun updateItem(
         field: String,
         isGlobal: Boolean = false,
         update: Boolean = true,
@@ -12,11 +18,12 @@ class LinkageForm internal constructor(private val adapter: BaseFormPartAdapter?
         block: (BaseForm) -> Unit
     ) {
         if (isGlobal) {
-            adapter?.formAdapter?.findOfField(field, update, hasPayload, block)
+            adapter?.formAdapter?.updateItemOfField(field, update, hasPayload, block)
         } else {
             val item = adapter?.findOfField(field)
             if (item != null && update) {
-                if (hasPayload) adapter?.notifyChangeItem(item, true) else adapter?.update()
+                block.invoke(item)
+                if (hasPayload) adapter!!.notifyChangeItem(item, true) else adapter!!.update()
             }
         }
     }

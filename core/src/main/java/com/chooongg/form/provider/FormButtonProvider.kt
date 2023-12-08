@@ -121,12 +121,13 @@ open class FormButtonProvider : BaseFormProvider() {
     private fun configButtonGravity(view: MaterialButton, contentGravity: Int) {
         if (contentGravity == Gravity.NO_GRAVITY) {
             view.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
                 startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                 endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
             }
         } else {
             view.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                width = ViewGroup.LayoutParams.WRAP_CONTENT
+                width = ConstraintLayout.LayoutParams.WRAP_CONTENT
                 when {
                     contentGravity and Gravity.START == Gravity.START -> {
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID

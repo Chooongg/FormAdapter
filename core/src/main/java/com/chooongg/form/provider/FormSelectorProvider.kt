@@ -145,13 +145,6 @@ class FormSelectorProvider : BaseFormProvider() {
                 }
             }
         }
-        view.isChecked = false
-        view.isCheckable = when ((item as? FormSelector)?.openMode) {
-            FormSelectorOpenMode.POPUPMENU -> true
-            FormSelectorOpenMode.PAGE -> false
-            FormSelectorOpenMode.AUTO -> (item.options?.size ?: 0) <= 30
-            else -> false
-        }
     }
 
     private fun onClickButton(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {
@@ -224,9 +217,7 @@ class FormSelectorProvider : BaseFormProvider() {
             view.text = item.getContentText(view.context, true)
             true
         }
-        popupMenu.setOnDismissListener { view.isChecked = false }
         popupMenu.show()
-        view.isChecked = true
     }
 
     private fun showPage(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {

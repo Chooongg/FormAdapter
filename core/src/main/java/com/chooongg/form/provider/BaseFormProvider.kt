@@ -110,7 +110,7 @@ abstract class BaseFormProvider {
             val adapter = holder.bindingAdapter as? BaseFormPartAdapter ?: return
             item.loadOption(holder) {
                 holder.itemView.post {
-                    val position = adapter.indexOf(item)
+                    val position = adapter.indexOfShow(item)
                     if (position >= 0) {
                         adapter.notifyItemChanged(
                             position, BaseOptionForm.CHANGE_OPTION_PAYLOAD_FLAG

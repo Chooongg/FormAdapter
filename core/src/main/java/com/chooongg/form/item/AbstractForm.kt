@@ -35,11 +35,6 @@ abstract class AbstractForm {
     var menu: Int? = null
 
     /**
-     * 菜单显示标题
-     */
-    var menuShowTitle: Boolean = false
-
-    /**
      * 菜单可见模式
      */
     var menuVisibilityMode: FormVisibilityMode = FormVisibilityMode.ENABLED

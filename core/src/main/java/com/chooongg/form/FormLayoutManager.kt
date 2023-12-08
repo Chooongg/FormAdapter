@@ -8,20 +8,26 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.max
 import kotlin.math.min
 
-class FormLayoutManager(context: Context) : GridLayoutManager(context, 27720) {
+class FormLayoutManager @JvmOverloads constructor(
+    context: Context,
+    maxItemWidth: Int = FormManager.Default.maxWidth
+) :
+    GridLayoutManager(context, 27720) {
 
     private var recyclerView: RecyclerView? = null
 
     private var adapter: RecyclerView.Adapter<*>? = null
 
-    private var maxItemWidth: Int = FormManager.Default.maxWidth
+    var maxItemWidth: Int = maxItemWidth
         set(value) {
-            field = value
-            if (width != 0) {
-                columnCount = max(
-                    1,
-                    min(12, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / value)
-                )
+            if (field != value) {
+                field = value
+                if (width != 0) {
+                    columnCount = max(
+                        1,
+                        min(12, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / value)
+                    )
+                }
             }
         }
 
@@ -65,6 +71,19 @@ class FormLayoutManager(context: Context) : GridLayoutManager(context, 27720) {
                 1,
                 min(12, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / maxItemWidth)
             )
+    }
+
+    override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {
+        if (state.didStructureChange()) {
+            var position = 0
+            (adapter as? FormAdapter)?.partAdapters?.forEach {
+                for (i in 0 until it.itemCount) {
+                    it.getItem(i).globalPosition = position
+                    position++
+                }
+            }
+        }
+        super.onLayoutChildren(recycler, state)
     }
 
     override fun onAttachedToWindow(view: RecyclerView) {

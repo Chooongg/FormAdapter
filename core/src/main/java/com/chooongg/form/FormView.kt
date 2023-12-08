@@ -12,28 +12,27 @@ class FormView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
-    var formMarginStart: Int = 0
-        private set
-
-    var formMarginEnd: Int = 0
-        private set
-
     init {
         clipChildren = false
         clipToPadding = false
 //        itemAnimator = FormItemAnimator()
-        val a = context.obtainStyledAttributes(
-            attrs, R.styleable.FormView, defStyleAttr, 0
-        )
-        formMarginStart = a.getDimensionPixelSize(
+        val a = context.obtainStyledAttributes(attrs, R.styleable.FormView, defStyleAttr, 0)
+        val formMarginStart = a.getDimensionPixelSize(
             R.styleable.FormView_formMarginStart,
             resources.getDimensionPixelSize(R.dimen.formMarginStart)
         )
-        formMarginEnd = a.getDimensionPixelSize(
+        val formMarginEnd = a.getDimensionPixelSize(
             R.styleable.FormView_formMarginEnd,
             resources.getDimensionPixelSize(R.dimen.formMarginEnd)
         )
+        val maxItemWidth = a.getDimensionPixelSize(
+            R.styleable.FormView_formMaxItemWidth,
+            FormManager.Default.maxWidth
+        )
         a.recycle()
+        layoutManager = FormLayoutManager(context, maxItemWidth).apply {
+            setFormMargin(formMarginStart, formMarginEnd)
+        }
         addOnScrollListener(object : OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 when (newState) {
@@ -46,8 +45,8 @@ class FormView @JvmOverloads constructor(
         })
     }
 
-    @Deprecated("Under normal circumstances, the View enable status cannot be modified")
     override fun setEnabled(enabled: Boolean) {
+        (adapter as? FormAdapter)?.isEnabled = enabled
     }
 
     fun setFormAdapter(formAdapter: FormAdapter?) {
@@ -64,19 +63,15 @@ class FormView @JvmOverloads constructor(
         super.setLayoutManager(layout)
     }
 
-    fun updateFormMargin(
-        start: Int = formMarginStart,
-        end: Int = formMarginEnd,
-    ) {
-        formMarginStart = start
-        formMarginEnd = end
-        updateFormMargin4LayoutManager()
+    fun setMaxItemWidth(width: Int) {
+        (layoutManager as? FormLayoutManager)?.maxItemWidth = width
     }
 
-    private fun updateFormMargin4LayoutManager() {
-        (layoutManager as? FormLayoutManager)?.also {
-            it.setFormMargin(formMarginStart, formMarginEnd)
-        }
+    fun setFormMargin(
+        start: Int,
+        end: Int,
+    ) {
+        (layoutManager as? FormLayoutManager)?.setFormMargin(start, end)
     }
 
     fun clearPool() {

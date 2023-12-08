@@ -58,17 +58,15 @@ class VerticalTypeset : BaseTypeset() {
                 inflateMenu(
                     item.menu!!,
                     item.isRealMenuEnable(enabled),
-                    item.getMenuCreateOptionCallback(),
-                    {
-                        val isIntercept = item.getMenuClickListener()?.invoke(context, it, item)
-                        if (isIntercept != true) {
-                            (holder.bindingAdapter as? BaseFormPartAdapter)?.formAdapter
-                                ?.getOnMenuClickListener()?.invoke(context, it, item)
-                        }
-                        true
-                    },
-                    item.menuShowTitle
-                )
+                    item.getMenuCreateOptionCallback()
+                ) {
+                    val isIntercept = item.getMenuClickListener()?.invoke(context, it, item)
+                    if (isIntercept != true) {
+                        (holder.bindingAdapter as? BaseFormPartAdapter)?.formAdapter
+                            ?.getOnMenuClickListener()?.invoke(context, it, item)
+                    }
+                    true
+                }
             } else clearMenu()
         }
     }

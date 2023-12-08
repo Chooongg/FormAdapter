@@ -23,6 +23,8 @@ import com.chooongg.form.addSwitch
 import com.chooongg.form.addText
 import com.chooongg.form.addTime
 import com.chooongg.form.addTip
+import com.chooongg.form.enum.FormOutputMode
+import com.chooongg.form.enum.FormVisibilityMode
 import com.chooongg.form.initCardOutlinedPart
 import com.chooongg.form.inputMode.InputModePassword
 import com.chooongg.form.item.FormButton
@@ -115,7 +117,7 @@ class BasicViewModel : ViewModel() {
                     hint = "测试"
                 }
                 addTip("Tip") {
-                    visibilityMode = com.chooongg.form.enum.FormVisibilityMode.ENABLED
+                    visibilityMode = FormVisibilityMode.ENABLED
                     enableBottomPadding = true
                 }
                 addRadioButton("RadioButton", "radioButton") {
@@ -157,7 +159,7 @@ class BasicViewModel : ViewModel() {
                     stepSize = 1f
                     content = "20"
                     menu = R.menu.operation
-                    menuVisibilityMode = com.chooongg.form.enum.FormVisibilityMode.ALWAYS
+                    menuVisibilityMode = FormVisibilityMode.ALWAYS
                     menuCreateOptionCallback {
                         it.findItem(R.id.error).isVisible = false
                     }
@@ -200,7 +202,7 @@ class BasicViewModel : ViewModel() {
                     buttonStyle = FormButton.ButtonStyle.OUTLINED
                 }
                 addText("输出", "output") {
-                    outputMode = com.chooongg.form.enum.FormOutputMode.NEVER
+                    outputMode = FormOutputMode.NEVER
                     typeset = VerticalTypeset()
                     menu = R.menu.operation
                 }

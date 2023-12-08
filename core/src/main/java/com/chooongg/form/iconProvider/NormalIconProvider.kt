@@ -6,7 +6,7 @@ import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.button.MaterialButton
 
-class DefaultIconProvider : BaseIconProvider() {
+class NormalIconProvider : BaseIconProvider() {
 
     override fun setSrc(imageView: ImageView, icon: Any?) {
         when (icon) {

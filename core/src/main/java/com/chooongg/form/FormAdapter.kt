@@ -27,26 +27,34 @@ open class FormAdapter(isEnabled: Boolean) :
         const val ERROR_NOTIFY_FLAG = "ERROR_NOTIFY"
     }
 
-    internal var recyclerView: RecyclerView? = null
-
     private val concatAdapter = ConcatAdapter(
         ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
     )
 
     val partAdapters get() = concatAdapter.adapters.map { it as BaseFormPartAdapter }
 
+    internal var recyclerView: RecyclerView? = null
+
     var isEnabled: Boolean = isEnabled
         set(value) {
-            field = value
-            updateForm()
+            if (field != value) {
+                field = value
+                updateForm()
+            }
         }
 
     var columnCount: Int = 1
         internal set(value) {
-            field = value
-            partAdapters.forEach { it.executeUpdate(false) }
+            if (field != value) {
+                field = value
+                updateForm()
+            }
         }
 
+
+    /**
+     * 创建时刷新联动操作
+     */
     var refreshLinkageWhileCreate: Boolean = true
 
     private var menuClickListener: FormMenuClickGlobalBlock? = null
@@ -161,7 +169,27 @@ open class FormAdapter(isEnabled: Boolean) :
 
     //</editor-fold>
 
-    fun findOfField(
+    fun findItemOfField(field: String): BaseForm? {
+        partAdapters.forEach {
+            val item = it.findOfField(field)
+            if (item != null) {
+                return item
+            }
+        }
+        return null
+    }
+
+    fun findItemOfId(id: String): BaseForm? {
+        partAdapters.forEach {
+            val item = it.findOfId(id)
+            if (item != null) {
+                return item
+            }
+        }
+        return null
+    }
+
+    fun updateItemOfField(
         field: String,
         update: Boolean = true,
         hasPayload: Boolean = true,
@@ -180,7 +208,7 @@ open class FormAdapter(isEnabled: Boolean) :
         return false
     }
 
-    fun findOfId(
+    fun updateItemOfId(
         id: String,
         update: Boolean = true,
         hasPayload: Boolean = true,
@@ -202,17 +230,51 @@ open class FormAdapter(isEnabled: Boolean) :
     /**
      * 执行数据效验
      */
-    fun executeDataVerification(): Boolean {
-        return try {
+    fun executeDataVerification(notifyAllError: Boolean = FormManager.Default.dataVerificationNotifyAllError): Boolean {
+        return if (notifyAllError) {
+            val errors = getDataVerificationList()
+            if (errors.isNotEmpty()) {
+                val messages = ArrayList<CharSequence>()
+                errors.forEachIndexed { index, e ->
+                    e.item.errorNotify = System.currentTimeMillis()
+                    if (e.item.globalPosition >= 0) {
+                        notifyItemChanged(e.item.globalPosition, ERROR_NOTIFY_FLAG)
+                        if (index == 0) {
+                            recyclerView?.smoothScrollToPosition(e.item.globalPosition)
+                        }
+                    }
+                    FormManager.Default.errorFormatter.format(recyclerView!!.context, e)?.apply {
+                        messages.add(this)
+                    }
+                }
+                if (recyclerView != null) {
+                    FormManager.Default.errorOutputTool.errorOutput(
+                        recyclerView!!.context, messages
+                    )
+                }
+                true
+            } else false
+        } else try {
             partAdapters.forEach { it.executeDataVerification() }
             true
         } catch (e: FormDataVerificationException) {
-            errorNotify(e.item)
+            e.item.errorNotify = System.currentTimeMillis()
+            if (e.item.globalPosition >= 0) {
+                notifyItemChanged(e.item.globalPosition, ERROR_NOTIFY_FLAG)
+                recyclerView?.smoothScrollToPosition(e.item.globalPosition)
+            }
             if (recyclerView != null) {
-                FormManager.Default.errorOutputTool.errorOutput(recyclerView!!.context, e)
+                val message = FormManager.Default.errorFormatter.format(recyclerView!!.context, e)
+                FormManager.Default.errorOutputTool.errorOutput(recyclerView!!.context, message)
             }
             false
         }
+    }
+
+    fun getDataVerificationList(): List<FormDataVerificationException> {
+        val errors = ArrayList<FormDataVerificationException>()
+        partAdapters.forEach { errors.addAll(it.getDataVerificationError()) }
+        return errors
     }
 
     /**
@@ -229,27 +291,11 @@ open class FormAdapter(isEnabled: Boolean) :
     /**
      * 错误通知
      */
-    fun errorNotify(item: BaseForm) {
-        var position = 0
-        partAdapters.forEach {
-            val indexOf = it.indexOf(item)
-            if (it.indexOf(item) != -1) {
-                item.errorNotify = System.currentTimeMillis()
-                position += indexOf
-                val layoutManager = recyclerView?.layoutManager as? FormLayoutManager
-                if (layoutManager != null) {
-                    val firstVisiblePosition =
-                        layoutManager.findFirstVisibleItemPosition()
-                    val lastVisiblePosition =
-                        layoutManager.findLastVisibleItemPosition()
-                    if (position in firstVisiblePosition..lastVisiblePosition) {
-                        it.notifyItemChanged(indexOf, ERROR_NOTIFY_FLAG)
-                    }
-                    recyclerView?.smoothScrollToPosition(position)
-                }
-            } else {
-                position += it.itemCount
-            }
+    fun errorNotify(item: BaseForm, isToScrollHere: Boolean = true) {
+        item.errorNotify = System.currentTimeMillis()
+        if (item.globalPosition >= 0) {
+            notifyItemChanged(item.globalPosition, ERROR_NOTIFY_FLAG)
+            if (isToScrollHere) recyclerView?.smoothScrollToPosition(item.globalPosition)
         }
     }
 
@@ -265,7 +311,10 @@ open class FormAdapter(isEnabled: Boolean) :
     }
 
     fun addPart(adapter: FormPartAdapter?) {
-        if (adapter != null) concatAdapter.addAdapter(adapter)
+        if (adapter != null) {
+            adapter.executeUpdate(true)
+            concatAdapter.addAdapter(adapter)
+        }
     }
 
     fun addDynamicPart(
@@ -278,7 +327,10 @@ open class FormAdapter(isEnabled: Boolean) :
     }
 
     fun addDynamicPart(adapter: FormDynamicPartAdapter?) {
-        if (adapter != null) concatAdapter.addAdapter(adapter)
+        if (adapter != null) {
+            adapter.executeUpdate(true)
+            concatAdapter.addAdapter(adapter)
+        }
     }
 
     fun removeAdapter(adapter: RecyclerView.Adapter<ViewHolder>) {
@@ -332,14 +384,9 @@ open class FormAdapter(isEnabled: Boolean) :
         concatAdapter.onAttachedToRecyclerView(recyclerView)
         if (recyclerView.layoutManager !is FormLayoutManager) {
             val layoutManager = FormLayoutManager(recyclerView.context)
-            if (recyclerView is FormView) {
-                layoutManager.setFormMargin(
-                    recyclerView.formMarginStart, recyclerView.formMarginEnd
-                )
-            }
             recyclerView.layoutManager = layoutManager
-            columnCount = layoutManager.columnCount
         }
+        columnCount = (recyclerView.layoutManager as FormLayoutManager).columnCount
         var hasAddItemDecoration = true
         if (recyclerView.itemDecorationCount > 0) {
             for (i in 0 until recyclerView.itemDecorationCount) {

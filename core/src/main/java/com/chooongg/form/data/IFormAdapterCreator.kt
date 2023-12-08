@@ -24,11 +24,17 @@ interface IFormAdapterCreator {
      * 初始化片段
      */
     fun initPart(
+        partName: Any? = null,
+        partField: String? = null,
         style: BaseStyle = NoneStyle(),
         block: FormPartData.() -> Unit
     ): FormPartAdapter {
         val part = FormPartAdapter(getFormAdapter(), style)
-        part.create(block)
+        val data = FormPartData()
+        data.partName = partName
+        data.partField = partField
+        block.invoke(data)
+        part.create(data)
         initPart(part)
         return part
     }
@@ -37,11 +43,17 @@ interface IFormAdapterCreator {
      * 初始化动态片段
      */
     fun initDynamicPart(
+        partName: Any? = null,
+        partField: String? = null,
         style: BaseStyle = NoneStyle(),
         block: FormDynamicPartData.() -> Unit
     ): FormDynamicPartAdapter {
         val part = FormDynamicPartAdapter(getFormAdapter(), style)
-        part.create(block)
+        val data = FormDynamicPartData()
+        data.partName = partName
+        data.partField = partField
+        block.invoke(data)
+        part.create(data)
         initPart(part)
         return part
     }

@@ -21,9 +21,12 @@ import com.chooongg.form.addSwitch
 import com.chooongg.form.addText
 import com.chooongg.form.addTime
 import com.chooongg.form.addTip
+import com.chooongg.form.enum.FormEnableMode
 import com.chooongg.form.enum.FormSelectorOpenMode
+import com.chooongg.form.enum.FormTimeMode
+import com.chooongg.form.enum.FormVisibilityMode
+import com.chooongg.form.initCardOutlinedDynamicPart
 import com.chooongg.form.initCardOutlinedPart
-import com.chooongg.form.initCardSeparateOutlinedDynamicPart
 import com.chooongg.form.inputMode.InputModeDecimal
 import com.chooongg.form.inputMode.InputModeNumber
 import com.chooongg.form.inputMode.InputModePassword
@@ -38,8 +41,7 @@ class AdvancedViewModel : ViewModel() {
 
     init {
         adapter.setNewInstance {
-            initCardSeparateOutlinedDynamicPart {
-                partName = "Test Group"
+            initCardOutlinedDynamicPart("Test Group") {
                 minGroupCount = 0
                 maxGroupCount = 10
                 addGroup {
@@ -55,38 +57,35 @@ class AdvancedViewModel : ViewModel() {
                     }
                 }
             }
-            initCardOutlinedPart {
-                partName = "VisibilityMode"
+            initCardOutlinedPart("VisibilityMode") {
                 addButton("ENABLED") {
-                    visibilityMode = com.chooongg.form.enum.FormVisibilityMode.ENABLED
+                    visibilityMode = FormVisibilityMode.ENABLED
                 }
                 addButton("ALWAYS") {
-                    visibilityMode = com.chooongg.form.enum.FormVisibilityMode.ALWAYS
+                    visibilityMode = FormVisibilityMode.ALWAYS
                 }
                 addButton("DISABLED") {
-                    visibilityMode = com.chooongg.form.enum.FormVisibilityMode.DISABLED
+                    visibilityMode = FormVisibilityMode.DISABLED
                 }
                 addButton("NEVER") {
-                    visibilityMode = com.chooongg.form.enum.FormVisibilityMode.NEVER
+                    visibilityMode = FormVisibilityMode.NEVER
                 }
             }
-            initCardOutlinedPart {
-                partName = "EnableMode"
+            initCardOutlinedPart("EnableMode") {
                 addButton("ENABLED") {
-                    enableMode = com.chooongg.form.enum.FormEnableMode.ENABLED
+                    enableMode = FormEnableMode.ENABLED
                 }
                 addButton("ALWAYS") {
-                    enableMode = com.chooongg.form.enum.FormEnableMode.ALWAYS
+                    enableMode = FormEnableMode.ALWAYS
                 }
                 addButton("DISABLED") {
-                    enableMode = com.chooongg.form.enum.FormEnableMode.DISABLED
+                    enableMode = FormEnableMode.DISABLED
                 }
                 addButton("NEVER") {
-                    enableMode = com.chooongg.form.enum.FormEnableMode.NEVER
+                    enableMode = FormEnableMode.NEVER
                 }
             }
-            initCardOutlinedPart {
-                partName = "ContentGravity"
+            initCardOutlinedPart("ContentGravity") {
                 addText("None") {
                     content = "Content"
                 }
@@ -103,8 +102,7 @@ class AdvancedViewModel : ViewModel() {
                     contentGravity = Gravity.CENTER
                 }
             }
-            initCardOutlinedPart {
-                partName = "MultiColumnContentGravity"
+            initCardOutlinedPart("MultiColumnContentGravity") {
                 addText("None") {
                     content = "Content"
                 }
@@ -121,16 +119,15 @@ class AdvancedViewModel : ViewModel() {
                     multiColumnContentGravity = Gravity.CENTER
                 }
             }
-            initCardOutlinedPart {
-                partName = "Linkage"
+            initCardOutlinedPart("Linkage") {
                 addSelector("Selector") {
                     options = listOf(Option("Item1"), Option("Item2"), Option("Item3"))
                     setLinkage { linkage, _, content ->
-                        linkage.findItem("linkageText") {
+                        linkage.updateItem("linkageText") {
                             it.visibilityMode = if (content != null) {
-                                com.chooongg.form.enum.FormVisibilityMode.ALWAYS
+                                FormVisibilityMode.ALWAYS
                             } else {
-                                com.chooongg.form.enum.FormVisibilityMode.NEVER
+                                FormVisibilityMode.NEVER
                             }
                         }
                     }
@@ -140,8 +137,7 @@ class AdvancedViewModel : ViewModel() {
                     content = "selector is empty hide it"
                 }
             }
-            initCardOutlinedPart {
-                partName = "Button"
+            initCardOutlinedPart("Button") {
                 addButton("Default")
                 addButton("Text") {
                     buttonStyle = FormButton.ButtonStyle.TEXT
@@ -168,8 +164,7 @@ class AdvancedViewModel : ViewModel() {
                     gravity = Gravity.CENTER
                 }
             }
-            initCardOutlinedPart {
-                partName = "CheckBox"
+            initCardOutlinedPart("CheckBox") {
                 addCheckBox("Default") {
                     options = listOf(
                         Option("Option1", "1"),
@@ -190,8 +185,7 @@ class AdvancedViewModel : ViewModel() {
                     }
                 }
             }
-            initCardOutlinedPart {
-                partName = "Divider"
+            initCardOutlinedPart("Divider") {
                 addDivider()
                 addDivider {
                     matchParentEdge = true
@@ -210,8 +204,7 @@ class AdvancedViewModel : ViewModel() {
                     showAtEdge = true
                 }
             }
-            initCardOutlinedPart {
-                partName = "Input"
+            initCardOutlinedPart("Input") {
                 addInput("Default")
                 addInput("Remote") {
                     optionLoader {
@@ -244,17 +237,14 @@ class AdvancedViewModel : ViewModel() {
                     inputMode = InputModePassword()
                 }
             }
-            initCardOutlinedPart {
-                partName = "Label"
+            initCardOutlinedPart("Label") {
                 addLabel("Color") {
                     color = { ColorStateList.valueOf(Color.RED) }
                 }
             }
-            initCardOutlinedPart {
-                partName = "Menu"
+            initCardOutlinedPart("Menu") {
             }
-            initCardOutlinedPart {
-                partName = "RadioButton"
+            initCardOutlinedPart("RadioButton") {
                 addRadioButton("Default") {
                     options = listOf(
                         Option("Option1", "1"),
@@ -275,8 +265,7 @@ class AdvancedViewModel : ViewModel() {
                     }
                 }
             }
-            initCardOutlinedPart {
-                partName = "Rating"
+            initCardOutlinedPart("Rating") {
                 addRating("Default")
                 addRating("3 Star") {
                     numStars = 3
@@ -288,13 +277,12 @@ class AdvancedViewModel : ViewModel() {
                     tint = { ColorStateList.valueOf(Color.YELLOW) }
                 }
                 addRating("OnlyShow") {
-                    enableMode = com.chooongg.form.enum.FormEnableMode.NEVER
+                    enableMode = FormEnableMode.NEVER
                     stepSize = 0.5f
                     content = 2.5f
                 }
             }
-            initCardOutlinedPart {
-                partName = "Selector"
+            initCardOutlinedPart("Selector") {
                 addSelector("Default") {
                     options = listOf(
                         Option("Option1", "1"),
@@ -325,8 +313,7 @@ class AdvancedViewModel : ViewModel() {
                     )
                 }
             }
-            initCardOutlinedPart {
-                partName = "Slider"
+            initCardOutlinedPart("Slider") {
                 addSlider("Default")
                 addSlider("Step") {
                     stepSize = 5f
@@ -347,26 +334,23 @@ class AdvancedViewModel : ViewModel() {
                     formatter { "${it.toInt()} Size" }
                 }
             }
-            initCardOutlinedPart {
-                partName = "Switch"
+            initCardOutlinedPart("Switch") {
                 addSwitch("Switch")
             }
-            initCardOutlinedPart {
-                partName = "Text"
+            initCardOutlinedPart("Text") {
                 addText("Default") {
                     content = "Content"
                 }
             }
-            initCardOutlinedPart {
-                partName = "Time"
+            initCardOutlinedPart("Time") {
                 addTime("Time") {
-                    timeMode = com.chooongg.form.enum.FormTimeMode.TIME
+                    timeMode = FormTimeMode.TIME
                 }
                 addTime("Date") {
-                    timeMode = com.chooongg.form.enum.FormTimeMode.DATE
+                    timeMode = FormTimeMode.DATE
                 }
                 addTime("DateTime") {
-                    timeMode = com.chooongg.form.enum.FormTimeMode.DATE_TIME
+                    timeMode = FormTimeMode.DATE_TIME
                 }
                 addTime("InputMode") {
                     inputMode = FormTime.INPUT_MODE_TEXT
@@ -375,8 +359,7 @@ class AdvancedViewModel : ViewModel() {
                     showFormatPattern = "yyyy-MM-dd HH:mm:ss"
                 }
             }
-            initCardOutlinedPart {
-                partName = "Tip"
+            initCardOutlinedPart("Tip") {
                 addTip("Color") {
                     color = { ColorStateList.valueOf(Color.RED) }
                 }
