@@ -93,28 +93,7 @@ open class FormAdapter(isEnabled: Boolean) :
                 is FormDynamicPartAdapter -> addDynamicPart(it)
             }
         }
-        if (refreshLinkageWhileCreate) {
-            partAdapters.forEach {
-                when (it) {
-                    is FormPartAdapter -> {
-                        it.data.getItems().forEach { item ->
-                            item.getLinkageBlock()
-                                ?.invoke(LinkageForm(it), item.field, item.content)
-                        }
-                    }
-
-                    is FormDynamicPartAdapter -> {
-                        it.data.getGroups().forEach { group ->
-                            group.getItems().forEach { item ->
-                                item.getLinkageBlock()
-                                    ?.invoke(LinkageForm(it), item.field, item.content)
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
+        if (refreshLinkageWhileCreate) refreshLinkage()
     }
 
     fun getPartAdapter(position: Int): BaseFormPartAdapter {
@@ -129,6 +108,35 @@ open class FormAdapter(isEnabled: Boolean) :
     fun updateForm() {
         recyclerView?.focusedChild?.clearFocus()
         partAdapters.forEach { it.update() }
+    }
+
+    fun refreshLinkage() {
+        partAdapters.forEach {
+            when (it) {
+                is FormPartAdapter -> {
+                    it.data.getItems().forEach { item ->
+                        item.getLinkageBlock()
+                            ?.invoke(LinkageForm(it), item.field, item.content)
+                    }
+                }
+
+                is FormDynamicPartAdapter -> {
+                    it.data.getGroups().forEach { group ->
+                        group.getItems().forEach { item ->
+                            item.getLinkageBlock()
+                                ?.invoke(LinkageForm(it), item.field, item.content)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun triggerLinkage(item: BaseForm) {
+        partAdapters.forEach {
+            val findOfItem = it.findOfItem(item)
+            if (findOfItem != null) item.triggerLinkage(it)
+        }
     }
 
     //<editor-fold desc="listener 监听事件">
@@ -160,7 +168,14 @@ open class FormAdapter(isEnabled: Boolean) :
         block: BaseForm.() -> Unit
     ): Boolean {
         partAdapters.forEach {
-            if (it.findOfField(field, update, hasPayload, block)) return true
+            val item = it.findOfField(field)
+            if (item != null) {
+                block.invoke(item)
+                if (update) {
+                    if (hasPayload) it.notifyChangeItem(item, true) else it.update()
+                }
+                return true
+            }
         }
         return false
     }
@@ -172,7 +187,14 @@ open class FormAdapter(isEnabled: Boolean) :
         block: BaseForm.() -> Unit
     ): Boolean {
         partAdapters.forEach {
-            if (it.findOfId(id, update, hasPayload, block)) return true
+            val item = it.findOfId(id)
+            if (item != null) {
+                block.invoke(item)
+                if (update) {
+                    if (hasPayload) it.notifyChangeItem(item, true) else it.update()
+                }
+                return true
+            }
         }
         return false
     }

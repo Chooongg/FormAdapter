@@ -14,7 +14,10 @@ class LinkageForm internal constructor(private val adapter: BaseFormPartAdapter?
         if (isGlobal) {
             adapter?.formAdapter?.findOfField(field, update, hasPayload, block)
         } else {
-            adapter?.findOfField(field, update, hasPayload, block)
+            val item = adapter?.findOfField(field)
+            if (item != null && update) {
+                if (hasPayload) adapter?.notifyChangeItem(item, true) else adapter?.update()
+            }
         }
     }
 }

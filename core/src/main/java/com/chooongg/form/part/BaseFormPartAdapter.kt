@@ -248,19 +248,11 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
 
     open fun getExtraGroupCount() = 0
 
-    abstract fun findOfField(
-        field: String,
-        update: Boolean = true,
-        hasPayload: Boolean = false,
-        block: BaseForm.() -> Unit
-    ): Boolean
+    abstract fun findOfField(field: String): BaseForm?
 
-    abstract fun findOfId(
-        id: String,
-        update: Boolean = true,
-        hasPayload: Boolean = false,
-        block: BaseForm.() -> Unit
-    ): Boolean
+    abstract fun findOfId(id: String): BaseForm?
+
+    abstract fun findOfItem(target: BaseForm): BaseForm?
 
     /**
      * 执行数据验证

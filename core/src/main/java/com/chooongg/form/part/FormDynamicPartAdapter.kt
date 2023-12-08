@@ -113,66 +113,40 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         }
     }
 
-    override fun findOfField(
-        field: String,
-        update: Boolean,
-        hasPayload: Boolean,
-        block: (BaseForm) -> Unit
-    ): Boolean {
+    override fun findOfField(field: String): BaseForm? {
         data.getGroups().forEach { group ->
             group.getItems().forEach { item ->
-                if (item.field == field) {
-                    block(item)
-                    if (update) {
-                        if (hasPayload) notifyChangeItem(item, true) else update()
-                    }
-                    return true
-                }
+                if (item.field == field) return item
                 if (item is VariantForm) {
-                    item.getItems().forEach {
-                        if (it.field == field) {
-                            block(it)
-                            if (update) {
-                                if (hasPayload) notifyChangeItem(item, true) else update()
-                            }
-                            return true
-                        }
-                    }
+                    item.getItems().forEach { if (it.field == field) return it }
                 }
             }
         }
-        return false
+        return null
     }
 
-    override fun findOfId(
-        id: String,
-        update: Boolean,
-        hasPayload: Boolean,
-        block: BaseForm.() -> Unit
-    ): Boolean {
+    override fun findOfId(id: String): BaseForm? {
         data.getGroups().forEach { group ->
             group.getItems().forEach { item ->
-                if (item.id == id) {
-                    block(item)
-                    if (update) {
-                        if (hasPayload) notifyChangeItem(item, true) else update()
-                    }
-                    return true
-                }
+                if (item.id == id) return item
                 if (item is VariantForm) {
-                    item.getItems().forEach {
-                        if (it.id == id) {
-                            block(it)
-                            if (update) {
-                                if (hasPayload) notifyChangeItem(item, true) else update()
-                            }
-                            return true
-                        }
-                    }
+                    item.getItems().forEach { if (it.id == id) return it }
                 }
             }
         }
-        return false
+        return null
+    }
+
+    override fun findOfItem(target: BaseForm): BaseForm? {
+        data.getGroups().forEach { group ->
+            group.getItems().forEach { item ->
+                if (item == target) return item
+                if (item is VariantForm) {
+                    item.getItems().forEach { if (it == target) return it }
+                }
+            }
+        }
+        return null
     }
 
     @Throws(FormDataVerificationException::class)
