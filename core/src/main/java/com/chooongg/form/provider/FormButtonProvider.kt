@@ -1,6 +1,7 @@
 package com.chooongg.form.provider
 
 import android.animation.AnimatorInflater
+import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.chooongg.form.item.FormButton
 import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.style.BaseStyle
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.theme.overlay.MaterialThemeOverlay
 import kotlinx.coroutines.CoroutineScope
 
@@ -60,31 +62,7 @@ open class FormButtonProvider : BaseFormProvider() {
     }
 
     private fun configButtonStyle(view: MaterialButton, itemButton: FormButton?) {
-        val style = when (itemButton?.buttonStyle ?: FormButton.ButtonStyle.DEFAULT) {
-            FormButton.ButtonStyle.DEFAULT -> view.context.obtainStyledAttributes(
-                intArrayOf(R.attr.formButtonStyle)
-            ).use { it.getResourceId(0, R.style.Form_Button) }
-
-            FormButton.ButtonStyle.TEXT -> view.context.obtainStyledAttributes(
-                intArrayOf(R.attr.formButtonTextStyle)
-            ).use { it.getResourceId(0, R.style.Form_Button_TextButton) }
-
-            FormButton.ButtonStyle.TONAL -> view.context.obtainStyledAttributes(
-                intArrayOf(R.attr.formButtonTonalStyle)
-            ).use { it.getResourceId(0, R.style.Form_Button_TonalButton) }
-
-            FormButton.ButtonStyle.OUTLINED -> view.context.obtainStyledAttributes(
-                intArrayOf(R.attr.formButtonOutlinedStyle)
-            ).use { it.getResourceId(0, R.style.Form_Button_OutlinedButton) }
-
-            FormButton.ButtonStyle.ELEVATED -> view.context.obtainStyledAttributes(
-                intArrayOf(R.attr.formButtonElevatedStyle)
-            ).use { it.getResourceId(0, R.style.Form_Button_ElevatedButton) }
-
-            FormButton.ButtonStyle.UN_ELEVATED -> view.context.obtainStyledAttributes(
-                intArrayOf(R.attr.formButtonUnelevatedStyle)
-            ).use { it.getResourceId(0, R.style.Form_Button_UnelevatedButton) }
-        }
+        val style = getButtonStyle(view.context, itemButton?.buttonStyle)
         val wrap = MaterialThemeOverlay.wrap(view.context, null, 0, style)
         view.setTextColor(wrap.obtainStyledAttributes(
             style, intArrayOf(android.R.attr.textColor)
@@ -109,7 +87,16 @@ open class FormButtonProvider : BaseFormProvider() {
         view.elevation = wrap.obtainStyledAttributes(
             style, intArrayOf(com.google.android.material.R.attr.elevation)
         ).use { it.getDimension(0, 0f) }
-
+        view.shapeAppearanceModel =
+            ShapeAppearanceModel.builder(
+                view.context, wrap.obtainStyledAttributes(
+                    style, intArrayOf(com.google.android.material.R.attr.shapeAppearance)
+                ).use {
+                    it.getResourceId(
+                        0, com.google.android.material.R.style.ShapeAppearance_Material3_Corner_Full
+                    )
+                }, 0
+            ).build()
         val stateListId = wrap.obtainStyledAttributes(
             style, intArrayOf(android.R.attr.stateListAnimator)
         ).use { it.getResourceId(0, 0) }
@@ -158,5 +145,54 @@ open class FormButtonProvider : BaseFormProvider() {
             val adapter = holder.bindingAdapter as? BaseFormPartAdapter
             adapter?.onItemClick(item, it)
         }
+    }
+
+    protected fun getButtonStyle(context: Context, buttonStyle: FormButton.ButtonStyle?): Int {
+        val attr = when (buttonStyle) {
+            FormButton.ButtonStyle.ELEVATED -> R.attr.formButtonElevatedStyle
+            FormButton.ButtonStyle.UN_ELEVATED -> R.attr.formButtonUnelevatedStyle
+            FormButton.ButtonStyle.PRIMARY -> R.attr.formButtonPrimaryStyle
+            FormButton.ButtonStyle.PRIMARY_TONAL -> R.attr.formButtonPrimaryTonalStyle
+            FormButton.ButtonStyle.PRIMARY_TEXT -> R.attr.formButtonPrimaryTextStyle
+            FormButton.ButtonStyle.PRIMARY_OUTLINED -> R.attr.formButtonPrimaryOutlinedStyle
+            FormButton.ButtonStyle.SECONDARY -> R.attr.formButtonSecondaryStyle
+            FormButton.ButtonStyle.TONAL -> R.attr.formButtonTonalStyle
+            FormButton.ButtonStyle.TEXT -> R.attr.formButtonTextStyle
+            FormButton.ButtonStyle.OUTLINED -> R.attr.formButtonOutlinedStyle
+            FormButton.ButtonStyle.TERTIARY -> R.attr.formButtonTertiaryStyle
+            FormButton.ButtonStyle.TERTIARY_TONAL -> R.attr.formButtonTertiaryTonalStyle
+            FormButton.ButtonStyle.TERTIARY_TEXT -> R.attr.formButtonTertiaryTextStyle
+            FormButton.ButtonStyle.TERTIARY_OUTLINED -> R.attr.formButtonTertiaryOutlinedStyle
+            FormButton.ButtonStyle.ERROR -> R.attr.formButtonErrorStyle
+            FormButton.ButtonStyle.ERROR_TONAL -> R.attr.formButtonErrorTonalStyle
+            FormButton.ButtonStyle.ERROR_TEXT -> R.attr.formButtonErrorTextStyle
+            FormButton.ButtonStyle.ERROR_OUTLINED -> R.attr.formButtonErrorOutlinedStyle
+            FormButton.ButtonStyle.CUSTOM1 -> R.attr.formButtonCustom1Style
+            FormButton.ButtonStyle.CUSTOM2 -> R.attr.formButtonCustom2Style
+            FormButton.ButtonStyle.CUSTOM3 -> R.attr.formButtonCustom3Style
+            else -> R.attr.formButtonStyle
+        }
+        val default = when (buttonStyle) {
+            FormButton.ButtonStyle.ELEVATED -> R.style.Form_Button_ElevatedButton
+            FormButton.ButtonStyle.UN_ELEVATED -> R.style.Form_Button_UnelevatedButton
+            FormButton.ButtonStyle.PRIMARY -> R.style.Form_Button_PrimaryButton
+            FormButton.ButtonStyle.PRIMARY_TONAL -> R.style.Form_Button_PrimaryTonalButton
+            FormButton.ButtonStyle.PRIMARY_TEXT -> R.style.Form_Button_PrimaryTextButton
+            FormButton.ButtonStyle.PRIMARY_OUTLINED -> R.style.Form_Button_PrimaryOutlinedButton
+            FormButton.ButtonStyle.SECONDARY -> R.style.Form_Button_SecondaryButton
+            FormButton.ButtonStyle.TONAL -> R.style.Form_Button_TonalButton
+            FormButton.ButtonStyle.TEXT -> R.style.Form_Button_TextButton
+            FormButton.ButtonStyle.OUTLINED -> R.style.Form_Button_OutlinedButton
+            FormButton.ButtonStyle.TERTIARY -> R.style.Form_Button_TertiaryButton
+            FormButton.ButtonStyle.TERTIARY_TONAL -> R.style.Form_Button_TertiaryTonalButton
+            FormButton.ButtonStyle.TERTIARY_TEXT -> R.style.Form_Button_TertiaryTextButton
+            FormButton.ButtonStyle.TERTIARY_OUTLINED -> R.style.Form_Button_TertiaryOutlinedButton
+            FormButton.ButtonStyle.ERROR -> R.style.Form_Button_ErrorButton
+            FormButton.ButtonStyle.ERROR_TONAL -> R.style.Form_Button_ErrorTonalButton
+            FormButton.ButtonStyle.ERROR_TEXT -> R.style.Form_Button_ErrorTextButton
+            FormButton.ButtonStyle.ERROR_OUTLINED -> R.style.Form_Button_ErrorOutlinedButton
+            else -> R.style.Form_Button
+        }
+        return context.obtainStyledAttributes(intArrayOf(attr)).use { it.getResourceId(0, default) }
     }
 }

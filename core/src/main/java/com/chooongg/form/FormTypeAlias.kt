@@ -62,6 +62,11 @@ typealias FormOptionLoader<T> = suspend (BaseOptionForm<T>) -> List<T>?
 typealias FormItemClickBlock = (item: BaseForm, view: View) -> Unit
 
 /**
+ * 操作按钮点击 Block
+ */
+typealias FormOperationButtonClickBlock = (view: View) -> Unit
+
+/**
  * 滑块文字格式化工具 Block
  */
 typealias FormSliderFormatter = (Float) -> String

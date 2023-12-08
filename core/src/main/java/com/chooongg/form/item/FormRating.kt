@@ -2,7 +2,6 @@ package com.chooongg.form.item
 
 import android.content.Context
 import androidx.annotation.FloatRange
-import androidx.annotation.StringRes
 import com.chooongg.form.FormAdapter
 import com.chooongg.form.FormColorStateListBlock
 import com.chooongg.form.FormUtils
@@ -11,10 +10,7 @@ import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.provider.FormRatingProvider
 import kotlin.reflect.KClass
 
-class FormRating : BaseForm {
-
-    constructor(name: CharSequence?, field: String?) : super(name, field)
-    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
+class FormRating(name: Any?, field: String?) : BaseForm(name, field) {
 
     /**
      * 星星数量

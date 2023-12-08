@@ -1,6 +1,5 @@
 package com.chooongg.form.item
 
-import androidx.annotation.StringRes
 import com.chooongg.form.FormAdapter
 import com.chooongg.form.FormColorStateListBlock
 import com.chooongg.form.provider.BaseFormProvider
@@ -9,10 +8,7 @@ import com.chooongg.form.typeset.BaseTypeset
 import com.chooongg.form.typeset.NoneTypeset
 import kotlin.reflect.KClass
 
-open class FormMenu : BaseForm {
-
-    constructor(name: CharSequence?, field: String?) : super(name, field)
-    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
+open class FormMenu(name: Any?, field: String?) : BaseForm(name, field) {
 
     /**
      * 图标

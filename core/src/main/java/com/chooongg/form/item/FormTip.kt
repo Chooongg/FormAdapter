@@ -1,7 +1,6 @@
 package com.chooongg.form.item
 
 import android.view.Gravity
-import androidx.annotation.StringRes
 import com.chooongg.form.FormAdapter
 import com.chooongg.form.FormColorStateListBlock
 import com.chooongg.form.provider.BaseFormProvider
@@ -10,10 +9,7 @@ import com.chooongg.form.typeset.BaseTypeset
 import com.chooongg.form.typeset.NoneTypeset
 import kotlin.reflect.KClass
 
-class FormTip : BaseForm {
-
-    constructor(name: CharSequence?, field: String?) : super(name, field)
-    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
+class FormTip(name: Any?, field: String?) : BaseForm(name, field) {
 
     /**
      * 启用顶部填充

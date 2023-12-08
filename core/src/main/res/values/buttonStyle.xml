@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Form.Button" parent="Widget.Material3.Button" />
+
+    <style name="Form.Button.ElevatedButton" parent="Widget.Material3.Button.ElevatedButton" />
+
+    <style name="Form.Button.UnelevatedButton" parent="Widget.Material3.Button.UnelevatedButton" />
+
+    <style name="Form.Button.PrimaryButton" parent="Widget.Material3.Button" />
+
+    <style name="Form.Button.PrimaryTextButton" parent="Widget.Material3.Button.TextButton" />
+
+    <style name="Form.Button.PrimaryTonalButton" parent="Widget.Material3.Button.TonalButton" />
+
+    <style name="Form.Button.PrimaryOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
+
+    <style name="Form.Button.SecondaryButton" parent="Widget.Material3.Button" />
+
+    <style name="Form.Button.TextButton" parent="Widget.Material3.Button.TextButton" />
+
+    <style name="Form.Button.TonalButton" parent="Widget.Material3.Button.TonalButton" />
+
+    <style name="Form.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
+
+    <style name="Form.Button.TertiaryButton" parent="Widget.Material3.Button" />
+
+    <style name="Form.Button.TertiaryTextButton" parent="Widget.Material3.Button.TextButton" />
+
+    <style name="Form.Button.TertiaryTonalButton" parent="Widget.Material3.Button.TonalButton" />
+
+    <style name="Form.Button.TertiaryOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
+
+    <style name="Form.Button.ErrorButton" parent="Widget.Material3.Button" />
+
+    <style name="Form.Button.ErrorTextButton" parent="Widget.Material3.Button.TextButton" />
+
+    <style name="Form.Button.ErrorTonalButton" parent="Widget.Material3.Button.TonalButton" />
+
+    <style name="Form.Button.ErrorOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
+
+</resources>

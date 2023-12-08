@@ -7,9 +7,12 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.chooongg.form.data.FormAdapterData
 import com.chooongg.form.data.FormDynamicPartData
 import com.chooongg.form.data.FormPartData
+import com.chooongg.form.enum.FormEnableMode
+import com.chooongg.form.enum.FormVisibilityMode
 import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.FormButton
+import com.chooongg.form.item.InternalFormOperationButton
 import com.chooongg.form.item.LinkageForm
 import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.part.FormDynamicPartAdapter
@@ -21,7 +24,7 @@ import com.chooongg.form.style.NotAlignmentStyle
 import com.chooongg.form.typeset.BaseTypeset
 import org.json.JSONObject
 
-open class FormAdapter(isEnabled: Boolean) :
+open class FormAdapter(isEnabled: Boolean = false) :
     RecyclerView.Adapter<ViewHolder>() {
 
     companion object {
@@ -37,7 +40,7 @@ open class FormAdapter(isEnabled: Boolean) :
 
     internal var recyclerView: RecyclerView? = null
 
-    private val operationPart = FormPartAdapter(this, NotAlignmentStyle())
+    private var operationPart: FormPartAdapter? = null
 
     var isEnabled: Boolean = isEnabled
         set(value) {
@@ -64,6 +67,8 @@ open class FormAdapter(isEnabled: Boolean) :
     private var menuClickListener: FormMenuClickGlobalBlock? = null
 
     private var itemClickListener: FormItemClickBlock? = null
+
+    private var operationClickListener:FormOperationButtonClickBlock? = null
 
     private val dataObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
@@ -93,7 +98,6 @@ open class FormAdapter(isEnabled: Boolean) :
 
     init {
         concatAdapter.registerAdapterDataObserver(dataObserver)
-        concatAdapter.addAdapter(operationPart)
     }
 
     fun setNewInstance(block: FormAdapterData.() -> Unit) {
@@ -102,21 +106,28 @@ open class FormAdapter(isEnabled: Boolean) :
         block(data)
         data.getParts().forEach {
             when (it) {
-                is FormPartAdapter -> addPart(it)
-                is FormDynamicPartAdapter -> addDynamicPart(it)
+                is FormPartAdapter -> addPart(it, false)
+                is FormDynamicPartAdapter -> addDynamicPart(it, false)
             }
         }
         if (refreshLinkageWhileCreate) refreshLinkage()
+        updateForm()
     }
 
-    fun configOperationButton(block: () -> FormButton?) {
-        operationPart.create {
-            val button = block.invoke()
-            if (button == null) {
-                isEnablePart = false
-            } else {
-                addItem(button)
-            }
+    fun showOperationButton(style: BaseStyle = NotAlignmentStyle(), block: FormButton.() -> Unit) {
+        operationPart = addPart(style) {
+            addItem(InternalFormOperationButton("").apply {
+                visibilityMode = FormVisibilityMode.ENABLED
+                enableMode = FormEnableMode.ALWAYS
+                block.invoke(this)
+            })
+        }
+    }
+
+    fun removeOperationButton() {
+        if (operationPart != null) {
+            concatAdapter.removeAdapter(operationPart!!)
+            operationPart = null
         }
     }
 
@@ -182,6 +193,15 @@ open class FormAdapter(isEnabled: Boolean) :
     }
 
     fun getOnItemClickListener() = itemClickListener
+
+    /**
+     * 设置操作点击事件
+     */
+    fun setOnOperationButtonClickListener(block:FormOperationButtonClickBlock?){
+        operationClickListener = block
+    }
+
+    fun getOnOperationButtonClickListener() = operationClickListener
 
     //</editor-fold>
 
@@ -320,36 +340,40 @@ open class FormAdapter(isEnabled: Boolean) :
     fun addPart(
         style: BaseStyle = NoneStyle(),
         block: FormPartData.() -> Unit
-    ) {
+    ): FormPartAdapter {
         val adapter = FormPartAdapter(this, style)
-        addPart(adapter)
         adapter.create { block(this) }
+        addPart(adapter)
+        return adapter
     }
 
-    fun addPart(adapter: FormPartAdapter?) {
+    fun addPart(adapter: FormPartAdapter?, update: Boolean = true) {
         if (adapter != null) {
             adapter.executeUpdate(true)
-            if (concatAdapter.adapters.isNotEmpty()) {
+            if (operationPart != null) {
                 concatAdapter.addAdapter(concatAdapter.adapters.size - 1, adapter)
             } else concatAdapter.addAdapter(adapter)
+            if (update) adapter.executeUpdate(true)
         }
     }
 
     fun addDynamicPart(
         style: BaseStyle = NoneStyle(),
         block: FormDynamicPartData.() -> Unit
-    ) {
+    ): FormDynamicPartAdapter {
         val adapter = FormDynamicPartAdapter(this, style)
         adapter.create { block(this) }
         addDynamicPart(adapter)
+        return adapter
     }
 
-    fun addDynamicPart(adapter: FormDynamicPartAdapter?) {
+    fun addDynamicPart(adapter: FormDynamicPartAdapter?, update: Boolean = true) {
         if (adapter != null) {
             adapter.executeUpdate(true)
-            if (concatAdapter.adapters.isNotEmpty()) {
+            if (operationPart != null) {
                 concatAdapter.addAdapter(concatAdapter.adapters.size - 1, adapter)
             } else concatAdapter.addAdapter(adapter)
+            if (update) adapter.executeUpdate(true)
         }
     }
 

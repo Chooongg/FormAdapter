@@ -1,6 +1,5 @@
 package com.chooongg.form.item
 
-import androidx.annotation.StringRes
 import com.chooongg.form.FormAdapter
 import com.chooongg.form.FormColorStateListBlock
 import com.chooongg.form.FormItemClickBlock
@@ -11,10 +10,7 @@ import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.provider.FormInputProvider
 import kotlin.reflect.KClass
 
-open class FormInput : BaseOptionForm<CharSequence> {
-
-    constructor(name: CharSequence?, field: String?) : super(name, field)
-    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
+open class FormInput(name: Any?, field: String?) : BaseOptionForm<CharSequence>(name, field) {
 
     /**
      * 输入模式

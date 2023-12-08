@@ -31,17 +31,6 @@
 
     <style name="Form.TextAppearance.Counter" parent="TextAppearance.MaterialComponents.Overline" />
 
-    <style name="Form.Button" parent="Widget.Material3.Button" />
-
-    <style name="Form.Button.TextButton" parent="Widget.Material3.Button.TextButton" />
-
-    <style name="Form.Button.TonalButton" parent="Widget.Material3.Button.TonalButton" />
-
-    <style name="Form.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
-
-    <style name="Form.Button.ElevatedButton" parent="Widget.Material3.Button.ElevatedButton" />
-
-    <style name="Form.Button.UnelevatedButton" parent="Widget.Material3.Button.UnelevatedButton" />
 
     <style name="Form.ShapeAppearance.Search" parent="ShapeAppearance.Material3.Corner.Full" />
 

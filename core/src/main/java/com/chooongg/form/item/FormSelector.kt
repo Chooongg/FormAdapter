@@ -1,7 +1,6 @@
 package com.chooongg.form.item
 
 import android.content.Context
-import androidx.annotation.StringRes
 import com.chooongg.form.FormAdapter
 import com.chooongg.form.FormUtils
 import com.chooongg.form.enum.FormSelectorOpenMode
@@ -12,10 +11,7 @@ import com.chooongg.form.provider.FormSelectorProvider
 import org.json.JSONObject
 import kotlin.reflect.KClass
 
-class FormSelector : BaseOptionForm<IOption> {
-
-    constructor(name: CharSequence?, field: String?) : super(name, field)
-    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
+class FormSelector(name: Any?, field: String?) : BaseOptionForm<IOption>(name, field) {
 
     /**
      * 打开模式

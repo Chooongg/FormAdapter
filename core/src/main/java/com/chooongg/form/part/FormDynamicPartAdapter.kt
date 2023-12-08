@@ -17,7 +17,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
 
     internal var data = FormDynamicPartData()
 
-    private val addButton = InternalFormDynamicAddButton(null, null)
+    private val addButton = InternalFormDynamicAddButton()
 
     fun create(data: FormDynamicPartData.() -> Unit) {
         create(FormDynamicPartData().apply(data))

@@ -2,7 +2,6 @@ package com.chooongg.form.item
 
 import android.view.Gravity
 import androidx.annotation.GravityInt
-import androidx.annotation.StringRes
 import com.chooongg.form.FormAdapter
 import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.provider.FormInputOutlinedProvider
@@ -10,10 +9,7 @@ import com.chooongg.form.typeset.BaseTypeset
 import com.chooongg.form.typeset.NoneTypeset
 import kotlin.reflect.KClass
 
-open class FormInputOutlined : FormInput {
-
-    constructor(name: CharSequence?, field: String?) : super(name, field)
-    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
+open class FormInputOutlined(name: Any?, field: String?) : FormInput(name, field) {
 
     override var typeset: BaseTypeset? = NoneTypeset()
 

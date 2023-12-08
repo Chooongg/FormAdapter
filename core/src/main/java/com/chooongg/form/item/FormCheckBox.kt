@@ -1,7 +1,6 @@
 package com.chooongg.form.item
 
 import androidx.annotation.IntRange
-import androidx.annotation.StringRes
 import com.chooongg.form.FormAdapter
 import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.option.IOption
@@ -12,7 +11,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.reflect.KClass
 
-open class FormCheckBox : BaseOptionForm<IOption> {
+open class FormCheckBox(name: Any?, field: String?) : BaseOptionForm<IOption>(name, field) {
 
     /**
      * 最少选择数量
@@ -25,9 +24,6 @@ open class FormCheckBox : BaseOptionForm<IOption> {
      */
     @IntRange(from = 1)
     var maxSelectCount: Int = Int.MAX_VALUE
-
-    constructor(name: CharSequence?, field: String?) : super(name, field)
-    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     override fun hasOpenOperation() = false
 

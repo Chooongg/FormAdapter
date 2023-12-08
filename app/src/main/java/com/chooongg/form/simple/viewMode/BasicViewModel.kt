@@ -39,7 +39,7 @@ class BasicViewModel : ViewModel() {
 
     init {
         adapter.setNewInstance {
-            initCardOutlinedPart {
+            initCardOutlinedPart("Default") {
                 addButton("Button(Tonal)", "button") {
                     buttonStyle = FormButton.ButtonStyle.TONAL
                     icon = R.drawable.ic_main_advanced
@@ -215,6 +215,10 @@ class BasicViewModel : ViewModel() {
                     bubbleText = "v1.0.0"
                 }
             }
+        }
+        adapter.showOperationButton {
+            visibilityMode = FormVisibilityMode.ALWAYS
+            name = "Operation"
         }
     }
 }

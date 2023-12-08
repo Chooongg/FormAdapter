@@ -4,7 +4,6 @@ import android.content.Context
 import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
 import androidx.annotation.IntDef
-import androidx.annotation.StringRes
 import com.chooongg.form.FormAdapter
 import com.chooongg.form.FormUtils
 import com.chooongg.form.enum.FormTimeMode
@@ -15,15 +14,12 @@ import com.google.android.material.timepicker.TimeFormat
 import org.json.JSONObject
 import java.util.Locale
 
-class FormTime : BaseForm {
+class FormTime(name: Any?, field: String?) : BaseForm(name, field) {
 
     companion object {
         const val INPUT_MODE_SELECT = 0
         const val INPUT_MODE_TEXT = 1
     }
-
-    constructor(name: CharSequence?, field: String?) : super(name, field)
-    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     @IntDef(INPUT_MODE_SELECT, INPUT_MODE_TEXT)
     annotation class InputMode

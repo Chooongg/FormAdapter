@@ -16,6 +16,7 @@ import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.InternalFormNone
+import com.chooongg.form.item.InternalFormOperationButton
 import com.chooongg.form.item.VariantForm
 import com.chooongg.form.provider.InternalFormNoneProvider
 import com.chooongg.form.style.BaseStyle
@@ -264,6 +265,10 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
     abstract fun executeOutput(json: JSONObject)
 
     open fun onItemClick(item: BaseForm, view: View) {
+        if (item is InternalFormOperationButton) {
+            formAdapter.getOnOperationButtonClickListener()?.invoke(view)
+            return
+        }
         formAdapter.getOnItemClickListener()?.invoke(item, view)
     }
 

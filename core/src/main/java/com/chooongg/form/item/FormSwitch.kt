@@ -1,7 +1,6 @@
 package com.chooongg.form.item
 
 import android.content.Context
-import androidx.annotation.StringRes
 import com.chooongg.form.FormAdapter
 import com.chooongg.form.FormUtils
 import com.chooongg.form.provider.BaseFormProvider
@@ -9,7 +8,7 @@ import com.chooongg.form.provider.FormSwitchProvider
 import org.json.JSONObject
 import kotlin.reflect.KClass
 
-class FormSwitch : BaseForm {
+class FormSwitch(name: Any?, field: String?) : BaseForm(name, field) {
 
     /**
      * 值为空时
@@ -25,9 +24,6 @@ class FormSwitch : BaseForm {
      * 自定义输出(假)
      */
     var customFalseValue: Any? = null
-
-    constructor(name: CharSequence?, field: String?) : super(name, field)
-    constructor(@StringRes nameRes: Int?, field: String?) : super(nameRes, field)
 
     override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =
         FormSwitchProvider::class
