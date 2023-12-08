@@ -9,6 +9,7 @@ import com.chooongg.form.data.FormDynamicPartData
 import com.chooongg.form.data.FormPartData
 import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.item.BaseForm
+import com.chooongg.form.item.FormButton
 import com.chooongg.form.item.LinkageForm
 import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.part.FormDynamicPartAdapter
@@ -16,6 +17,7 @@ import com.chooongg.form.part.FormPartAdapter
 import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.style.BaseStyle
 import com.chooongg.form.style.NoneStyle
+import com.chooongg.form.style.NotAlignmentStyle
 import com.chooongg.form.typeset.BaseTypeset
 import org.json.JSONObject
 
@@ -34,6 +36,8 @@ open class FormAdapter(isEnabled: Boolean) :
     val partAdapters get() = concatAdapter.adapters.map { it as BaseFormPartAdapter }
 
     internal var recyclerView: RecyclerView? = null
+
+    private val operationPart = FormPartAdapter(this, NotAlignmentStyle())
 
     var isEnabled: Boolean = isEnabled
         set(value) {
@@ -89,6 +93,7 @@ open class FormAdapter(isEnabled: Boolean) :
 
     init {
         concatAdapter.registerAdapterDataObserver(dataObserver)
+        concatAdapter.addAdapter(operationPart)
     }
 
     fun setNewInstance(block: FormAdapterData.() -> Unit) {
@@ -102,6 +107,17 @@ open class FormAdapter(isEnabled: Boolean) :
             }
         }
         if (refreshLinkageWhileCreate) refreshLinkage()
+    }
+
+    fun configOperationButton(block: () -> FormButton?) {
+        operationPart.create {
+            val button = block.invoke()
+            if (button == null) {
+                isEnablePart = false
+            } else {
+                addItem(button)
+            }
+        }
     }
 
     fun getPartAdapter(position: Int): BaseFormPartAdapter {
@@ -313,7 +329,9 @@ open class FormAdapter(isEnabled: Boolean) :
     fun addPart(adapter: FormPartAdapter?) {
         if (adapter != null) {
             adapter.executeUpdate(true)
-            concatAdapter.addAdapter(adapter)
+            if (concatAdapter.adapters.isNotEmpty()) {
+                concatAdapter.addAdapter(concatAdapter.adapters.size - 1, adapter)
+            } else concatAdapter.addAdapter(adapter)
         }
     }
 
@@ -329,7 +347,9 @@ open class FormAdapter(isEnabled: Boolean) :
     fun addDynamicPart(adapter: FormDynamicPartAdapter?) {
         if (adapter != null) {
             adapter.executeUpdate(true)
-            concatAdapter.addAdapter(adapter)
+            if (concatAdapter.adapters.isNotEmpty()) {
+                concatAdapter.addAdapter(concatAdapter.adapters.size - 1, adapter)
+            } else concatAdapter.addAdapter(adapter)
         }
     }
 

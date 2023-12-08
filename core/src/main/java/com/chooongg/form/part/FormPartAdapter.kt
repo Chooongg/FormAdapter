@@ -11,7 +11,7 @@ import org.json.JSONObject
 class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     BaseFormPartAdapter(formAdapter, style) {
 
-    internal var data = FormPartData()
+    internal var data = FormPartData().apply { isEnablePart = false }
 
     fun create(data: FormPartData.() -> Unit) {
         create(FormPartData().apply(data))
