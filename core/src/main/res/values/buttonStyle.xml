@@ -7,36 +7,112 @@
 
     <style name="Form.Button.UnelevatedButton" parent="Widget.Material3.Button.UnelevatedButton" />
 
-    <style name="Form.Button.PrimaryButton" parent="Widget.Material3.Button" />
-
-    <style name="Form.Button.PrimaryTextButton" parent="Widget.Material3.Button.TextButton" />
-
-    <style name="Form.Button.PrimaryTonalButton" parent="Widget.Material3.Button.TonalButton" />
-
-    <style name="Form.Button.PrimaryOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
-
-    <style name="Form.Button.SecondaryButton" parent="Widget.Material3.Button" />
+    <style name="Form.Button.PrimaryButton" parent="Widget.Material3.Button">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.Primary</item>
+    </style>
 
     <style name="Form.Button.TextButton" parent="Widget.Material3.Button.TextButton" />
 
+    <style name="Form.Button.PrimaryTonalButton" parent="Widget.Material3.Button.TonalButton">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.PrimaryTonal</item>
+    </style>
+
+    <style name="Form.Button.PrimaryOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
+
+    <style name="Form.Button.SecondaryButton" parent="Widget.Material3.Button">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.Secondary</item>
+    </style>
+
+    <style name="Form.Button.SecondaryTextButton" parent="Widget.Material3.Button.TextButton">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.SecondaryText</item>
+    </style>
+
     <style name="Form.Button.TonalButton" parent="Widget.Material3.Button.TonalButton" />
 
-    <style name="Form.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
+    <style name="Form.Button.OutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.SecondaryText</item>
+    </style>
 
-    <style name="Form.Button.TertiaryButton" parent="Widget.Material3.Button" />
+    <style name="Form.Button.TertiaryButton" parent="Widget.Material3.Button">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.Tertiary</item>
+    </style>
 
-    <style name="Form.Button.TertiaryTextButton" parent="Widget.Material3.Button.TextButton" />
+    <style name="Form.Button.TertiaryTextButton" parent="Widget.Material3.Button.TextButton">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.TertiaryText</item>
+    </style>
 
-    <style name="Form.Button.TertiaryTonalButton" parent="Widget.Material3.Button.TonalButton" />
+    <style name="Form.Button.TertiaryTonalButton" parent="Widget.Material3.Button.TonalButton">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.TertiaryTonal</item>
+    </style>
 
-    <style name="Form.Button.TertiaryOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
+    <style name="Form.Button.TertiaryOutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.TertiaryText</item>
+    </style>
 
-    <style name="Form.Button.ErrorButton" parent="Widget.Material3.Button" />
+    <style name="Form.Button.ErrorButton" parent="Widget.Material3.Button">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.Error</item>
+    </style>
 
-    <style name="Form.Button.ErrorTextButton" parent="Widget.Material3.Button.TextButton" />
+    <style name="Form.Button.ErrorTextButton" parent="Widget.Material3.Button.TextButton">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.ErrorText</item>
+    </style>
 
-    <style name="Form.Button.ErrorTonalButton" parent="Widget.Material3.Button.TonalButton" />
+    <style name="Form.Button.ErrorTonalButton" parent="Widget.Material3.Button.TonalButton">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.ErrorTonal</item>
+    </style>
 
-    <style name="Form.Button.ErrorOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
+    <style name="Form.Button.ErrorOutlinedButton" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="materialThemeOverlay">@style/Form.ThemeOverlay.Button.ErrorText</item>
+    </style>
+
+    <style name="Form.ThemeOverlay.Button.Primary" parent="">
+        <item name="colorOnContainer">?attr/colorOnPrimary</item>
+        <item name="colorContainer">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Form.ThemeOverlay.Button.PrimaryTonal" parent="">
+        <item name="colorOnContainer">?attr/colorOnPrimaryContainer</item>
+        <item name="colorContainer">?attr/colorPrimaryContainer</item>
+    </style>
+
+    <style name="Form.ThemeOverlay.Button.Secondary" parent="">
+        <item name="colorOnContainer">?attr/colorOnSecondary</item>
+        <item name="colorContainer">?attr/colorSecondary</item>
+    </style>
+
+    <style name="Form.ThemeOverlay.Button.SecondaryText" parent="">
+        <item name="colorOnContainer">?attr/colorSecondary</item>
+        <item name="colorContainer">@android:color/transparent</item>
+    </style>
+
+    <style name="Form.ThemeOverlay.Button.Tertiary" parent="">
+        <item name="colorOnContainer">?attr/colorOnTertiary</item>
+        <item name="colorContainer">?attr/colorTertiary</item>
+    </style>
+
+    <style name="Form.ThemeOverlay.Button.TertiaryText" parent="">
+        <item name="colorOnContainer">?attr/colorTertiary</item>
+        <item name="colorContainer">@android:color/transparent</item>
+    </style>
+
+    <style name="Form.ThemeOverlay.Button.TertiaryTonal" parent="">
+        <item name="colorOnContainer">?attr/colorOnTertiaryContainer</item>
+        <item name="colorContainer">?attr/colorTertiaryContainer</item>
+    </style>
+
+    <style name="Form.ThemeOverlay.Button.Error" parent="">
+        <item name="colorOnContainer">?attr/colorOnError</item>
+        <item name="colorContainer">?attr/colorError</item>
+    </style>
+
+    <style name="Form.ThemeOverlay.Button.ErrorText" parent="">
+        <item name="colorOnContainer">?attr/colorError</item>
+        <item name="colorContainer">@android:color/transparent</item>
+    </style>
+
+    <style name="Form.ThemeOverlay.Button.ErrorTonal" parent="">
+        <item name="colorOnContainer">?attr/colorOnErrorContainer</item>
+        <item name="colorContainer">?attr/colorErrorContainer</item>
+    </style>
 
 </resources>

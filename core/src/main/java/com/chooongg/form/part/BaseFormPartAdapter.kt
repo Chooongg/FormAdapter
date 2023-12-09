@@ -162,12 +162,15 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             }
             tempList2.add(tempGroup)
         }
+        var localPosition = 0
         tempList2.forEachIndexed { index, group ->
             group.forEachIndexed { position, item ->
                 item.groupCount = tempList.size - extraGroupsCount
                 item.groupIndex = index
                 item.countInGroup = group.size
                 item.positionInGroup = position
+                item.localPosition = localPosition
+                localPosition++
             }
         }
         asyncDiffer.submitList(ArrayList<BaseForm>().apply { tempList2.forEach { addAll(it) } }) {
@@ -413,10 +416,6 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
             .onViewDetachedFromWindow(holder, holder.typesetLayout)
         formAdapter.getProvider4ItemViewType(holder.itemViewType)
             .onViewDetachedFromWindow(holder, holder.view)
-    }
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
     }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {

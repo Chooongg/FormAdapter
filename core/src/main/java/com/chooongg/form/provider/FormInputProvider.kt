@@ -22,8 +22,8 @@ import androidx.core.view.updatePadding
 import androidx.core.widget.doAfterTextChanged
 import com.chooongg.form.FormUtils
 import com.chooongg.form.FormViewHolder
-import com.chooongg.form.core.R
 import com.chooongg.form.boundary.Boundary
+import com.chooongg.form.core.R
 import com.chooongg.form.formTextAppearance
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.BaseOptionForm

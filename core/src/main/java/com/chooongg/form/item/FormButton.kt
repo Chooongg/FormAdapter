@@ -14,8 +14,8 @@ open class FormButton(name: Any?, field: String?) : BaseForm(name, field) {
 
     enum class ButtonStyle {
         ELEVATED, UN_ELEVATED,
-        PRIMARY, PRIMARY_TONAL, PRIMARY_TEXT, PRIMARY_OUTLINED,
-        SECONDARY, TONAL, TEXT, OUTLINED,
+        PRIMARY, PRIMARY_TONAL, TEXT, PRIMARY_OUTLINED,
+        SECONDARY, TONAL, SECONDARY_TEXT, OUTLINED,
         TERTIARY, TERTIARY_TONAL, TERTIARY_TEXT, TERTIARY_OUTLINED,
         ERROR, ERROR_TONAL, ERROR_TEXT, ERROR_OUTLINED,
         CUSTOM1, CUSTOM2, CUSTOM3
@@ -51,6 +51,11 @@ open class FormButton(name: Any?, field: String?) : BaseForm(name, field) {
      * 文本重力
      */
     var textGravity: Int? = null
+
+    /**
+     * 高程
+     */
+    var elevation: Float? = null
 
     override var typeset: BaseTypeset? = NoneTypeset()
 

@@ -84,7 +84,7 @@ open class FormButtonProvider : BaseFormProvider() {
         view.rippleColor = wrap.obtainStyledAttributes(
             style, intArrayOf(com.google.android.material.R.attr.rippleColor)
         ).use { it.getColorStateList(0) }
-        view.elevation = wrap.obtainStyledAttributes(
+        view.elevation = itemButton?.elevation ?: wrap.obtainStyledAttributes(
             style, intArrayOf(com.google.android.material.R.attr.elevation)
         ).use { it.getDimension(0, 0f) }
         view.shapeAppearanceModel =
@@ -100,7 +100,7 @@ open class FormButtonProvider : BaseFormProvider() {
         val stateListId = wrap.obtainStyledAttributes(
             style, intArrayOf(android.R.attr.stateListAnimator)
         ).use { it.getResourceId(0, 0) }
-        view.stateListAnimator = if (stateListId != 0) {
+        view.stateListAnimator = if (stateListId != 0 && itemButton?.elevation == null) {
             AnimatorInflater.loadStateListAnimator(wrap, stateListId)
         } else null
     }
@@ -153,11 +153,11 @@ open class FormButtonProvider : BaseFormProvider() {
             FormButton.ButtonStyle.UN_ELEVATED -> R.attr.formButtonUnelevatedStyle
             FormButton.ButtonStyle.PRIMARY -> R.attr.formButtonPrimaryStyle
             FormButton.ButtonStyle.PRIMARY_TONAL -> R.attr.formButtonPrimaryTonalStyle
-            FormButton.ButtonStyle.PRIMARY_TEXT -> R.attr.formButtonPrimaryTextStyle
+            FormButton.ButtonStyle.TEXT -> R.attr.formButtonTextStyle
             FormButton.ButtonStyle.PRIMARY_OUTLINED -> R.attr.formButtonPrimaryOutlinedStyle
             FormButton.ButtonStyle.SECONDARY -> R.attr.formButtonSecondaryStyle
+            FormButton.ButtonStyle.SECONDARY_TEXT -> R.attr.formButtonSecondaryTextStyle
             FormButton.ButtonStyle.TONAL -> R.attr.formButtonTonalStyle
-            FormButton.ButtonStyle.TEXT -> R.attr.formButtonTextStyle
             FormButton.ButtonStyle.OUTLINED -> R.attr.formButtonOutlinedStyle
             FormButton.ButtonStyle.TERTIARY -> R.attr.formButtonTertiaryStyle
             FormButton.ButtonStyle.TERTIARY_TONAL -> R.attr.formButtonTertiaryTonalStyle
@@ -177,11 +177,11 @@ open class FormButtonProvider : BaseFormProvider() {
             FormButton.ButtonStyle.UN_ELEVATED -> R.style.Form_Button_UnelevatedButton
             FormButton.ButtonStyle.PRIMARY -> R.style.Form_Button_PrimaryButton
             FormButton.ButtonStyle.PRIMARY_TONAL -> R.style.Form_Button_PrimaryTonalButton
-            FormButton.ButtonStyle.PRIMARY_TEXT -> R.style.Form_Button_PrimaryTextButton
+            FormButton.ButtonStyle.TEXT -> R.style.Form_Button_TextButton
             FormButton.ButtonStyle.PRIMARY_OUTLINED -> R.style.Form_Button_PrimaryOutlinedButton
             FormButton.ButtonStyle.SECONDARY -> R.style.Form_Button_SecondaryButton
             FormButton.ButtonStyle.TONAL -> R.style.Form_Button_TonalButton
-            FormButton.ButtonStyle.TEXT -> R.style.Form_Button_TextButton
+            FormButton.ButtonStyle.SECONDARY_TEXT -> R.style.Form_Button_SecondaryTextButton
             FormButton.ButtonStyle.OUTLINED -> R.style.Form_Button_OutlinedButton
             FormButton.ButtonStyle.TERTIARY -> R.style.Form_Button_TertiaryButton
             FormButton.ButtonStyle.TERTIARY_TONAL -> R.style.Form_Button_TertiaryTonalButton

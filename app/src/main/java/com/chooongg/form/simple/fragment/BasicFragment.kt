@@ -44,7 +44,7 @@ class BasicFragment : BaseFragment() {
     override fun output() {
         if (model.adapter.executeDataVerification()) {
             val output = model.adapter.executeOutput()
-            model.adapter.updateItemOfField("output", update = true, hasPayload = true) {
+            model.adapter.updateItemOfField("output", true) {
                 content = output.toString(4)
             }
         }

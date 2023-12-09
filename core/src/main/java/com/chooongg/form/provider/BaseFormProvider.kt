@@ -97,11 +97,8 @@ abstract class BaseFormProvider {
         field: String?,
         content: Any?
     ) {
-        item.getLinkageBlock()?.invoke(
-            LinkageForm(holder.bindingAdapter as? BaseFormPartAdapter),
-            field,
-            content
-        )
+        val adapter = holder.bindingAdapter as? BaseFormPartAdapter ?: return
+        item.getLinkageBlock()?.invoke(LinkageForm(adapter), field, content)
     }
 
     protected fun loadOption(holder: FormViewHolder, item: BaseForm?) {

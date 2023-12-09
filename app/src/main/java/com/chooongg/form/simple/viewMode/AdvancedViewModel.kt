@@ -120,7 +120,7 @@ class AdvancedViewModel : ViewModel() {
                 }
             }
             initCardOutlinedPart("Linkage") {
-                addSelector("Selector") {
+                addSelector("Selector","selector") {
                     options = listOf(Option("Item1"), Option("Item2"), Option("Item3"))
                     setLinkage { linkage, _, content ->
                         linkage.updateItem("linkageText") {
@@ -139,20 +139,68 @@ class AdvancedViewModel : ViewModel() {
             }
             initCardOutlinedPart("Button") {
                 addButton("Default")
-                addButton("Text") {
-                    buttonStyle = FormButton.ButtonStyle.TEXT
-                }
-                addButton("Tonal") {
-                    buttonStyle = FormButton.ButtonStyle.TONAL
-                }
-                addButton("Outlined") {
-                    buttonStyle = FormButton.ButtonStyle.OUTLINED
-                }
                 addButton("Elevated") {
                     buttonStyle = FormButton.ButtonStyle.ELEVATED
                 }
                 addButton("UnElevated") {
                     buttonStyle = FormButton.ButtonStyle.UN_ELEVATED
+                }
+                addButton("Primary") {
+                    buttonStyle = FormButton.ButtonStyle.PRIMARY
+                }
+                addButton("PrimaryTonal") {
+                    buttonStyle = FormButton.ButtonStyle.PRIMARY_TONAL
+                }
+                addButton("Text") {
+                    buttonStyle = FormButton.ButtonStyle.TEXT
+                }
+                addButton("PrimaryOutlined") {
+                    buttonStyle = FormButton.ButtonStyle.PRIMARY_OUTLINED
+                }
+                addButton("Secondary") {
+                    buttonStyle = FormButton.ButtonStyle.SECONDARY
+                }
+                addButton("Tonal") {
+                    buttonStyle = FormButton.ButtonStyle.TONAL
+                }
+                addButton("SecondaryText") {
+                    buttonStyle = FormButton.ButtonStyle.SECONDARY_TEXT
+                }
+                addButton("Outlined") {
+                    buttonStyle = FormButton.ButtonStyle.OUTLINED
+                }
+                addButton("Tertiary") {
+                    buttonStyle = FormButton.ButtonStyle.TERTIARY
+                }
+                addButton("TertiaryTonal") {
+                    buttonStyle = FormButton.ButtonStyle.TERTIARY_TONAL
+                }
+                addButton("TertiaryText") {
+                    buttonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
+                }
+                addButton("TertiaryOutlined") {
+                    buttonStyle = FormButton.ButtonStyle.TERTIARY_OUTLINED
+                }
+                addButton("Error") {
+                    buttonStyle = FormButton.ButtonStyle.ERROR
+                }
+                addButton("ErrorTonal") {
+                    buttonStyle = FormButton.ButtonStyle.ERROR_TONAL
+                }
+                addButton("ErrorText") {
+                    buttonStyle = FormButton.ButtonStyle.ERROR_TEXT
+                }
+                addButton("ErrorOutlined") {
+                    buttonStyle = FormButton.ButtonStyle.ERROR_OUTLINED
+                }
+                addButton("Custom1") {
+                    buttonStyle = FormButton.ButtonStyle.CUSTOM1
+                }
+                addButton("Custom2") {
+                    buttonStyle = FormButton.ButtonStyle.CUSTOM2
+                }
+                addButton("Custom3") {
+                    buttonStyle = FormButton.ButtonStyle.CUSTOM3
                 }
                 addButton("Gravity Start") {
                     gravity = Gravity.START

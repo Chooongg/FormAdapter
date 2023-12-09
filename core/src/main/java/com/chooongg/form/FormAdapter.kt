@@ -68,7 +68,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
 
     private var itemClickListener: FormItemClickBlock? = null
 
-    private var operationClickListener:FormOperationButtonClickBlock? = null
+    private var operationClickListener: FormOperationButtonClickBlock? = null
 
     private val dataObserver = object : RecyclerView.AdapterDataObserver() {
         override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
@@ -197,7 +197,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
     /**
      * 设置操作点击事件
      */
-    fun setOnOperationButtonClickListener(block:FormOperationButtonClickBlock?){
+    fun setOnOperationButtonClickListener(block: FormOperationButtonClickBlock?) {
         operationClickListener = block
     }
 
@@ -227,7 +227,6 @@ open class FormAdapter(isEnabled: Boolean = false) :
 
     fun updateItemOfField(
         field: String,
-        update: Boolean = true,
         hasPayload: Boolean = true,
         block: BaseForm.() -> Unit
     ): Boolean {
@@ -235,9 +234,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
             val item = it.findOfField(field)
             if (item != null) {
                 block.invoke(item)
-                if (update) {
-                    if (hasPayload) it.notifyChangeItem(item, true) else it.update()
-                }
+                if (hasPayload) it.notifyChangeItem(item, true) else it.update()
                 return true
             }
         }
@@ -349,7 +346,6 @@ open class FormAdapter(isEnabled: Boolean = false) :
 
     fun addPart(adapter: FormPartAdapter?, update: Boolean = true) {
         if (adapter != null) {
-            adapter.executeUpdate(true)
             if (operationPart != null) {
                 concatAdapter.addAdapter(concatAdapter.adapters.size - 1, adapter)
             } else concatAdapter.addAdapter(adapter)
@@ -369,7 +365,6 @@ open class FormAdapter(isEnabled: Boolean = false) :
 
     fun addDynamicPart(adapter: FormDynamicPartAdapter?, update: Boolean = true) {
         if (adapter != null) {
-            adapter.executeUpdate(true)
             if (operationPart != null) {
                 concatAdapter.addAdapter(concatAdapter.adapters.size - 1, adapter)
             } else concatAdapter.addAdapter(adapter)

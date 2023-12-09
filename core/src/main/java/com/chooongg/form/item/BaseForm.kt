@@ -140,6 +140,12 @@ abstract class BaseForm(
         internal set
 
     /**
+     * 本地位置
+     */
+    var localPosition: Int = -1
+        internal set
+
+    /**
      * Part 组数量
      */
     var groupCount = -1
@@ -197,6 +203,7 @@ abstract class BaseForm(
 
     internal fun resetInternalValues() {
         globalPosition = -1
+        localPosition = -1
         groupCount = -1
         groupIndex = -1
         countInGroup = -1

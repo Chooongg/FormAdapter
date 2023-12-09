@@ -19,11 +19,11 @@
     <attr name="formButtonUnelevatedStyle" format="reference" />
     <attr name="formButtonPrimaryStyle" format="reference" />
     <attr name="formButtonPrimaryTonalStyle" format="reference" />
-    <attr name="formButtonPrimaryTextStyle" format="reference" />
+    <attr name="formButtonTextStyle" format="reference" />
     <attr name="formButtonPrimaryOutlinedStyle" format="reference" />
     <attr name="formButtonSecondaryStyle" format="reference" />
     <attr name="formButtonTonalStyle" format="reference" />
-    <attr name="formButtonTextStyle" format="reference" />
+    <attr name="formButtonSecondaryTextStyle" format="reference" />
     <attr name="formButtonOutlinedStyle" format="reference" />
     <attr name="formButtonTertiaryStyle" format="reference" />
     <attr name="formButtonTertiaryTonalStyle" format="reference" />
