@@ -426,15 +426,6 @@ open class FormAdapter(isEnabled: Boolean = false) :
             recyclerView.layoutManager = layoutManager
         }
         columnCount = (recyclerView.layoutManager as FormLayoutManager).columnCount
-        var hasAddItemDecoration = true
-        if (recyclerView.itemDecorationCount > 0) {
-            for (i in 0 until recyclerView.itemDecorationCount) {
-                if (recyclerView.getItemDecorationAt(i) is FormItemDecoration) {
-                    hasAddItemDecoration = false
-                }
-            }
-        }
-        if (hasAddItemDecoration) recyclerView.addItemDecoration(FormItemDecoration())
         this.recyclerView = recyclerView
     }
 

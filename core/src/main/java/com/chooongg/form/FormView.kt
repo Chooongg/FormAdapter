@@ -15,7 +15,6 @@ class FormView @JvmOverloads constructor(
     init {
         clipChildren = false
         clipToPadding = false
-//        itemAnimator = FormItemAnimator()
         val a = context.obtainStyledAttributes(attrs, R.styleable.FormView, defStyleAttr, 0)
         val formMarginStart = a.getDimensionPixelSize(
             R.styleable.FormView_formMarginStart,
@@ -33,6 +32,7 @@ class FormView @JvmOverloads constructor(
         layoutManager = FormLayoutManager(context, maxItemWidth).apply {
             setFormMargin(formMarginStart, formMarginEnd)
         }
+        addItemDecoration(FormItemDecoration())
         addOnScrollListener(object : OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 when (newState) {

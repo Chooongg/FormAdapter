@@ -18,6 +18,11 @@ class FormSelector(name: Any?, field: String?) : BaseOptionForm<IOption>(name, f
      */
     var openMode: FormSelectorOpenMode = FormSelectorOpenMode.AUTO
 
+    /**
+     * 是否包含空选项
+     */
+    var isEmptyOption: Boolean = true
+
     override fun hasOpenOperation() = true
 
     override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> =

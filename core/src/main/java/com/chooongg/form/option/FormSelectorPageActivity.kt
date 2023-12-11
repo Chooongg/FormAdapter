@@ -67,7 +67,7 @@ class FormSelectorPageActivity : AppCompatActivity() {
             finishAfterTransition()
             return
         }
-        if (Controller.formSelector?.required == false) {
+        if (Controller.formSelector?.required == false && Controller.formSelector?.isEmptyOption != false) {
             val nullAdapter = NullAdapter(FormUtils.getText(this, Controller.formSelector?.hint)) {
                 Controller.resultBlock?.invoke(it)
                 finishAfterTransition()

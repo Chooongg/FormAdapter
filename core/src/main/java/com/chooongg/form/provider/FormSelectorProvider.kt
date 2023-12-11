@@ -175,7 +175,7 @@ class FormSelectorProvider : BaseFormProvider() {
         val popupMenu = PopupMenu(view.context, view)
         popupMenu.gravity =
             if (gravity and Gravity.END == Gravity.END) Gravity.END else Gravity.START
-        if (!item.required) {
+        if (!item.required && item.isEmptyOption) {
             popupMenu.menu.add(0, 0, 0, SpannableString(view.hint ?: "").apply {
                 setSpan(
                     ForegroundColorSpan(view.hintTextColors.defaultColor),
