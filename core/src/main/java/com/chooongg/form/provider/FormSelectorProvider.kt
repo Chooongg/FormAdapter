@@ -4,25 +4,25 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.ListPopupWindow
-import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.app.ActivityOptionsCompat
-import androidx.core.content.res.use
 import com.chooongg.form.FormUtils
 import com.chooongg.form.FormViewHolder
+import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.core.R
 import com.chooongg.form.enum.FormSelectorOpenMode
 import com.chooongg.form.formTextAppearance
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.BaseOptionForm
 import com.chooongg.form.item.FormSelector
+import com.chooongg.form.option.FormArrayAdapter
 import com.chooongg.form.option.FormSelectorPageActivity
+import com.chooongg.form.option.IOption
+import com.chooongg.form.option.Option
 import com.chooongg.form.option.OptionLoadResult
 import com.chooongg.form.style.BaseStyle
 import com.google.android.material.button.MaterialButton
@@ -170,54 +170,33 @@ class FormSelectorProvider : BaseFormProvider() {
 
     @SuppressLint("RestrictedApi")
     private fun showPopupMenu(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {
-        ListPopupWindow(view.context)
-        val gravity = holder.typeset.obtainContentGravity(holder, item)
-        val popupMenu = PopupMenu(view.context, view)
-        popupMenu.gravity =
-            if (gravity and Gravity.END == Gravity.END) Gravity.END else Gravity.START
-        if (!item.required && item.isEmptyOption) {
-            popupMenu.menu.add(0, 0, 0, SpannableString(view.hint ?: "").apply {
-                setSpan(
-                    ForegroundColorSpan(view.hintTextColors.defaultColor),
-                    0,
-                    length,
-                    SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-            })
-        }
-        item.options!!.forEachIndexed { index, option ->
-            popupMenu.menu.add(
-                0,
-                index + 1,
-                index + 1,
-                option.getSpannableString(view.context).apply {
-                    setSpan(ForegroundColorSpan(
-                        if (item.content == option) {
-                            view.context.obtainStyledAttributes(
-                                intArrayOf(com.google.android.material.R.attr.colorPrimary)
-                            ).use { it.getColor(0, Color.GRAY) }
-                        } else {
-                            view.context.obtainStyledAttributes(
-                                intArrayOf(com.google.android.material.R.attr.colorOnSurface)
-                            ).use { it.getColor(0, Color.GRAY) }
-                        }
-                    ), 0, length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
+        val popupWindow = ListPopupWindow(view.context)
+        popupWindow.anchorView = view
+        popupWindow.setDropDownGravity(Gravity.END)
+        popupWindow.setOverlapAnchor(true)
+        val fontHeight = FormUtils.getFontHeight(view)
+        val iconPadding = view.resources.getDimensionPixelSize(R.dimen.formIconPadding)
+        val adapter = FormArrayAdapter<IOption>(
+            Boundary(
+                view.paddingStart, view.paddingTop,
+                view.paddingEnd + iconPadding + fontHeight, view.paddingBottom
             )
-        }
-        popupMenu.setOnMenuItemClickListener {
-            if (it.itemId == 0) {
-                changeContentAndNotifyLinkage(holder, item, null)
-                view.text = null
-                return@setOnMenuItemClickListener true
-            }
-            val option =
-                item.options!!.getOrNull(it.itemId - 1) ?: return@setOnMenuItemClickListener false
+        )
+        adapter.hint = view.hint
+        adapter.current = item.content
+        val options = ArrayList<IOption>()
+        if (!item.required) options.add(Option(null))
+        item.options?.let { if (it.isNotEmpty()) options.addAll(it) }
+        val gravity = holder.typeset.obtainContentGravity(holder, item)
+        adapter.setNewData(options, gravity)
+        popupWindow.setAdapter(adapter)
+        popupWindow.setOnItemClickListener { _, _, position, _ ->
+            val option = options[position]
             changeContentAndNotifyLinkage(holder, item, option)
             view.text = item.getContentText(view.context, true)
-            true
+            popupWindow.dismiss()
         }
-        popupMenu.show()
+        popupWindow.show()
     }
 
     private fun showPage(holder: FormViewHolder, view: MaterialButton, item: FormSelector) {

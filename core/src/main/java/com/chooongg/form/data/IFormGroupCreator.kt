@@ -2,7 +2,7 @@ package com.chooongg.form.data
 
 import com.chooongg.form.item.BaseForm
 
-interface IFormCreator {
+interface IFormGroupCreator {
 
     fun getItems(): MutableList<BaseForm>
 

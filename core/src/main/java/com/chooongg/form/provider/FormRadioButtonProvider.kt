@@ -181,6 +181,8 @@ class FormRadioButtonProvider : BaseFormProvider() {
                 minimumHeight = 0
                 compoundDrawablePadding = 0
                 setTextAppearance(getTextAppearance(this, R.attr.formTextAppearanceContent))
+                buttonTintList =
+                    context.getColorStateList(R.color.form_radio_button_tint)
                 background = RippleDrawable(
                     ColorStateList.valueOf(
                         context.obtainStyledAttributes(intArrayOf(android.R.attr.colorControlHighlight))

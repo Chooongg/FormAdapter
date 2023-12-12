@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.FrameLayout
 import androidx.annotation.GravityInt
-import com.chooongg.form.core.R
 import com.chooongg.form.boundary.Boundary
+import com.chooongg.form.core.R
 import com.chooongg.form.getTextAppearance
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.textview.MaterialTextView
 
 class FormArrayAdapter<T>(
@@ -23,9 +25,14 @@ class FormArrayAdapter<T>(
     @GravityInt
     private var gravity: Int = Gravity.NO_GRAVITY
 
+    var hint: CharSequence? = null
+
+    var current: Any? = null
+
     fun setNewData(list: List<T>?, gravity: Int?) {
         mObjects = if (list == null) ArrayList() else ArrayList(list)
         if (gravity != null) this.gravity = gravity
+        notifyDataSetChanged()
     }
 
     override fun getCount(): Int = mObjects.size
@@ -35,18 +42,41 @@ class FormArrayAdapter<T>(
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: MaterialTextView(parent.context).apply {
-            setTextAppearance(getTextAppearance(this, R.attr.formTextAppearanceContent))
-            setPaddingRelative(boundary.start, boundary.top, boundary.end, boundary.bottom)
+        val view = convertView ?: FrameLayout(parent.context).also {
+            it.addView(MaterialTextView(parent.context).apply {
+                id = R.id.formInternalContentView
+                setTextAppearance(getTextAppearance(this, R.attr.formTextAppearanceContent))
+                setPaddingRelative(boundary.start, boundary.top, boundary.end, boundary.bottom)
+            })
+            it.layoutParams = ViewGroup.LayoutParams(-1, -1)
         }
-        val text = view as MaterialTextView
+        val textView = view.findViewById<MaterialTextView>(R.id.formInternalContentView)
         val item = getItem(position)
-        text.text = if (item is CharSequence) item else item.toString()
-        text.gravity = gravity
+        textView.hint = hint
+        textView.text = when (item) {
+            is CharSequence -> item
+            is IOption -> item.getSpannableString(view.context)
+            else -> item.toString()
+        }
+        textView.setTextColor(
+            if (current == item || (item is CharSequence && current == item.toString())) {
+                MaterialColors.getColor(textView, com.google.android.material.R.attr.colorPrimary)
+            } else {
+                MaterialColors.getColor(textView, com.google.android.material.R.attr.colorOnSurface)
+            }
+        )
+        textView.gravity = gravity
         return view
     }
 
-    override fun getFilter(): Filter = FormFilter()
+    private lateinit var _filter: FormFilter
+
+    override fun getFilter(): Filter {
+        if (!this::_filter.isInitialized) {
+            _filter = FormFilter()
+        }
+        return _filter
+    }
 
     private inner class FormFilter : Filter() {
 

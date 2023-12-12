@@ -15,14 +15,14 @@ class FormPartData : FormGroupData(), BaseFormPartData {
     override var isEnablePart: Boolean = true
 
     /**
-     * 片段字段
-     */
-    override var partField: String? = null
-
-    /**
      * 片段名称
      */
     override var partName: Any? = null
+
+    /**
+     * 片段字段
+     */
+    override var partField: String? = null
 
     /**
      * 菜单

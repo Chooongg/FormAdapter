@@ -184,6 +184,7 @@ class FormCheckBoxProvider : BaseFormProvider() {
                 minimumHeight = 0
                 compoundDrawablePadding = 0
                 setTextAppearance(getTextAppearance(this, R.attr.formTextAppearanceContent))
+                buttonTintList = context.getColorStateList(R.color.form_checkbox_button_tint)
                 background = RippleDrawable(
                     ColorStateList.valueOf(
                         context.obtainStyledAttributes(intArrayOf(android.R.attr.colorControlHighlight))

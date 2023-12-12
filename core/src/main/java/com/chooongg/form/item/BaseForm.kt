@@ -201,7 +201,25 @@ abstract class BaseForm(
     var spanIndex: Int = -1
         internal set
 
+    /**
+     * 上一次更新边界验证差异
+     */
+    private var lastMarginBoundary: Boundary = Boundary()
+    private var lastInsideBoundary: Boundary = Boundary()
+
+    private var lastEnabled: Boolean = false
+
     internal fun resetInternalValues() {
+        lastMarginBoundary.start = marginBoundary.start
+        lastMarginBoundary.top = marginBoundary.top
+        lastMarginBoundary.end = marginBoundary.end
+        lastMarginBoundary.bottom = marginBoundary.bottom
+
+        lastInsideBoundary.start = insideBoundary.start
+        lastInsideBoundary.top = insideBoundary.top
+        lastInsideBoundary.end = insideBoundary.end
+        lastInsideBoundary.bottom = insideBoundary.bottom
+
         globalPosition = -1
         localPosition = -1
         groupCount = -1
@@ -213,6 +231,14 @@ abstract class BaseForm(
         indexInCurrentVariant = -1
         parentItem = null
     }
+
+    internal fun boundaryIsChanged() =
+        marginBoundary != lastMarginBoundary || insideBoundary != lastInsideBoundary
+
+    internal fun enabledIsChanged(realEnabled: Boolean) = if (realEnabled != lastEnabled) {
+        lastEnabled = realEnabled
+        true
+    } else false
 
     //</editor-fold>
 

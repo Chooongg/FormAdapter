@@ -3,7 +3,7 @@ package com.chooongg.form.data
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.InternalFormGroupName
 
-open class FormGroupData : IFormCreator {
+open class FormGroupData : IFormPartCreator {
 
     private var _groupNameItem: InternalFormGroupName? = null
 

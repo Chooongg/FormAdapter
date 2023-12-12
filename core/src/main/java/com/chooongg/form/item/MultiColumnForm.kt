@@ -3,7 +3,7 @@ package com.chooongg.form.item
 import androidx.annotation.FloatRange
 import kotlin.math.max
 
-class MultiColumnForm : VariantForm() {
+class MultiColumnForm : VariantForm(null, null) {
 
     /**
      * 当前列容纳的列数

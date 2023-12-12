@@ -252,6 +252,8 @@ open class FormInputProvider : BaseFormProvider() {
             if (editable.isNullOrEmpty()) {
                 changeContentAndNotifyLinkage(holder, item, null)
             } else changeContentAndNotifyLinkage(holder, item, editable)
+            val adapter = edit.adapter as FormArrayAdapter<*>
+            adapter.current = editable?.toString()
         }
         edit.tag = watcher
     }
@@ -279,11 +281,9 @@ open class FormInputProvider : BaseFormProvider() {
         val editText =
             view.findViewById<MaterialAutoCompleteTextView>(R.id.formInternalContentChildView)
         val itemInput = item as? FormInput
-        try {
-            val adapter = editText.adapter as FormArrayAdapter<CharSequence>
-            adapter.setNewData(itemInput?.options, editText.gravity)
-        } catch (_: Exception) {
-        }
+        val adapter = editText.adapter as FormArrayAdapter<CharSequence>
+        adapter.hint = editText.hint
+        adapter.setNewData(itemInput?.options, editText.gravity)
         val fontHeight = FormUtils.getFontHeight(editText)
         with(view as TextInputLayout) {
             when (val result = itemInput?.optionLoadResult) {
@@ -296,10 +296,7 @@ open class FormInputProvider : BaseFormProvider() {
                         endIconDrawable = FormUtils.getIconChangeSize(
                             context, R.drawable.ic_form_close, fontHeight
                         )
-                    } else {
-                        endIconMode = TextInputLayout.END_ICON_NONE
-                        endIconDrawable = null
-                    }
+                    } else endIconMode = TextInputLayout.END_ICON_NONE
                 }
 
                 is OptionLoadResult.Wait, is OptionLoadResult.Success -> {
@@ -316,10 +313,7 @@ open class FormInputProvider : BaseFormProvider() {
                         endIconDrawable = FormUtils.getIconChangeSize(
                             context, R.drawable.ic_form_close, fontHeight
                         )
-                    } else {
-                        endIconMode = TextInputLayout.END_ICON_NONE
-                        endIconDrawable = null
-                    }
+                    } else endIconMode = TextInputLayout.END_ICON_NONE
                 }
 
                 is OptionLoadResult.Loading -> {
@@ -352,10 +346,7 @@ open class FormInputProvider : BaseFormProvider() {
                         endIconDrawable = FormUtils.getIconChangeSize(
                             context, R.drawable.ic_form_close, fontHeight
                         )
-                    } else {
-                        endIconMode = TextInputLayout.END_ICON_NONE
-                        endIconDrawable = null
-                    }
+                    } else endIconMode = TextInputLayout.END_ICON_NONE
                 }
             }
         }

@@ -25,7 +25,7 @@ import com.chooongg.form.addTime
 import com.chooongg.form.addTip
 import com.chooongg.form.enum.FormOutputMode
 import com.chooongg.form.enum.FormVisibilityMode
-import com.chooongg.form.initCardOutlinedPart
+import com.chooongg.form.initCardElevatedPart
 import com.chooongg.form.inputMode.InputModePassword
 import com.chooongg.form.item.FormButton
 import com.chooongg.form.option.Option
@@ -39,7 +39,7 @@ class BasicViewModel : ViewModel() {
 
     init {
         adapter.setNewInstance {
-            initCardOutlinedPart("Default") {
+            initCardElevatedPart("Default") {
                 addButton("Button(Tonal)", "button") {
                     buttonStyle = FormButton.ButtonStyle.TONAL
                     icon = R.drawable.ic_main_advanced
@@ -65,7 +65,7 @@ class BasicViewModel : ViewModel() {
                         Toast.makeText(view.context, "点击了", Toast.LENGTH_SHORT).show()
                     }
                     optionLoader {
-                        delay(5000)
+                        delay(2000)
                         val list = mutableListOf<CharSequence>()
                         for (i in 0..100) {
                             list.add("Test${i}")
@@ -79,7 +79,7 @@ class BasicViewModel : ViewModel() {
                         Toast.makeText(view.context, "点击了", Toast.LENGTH_SHORT).show()
                     }
                     optionLoader {
-                        delay(5000)
+                        delay(2000)
                         val list = mutableListOf<CharSequence>()
                         for (i in 0..100) {
                             list.add("Test${i}")
@@ -89,10 +89,10 @@ class BasicViewModel : ViewModel() {
                 }
                 addInput("Input", "input") {
                     optionLoader {
-                        delay(5000)
+                        delay(2000)
                         val list = mutableListOf<CharSequence>()
                         for (i in 0..100) {
-                            list.add("Test${i}")
+                            list.add("Test${i}asdfasdfrefgwesrgasdrgzsefasefsdf")
                         }
                         list
                     }
@@ -122,7 +122,7 @@ class BasicViewModel : ViewModel() {
                 }
                 addRadioButton("RadioButton", "radioButton") {
                     optionLoader {
-                        delay(5000)
+                        delay(2000)
                         val list = mutableListOf<Option>()
                         for (i in 0..5) {
                             list.add(Option("Test${i}"))
@@ -140,14 +140,14 @@ class BasicViewModel : ViewModel() {
                     optionLoader {
                         val list = mutableListOf<Option>()
                         for (i in 0..5) {
-                            list.add(Option("Test${i}", "remarks"))
+                            list.add(Option("Test${i}asdfasdfasdfasdfawerawerawdfasdgawerawserfasdfasdf", "remarks"))
                         }
                         list
                     }
                 }
                 addSelector("Selector", "selector2") {
                     optionLoader {
-                        delay(5000)
+                        delay(2000)
                         val list = mutableListOf<Option>()
                         for (i in 0..100) {
                             list.add(Option("Test${i}", "remarks"))

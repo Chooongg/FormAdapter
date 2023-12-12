@@ -33,6 +33,7 @@ class FormTextProvider : BaseFormProvider() {
         enabled: Boolean
     ) {
         with(view as MaterialTextView) {
+            isEnabled = item.isRealEnable(enabled)
             text = item.getContentText(context, enabled)
             hint = FormUtils.getText(context, item.hint)
                 ?: resources.getString(R.string.fromDefaultHintNone)

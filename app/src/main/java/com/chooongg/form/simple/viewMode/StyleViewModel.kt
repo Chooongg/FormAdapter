@@ -12,8 +12,6 @@ import com.chooongg.form.initCardSeparateElevatedPart
 import com.chooongg.form.initCardSeparateFilledPart
 import com.chooongg.form.initCardSeparateOutlinedPart
 import com.chooongg.form.initNotAlignmentPart
-import com.chooongg.form.multiColumn
-import com.chooongg.form.singleLine
 import com.chooongg.form.typeset.VerticalTypeset
 
 class StyleViewModel : ViewModel() {

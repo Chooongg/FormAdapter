@@ -1,6 +1,6 @@
 package com.chooongg.form.item
 
-class SingleLineForm : VariantForm() {
+class SingleLineForm : VariantForm(null, null) {
 
     /**
      * 自动等分

@@ -82,9 +82,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
                         if (tempChildList.isNotEmpty()) {
                             variantIndex++
                             tempChildList.forEachIndexed { i, child ->
-                                child.loneLine = false
                                 child.showAtEdge = item.showAtEdge
-                                child.autoFill = item.autoFill
                                 child.parentItem = item
                                 child.variantIndexInGroup = variantIndex
                                 child.countInCurrentVariant = tempChildList.size
@@ -117,9 +115,15 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
                             item.spanIndex = 0
                             spanIndex = 0
                         }
-                        spanCount / item.parentItem!!.getColumn(
-                            item.countInCurrentVariant, formAdapter.columnCount
-                        )
+                        if (item.loneLine){
+                            item.spanIndex = 0
+                            spanIndex = 0
+                            spanCount
+                        }else{
+                            spanCount / item.parentItem!!.getColumn(
+                                item.countInCurrentVariant, formAdapter.columnCount
+                            )
+                        }
                     }
 
                     item.loneLine -> {
@@ -176,9 +180,22 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, val style: Base
         asyncDiffer.submitList(ArrayList<BaseForm>().apply { tempList2.forEach { addAll(it) } }) {
             calculateBoundary()
             if (isNotifyChanged) {
-                notifyItemRangeChanged(0, itemCount)
+                asyncDiffer.currentList.forEachIndexed { index, form ->
+//                    if (form.enabledIsChanged(form.isRealEnable(formAdapter.isEnabled))) {
+//                        notifyItemChanged(index)
+//                    } else {
+                        if (form.boundaryIsChanged()) {
+                            notifyItemChanged(index, Boundary.NOTIFY_BOUNDARY_FLAG)
+                        }
+                        notifyItemChanged(index, FormAdapter.UPDATE_PAYLOAD_FLAG)
+//                    }
+                }
             } else {
-                notifyItemRangeChanged(0, itemCount, Boundary.NOTIFY_BOUNDARY_FLAG)
+                asyncDiffer.currentList.forEachIndexed { index, form ->
+                    if (form.boundaryIsChanged()) {
+                        notifyItemChanged(index, Boundary.NOTIFY_BOUNDARY_FLAG)
+                    }
+                }
             }
         }
     }

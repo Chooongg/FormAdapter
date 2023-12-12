@@ -1,5 +1,6 @@
 package com.chooongg.form.simple.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.chooongg.form.enum.FormVisibilityMode
 import com.chooongg.form.simple.R
+import com.chooongg.form.simple.TestActivity
 import com.chooongg.form.simple.viewMode.BasicViewModel
 
 class BasicFragment : BaseFragment() {
@@ -28,6 +30,7 @@ class BasicFragment : BaseFragment() {
             Toast.makeText(context, "点击了按钮", Toast.LENGTH_SHORT).show()
         }
         model.adapter.setOnOperationButtonClickListener {
+            startActivity(Intent(context, TestActivity::class.java))
             Toast.makeText(context, "点击了操作按钮", Toast.LENGTH_SHORT).show()
         }
         return view
