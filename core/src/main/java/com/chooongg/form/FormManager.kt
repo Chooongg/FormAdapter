@@ -7,10 +7,10 @@ import androidx.annotation.IntRange
 import androidx.annotation.Px
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.dataActuator.FormDataActuator
-import com.chooongg.form.error.NormalErrorOutputTool
 import com.chooongg.form.error.ErrorFormatter
 import com.chooongg.form.error.ErrorOutputTool
 import com.chooongg.form.error.NormalErrorFormatter
+import com.chooongg.form.error.NormalErrorOutputTool
 import com.chooongg.form.format.BaseNameFormatter
 import com.chooongg.form.format.NormalNameFormatter
 import com.chooongg.form.groupNameProvider.BaseGroupNameProvider
@@ -30,7 +30,7 @@ object FormManager {
     object Default {
 
         @Px
-        var maxWidth: Int = (300 * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+        var maxItemWidth: Int = (300 * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
         @IntRange(from = 1)
         var emsSize: Int = 5

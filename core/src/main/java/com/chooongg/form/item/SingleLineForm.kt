@@ -7,6 +7,8 @@ class SingleLineForm : VariantForm(null, null) {
      */
     var autoEquipartition: Boolean = true
 
+    override var loneLine: Boolean = true
+
     override fun getColumn(count: Int, layoutColumn: Int): Int {
         val size = getItems().size
         return if (size <= 12) size

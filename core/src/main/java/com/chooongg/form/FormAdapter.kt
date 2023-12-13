@@ -349,7 +349,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
             if (operationPart != null) {
                 concatAdapter.addAdapter(concatAdapter.adapters.size - 1, adapter)
             } else concatAdapter.addAdapter(adapter)
-            if (update) adapter.executeUpdate(true)
+            if (update) adapter.update()
         }
     }
 
@@ -368,7 +368,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
             if (operationPart != null) {
                 concatAdapter.addAdapter(concatAdapter.adapters.size - 1, adapter)
             } else concatAdapter.addAdapter(adapter)
-            if (update) adapter.executeUpdate(true)
+            if (update) adapter.update()
         }
     }
 

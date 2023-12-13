@@ -57,7 +57,7 @@ abstract class BaseTypeset {
     open var multiColumnContentGravity: Int =
         FormManager.Default.multiColumnContentGravity
 
-    abstract fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): ViewGroup
+    abstract fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): ViewGroup?
 
     abstract fun onBindViewHolder(
         holder: FormViewHolder,

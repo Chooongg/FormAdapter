@@ -209,7 +209,7 @@ abstract class BaseForm(
 
     private var lastEnabled: Boolean = false
 
-    internal fun resetInternalValues() {
+    open fun resetInternalValues() {
         lastMarginBoundary.start = marginBoundary.start
         lastMarginBoundary.top = marginBoundary.top
         lastMarginBoundary.end = marginBoundary.end

@@ -12,6 +12,12 @@ class FormView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
+    constructor(context: Context, maxItemWidth: Int) : this(context) {
+        this.maxItemWidth = maxItemWidth
+    }
+
+    private var maxItemWidth: Int = FormManager.Default.maxItemWidth
+
     init {
         clipChildren = false
         clipToPadding = false
@@ -25,8 +31,7 @@ class FormView @JvmOverloads constructor(
             resources.getDimensionPixelSize(R.dimen.formMarginEnd)
         )
         val maxItemWidth = a.getDimensionPixelSize(
-            R.styleable.FormView_formMaxItemWidth,
-            FormManager.Default.maxWidth
+            R.styleable.FormView_formMaxItemWidth, maxItemWidth
         )
         a.recycle()
         layoutManager = FormLayoutManager(context, maxItemWidth).apply {

@@ -58,6 +58,13 @@ class BasicViewModel : ViewModel() {
                         list
                     }
                 }
+                singleLine {
+                    name = "测试"
+                    isIndependent = true
+                    addButton("Button1")
+                    addButton("Button2")
+                    addButton("Button3")
+                }
                 addDivider()
                 addInputFilled("InputFilled", "inputFilled") {
                     startIcon = R.drawable.ic_main_basic
@@ -140,7 +147,12 @@ class BasicViewModel : ViewModel() {
                     optionLoader {
                         val list = mutableListOf<Option>()
                         for (i in 0..5) {
-                            list.add(Option("Test${i}asdfasdfasdfasdfawerawerawdfasdgawerawserfasdfasdf", "remarks"))
+                            list.add(
+                                Option(
+                                    "Test${i}asdfasdfasdfasdfawerawerawdfasdgawerawserfasdfasdf",
+                                    "remarks"
+                                )
+                            )
                         }
                         list
                     }

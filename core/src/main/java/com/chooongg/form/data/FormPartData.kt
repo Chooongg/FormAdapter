@@ -43,7 +43,7 @@ class FormPartData : FormGroupData(), BaseFormPartData {
     /**
      * 菜单创建选项时的监听
      */
-    fun onMenuCreateOptionCallback(block: FormMenuCreateOptionBlock?) {
+    fun setOnMenuCreateOptionCallback(block: FormMenuCreateOptionBlock?) {
         menuCreateOptionCallback = block
     }
 

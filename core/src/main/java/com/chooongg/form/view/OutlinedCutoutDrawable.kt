@@ -186,5 +186,4 @@ class OutlinedCutoutDrawable(
             canvas.restore()
         }
     }
-
 }

@@ -11,9 +11,9 @@ class FormViewHolder(
     val style: BaseStyle,
     val styleLayout: ViewGroup?,
     val typeset: BaseTypeset,
-    val typesetLayout: ViewGroup,
+    val typesetLayout: ViewGroup?,
     val view: View
-) : RecyclerView.ViewHolder(styleLayout ?: typesetLayout) {
+) : RecyclerView.ViewHolder(styleLayout ?: typesetLayout ?: view) {
 
     var job: Job? = null
 
