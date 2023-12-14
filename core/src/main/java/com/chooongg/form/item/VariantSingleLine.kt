@@ -1,11 +1,13 @@
 package com.chooongg.form.item
 
-class SingleLineForm : VariantForm(null, null) {
+class VariantSingleLine : VariantBaseForm(null, null) {
 
     /**
      * 自动等分
      */
     var autoEquipartition: Boolean = true
+
+    override var autoFill: Boolean = false
 
     override var loneLine: Boolean = true
 

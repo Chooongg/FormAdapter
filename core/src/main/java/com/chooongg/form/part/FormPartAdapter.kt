@@ -4,7 +4,7 @@ import com.chooongg.form.FormAdapter
 import com.chooongg.form.data.FormPartData
 import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.item.BaseForm
-import com.chooongg.form.item.VariantForm
+import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.style.BaseStyle
 import org.json.JSONObject
 
@@ -41,7 +41,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     override fun findOfField(field: String): BaseForm? {
         data.getItems().forEach { item ->
             if (item.field == field) return item
-            if (item is VariantForm) {
+            if (item is VariantBaseForm) {
                 item.getItems().forEach { if (it.field == field) return item }
             }
         }
@@ -51,7 +51,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     override fun findOfId(id: String): BaseForm? {
         data.getItems().forEach { item ->
             if (item.id == id) return item
-            if (item is VariantForm) {
+            if (item is VariantBaseForm) {
                 item.getItems().forEach { if (it.id == id) return item }
             }
         }
@@ -61,7 +61,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     override fun findOfItem(target: BaseForm): BaseForm? {
         data.getItems().forEach { item ->
             if (item == target) return item
-            if (item is VariantForm) {
+            if (item is VariantBaseForm) {
                 item.getItems().forEach { if (it == target) return item }
             }
         }

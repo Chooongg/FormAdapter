@@ -10,7 +10,7 @@ import com.chooongg.form.typeset.BaseTypeset
 import com.chooongg.form.typeset.EmptyTypeset
 import kotlin.reflect.KClass
 
-abstract class VariantForm(name: Any?, field: String?) : BaseForm(name, field), IFormGroupCreator {
+abstract class VariantBaseForm(name: Any?, field: String?) : BaseForm(name, field), IFormGroupCreator {
 
     /**
      * 是否是独立的

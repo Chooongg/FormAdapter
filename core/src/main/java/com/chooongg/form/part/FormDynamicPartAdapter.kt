@@ -6,7 +6,7 @@ import com.chooongg.form.data.FormGroupData
 import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.InternalFormDynamicAddButton
-import com.chooongg.form.item.VariantForm
+import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.style.BaseStyle
 import com.chooongg.form.style.NotAlignmentStyle
 import org.json.JSONArray
@@ -108,7 +108,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         data.getGroups().forEach { group ->
             group.getItems().forEach { item ->
                 if (item.field == field) return item
-                if (item is VariantForm) {
+                if (item is VariantBaseForm) {
                     item.getItems().forEach { if (it.field == field) return it }
                 }
             }
@@ -120,7 +120,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         data.getGroups().forEach { group ->
             group.getItems().forEach { item ->
                 if (item.id == id) return item
-                if (item is VariantForm) {
+                if (item is VariantBaseForm) {
                     item.getItems().forEach { if (it.id == id) return it }
                 }
             }
@@ -132,7 +132,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         data.getGroups().forEach { group ->
             group.getItems().forEach { item ->
                 if (item == target) return item
-                if (item is VariantForm) {
+                if (item is VariantBaseForm) {
                     item.getItems().forEach { if (it == target) return it }
                 }
             }

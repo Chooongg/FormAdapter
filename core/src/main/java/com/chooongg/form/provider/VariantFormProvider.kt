@@ -7,7 +7,7 @@ import com.chooongg.form.BaseFormLayoutManager
 import com.chooongg.form.FormViewHolder
 import com.chooongg.form.data.FormPartData
 import com.chooongg.form.item.BaseForm
-import com.chooongg.form.item.VariantForm
+import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.part.FormPartAdapter
 import com.chooongg.form.style.BaseStyle
@@ -26,7 +26,7 @@ class VariantFormProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        val itemVariant = item as? VariantForm
+        val itemVariant = item as? VariantBaseForm
         val recyclerView = view as RecyclerView
         val bindingAdapter = holder.bindingAdapter as? BaseFormPartAdapter
         if (itemVariant == null || bindingAdapter == null) {

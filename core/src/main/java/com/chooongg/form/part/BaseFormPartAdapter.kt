@@ -16,7 +16,7 @@ import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.InternalFormNone
 import com.chooongg.form.item.InternalFormOperationButton
-import com.chooongg.form.item.VariantForm
+import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.provider.InternalFormNoneProvider
 import com.chooongg.form.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
@@ -74,7 +74,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
             group.forEach { item ->
                 item.resetInternalValues()
                 if (item.isRealVisible(formAdapter.isEnabled)) {
-                    if (item is VariantForm) {
+                    if (item is VariantBaseForm) {
                         variantIndex = addVariantForm(item, tempGroup, variantIndex)
                     } else {
                         tempGroup.add(item)
@@ -177,7 +177,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
     }
 
     private fun addVariantForm(
-        item: VariantForm,
+        item: VariantBaseForm,
         group: ArrayList<BaseForm>,
         variantIndex: Int
     ): Int {

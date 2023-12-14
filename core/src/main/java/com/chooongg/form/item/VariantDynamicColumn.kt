@@ -3,7 +3,7 @@ package com.chooongg.form.item
 import androidx.annotation.FloatRange
 import kotlin.math.max
 
-class MultiColumnForm : VariantForm(null, null) {
+class VariantDynamicColumn : VariantBaseForm(null, null) {
 
     /**
      * 当前列容纳的列数
@@ -12,6 +12,8 @@ class MultiColumnForm : VariantForm(null, null) {
     var column: Float = 2f
 
     override var autoFill: Boolean = false
+
+    override var loneLine: Boolean = true
 
     override fun getColumn(count: Int, layoutColumn: Int): Int =
         if (layoutColumn * column > 12) 12 else max((layoutColumn * column).toInt(), 1)

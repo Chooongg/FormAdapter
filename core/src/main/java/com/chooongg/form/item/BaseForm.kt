@@ -187,7 +187,7 @@ abstract class BaseForm(
     var indexInCurrentVariant = -1
         internal set
 
-    var parentItem: VariantForm? = null
+    var parentItem: VariantBaseForm? = null
 
     /**
      * 跨度
