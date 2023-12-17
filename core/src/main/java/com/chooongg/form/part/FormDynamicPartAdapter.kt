@@ -27,14 +27,6 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         this.data = data
     }
 
-    override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
-        if (item is InternalFormDynamicAddButton) {
-            return formAdapter.getItemViewType4Pool(NotAlignmentStyle(), item)
-        }
-        return formAdapter.getItemViewType4Pool(style, item)
-    }
-
     override fun getOriginalItemList(): List<List<BaseForm>> {
         data.getGroups().forEach { if (it.getItems().isEmpty()) data.getGroups().remove(it) }
         if (data.dynamicGroupCreateBlock != null) {

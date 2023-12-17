@@ -11,13 +11,13 @@ open class FormGroupData : IFormPartCreator {
 
     override fun getItems(): MutableList<BaseForm> = _items
 
-    fun getGroupNameItem(block: (InternalFormGroupName) -> Unit): InternalFormGroupName {
+    internal fun getGroupNameItem(block: (InternalFormGroupName) -> Unit): InternalFormGroupName {
         if (_groupNameItem == null) _groupNameItem = InternalFormGroupName()
         block.invoke(_groupNameItem!!)
         return _groupNameItem!!
     }
 
-    fun clearGroupNameItem() {
+    internal fun clearGroupNameItem() {
         _groupNameItem = null
     }
 }

@@ -1,5 +1,6 @@
 package com.chooongg.form.part
 
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -14,11 +15,15 @@ import com.chooongg.form.FormViewHolder
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.item.BaseForm
+import com.chooongg.form.item.InternalFormDynamicAddButton
 import com.chooongg.form.item.InternalFormNone
 import com.chooongg.form.item.InternalFormOperationButton
 import com.chooongg.form.item.VariantBaseForm
+import com.chooongg.form.item.VariantChildDynamicGroup
+import com.chooongg.form.item.VariantChildGroup
 import com.chooongg.form.provider.InternalFormNoneProvider
 import com.chooongg.form.style.BaseStyle
+import com.chooongg.form.style.NotAlignmentStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -73,11 +78,44 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
             var variantIndex = -1
             group.forEach { item ->
                 item.resetInternalValues()
+                item.initValue(item.content)
                 if (item.isRealVisible(formAdapter.isEnabled)) {
-                    if (item is VariantBaseForm) {
-                        variantIndex = addVariantForm(item, tempGroup, variantIndex)
-                    } else {
-                        tempGroup.add(item)
+                    when (item) {
+                        is VariantChildDynamicGroup -> {
+                            item.getGroups().forEachIndexed { index, child ->
+                                val cg = VariantChildGroup(item.name, item.field)
+                                cg.isHasDeleteConfirm = item.isHasDeleteConfirm
+                                cg.dynamicGroupNameFormatBlock = item.dynamicGroupNameFormatter
+                                cg.getItems().addAll(child.getItems())
+                                if (item.minGroupCount <= index) {
+                                    cg.dynamicGroupDeletingBlock = {
+                                        item.getGroups().remove(child)
+                                        update()
+                                    }
+                                } else {
+                                    cg.dynamicGroupDeletingBlock = null
+                                }
+                                variantIndex = addVariantForm(cg, tempGroup, variantIndex)
+                            }
+                            if (formAdapter.isEnabled && item.dynamicGroupCreateBlock != null && item.maxGroupCount > item.getGroups().size) {
+                                item.addButton.apply {
+                                    name = item.name
+                                    dynamicGroupNameFormatter = item.dynamicGroupNameFormatter
+                                    buttonStyle = item.addButtonStyle
+                                    iconGravity = item.addIconGravity
+                                    icon = item.addIcon
+                                }
+                                tempGroup.add(item.addButton)
+                            }
+                        }
+
+                        is VariantBaseForm -> {
+                            variantIndex = addVariantForm(item, tempGroup, variantIndex)
+                        }
+
+                        else -> {
+                            tempGroup.add(item)
+                        }
                     }
                 }
             }
@@ -185,6 +223,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
         if (item.isIndependent) {
             var count = 0
             item.getItems().forEach { child ->
+                child.initValue(child.content)
                 if (child.isRealVisible(formAdapter.isEnabled)) count++
             }
             item._column = item.getColumn(
@@ -195,6 +234,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
             val tempChildList = ArrayList<BaseForm>()
             item.getItems().forEach { child ->
                 child.resetInternalValues()
+                child.initValue(child.content)
                 if (child.isRealVisible(formAdapter.isEnabled)) {
                     tempChildList.add(child)
                 }
@@ -313,7 +353,11 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
     fun getItem(position: Int) = itemList[position]
 
     override fun getItemViewType(position: Int): Int {
-        return formAdapter.getItemViewType4Pool(style, getItem(position))
+        val item = getItem(position)
+        if (item is InternalFormDynamicAddButton) {
+            return formAdapter.getItemViewType4Pool(NotAlignmentStyle(), item)
+        }
+        return formAdapter.getItemViewType4Pool(style, item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder {

@@ -2,6 +2,7 @@ package com.chooongg.form.data
 
 import androidx.annotation.IntRange
 import com.chooongg.form.item.BaseForm
+import com.chooongg.form.item.VariantChildDynamicGroup
 import com.chooongg.form.item.VariantChildGroup
 import com.chooongg.form.item.VariantDynamicColumn
 import com.chooongg.form.item.VariantFixedColumn
@@ -12,7 +13,6 @@ interface IFormGroupCreator {
     fun getItems(): MutableList<BaseForm>
 
     fun addItem(item: BaseForm): Boolean {
-        item.initValue(item.content)
         return getItems().add(item)
     }
 
@@ -34,4 +34,10 @@ interface IFormGroupCreator {
         field: String? = null,
         block: VariantChildGroup.() -> Unit
     ) = addItem(VariantChildGroup(name, field).apply(block))
+
+    fun childDynamicGroup(
+        name: Any? = null,
+        field: String? = null,
+        block: VariantChildDynamicGroup.() -> Unit
+    ) = addItem(VariantChildDynamicGroup(name, field).apply(block))
 }

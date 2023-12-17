@@ -55,6 +55,21 @@ class AdvancedViewModel : ViewModel() {
                     addText("Text") {
                         content = "Test"
                     }
+                    childDynamicGroup("ChildGroup", "temp") {
+                        isIndependent = true
+                        addGroup {
+                            addSwitch("ChildSwitch")
+                            addText("ChildText") {
+                                content = "ChildTest"
+                            }
+                        }
+                        dynamicGroupCreator {
+                            addSwitch("ChildSwitch")
+                            addText("ChildText") {
+                                content = "ChildTest"
+                            }
+                        }
+                    }
                 }
             }
             initCardOutlinedPart("VisibilityMode") {
@@ -120,7 +135,7 @@ class AdvancedViewModel : ViewModel() {
                 }
             }
             initCardOutlinedPart("Linkage") {
-                addSelector("Selector","selector") {
+                addSelector("Selector", "selector") {
                     options = listOf(Option("Item1"), Option("Item2"), Option("Item3"))
                     setLinkage { linkage, _, content ->
                         linkage.updateItem("linkageText") {

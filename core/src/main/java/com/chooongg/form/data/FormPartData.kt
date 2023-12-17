@@ -1,6 +1,7 @@
 package com.chooongg.form.data
 
 import androidx.annotation.MenuRes
+import com.chooongg.form.FormGroupNameFormatter
 import com.chooongg.form.FormMenuCreateOptionBlock
 import com.chooongg.form.enum.FormEnableMode
 import com.chooongg.form.enum.FormVisibilityMode
@@ -48,4 +49,19 @@ class FormPartData : FormGroupData(), BaseFormPartData {
     }
 
     fun getMenuCreateOptionCallback() = menuCreateOptionCallback
+
+    /**
+     * VariantChildDynamicGroup 中使用
+     */
+    internal var isHasDeleteConfirm: Boolean = true
+
+    /**
+     * VariantChildDynamicGroup 中使用
+     */
+    internal var dynamicGroupDeletingBlock: (() -> Unit)? = null
+
+    /**
+     * VariantChildDynamicGroup 中使用
+     */
+    internal var dynamicGroupNameFormatBlock: FormGroupNameFormatter? = null
 }

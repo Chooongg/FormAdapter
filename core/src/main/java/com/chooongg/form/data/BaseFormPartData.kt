@@ -16,5 +16,4 @@ interface BaseFormPartData {
      * 片段名称
      */
     var partName: Any?
-
 }

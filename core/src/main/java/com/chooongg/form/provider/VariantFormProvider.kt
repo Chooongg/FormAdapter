@@ -8,6 +8,7 @@ import com.chooongg.form.FormViewHolder
 import com.chooongg.form.data.FormPartData
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.VariantBaseForm
+import com.chooongg.form.item.VariantChildGroup
 import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.part.FormPartAdapter
 import com.chooongg.form.style.BaseStyle
@@ -45,6 +46,8 @@ class VariantFormProvider : BaseFormProvider() {
         data.menu = item.menu
         data.menuEnableMode = item.menuEnableMode
         data.menuVisibilityMode = item.menuVisibilityMode
+        data.dynamicGroupDeletingBlock = (item as? VariantChildGroup)?.dynamicGroupDeletingBlock
+        data.dynamicGroupNameFormatBlock = (item as? VariantChildGroup)?.dynamicGroupNameFormatBlock
         data.setOnMenuCreateOptionCallback(item.getMenuCreateOptionCallback())
         data.getItems().addAll(itemVariant.getItems())
         adapter.create(data)

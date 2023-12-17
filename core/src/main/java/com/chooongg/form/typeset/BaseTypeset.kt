@@ -74,7 +74,7 @@ abstract class BaseTypeset {
     @GravityInt
     fun obtainContentGravity(holder: FormViewHolder, item: BaseForm): Int {
         val adapter = holder.bindingAdapter as? BaseFormPartAdapter
-        return if ((adapter?.formAdapter?.columnCount ?: 1) > 1) {
+        return if ((adapter?.columnCount ?: adapter?.formAdapter?.columnCount ?: 1) > 1) {
             item.multiColumnContentGravity ?: item.gravity ?: multiColumnContentGravity
         } else item.contentGravity ?: item.gravity ?: contentGravity
     }

@@ -73,7 +73,6 @@ class StyleViewModel : ViewModel() {
             }
         }
         childGroup {
-            column = 2f
             for (i in 1..5) {
                 addSlider("Style${i}") {
                     typeset = VerticalTypeset()

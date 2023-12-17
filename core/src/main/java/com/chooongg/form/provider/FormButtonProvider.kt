@@ -106,35 +106,118 @@ open class FormButtonProvider : BaseFormProvider() {
     }
 
     private fun configButtonGravity(view: MaterialButton, contentGravity: Int) {
-        if (contentGravity == Gravity.NO_GRAVITY) {
-            view.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
-                startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-                endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-            }
-        } else {
-            view.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                width = ConstraintLayout.LayoutParams.WRAP_CONTENT
-                when {
-                    contentGravity and Gravity.START == Gravity.START -> {
+        view.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            when {
+                contentGravity == Gravity.TOP -> {
+                    width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.UNSET
+                }
+
+                contentGravity == Gravity.BOTTOM -> {
+                    width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    topToTop = ConstraintLayout.LayoutParams.UNSET
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+
+                contentGravity == Gravity.START -> {
+                    width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    endToEnd = ConstraintLayout.LayoutParams.UNSET
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+
+                contentGravity == Gravity.END -> {
+                    width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    startToStart = ConstraintLayout.LayoutParams.UNSET
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+
+                contentGravity == Gravity.START or Gravity.TOP -> {
+                    width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    endToEnd = ConstraintLayout.LayoutParams.UNSET
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.UNSET
+                }
+
+                contentGravity == Gravity.START or Gravity.BOTTOM -> {
+                    width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    endToEnd = ConstraintLayout.LayoutParams.UNSET
+                    topToTop = ConstraintLayout.LayoutParams.UNSET
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+
+                contentGravity == Gravity.END or Gravity.TOP -> {
+                    width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    startToStart = ConstraintLayout.LayoutParams.UNSET
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.UNSET
+                }
+
+                contentGravity == Gravity.END or Gravity.BOTTOM -> {
+                    width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    startToStart = ConstraintLayout.LayoutParams.UNSET
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    topToTop = ConstraintLayout.LayoutParams.UNSET
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+
+                contentGravity and Gravity.CENTER == Gravity.CENTER -> {
+                    width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                }
+
+                contentGravity and Gravity.CENTER_HORIZONTAL == Gravity.CENTER_HORIZONTAL -> {
+                    width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    if (contentGravity and Gravity.TOP == Gravity.TOP) {
+                        topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                        bottomToBottom = ConstraintLayout.LayoutParams.UNSET
+                    } else if (contentGravity and Gravity.BOTTOM == Gravity.BOTTOM) {
+                        topToTop = ConstraintLayout.LayoutParams.UNSET
+                        bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                    } else {
+                        topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                        bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                    }
+                }
+
+                contentGravity and Gravity.CENTER_VERTICAL == Gravity.CENTER_VERTICAL -> {
+                    width = ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                    if (contentGravity and Gravity.START == Gravity.START) {
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         endToEnd = ConstraintLayout.LayoutParams.UNSET
-                    }
-
-                    contentGravity and Gravity.END == Gravity.END -> {
+                    } else if (contentGravity and Gravity.END == Gravity.END) {
                         startToStart = ConstraintLayout.LayoutParams.UNSET
                         endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-                    }
-
-                    contentGravity and Gravity.CENTER == Gravity.CENTER -> {
+                    } else {
                         startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                         endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
                     }
+                }
 
-                    contentGravity and Gravity.CENTER_HORIZONTAL == Gravity.CENTER_HORIZONTAL -> {
-                        startToStart = ConstraintLayout.LayoutParams.PARENT_ID
-                        endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
-                    }
+                else -> {
+                    width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT
+                    startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                    endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
+                    topToTop = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
                 }
             }
         }
