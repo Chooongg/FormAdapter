@@ -4,7 +4,7 @@ import android.content.Context
 import com.chooongg.form.FormAdapter
 import com.chooongg.form.FormGroupNameFormatter
 import com.chooongg.form.FormUtils
-import com.chooongg.form.provider.InternalFormPartNameProvider
+import com.chooongg.form.provider.InternalFormGroupNameProvider
 import com.chooongg.form.typeset.BaseTypeset
 import com.chooongg.form.typeset.NoneTypeset
 
@@ -20,7 +20,7 @@ class InternalFormGroupName internal constructor() : BaseForm(null, null) {
 
     internal var dynamicGroupNameFormatBlock: FormGroupNameFormatter? = null
 
-    override fun getProvider(adapter: FormAdapter) = InternalFormPartNameProvider::class
+    override fun getProvider(adapter: FormAdapter) = InternalFormGroupNameProvider::class
 
     fun getPartName(context: Context): CharSequence? {
         val tempName = FormUtils.getText(context, name)

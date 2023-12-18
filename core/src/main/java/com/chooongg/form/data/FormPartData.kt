@@ -59,9 +59,4 @@ class FormPartData : FormGroupData(), BaseFormPartData {
      * VariantChildDynamicGroup 中使用
      */
     internal var dynamicGroupDeletingBlock: (() -> Unit)? = null
-
-    /**
-     * VariantChildDynamicGroup 中使用
-     */
-    internal var dynamicGroupNameFormatBlock: FormGroupNameFormatter? = null
 }

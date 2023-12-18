@@ -8,7 +8,7 @@ import com.chooongg.form.item.InternalFormGroupName
 import com.chooongg.form.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 
-class InternalFormPartNameProvider : BaseFormProvider() {
+class InternalFormGroupNameProvider : BaseFormProvider() {
 
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
         return style.partNameProvider.onCreateGroupName(style, parent)

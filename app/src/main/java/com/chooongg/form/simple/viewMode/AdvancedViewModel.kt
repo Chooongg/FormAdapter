@@ -50,7 +50,7 @@ class AdvancedViewModel : ViewModel() {
                         content = "Test"
                     }
                 }
-                dynamicGroupCreator {
+                setDynamicGroupCreator {
                     addSwitch("Switch")
                     addText("Text") {
                         content = "Test"
@@ -63,7 +63,7 @@ class AdvancedViewModel : ViewModel() {
                                 content = "ChildTest"
                             }
                         }
-                        dynamicGroupCreator {
+                        setDynamicGroupCreator {
                             addSwitch("ChildSwitch")
                             addText("ChildText") {
                                 content = "ChildTest"

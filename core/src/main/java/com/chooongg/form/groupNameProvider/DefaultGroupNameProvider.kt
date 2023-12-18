@@ -107,27 +107,30 @@ class DefaultGroupNameProvider : BaseGroupNameProvider() {
         }
         view.findViewById<MaterialButton>(R.id.formInternalContentChildSecondView).apply {
             setText(R.string.formDefaultGroupDelete)
-            visibility = if (enabled && item.isShowDynamicDelete()) View.VISIBLE else View.GONE
-            setOnClickListener {
-                if (item.isHasDeleteConfirm) {
-                    val alertDialog =
-                        MaterialAlertDialogBuilder(context).setTitle(R.string.formDefaultGroupDeleteConfirm)
-                            .setMessage(
-                                context.getString(
-                                    R.string.formDefaultGroupDeleteMessage,
-                                    title.text
-                                )
-                            ).setPositiveButton(R.string.formDefaultGroupDelete) { dialog, _ ->
-                                item.deleteDynamicGroup()
-                                dialog.dismiss()
-                            }.setNegativeButton(R.string.formDefaultGroupCancel) { dialog, _ ->
-                                dialog.dismiss()
-                            }.create()
-                    alertDialog.show()
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColors)
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(hintTextColors)
-                } else item.deleteDynamicGroup()
-            }
+            visibility = if (enabled && item.isShowDynamicDelete()) {
+                setOnClickListener {
+                    if (item.isHasDeleteConfirm) {
+                        val alertDialog =
+                            MaterialAlertDialogBuilder(context).setTitle(R.string.formDefaultGroupDeleteConfirm)
+                                .setMessage(
+                                    context.getString(
+                                        R.string.formDefaultGroupDeleteMessage,
+                                        title.text
+                                    )
+                                ).setPositiveButton(R.string.formDefaultGroupDelete) { dialog, _ ->
+                                    item.deleteDynamicGroup()
+                                    dialog.dismiss()
+                                }.setNegativeButton(R.string.formDefaultGroupCancel) { dialog, _ ->
+                                    dialog.dismiss()
+                                }.create()
+                        alertDialog.show()
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(textColors)
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                            .setTextColor(hintTextColors)
+                    } else item.deleteDynamicGroup()
+                }
+                View.VISIBLE
+            } else View.GONE
         }
     }
 }

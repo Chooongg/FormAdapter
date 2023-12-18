@@ -2,40 +2,30 @@ package com.chooongg.form.item
 
 import androidx.annotation.IntRange
 import com.chooongg.form.FormAdapter
-import com.chooongg.form.FormGroupCreateBlock
+import com.chooongg.form.FormChildGroupCreateBlock
 import com.chooongg.form.FormGroupNameFormatter
 import com.chooongg.form.core.R
-import com.chooongg.form.data.FormGroupData
-import com.chooongg.form.provider.BaseFormProvider
+import com.chooongg.form.provider.VariantChildDynamicGroupProvider
+import com.chooongg.form.typeset.BaseTypeset
+import com.chooongg.form.typeset.EmptyTypeset
 import com.google.android.material.button.MaterialButton
-import kotlin.reflect.KClass
 
-class VariantChildDynamicGroup(name: Any?, field: String?) : BaseForm(name, field) {
+class VariantChildDynamicGroup(name: Any?, field: String?) : VariantBaseForm(name, field) {
 
-    private val _groups = mutableListOf<FormGroupData>()
+    private val _groups = mutableListOf<VariantChildGroup>()
 
     internal val addButton = InternalFormDynamicAddButton()
 
-    internal var dynamicGroupCreateBlock: FormGroupCreateBlock? = null
+    internal var dynamicGroupCreateBlock: FormChildGroupCreateBlock? = null
 
-    internal var dynamicGroupNameFormatter: FormGroupNameFormatter? = { _, name, index, count ->
+    internal var dynamicGroupNameFormatter: FormGroupNameFormatter = { _, name, index, count ->
         if (count == 1) name else "$name ${index + 1}"
     }
 
     /**
-     * 是否是独立的
-     */
-    var isIndependent: Boolean = false
-
-    /**
-     * 删除是否需要确认操作
-     */
-    var isHasDeleteConfirm: Boolean = false
-
-    /**
      * 新增按钮样式
      */
-    var addButtonStyle: FormButton.ButtonStyle = FormButton.ButtonStyle.TONAL
+    var addButtonStyle: FormButton.ButtonStyle = FormButton.ButtonStyle.TEXT
 
     /**
      * 新增图标
@@ -58,51 +48,51 @@ class VariantChildDynamicGroup(name: Any?, field: String?) : BaseForm(name, fiel
      * 最大组数量
      */
     @IntRange(from = 1)
-    var maxGroupCount: Int = 1
+    var maxGroupCount: Int = 10
+
+    override var loneLine: Boolean = true
+
+    override var typeset: BaseTypeset? = EmptyTypeset()
 
     /**
      * 初始化组
      */
-    fun <T> initGroups(list: Iterable<T>, block: FormGroupData.(T) -> Unit) {
-        list.forEach { _groups.add(FormGroupData().apply { block.invoke(this, it) }) }
+    fun <T> initGroups(list: Iterable<T>, block: VariantChildGroup.(T) -> Unit) {
+        list.forEach { _groups.add(VariantChildGroup(null, null).apply { block.invoke(this, it) }) }
     }
 
     /**
      * 添加组
      */
-    fun addGroup(block: FormGroupData.() -> Unit) {
-        _groups.add(FormGroupData().apply(block))
+    fun addGroup(block: VariantChildGroup.() -> Unit) {
+        _groups.add(VariantChildGroup(null, null).apply(block))
     }
 
-    fun getGroups(): MutableList<FormGroupData> = _groups
+    fun getGroups(): MutableList<VariantChildGroup> = _groups
 
     fun clearGroups() = _groups.clear()
 
     /**
      * 动态片段组创建器
      */
-    fun dynamicGroupCreator(block: FormGroupCreateBlock?) {
+    fun setDynamicGroupCreator(block: FormChildGroupCreateBlock?) {
         dynamicGroupCreateBlock = block
     }
 
     /**
      * 动态片段名称格式工具
      */
-    fun dynamicPartNameFormatter(block: FormGroupNameFormatter?) {
+    fun setDynamicPartNameFormatter(block: FormGroupNameFormatter) {
         dynamicGroupNameFormatter = block
     }
 
     override fun initValue(value: Any?) {
-        if (dynamicGroupCreateBlock != null) {
-            while (getGroups().size < minGroupCount) {
-                val groupData = FormGroupData()
-                dynamicGroupCreateBlock!!.invoke(groupData)
-                getGroups().add(groupData)
-            }
+        if (name == null) {
+            name = R.string.formDefaultChildGroupName
         }
     }
 
-    override fun getProvider(adapter: FormAdapter): KClass<out BaseFormProvider> {
-        throw IllegalStateException("This item does not require a provider!")
-    }
+    override fun getColumn(count: Int, layoutColumn: Int): Int = layoutColumn
+
+    override fun getProvider(adapter: FormAdapter) = VariantChildDynamicGroupProvider::class
 }

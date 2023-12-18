@@ -1,6 +1,8 @@
 package com.chooongg.form.item
 
-class VariantSingleLine : VariantBaseForm(null, null) {
+import com.chooongg.form.data.IFormGroupCreator
+
+class VariantSingleLine : VariantBaseForm(null, null), IFormGroupCreator {
 
     /**
      * 自动等分

@@ -108,21 +108,21 @@ class FormDynamicPartData : BaseFormPartData {
     /**
      * 动态片段组创建器
      */
-    fun dynamicGroupCreator(block: FormGroupCreateBlock?) {
+    fun setDynamicGroupCreator(block: FormGroupCreateBlock?) {
         dynamicGroupCreateBlock = block
     }
 
     /**
      * 动态片段名称格式工具
      */
-    fun dynamicPartNameFormatter(block: FormGroupNameFormatter?) {
+    fun setDynamicPartNameFormatter(block: FormGroupNameFormatter?) {
         dynamicGroupNameFormatter = block
     }
 
     /**
      * 菜单创建选项时的监听
      */
-    fun menuCreateOptionCallback(block: FormMenuCreateOptionBlock?) {
+    fun setMenuCreateOptionCallback(block: FormMenuCreateOptionBlock?) {
         menuCreateOptionCallback = block
     }
 

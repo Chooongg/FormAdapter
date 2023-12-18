@@ -71,7 +71,7 @@ abstract class AbstractForm {
     /**
      * 菜单创建监听
      */
-    fun menuCreateOptionCallback(block: FormMenuCreateOptionBlock?) {
+    fun setMenuCreateOptionCallback(block: FormMenuCreateOptionBlock?) {
         menuCreateOptionCallback = block
     }
 
@@ -80,7 +80,7 @@ abstract class AbstractForm {
     /**
      * 菜单点击监听
      */
-    fun onMenuClickListener(menuClickListener: FormMenuClickBlock?) {
+    fun setMenuOnClickListener(menuClickListener: FormMenuClickBlock?) {
         this.menuClickListener = menuClickListener
     }
 

@@ -31,8 +31,8 @@ class InternalFormDynamicAddButtonProvider : FormButtonProvider() {
 
     override fun configButtonClick(holder: FormViewHolder, view: View, item: BaseForm) {
         view.setOnClickListener {
-            val adapter = holder.bindingAdapter as? FormDynamicPartAdapter
-            adapter?.onItemAddClick(item)
+            val itemButton = item as? InternalFormDynamicAddButton
+            itemButton?.addBlock?.invoke()
         }
     }
 }

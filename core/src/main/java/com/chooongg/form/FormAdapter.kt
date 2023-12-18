@@ -3,6 +3,7 @@ package com.chooongg.form
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.RecycledViewPool
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.chooongg.form.data.FormAdapterData
 import com.chooongg.form.data.FormDynamicPartData
@@ -31,6 +32,8 @@ open class FormAdapter(isEnabled: Boolean = false) :
         const val UPDATE_PAYLOAD_FLAG = "UPDATE"
         const val ERROR_NOTIFY_FLAG = "ERROR_NOTIFY"
     }
+
+    val recycledPool = RecycledViewPool()
 
     private val concatAdapter = ConcatAdapter(
         ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
@@ -420,6 +423,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
         concatAdapter.onViewRecycled(holder)
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.setRecycledViewPool(recycledPool)
         concatAdapter.onAttachedToRecyclerView(recyclerView)
         if (recyclerView.layoutManager !is FormLayoutManager) {
             val layoutManager = FormLayoutManager(recyclerView.context)

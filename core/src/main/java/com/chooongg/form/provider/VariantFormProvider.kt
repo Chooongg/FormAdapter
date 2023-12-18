@@ -8,7 +8,6 @@ import com.chooongg.form.FormViewHolder
 import com.chooongg.form.data.FormPartData
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.VariantBaseForm
-import com.chooongg.form.item.VariantChildGroup
 import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.part.FormPartAdapter
 import com.chooongg.form.style.BaseStyle
@@ -16,9 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 
 class VariantFormProvider : BaseFormProvider() {
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View =
-        RecyclerView(parent.context).apply {
-            layoutManager = BaseFormLayoutManager(context)
-        }
+        RecyclerView(parent.context).apply { layoutManager = BaseFormLayoutManager(context) }
 
     override fun onBindViewHolder(
         scope: CoroutineScope,
@@ -27,18 +24,18 @@ class VariantFormProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        val itemVariant = item as? VariantBaseForm
+        val variant = item as? VariantBaseForm
         val recyclerView = view as RecyclerView
         val bindingAdapter = holder.bindingAdapter as? BaseFormPartAdapter
-        if (itemVariant == null || bindingAdapter == null) {
+        if (variant == null || bindingAdapter == null) {
             recyclerView.adapter = null
             return
         }
         if (recyclerView.adapter == null) {
-            recyclerView.adapter = FormPartAdapter(bindingAdapter.formAdapter, itemVariant.style)
+            recyclerView.adapter = FormPartAdapter(bindingAdapter.formAdapter, item.style)
         }
         val adapter = recyclerView.adapter as FormPartAdapter
-        adapter.columnCount = itemVariant._column
+        adapter.columnCount = item._column
         val data = FormPartData()
         data.isEnablePart = item.isRealEnable(enabled)
         data.partName = item.name
@@ -46,10 +43,10 @@ class VariantFormProvider : BaseFormProvider() {
         data.menu = item.menu
         data.menuEnableMode = item.menuEnableMode
         data.menuVisibilityMode = item.menuVisibilityMode
-        data.dynamicGroupDeletingBlock = (item as? VariantChildGroup)?.dynamicGroupDeletingBlock
-        data.dynamicGroupNameFormatBlock = (item as? VariantChildGroup)?.dynamicGroupNameFormatBlock
+        data.isHasDeleteConfirm = item.isHasDeleteConfirm
+        data.dynamicGroupDeletingBlock = item.dynamicGroupDeletingBlock
         data.setOnMenuCreateOptionCallback(item.getMenuCreateOptionCallback())
-        data.getItems().addAll(itemVariant.getItems())
+        data.getItems().addAll(variant.getItems())
         adapter.create(data)
         adapter.update()
     }

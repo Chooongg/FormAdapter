@@ -9,5 +9,8 @@ class InternalFormDynamicAddButton internal constructor() : FormButton(null, nul
     var dynamicGroupNameFormatter: FormGroupNameFormatter? = null
         internal set
 
+    var addBlock: (() -> Unit)? = null
+        internal set
+
     override fun getProvider(adapter: FormAdapter) = InternalFormDynamicAddButtonProvider::class
 }

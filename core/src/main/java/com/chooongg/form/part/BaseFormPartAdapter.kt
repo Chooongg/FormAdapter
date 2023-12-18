@@ -1,6 +1,5 @@
 package com.chooongg.form.part
 
-import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.FormAdapter
+import com.chooongg.form.FormUtils
 import com.chooongg.form.FormViewHolder
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.error.FormDataVerificationException
@@ -20,7 +20,6 @@ import com.chooongg.form.item.InternalFormNone
 import com.chooongg.form.item.InternalFormOperationButton
 import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.item.VariantChildDynamicGroup
-import com.chooongg.form.item.VariantChildGroup
 import com.chooongg.form.provider.InternalFormNoneProvider
 import com.chooongg.form.style.BaseStyle
 import com.chooongg.form.style.NotAlignmentStyle
@@ -82,31 +81,8 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 if (item.isRealVisible(formAdapter.isEnabled)) {
                     when (item) {
                         is VariantChildDynamicGroup -> {
-                            item.getGroups().forEachIndexed { index, child ->
-                                val cg = VariantChildGroup(item.name, item.field)
-                                cg.isHasDeleteConfirm = item.isHasDeleteConfirm
-                                cg.dynamicGroupNameFormatBlock = item.dynamicGroupNameFormatter
-                                cg.getItems().addAll(child.getItems())
-                                if (item.minGroupCount <= index) {
-                                    cg.dynamicGroupDeletingBlock = {
-                                        item.getGroups().remove(child)
-                                        update()
-                                    }
-                                } else {
-                                    cg.dynamicGroupDeletingBlock = null
-                                }
-                                variantIndex = addVariantForm(cg, tempGroup, variantIndex)
-                            }
-                            if (formAdapter.isEnabled && item.dynamicGroupCreateBlock != null && item.maxGroupCount > item.getGroups().size) {
-                                item.addButton.apply {
-                                    name = item.name
-                                    dynamicGroupNameFormatter = item.dynamicGroupNameFormatter
-                                    buttonStyle = item.addButtonStyle
-                                    iconGravity = item.addIconGravity
-                                    icon = item.addIcon
-                                }
-                                tempGroup.add(item.addButton)
-                            }
+                            variantIndex =
+                                addVariantDynamicChildGroupForm(item, tempGroup, variantIndex)
                         }
 
                         is VariantBaseForm -> {
@@ -232,6 +208,16 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
             group.add(item)
         } else {
             val tempChildList = ArrayList<BaseForm>()
+            if (item.name != null) {
+                tempChildList.add(item.getGroupNameItem {
+                    it.name = item.name
+                    it.menu = item.menu
+                    it.menuEnableMode = item.menuEnableMode
+                    it.menuVisibilityMode = item.menuVisibilityMode
+                    it.dynamicGroupDeletingBlock = item.dynamicGroupDeletingBlock
+                    it.setMenuCreateOptionCallback(item.getMenuCreateOptionCallback())
+                })
+            } else item.clearGroupNameItem()
             item.getItems().forEach { child ->
                 child.resetInternalValues()
                 child.initValue(child.content)
@@ -249,6 +235,75 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                     child.indexInCurrentVariant = i
                 }
                 group.addAll(tempChildList)
+            }
+        }
+        return index
+    }
+
+    private fun addVariantDynamicChildGroupForm(
+        item: VariantChildDynamicGroup,
+        group: ArrayList<BaseForm>,
+        variantIndex: Int
+    ): Int {
+        var index = variantIndex
+        if (item.isIndependent) {
+            item._column = item.getColumn(
+                item.getGroups().size, columnCount ?: formAdapter.columnCount
+            )
+            group.add(item)
+        } else {
+            val tempChildList = ArrayList<BaseForm>()
+            item.getGroups().forEachIndexed { i, child ->
+                tempChildList.add(child.getGroupNameItem {
+                    val context = formAdapter.recyclerView?.context
+                    it.name = if (context != null) {
+                        item.dynamicGroupNameFormatter.invoke(
+                            context, FormUtils.getText(context, item.name), i, item.getGroups().size
+                        )
+                    } else item.name
+                    it.name = item.name
+                    it.isHasDeleteConfirm = item.isHasDeleteConfirm
+                    if (item.minGroupCount <= index) {
+                        it.dynamicGroupDeletingBlock = {
+                            item.getGroups().remove(child)
+                            update()
+                        }
+                    } else {
+                        it.dynamicGroupDeletingBlock = null
+                    }
+                    it.menu = item.menu
+                    it.menuVisibilityMode = item.menuVisibilityMode
+                    it.menuEnableMode = item.menuEnableMode
+                    it.setMenuCreateOptionCallback(item.getMenuCreateOptionCallback())
+                })
+                child.getItems().forEach {
+                    it.resetInternalValues()
+                    it.initValue(it.content)
+                    if (it.isRealVisible(formAdapter.isEnabled)) {
+                        tempChildList.add(it)
+                    }
+                }
+            }
+            if (tempChildList.isNotEmpty()) {
+                index++
+                tempChildList.forEachIndexed { i, child ->
+                    child.showAtEdge = item.showAtEdge
+                    child.parentItem = item
+                    child.variantIndexInGroup = index
+                    child.countInCurrentVariant = tempChildList.size
+                    child.indexInCurrentVariant = i
+                }
+                group.addAll(tempChildList)
+            }
+            if (formAdapter.isEnabled && item.dynamicGroupCreateBlock != null && item.maxGroupCount > item.getGroups().size) {
+                item.addButton.apply {
+                    name = item.name
+                    dynamicGroupNameFormatter = item.dynamicGroupNameFormatter
+                    buttonStyle = item.addButtonStyle
+                    iconGravity = item.addIconGravity
+                    icon = item.addIcon
+                }
+                group.add(item.addButton)
             }
         }
         return index

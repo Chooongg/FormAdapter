@@ -172,10 +172,10 @@ class BasicViewModel : ViewModel() {
                     content = "20"
                     menu = R.menu.operation
                     menuVisibilityMode = FormVisibilityMode.ALWAYS
-                    menuCreateOptionCallback {
+                    setMenuCreateOptionCallback {
                         it.findItem(R.id.error).isVisible = false
                     }
-                    onMenuClickListener { context, menu, item ->
+                    setMenuOnClickListener { context, menu, item ->
                         if (menu.itemId == R.id.error) {
                             Toast.makeText(context, "${item.name}", Toast.LENGTH_SHORT).show()
                             true

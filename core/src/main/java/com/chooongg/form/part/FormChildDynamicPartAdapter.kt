@@ -1,28 +1,22 @@
 package com.chooongg.form.part
 
 import com.chooongg.form.FormAdapter
-import com.chooongg.form.data.FormDynamicPartData
-import com.chooongg.form.data.FormGroupData
+import com.chooongg.form.FormUtils
 import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.item.BaseForm
-import com.chooongg.form.item.InternalFormDynamicAddButton
 import com.chooongg.form.item.VariantBaseForm
+import com.chooongg.form.item.VariantChildDynamicGroup
+import com.chooongg.form.item.VariantChildGroup
 import com.chooongg.form.style.BaseStyle
 import org.json.JSONArray
 import org.json.JSONObject
 
-class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
+class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     BaseFormPartAdapter(formAdapter, style) {
 
-    internal var data = FormDynamicPartData()
+    internal var data = VariantChildDynamicGroup(null, null)
 
-    private val addButton = InternalFormDynamicAddButton()
-
-    fun create(data: FormDynamicPartData.() -> Unit) {
-        create(FormDynamicPartData().apply(data))
-    }
-
-    fun create(data: FormDynamicPartData) {
+    fun set(data: VariantChildDynamicGroup) {
         this.data = data
     }
 
@@ -30,62 +24,56 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         data.getGroups().forEach { if (it.getItems().isEmpty()) data.getGroups().remove(it) }
         if (data.dynamicGroupCreateBlock != null) {
             while (data.getGroups().size < data.minGroupCount) {
-                val groupData = FormGroupData()
+                val groupData = VariantChildGroup(null, null)
                 data.dynamicGroupCreateBlock!!.invoke(groupData)
                 data.getGroups().add(groupData)
             }
         }
-        return if (data.isEnablePart) {
-            ArrayList<List<BaseForm>>().apply {
+        return if (data.isRealEnable(formAdapter.isEnabled)) {
+            val context = formAdapter.recyclerView?.context
+            val items = ArrayList<BaseForm>().apply {
                 data.getGroups().forEachIndexed { index, it ->
-                    val group = ArrayList<BaseForm>()
-                    group.add(it.getGroupNameItem { item ->
-                        item.name = data.partName
-                        item.isHasDeleteConfirm = data.isHasDeleteConfirm
-                        item.dynamicGroupNameFormatBlock = data.dynamicGroupNameFormatter
-                        if (data.minGroupCount <= index) {
-                            item.dynamicGroupDeletingBlock = {
-                                data.getGroups().remove(it)
-                                update()
-                            }
-                        } else {
-                            item.dynamicGroupDeletingBlock = null
+                    it._column = it.getColumn(0, columnCount ?: formAdapter.columnCount)
+                    it.name = if (context != null) {
+                        data.dynamicGroupNameFormatter.invoke(
+                            context,
+                            FormUtils.getText(context, data.name),
+                            index,
+                            data.getGroups().size
+                        )
+                    } else data.name
+                    it.isHasDeleteConfirm = data.isHasDeleteConfirm
+                    if (data.minGroupCount <= index) {
+                        it.dynamicGroupDeletingBlock = {
+                            data.getGroups().remove(it)
+                            update()
                         }
-                        item.menu = data.menu
-                        item.menuVisibilityMode = data.menuVisibilityMode
-                        item.menuEnableMode = data.menuEnableMode
-                        item.setMenuCreateOptionCallback(data.getMenuCreateOptionCallback())
-                    })
-                    group.addAll(it.getItems())
-                    add(group)
+                    } else {
+                        it.dynamicGroupDeletingBlock = null
+                    }
+                    add(it)
                 }
                 if (formAdapter.isEnabled && data.dynamicGroupCreateBlock != null && data.maxGroupCount > data.getGroups().size) {
-                    val group = ArrayList<BaseForm>()
-                    group.add(addButton.apply {
-                        name = data.partName
+                    add(data.addButton.apply {
+                        name = data.name
                         dynamicGroupNameFormatter = data.dynamicGroupNameFormatter
                         buttonStyle = data.addButtonStyle
                         iconGravity = data.addIconGravity
                         icon = data.addIcon
                         addBlock = {
                             if (data.dynamicGroupCreateBlock != null) {
-                                val tempAdd = FormGroupData()
+                                val tempAdd = VariantChildGroup(null, null)
                                 data.dynamicGroupCreateBlock!!.invoke(tempAdd)
                                 data.getGroups().add(tempAdd)
                                 update()
                             }
                         }
                     })
-                    add(group)
                 }
             }
+            arrayListOf(items)
         } else emptyList()
     }
-
-    override fun getExtraGroupCount() =
-        if (formAdapter.isEnabled && data.dynamicGroupCreateBlock != null && data.maxGroupCount > data.getGroups().size) {
-            1
-        } else 0
 
     override fun findOfField(field: String): BaseForm? {
         data.getGroups().forEach { group ->
@@ -147,14 +135,14 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     }
 
     override fun executeOutput(json: JSONObject) {
-        if (data.partField != null) {
+        if (data.field != null) {
             val jsonArray = JSONArray()
             data.getGroups().forEach {
                 val childJson = JSONObject()
                 it.getItems().forEach { item -> item.executeOutput(formAdapter, childJson) }
                 jsonArray.put(childJson)
             }
-            json.put(data.partField!!, jsonArray)
+            json.put(data.field!!, jsonArray)
         } else {
             data.getGroups().forEach {
                 it.getItems().forEach { item ->

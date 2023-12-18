@@ -9,6 +9,7 @@ import com.chooongg.form.data.FormGroupData
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.BaseOptionForm
 import com.chooongg.form.item.LinkageForm
+import com.chooongg.form.item.VariantChildGroup
 
 /**
  * 颜色 Block
@@ -40,6 +41,11 @@ typealias FormMenuCreateOptionBlock = (menu: Menu) -> Unit
  * 组创建 Block
  */
 typealias FormGroupCreateBlock = FormGroupData.() -> Unit
+
+/**
+ * 组创建 Block
+ */
+typealias FormChildGroupCreateBlock = VariantChildGroup.() -> Unit
 
 /**
  * 组名称格式化工具 Block

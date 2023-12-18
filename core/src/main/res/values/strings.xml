@@ -2,6 +2,7 @@
 <resources>
 
     <string name="formDefaultGroupName">Group</string>
+    <string name="formDefaultChildGroupName">Child Group</string>
     <string name="fromDefaultHintNone">None</string>
     <string name="formDefaultHintSelect">Please select</string>
     <string name="formDefaultHintInput">Please enter</string>

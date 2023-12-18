@@ -2,6 +2,7 @@
 <resources>
 
     <string name="formDefaultGroupName">组</string>
+    <string name="formDefaultChildGroupName">子组</string>
     <string name="fromDefaultHintNone">空</string>
     <string name="formDefaultHintSelect">请选择</string>
     <string name="formDefaultHintInput">请输入</string>

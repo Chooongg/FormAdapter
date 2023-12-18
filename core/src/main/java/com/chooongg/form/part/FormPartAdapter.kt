@@ -24,7 +24,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     override fun getOriginalItemList(): List<List<BaseForm>> {
         return if (data.isEnablePart) {
             val group = ArrayList<BaseForm>()
-            if (data.dynamicGroupDeletingBlock != null) {
+            if (data.partName != null || data.dynamicGroupDeletingBlock != null) {
                 group.add(data.getGroupNameItem { item ->
                     item.name = data.partName
                     item.menu = data.menu
@@ -32,18 +32,7 @@ class FormPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                     item.menuVisibilityMode = data.menuVisibilityMode
                     item.isHasDeleteConfirm = data.isHasDeleteConfirm
                     item.dynamicGroupDeletingBlock = data.dynamicGroupDeletingBlock
-                    item.dynamicGroupNameFormatBlock = data.dynamicGroupNameFormatBlock
-                    item.menuCreateOptionCallback(data.getMenuCreateOptionCallback())
-                })
-            } else if (data.partName != null) {
-                group.add(data.getGroupNameItem { item ->
-                    item.name = data.partName
-                    item.menu = data.menu
-                    item.menuEnableMode = data.menuEnableMode
-                    item.menuVisibilityMode = data.menuVisibilityMode
-                    item.dynamicGroupDeletingBlock = null
-                    item.dynamicGroupNameFormatBlock = null
-                    item.menuCreateOptionCallback(data.getMenuCreateOptionCallback())
+                    item.setMenuCreateOptionCallback(data.getMenuCreateOptionCallback())
                 })
             } else data.clearGroupNameItem()
             group.addAll(data.getItems())
