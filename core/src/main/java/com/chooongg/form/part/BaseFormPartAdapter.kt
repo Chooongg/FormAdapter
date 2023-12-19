@@ -32,6 +32,12 @@ import org.json.JSONObject
 abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyle) :
     RecyclerView.Adapter<FormViewHolder>() {
 
+    internal var recyclerView: RecyclerView? = null
+
+    internal var parentAdapter: BaseFormPartAdapter? = null
+
+    internal var parentAdapterItemPosition: Int? = null
+
     var style: BaseStyle = style
         internal set
 
@@ -89,9 +95,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                             variantIndex = addVariantForm(item, tempGroup, variantIndex)
                         }
 
-                        else -> {
-                            tempGroup.add(item)
-                        }
+                        else -> tempGroup.add(item)
                     }
                 }
             }
@@ -183,8 +187,20 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
             asyncDiffer.currentList.forEachIndexed { index, form ->
                 if (form.enabledIsChanged(form.isRealEnable(formAdapter.isEnabled))) {
                     notifyItemChanged(index)
-                } else if (form.boundaryIsChanged()) {
-                    notifyItemChanged(index, Boundary.NOTIFY_BOUNDARY_FLAG)
+                } else {
+                    notifyItemChanged(index, FormAdapter.UPDATE_PAYLOAD_FLAG)
+                    if (form.boundaryIsChanged()) {
+                        notifyItemChanged(index, Boundary.NOTIFY_BOUNDARY_FLAG)
+                    }
+                }
+            }
+            parentAdapter?.let {
+                it.recyclerView?.post {
+                    for (i in 0 until it.itemCount) {
+                        if (i != parentAdapterItemPosition) {
+                            it.notifyItemChanged(i)
+                        }
+                    }
                 }
             }
         }
@@ -197,14 +213,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
     ): Int {
         var index = variantIndex
         if (item.isIndependent) {
-            var count = 0
-            item.getItems().forEach { child ->
-                child.initValue(child.content)
-                if (child.isRealVisible(formAdapter.isEnabled)) count++
-            }
-            item._column = item.getColumn(
-                count, columnCount ?: formAdapter.columnCount
-            )
+            item._column = item.getColumn(0, columnCount ?: formAdapter.columnCount)
             group.add(item)
         } else {
             val tempChildList = ArrayList<BaseForm>()
@@ -222,7 +231,17 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 child.resetInternalValues()
                 child.initValue(child.content)
                 if (child.isRealVisible(formAdapter.isEnabled)) {
-                    tempChildList.add(child)
+                    when (child) {
+                        is VariantChildDynamicGroup -> {
+                            index = addVariantDynamicChildGroupForm(child, tempChildList, index)
+                        }
+
+                        is VariantBaseForm -> {
+                            index = addVariantForm(child, tempChildList, index)
+                        }
+
+                        else -> tempChildList.add(child)
+                    }
                 }
             }
             if (tempChildList.isNotEmpty()) {
@@ -247,15 +266,13 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
     ): Int {
         var index = variantIndex
         if (item.isIndependent) {
-            item._column = item.getColumn(
-                item.getGroups().size, columnCount ?: formAdapter.columnCount
-            )
+            item._column = item.getColumn(0, columnCount ?: formAdapter.columnCount)
             group.add(item)
         } else {
+            val context = formAdapter.recyclerView?.context
             val tempChildList = ArrayList<BaseForm>()
             item.getGroups().forEachIndexed { i, child ->
                 tempChildList.add(child.getGroupNameItem {
-                    val context = formAdapter.recyclerView?.context
                     it.name = if (context != null) {
                         item.dynamicGroupNameFormatter.invoke(
                             context, FormUtils.getText(context, item.name), i, item.getGroups().size
@@ -278,7 +295,6 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 })
                 child.getItems().forEach {
                     it.resetInternalValues()
-                    it.initValue(it.content)
                     if (it.isRealVisible(formAdapter.isEnabled)) {
                         tempChildList.add(it)
                     }
@@ -296,14 +312,14 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 group.addAll(tempChildList)
             }
             if (formAdapter.isEnabled && item.dynamicGroupCreateBlock != null && item.maxGroupCount > item.getGroups().size) {
-                item.addButton.apply {
-                    name = item.name
-                    dynamicGroupNameFormatter = item.dynamicGroupNameFormatter
-                    buttonStyle = item.addButtonStyle
-                    iconGravity = item.addIconGravity
-                    icon = item.addIcon
-                }
-                group.add(item.addButton)
+//                item.addButton.apply {
+//                    name = item.name
+//                    dynamicGroupNameFormatter = item.dynamicGroupNameFormatter
+//                    buttonStyle = item.addButtonStyle
+//                    iconGravity = item.addIconGravity
+//                    icon = item.addIcon
+//                }
+//                group.add(item.addButton)
             }
         }
         return index
@@ -559,7 +575,12 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
             .onViewDetachedFromWindow(holder, holder.view)
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        this.recyclerView = recyclerView
+    }
+
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        this.recyclerView = null
         adapterScope.cancel()
         adapterScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     }

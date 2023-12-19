@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.BaseFormLayoutManager
 import com.chooongg.form.FormViewHolder
+import com.chooongg.form.core.R
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.VariantChildDynamicGroup
 import com.chooongg.form.part.BaseFormPartAdapter
@@ -14,7 +15,11 @@ import kotlinx.coroutines.CoroutineScope
 
 class VariantChildDynamicGroupProvider : BaseFormProvider() {
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup) =
-        RecyclerView(parent.context).apply { layoutManager = BaseFormLayoutManager(context) }
+        RecyclerView(parent.context).apply {
+            id = R.id.formInternalChildDynamicGroupView
+            isNestedScrollingEnabled = false
+            layoutManager = BaseFormLayoutManager(context)
+        }
 
     override fun onBindViewHolder(
         scope: CoroutineScope,
@@ -30,13 +35,26 @@ class VariantChildDynamicGroupProvider : BaseFormProvider() {
             recyclerView.adapter = null
             return
         }
-        if (recyclerView.adapter == null) {
-            recyclerView.adapter =
-                FormChildDynamicPartAdapter(bindingAdapter.formAdapter, variant.style)
+        if (recyclerView.recycledViewPool != bindingAdapter.formAdapter.recycledPool) {
+            recyclerView.setRecycledViewPool(bindingAdapter.formAdapter.recycledPool)
         }
-        val adapter = recyclerView.adapter as FormChildDynamicPartAdapter
-        adapter.columnCount = variant._column
-        adapter.set(variant)
-        adapter.update()
+        recyclerView.swapAdapter(
+            FormChildDynamicPartAdapter(bindingAdapter.formAdapter, variant.style).apply {
+                parentAdapter = bindingAdapter
+                parentAdapterItemPosition = holder.bindingAdapterPosition
+                columnCount = variant._column
+                set(variant)
+                update()
+            }, true
+        )
+//        recyclerView.adapter =
+//            FormChildDynamicPartAdapter(bindingAdapter.formAdapter, variant.style).apply {
+//                parentAdapter = bindingAdapter
+//                parentAdapterItemPosition = holder.bindingAdapterPosition
+//                columnCount = variant._column
+//                set(variant)
+//                update()
+//            }
+//        val adapter = recyclerView.adapter as FormChildDynamicPartAdapter
     }
 }

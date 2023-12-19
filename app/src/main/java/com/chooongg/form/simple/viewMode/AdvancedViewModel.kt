@@ -62,11 +62,41 @@ class AdvancedViewModel : ViewModel() {
                             addText("ChildText") {
                                 content = "ChildTest"
                             }
+                            childDynamicGroup("ChildChildGroup", "temp") {
+                                isIndependent = true
+                                addGroup {
+                                    addSwitch("ChildChildSwitch")
+                                    addText("ChildChildText") {
+                                        content = "ChildChildTest"
+                                    }
+                                }
+                                setDynamicGroupCreator {
+                                    addSwitch("ChildChildSwitch")
+                                    addText("ChildChildText") {
+                                        content = "ChildChildTest"
+                                    }
+                                }
+                            }
                         }
                         setDynamicGroupCreator {
                             addSwitch("ChildSwitch")
                             addText("ChildText") {
                                 content = "ChildTest"
+                            }
+                            childDynamicGroup("Child1Group", "temp") {
+                                isIndependent = true
+                                addGroup {
+                                    addSwitch("Child1Switch")
+                                    addText("Child1Text") {
+                                        content = "Child1Test"
+                                    }
+                                }
+                                setDynamicGroupCreator {
+                                    addSwitch("Child1Switch")
+                                    addText("Child1Text") {
+                                        content = "Child1Test"
+                                    }
+                                }
                             }
                         }
                     }

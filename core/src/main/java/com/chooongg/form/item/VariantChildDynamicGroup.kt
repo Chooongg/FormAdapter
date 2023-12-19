@@ -14,8 +14,6 @@ class VariantChildDynamicGroup(name: Any?, field: String?) : VariantBaseForm(nam
 
     private val _groups = mutableListOf<VariantChildGroup>()
 
-    internal val addButton = InternalFormDynamicAddButton()
-
     internal var dynamicGroupCreateBlock: FormChildGroupCreateBlock? = null
 
     internal var dynamicGroupNameFormatter: FormGroupNameFormatter = { _, name, index, count ->

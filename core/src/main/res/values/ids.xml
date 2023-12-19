@@ -8,4 +8,7 @@
     <item name="formInternalContentIconView" type="id" />
     <item name="formInternalContentChildView" type="id" />
     <item name="formInternalContentChildSecondView" type="id" />
+
+    <item name="formInternalVariantView" type="id" />
+    <item name="formInternalChildDynamicGroupView" type="id" />
 </resources>

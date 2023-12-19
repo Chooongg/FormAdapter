@@ -4,6 +4,7 @@ import com.chooongg.form.FormAdapter
 import com.chooongg.form.FormUtils
 import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.item.BaseForm
+import com.chooongg.form.item.InternalFormDynamicAddButton
 import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.item.VariantChildDynamicGroup
 import com.chooongg.form.item.VariantChildGroup
@@ -29,50 +30,55 @@ class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 data.getGroups().add(groupData)
             }
         }
-        return if (data.isRealEnable(formAdapter.isEnabled)) {
-            val context = formAdapter.recyclerView?.context
-            val items = ArrayList<BaseForm>().apply {
-                data.getGroups().forEachIndexed { index, it ->
-                    it._column = it.getColumn(0, columnCount ?: formAdapter.columnCount)
-                    it.name = if (context != null) {
+        val context = formAdapter.recyclerView?.context
+        val items = ArrayList<BaseForm>().apply {
+            data.getGroups().forEachIndexed { index, it ->
+                it.isIndependent = data.isIndependent
+                it._column = it.getColumn(0, columnCount ?: formAdapter.columnCount)
+                it.name = if (context != null) {
+                    data.dynamicGroupNameFormatter.invoke(
+                        context,
+                        FormUtils.getText(context, data.name),
+                        index,
+                        data.getGroups().size
+                    )
+                } else data.name
+                it.isHasDeleteConfirm = data.isHasDeleteConfirm
+                if (data.minGroupCount <= index) {
+                    it.dynamicGroupDeletingBlock = {
+                        data.getGroups().remove(it)
+                        update()
+                    }
+                } else {
+                    it.dynamicGroupDeletingBlock = null
+                }
+                add(it)
+            }
+            if (formAdapter.isEnabled && data.dynamicGroupCreateBlock != null && data.maxGroupCount > data.getGroups().size) {
+                add(InternalFormDynamicAddButton().apply {
+                    name = if (context != null) {
                         data.dynamicGroupNameFormatter.invoke(
                             context,
                             FormUtils.getText(context, data.name),
-                            index,
-                            data.getGroups().size
+                            data.getGroups().size,
+                            data.getGroups().size + 1
                         )
                     } else data.name
-                    it.isHasDeleteConfirm = data.isHasDeleteConfirm
-                    if (data.minGroupCount <= index) {
-                        it.dynamicGroupDeletingBlock = {
-                            data.getGroups().remove(it)
+                    buttonStyle = data.addButtonStyle
+                    iconGravity = data.addIconGravity
+                    icon = data.addIcon
+                    addBlock = {
+                        if (data.dynamicGroupCreateBlock != null) {
+                            val tempAdd = VariantChildGroup(null, null)
+                            data.dynamicGroupCreateBlock!!.invoke(tempAdd)
+                            data.getGroups().add(tempAdd)
                             update()
                         }
-                    } else {
-                        it.dynamicGroupDeletingBlock = null
                     }
-                    add(it)
-                }
-                if (formAdapter.isEnabled && data.dynamicGroupCreateBlock != null && data.maxGroupCount > data.getGroups().size) {
-                    add(data.addButton.apply {
-                        name = data.name
-                        dynamicGroupNameFormatter = data.dynamicGroupNameFormatter
-                        buttonStyle = data.addButtonStyle
-                        iconGravity = data.addIconGravity
-                        icon = data.addIcon
-                        addBlock = {
-                            if (data.dynamicGroupCreateBlock != null) {
-                                val tempAdd = VariantChildGroup(null, null)
-                                data.dynamicGroupCreateBlock!!.invoke(tempAdd)
-                                data.getGroups().add(tempAdd)
-                                update()
-                            }
-                        }
-                    })
-                }
+                })
             }
-            arrayListOf(items)
-        } else emptyList()
+        }
+        return arrayListOf(items)
     }
 
     override fun findOfField(field: String): BaseForm? {

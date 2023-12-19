@@ -217,7 +217,7 @@ open class FormButtonProvider : BaseFormProvider() {
                     startToStart = ConstraintLayout.LayoutParams.PARENT_ID
                     endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
                     topToTop = ConstraintLayout.LayoutParams.PARENT_ID
-                    bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID
+                    bottomToBottom = ConstraintLayout.LayoutParams.UNSET
                 }
             }
         }
