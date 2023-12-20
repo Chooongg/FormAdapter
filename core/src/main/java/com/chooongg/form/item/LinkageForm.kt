@@ -22,7 +22,7 @@ class LinkageForm internal constructor(private val adapter: BaseFormPartAdapter)
             val item = adapter.findOfField(field)
             if (item != null) {
                 block.invoke(item)
-                if (hasPayload) adapter.notifyChangeItem(item, true) else adapter.update()
+                if (hasPayload) adapter.notifyChangeItem(item, true) else adapter.executeUpdate()
             }
         }
     }

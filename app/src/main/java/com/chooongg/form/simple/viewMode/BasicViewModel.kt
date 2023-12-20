@@ -38,8 +38,25 @@ class BasicViewModel : ViewModel() {
     val adapter = FormAdapter(true)
 
     init {
+        adapter.showOperationButton {
+            visibilityMode = FormVisibilityMode.ALWAYS
+            name = "Operation"
+        }
+    }
+
+    fun created() {
         adapter.setNewInstance {
-            initCardElevatedPart("Default") {
+            initCardElevatedPart(/*"Default"*/) {
+                singleLine {
+//                    name = "测试"
+                    isIndependent = true
+                    addText("Text") {
+                        content = "Test"
+                    }
+                    addText("Text") {
+                        content = "Test"
+                    }
+                }
                 addButton("Button(Tonal)", "button") {
                     buttonStyle = FormButton.ButtonStyle.TONAL
                     icon = R.drawable.ic_main_advanced
@@ -59,7 +76,7 @@ class BasicViewModel : ViewModel() {
                     }
                 }
                 singleLine {
-                    name = "测试"
+//                    name = "测试"
                     isIndependent = true
                     addButton("Button1")
                     addButton("Button2")
@@ -227,10 +244,6 @@ class BasicViewModel : ViewModel() {
                     bubbleText = "v1.0.0"
                 }
             }
-        }
-        adapter.showOperationButton {
-            visibilityMode = FormVisibilityMode.ALWAYS
-            name = "Operation"
         }
     }
 }

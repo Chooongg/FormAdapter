@@ -18,7 +18,7 @@ class StyleViewModel : ViewModel() {
 
     val adapter = FormAdapter(true)
 
-    init {
+    fun created() {
         adapter.setNewInstance {
             initPart {
                 partName = "NoneStyle"

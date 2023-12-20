@@ -22,7 +22,6 @@ import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.item.VariantChildDynamicGroup
 import com.chooongg.form.provider.InternalFormNoneProvider
 import com.chooongg.form.style.BaseStyle
-import com.chooongg.form.style.NotAlignmentStyle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -35,8 +34,6 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
     internal var recyclerView: RecyclerView? = null
 
     internal var parentAdapter: BaseFormPartAdapter? = null
-
-    internal var parentAdapterItemPosition: Int? = null
 
     var style: BaseStyle = style
         internal set
@@ -74,7 +71,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
         executeUpdate()
     }
 
-    private fun executeUpdate() {
+    internal fun executeUpdate(completeBlock: (() -> Unit)? = null) {
         val groups = getOriginalItemList()
         val extraGroupsCount = getExtraGroupCount()
         val tempList = ArrayList<ArrayList<BaseForm>>()
@@ -194,15 +191,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                     }
                 }
             }
-            parentAdapter?.let {
-                it.recyclerView?.post {
-                    for (i in 0 until it.itemCount) {
-                        if (i != parentAdapterItemPosition) {
-                            it.notifyItemChanged(i)
-                        }
-                    }
-                }
-            }
+            completeBlock?.invoke()
         }
     }
 
@@ -283,7 +272,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                     if (item.minGroupCount <= index) {
                         it.dynamicGroupDeletingBlock = {
                             item.getGroups().remove(child)
-                            update()
+                            executeUpdate()
                         }
                     } else {
                         it.dynamicGroupDeletingBlock = null
@@ -296,7 +285,17 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 child.getItems().forEach {
                     it.resetInternalValues()
                     if (it.isRealVisible(formAdapter.isEnabled)) {
-                        tempChildList.add(it)
+                        when (it) {
+                            is VariantChildDynamicGroup -> {
+                                index = addVariantDynamicChildGroupForm(it, tempChildList, index)
+                            }
+
+                            is VariantBaseForm -> {
+                                index = addVariantForm(it, tempChildList, index)
+                            }
+
+                            else -> tempChildList.add(it)
+                        }
                     }
                 }
             }
@@ -312,14 +311,13 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 group.addAll(tempChildList)
             }
             if (formAdapter.isEnabled && item.dynamicGroupCreateBlock != null && item.maxGroupCount > item.getGroups().size) {
-//                item.addButton.apply {
-//                    name = item.name
-//                    dynamicGroupNameFormatter = item.dynamicGroupNameFormatter
-//                    buttonStyle = item.addButtonStyle
-//                    iconGravity = item.addIconGravity
-//                    icon = item.addIcon
-//                }
-//                group.add(item.addButton)
+                group.add(InternalFormDynamicAddButton().apply {
+                    name = item.name
+                    dynamicGroupNameFormatter = item.dynamicGroupNameFormatter
+                    buttonStyle = item.addButtonStyle
+                    iconGravity = item.addIconGravity
+                    icon = item.addIcon
+                })
             }
         }
         return index
@@ -424,11 +422,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
     fun getItem(position: Int) = itemList[position]
 
     override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
-        if (item is InternalFormDynamicAddButton) {
-            return formAdapter.getItemViewType4Pool(NotAlignmentStyle(), item)
-        }
-        return formAdapter.getItemViewType4Pool(style, item)
+        return formAdapter.getItemViewType4Pool(style, getItem(position))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FormViewHolder {

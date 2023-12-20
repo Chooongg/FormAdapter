@@ -11,7 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 class InternalFormGroupNameProvider : BaseFormProvider() {
 
     override fun onCreateViewHolder(style: BaseStyle, parent: ViewGroup): View {
-        return style.partNameProvider.onCreateGroupName(style, parent)
+        return style.groupNameProvider.onCreateGroupName(style, parent)
     }
 
     override fun onBindViewHolder(
@@ -21,7 +21,7 @@ class InternalFormGroupNameProvider : BaseFormProvider() {
         item: BaseForm,
         enabled: Boolean
     ) {
-        holder.style.partNameProvider.onBindGroupName(
+        holder.style.groupNameProvider.onBindGroupName(
             holder, view, item as InternalFormGroupName, enabled
         )
     }

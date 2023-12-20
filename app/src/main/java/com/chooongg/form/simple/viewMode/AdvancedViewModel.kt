@@ -39,7 +39,7 @@ class AdvancedViewModel : ViewModel() {
 
     val adapter = FormAdapter(true)
 
-    init {
+    fun created() {
         adapter.setNewInstance {
             initCardOutlinedDynamicPart("Test Group") {
                 minGroupCount = 0
@@ -63,6 +63,7 @@ class AdvancedViewModel : ViewModel() {
                                 content = "ChildTest"
                             }
                             childDynamicGroup("ChildChildGroup", "temp") {
+                                addButtonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
                                 isIndependent = true
                                 addGroup {
                                     addSwitch("ChildChildSwitch")
@@ -83,18 +84,19 @@ class AdvancedViewModel : ViewModel() {
                             addText("ChildText") {
                                 content = "ChildTest"
                             }
-                            childDynamicGroup("Child1Group", "temp") {
+                            childDynamicGroup("ChildChildGroup", "temp") {
+                                addButtonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
                                 isIndependent = true
                                 addGroup {
-                                    addSwitch("Child1Switch")
-                                    addText("Child1Text") {
-                                        content = "Child1Test"
+                                    addSwitch("ChildChildSwitch")
+                                    addText("ChildChildText") {
+                                        content = "ChildChildTest"
                                     }
                                 }
                                 setDynamicGroupCreator {
-                                    addSwitch("Child1Switch")
-                                    addText("Child1Text") {
-                                        content = "Child1Test"
+                                    addSwitch("ChildChildSwitch")
+                                    addText("ChildChildText") {
+                                        content = "ChildChildTest"
                                     }
                                 }
                             }

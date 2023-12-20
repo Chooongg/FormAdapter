@@ -51,13 +51,13 @@ class FormLayoutManager(context: Context, maxItemWidth: Int = 0) : BaseFormLayou
         widthSpec: Int,
         heightSpec: Int
     ) {
-        super.onMeasure(recycler, state, widthSpec, heightSpec)
         val width = MeasureSpec.getSize(widthSpec)
         columnCount =
             max(
                 1,
                 min(12, (width - max(0, formMarginStart) - max(0, formMarginEnd)) / maxItemWidth)
             )
+        super.onMeasure(recycler, state, widthSpec, heightSpec)
     }
 
     override fun onLayoutChildren(recycler: RecyclerView.Recycler, state: RecyclerView.State) {

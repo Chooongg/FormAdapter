@@ -8,6 +8,7 @@ import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.InternalFormDynamicAddButton
 import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.style.BaseStyle
+import com.chooongg.form.style.NotAlignmentStyle
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -24,6 +25,14 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
 
     fun create(data: FormDynamicPartData) {
         this.data = data
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val item = getItem(position)
+        if (item is InternalFormDynamicAddButton) {
+            return formAdapter.getItemViewType4Pool(NotAlignmentStyle(), item)
+        }
+        return formAdapter.getItemViewType4Pool(style, item)
     }
 
     override fun getOriginalItemList(): List<List<BaseForm>> {
@@ -46,7 +55,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                         if (data.minGroupCount <= index) {
                             item.dynamicGroupDeletingBlock = {
                                 data.getGroups().remove(it)
-                                update()
+                                executeUpdate()
                             }
                         } else {
                             item.dynamicGroupDeletingBlock = null
@@ -72,7 +81,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                                 val tempAdd = FormGroupData()
                                 data.dynamicGroupCreateBlock!!.invoke(tempAdd)
                                 data.getGroups().add(tempAdd)
-                                update()
+                                executeUpdate()
                             }
                         }
                     })

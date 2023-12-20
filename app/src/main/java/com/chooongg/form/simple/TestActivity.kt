@@ -8,8 +8,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import lv.chi.chilitextanimation.animateCharacterChange
-import lv.chi.chilitextanimation.animation.VerticalSlideCharacterAnimation
 
 class TestActivity : AppCompatActivity() {
 
@@ -19,35 +17,34 @@ class TestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.test.text = "测试文本"
-        binding.test.animateCharacterChange(VerticalSlideCharacterAnimation())
         lifecycleScope.launch {
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.text = "测试输入文本"
+                binding.test.animateText("测试输入文本")
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.text = "测试文本111"
+                binding.test.animateText("测试文本111")
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.text = "222测试文本"
+                binding.test.animateText("222测试文本")
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.text = "测试文本44"
+                binding.test.animateText("测试文本44")
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.text = "测试22文本"
+                binding.test.animateText("测试22文本")
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.text = "测试文本"
+                binding.test.animateText("测试文本")
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.text = "123测试文本"
+                binding.test.animateText("123测试文本")
             }
         }
     }

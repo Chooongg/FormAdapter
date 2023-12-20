@@ -1,5 +1,6 @@
 package com.chooongg.form.provider
 
+import android.provider.SyncStateContract.Helpers.update
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,7 +10,7 @@ import com.chooongg.form.core.R
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.part.BaseFormPartAdapter
-import com.chooongg.form.part.FormPartAdapter
+import com.chooongg.form.part.FormChildPartAdapter
 import com.chooongg.form.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
 
@@ -18,7 +19,10 @@ class VariantFormProvider : BaseFormProvider() {
         RecyclerView(parent.context).apply {
             id = R.id.formInternalVariantView
             isNestedScrollingEnabled = false
-            layoutManager = BaseFormLayoutManager(context)
+            layoutManager = object : BaseFormLayoutManager(context) {
+                override fun canScrollVertically() = false
+                override fun canScrollHorizontally() = false
+            }
         }
 
     override fun onBindViewHolder(
@@ -39,38 +43,11 @@ class VariantFormProvider : BaseFormProvider() {
             recyclerView.setRecycledViewPool(bindingAdapter.formAdapter.recycledPool)
         }
         recyclerView.swapAdapter(
-            FormPartAdapter(bindingAdapter.formAdapter, item.style).apply {
-                columnCount = item._column
-                data.getItems().clear()
-                data.isEnablePart = true
-                data.partName = item.name
-                data.partField = item.field
-                data.menu = item.menu
-                data.menuEnableMode = item.menuEnableMode
-                data.menuVisibilityMode = item.menuVisibilityMode
-                data.isHasDeleteConfirm = item.isHasDeleteConfirm
-                data.dynamicGroupDeletingBlock = item.dynamicGroupDeletingBlock
-                data.setOnMenuCreateOptionCallback(item.getMenuCreateOptionCallback())
-                data.getItems().addAll(variant.getItems())
-                create(data)
-                update()
-            },true
+            FormChildPartAdapter(bindingAdapter.formAdapter, item.style).apply {
+                parentAdapter = bindingAdapter
+                columnCount = variant._column
+                set(variant)
+            }, false
         )
-//        val adapter = recyclerView.adapter as FormPartAdapter
-//        adapter.columnCount = item._column
-//        val data = adapter.data
-//        data.getItems().clear()
-//        data.isEnablePart = true
-//        data.partName = item.name
-//        data.partField = item.field
-//        data.menu = item.menu
-//        data.menuEnableMode = item.menuEnableMode
-//        data.menuVisibilityMode = item.menuVisibilityMode
-//        data.isHasDeleteConfirm = item.isHasDeleteConfirm
-//        data.dynamicGroupDeletingBlock = item.dynamicGroupDeletingBlock
-//        data.setOnMenuCreateOptionCallback(item.getMenuCreateOptionCallback())
-//        data.getItems().addAll(variant.getItems())
-//        adapter.create(data)
-//        adapter.update()
     }
 }

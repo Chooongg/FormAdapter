@@ -24,6 +24,7 @@ import com.chooongg.form.style.NoneStyle
 import com.chooongg.form.style.NotAlignmentStyle
 import com.chooongg.form.typeset.BaseTypeset
 import org.json.JSONObject
+import kotlin.math.max
 
 open class FormAdapter(isEnabled: Boolean = false) :
     RecyclerView.Adapter<ViewHolder>() {
@@ -105,6 +106,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
 
     fun setNewInstance(block: FormAdapterData.() -> Unit) {
         clear()
+        if (operationPart != null) addPart(operationPart)
         val data = FormAdapterData(this)
         block(data)
         data.getParts().forEach {
@@ -118,16 +120,19 @@ open class FormAdapter(isEnabled: Boolean = false) :
     }
 
     fun showOperationButton(style: BaseStyle = NotAlignmentStyle(), block: FormButton.() -> Unit) {
+        if (operationPart != null) {
+            dismissOperationButton()
+        }
         operationPart = addPart(style) {
             addItem(InternalFormOperationButton("").apply {
                 visibilityMode = FormVisibilityMode.ENABLED
                 enableMode = FormEnableMode.ALWAYS
                 block.invoke(this)
             })
-        }
+        }.apply { update() }
     }
 
-    fun removeOperationButton() {
+    fun dismissOperationButton() {
         if (operationPart != null) {
             concatAdapter.removeAdapter(operationPart!!)
             operationPart = null
@@ -237,7 +242,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
             val item = it.findOfField(field)
             if (item != null) {
                 block.invoke(item)
-                if (hasPayload) it.notifyChangeItem(item, true) else it.update()
+                if (hasPayload) it.notifyChangeItem(item, true) else it.executeUpdate()
                 return true
             }
         }
@@ -255,7 +260,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
             if (item != null) {
                 block.invoke(item)
                 if (update) {
-                    if (hasPayload) it.notifyChangeItem(item, true) else it.update()
+                    if (hasPayload) it.notifyChangeItem(item, true) else it.executeUpdate()
                 }
                 return true
             }
@@ -350,7 +355,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
     fun addPart(adapter: FormPartAdapter?, update: Boolean = true) {
         if (adapter != null) {
             if (operationPart != null) {
-                concatAdapter.addAdapter(concatAdapter.adapters.size - 1, adapter)
+                concatAdapter.addAdapter(max(0, concatAdapter.adapters.lastIndex), adapter)
             } else concatAdapter.addAdapter(adapter)
             if (update) adapter.update()
         }
@@ -369,7 +374,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
     fun addDynamicPart(adapter: FormDynamicPartAdapter?, update: Boolean = true) {
         if (adapter != null) {
             if (operationPart != null) {
-                concatAdapter.addAdapter(concatAdapter.adapters.size - 1, adapter)
+                concatAdapter.addAdapter(max(0, concatAdapter.adapters.lastIndex), adapter)
             } else concatAdapter.addAdapter(adapter)
             if (update) adapter.update()
         }

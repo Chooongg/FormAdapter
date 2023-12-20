@@ -1,6 +1,7 @@
 package com.chooongg.form.item
 
 import com.chooongg.form.FormAdapter
+import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.provider.VariantFormProvider
 import com.chooongg.form.style.BaseStyle
@@ -10,6 +11,8 @@ import com.chooongg.form.typeset.EmptyTypeset
 import kotlin.reflect.KClass
 
 abstract class VariantBaseForm(name: Any?, field: String?) : BaseForm(name, field) {
+
+    internal var adapter: BaseFormPartAdapter? = null
 
     private var _groupNameItem: InternalFormGroupName? = null
 

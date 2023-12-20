@@ -9,6 +9,7 @@ import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.item.VariantChildDynamicGroup
 import com.chooongg.form.item.VariantChildGroup
 import com.chooongg.form.style.BaseStyle
+import com.chooongg.form.style.NoneStyle
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -19,6 +20,15 @@ class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
 
     fun set(data: VariantChildDynamicGroup) {
         this.data = data
+        update()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val item = getItem(position)
+        if (item is InternalFormDynamicAddButton) {
+            return formAdapter.getItemViewType4Pool(NoneStyle(), item)
+        }
+        return formAdapter.getItemViewType4Pool(style, item)
     }
 
     override fun getOriginalItemList(): List<List<BaseForm>> {
@@ -33,6 +43,7 @@ class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         val context = formAdapter.recyclerView?.context
         val items = ArrayList<BaseForm>().apply {
             data.getGroups().forEachIndexed { index, it ->
+                it.parentItem = data
                 it.isIndependent = data.isIndependent
                 it._column = it.getColumn(0, columnCount ?: formAdapter.columnCount)
                 it.name = if (context != null) {
@@ -47,7 +58,16 @@ class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 if (data.minGroupCount <= index) {
                     it.dynamicGroupDeletingBlock = {
                         data.getGroups().remove(it)
-                        update()
+                        var tempAdapter: BaseFormPartAdapter = this@FormChildDynamicPartAdapter
+                        var isTopLevel = false
+                        while (!isTopLevel) {
+                            if (tempAdapter.parentAdapter != null) {
+                                tempAdapter = tempAdapter.parentAdapter!!
+                            } else {
+                                isTopLevel = true
+                            }
+                        }
+                        tempAdapter.update()
                     }
                 } else {
                     it.dynamicGroupDeletingBlock = null
@@ -72,7 +92,7 @@ class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                             val tempAdd = VariantChildGroup(null, null)
                             data.dynamicGroupCreateBlock!!.invoke(tempAdd)
                             data.getGroups().add(tempAdd)
-                            update()
+                            executeUpdate()
                         }
                     }
                 })

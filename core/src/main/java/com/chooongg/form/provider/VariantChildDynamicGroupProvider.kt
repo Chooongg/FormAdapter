@@ -18,7 +18,10 @@ class VariantChildDynamicGroupProvider : BaseFormProvider() {
         RecyclerView(parent.context).apply {
             id = R.id.formInternalChildDynamicGroupView
             isNestedScrollingEnabled = false
-            layoutManager = BaseFormLayoutManager(context)
+            layoutManager = object : BaseFormLayoutManager(context) {
+                override fun canScrollVertically() = false
+                override fun canScrollHorizontally() = false
+            }
         }
 
     override fun onBindViewHolder(
@@ -41,20 +44,9 @@ class VariantChildDynamicGroupProvider : BaseFormProvider() {
         recyclerView.swapAdapter(
             FormChildDynamicPartAdapter(bindingAdapter.formAdapter, variant.style).apply {
                 parentAdapter = bindingAdapter
-                parentAdapterItemPosition = holder.bindingAdapterPosition
                 columnCount = variant._column
                 set(variant)
-                update()
-            }, true
+            }, false
         )
-//        recyclerView.adapter =
-//            FormChildDynamicPartAdapter(bindingAdapter.formAdapter, variant.style).apply {
-//                parentAdapter = bindingAdapter
-//                parentAdapterItemPosition = holder.bindingAdapterPosition
-//                columnCount = variant._column
-//                set(variant)
-//                update()
-//            }
-//        val adapter = recyclerView.adapter as FormChildDynamicPartAdapter
     }
 }

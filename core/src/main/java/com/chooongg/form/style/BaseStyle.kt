@@ -24,7 +24,7 @@ abstract class BaseStyle {
     /**
      * 片段名称提供器
      */
-    var partNameProvider: BaseGroupNameProvider = FormManager.Default.groupNameProvider
+    var groupNameProvider: BaseGroupNameProvider = FormManager.Default.groupNameProvider
 
     /**
      * 图标提供器
@@ -120,7 +120,7 @@ abstract class BaseStyle {
     override fun equals(other: Any?): Boolean {
         if (other !is BaseStyle) return false
         if (javaClass != other.javaClass) return false
-        if (partNameProvider != other.partNameProvider) return false
+        if (groupNameProvider != other.groupNameProvider) return false
         if (typeset != other.typeset) return false
         if (horizontalIsSeparateItem != other.horizontalIsSeparateItem) return false
         return true

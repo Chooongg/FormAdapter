@@ -22,6 +22,8 @@ class BasicFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = super.onCreateView(inflater, container, savedInstanceState)
+        toolbar.setTitle(R.string.basic)
+        formView.setFormAdapter(model.adapter)
         model.adapter.setOnMenuClickListener { context, menu, item ->
             Toast.makeText(context, "${item.name}, ${menu.title}", Toast.LENGTH_SHORT)
                 .show()
@@ -34,6 +36,10 @@ class BasicFragment : BaseFragment() {
             Toast.makeText(context, "点击了操作按钮", Toast.LENGTH_SHORT).show()
         }
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        model.created()
     }
 
     override fun change() {
@@ -54,10 +60,5 @@ class BasicFragment : BaseFragment() {
     }
 
     override fun errorNotify() {
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        toolbar.setTitle(R.string.basic)
-        formView.setFormAdapter(model.adapter)
     }
 }
