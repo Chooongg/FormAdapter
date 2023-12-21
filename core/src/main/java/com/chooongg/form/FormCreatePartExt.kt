@@ -9,24 +9,24 @@ import com.chooongg.form.style.CardOutlinedStyle
 import com.chooongg.form.style.CardSeparateElevatedStyle
 import com.chooongg.form.style.CardSeparateFilledStyle
 import com.chooongg.form.style.CardSeparateOutlinedStyle
-import com.chooongg.form.style.NotAlignmentStyle
+import com.chooongg.form.style.NegativePaddingStyle
 
 fun IFormAdapterCreator.initNotAlignmentPart(
     partName: Any? = null,
     partField: String? = null,
-    styleBlock: (NotAlignmentStyle.() -> Unit)? = null,
+    styleBlock: (NegativePaddingStyle.() -> Unit)? = null,
     block: FormPartData.() -> Unit
 ) = initPart(
-    partName, partField, NotAlignmentStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, NegativePaddingStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initNotAlignmentDynamicPart(
     partName: Any? = null,
     partField: String? = null,
-    styleBlock: (NotAlignmentStyle.() -> Unit)? = null,
+    styleBlock: (NegativePaddingStyle.() -> Unit)? = null,
     block: FormDynamicPartData.() -> Unit
 ) = initDynamicPart(
-    partName, partField, NotAlignmentStyle().apply { styleBlock?.invoke(this) }, block
+    partName, partField, NegativePaddingStyle().apply { styleBlock?.invoke(this) }, block
 )
 
 fun IFormAdapterCreator.initCardElevatedPart(

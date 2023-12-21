@@ -32,8 +32,9 @@ class Boundary(
         const val NOTIFY_BOUNDARY_FLAG = "FormUpdateBoundary"
 
         const val NONE = 0
-        const val MIDDLE = 1
-        const val GLOBAL = 2
+        const val MIDDLE_NO_MARGIN = 1
+        const val MIDDLE = 2
+        const val GLOBAL = 3
     }
 
     @IntDef(NONE, MIDDLE, GLOBAL)

@@ -21,7 +21,7 @@ import com.chooongg.form.part.FormPartAdapter
 import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.style.BaseStyle
 import com.chooongg.form.style.NoneStyle
-import com.chooongg.form.style.NotAlignmentStyle
+import com.chooongg.form.style.NegativePaddingStyle
 import com.chooongg.form.typeset.BaseTypeset
 import org.json.JSONObject
 import kotlin.math.max
@@ -119,7 +119,7 @@ open class FormAdapter(isEnabled: Boolean = false) :
         updateForm()
     }
 
-    fun showOperationButton(style: BaseStyle = NotAlignmentStyle(), block: FormButton.() -> Unit) {
+    fun showOperationButton(style: BaseStyle = NegativePaddingStyle(), block: FormButton.() -> Unit) {
         if (operationPart != null) {
             dismissOperationButton()
         }

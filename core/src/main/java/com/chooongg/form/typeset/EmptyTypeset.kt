@@ -24,10 +24,10 @@ class EmptyTypeset : BaseTypeset() {
 
     override fun addView(style: BaseStyle, parentView: ViewGroup, child: View) = Unit
 
-    override fun setTypesetLayoutPadding(
-        holder: FormViewHolder,
-        layout: ViewGroup?,
-        insideInfo: FormInsideInfo,
-        item: BaseForm
-    ) = Unit
+//    override fun setTypesetLayoutPadding(
+//        holder: FormViewHolder,
+//        layout: ViewGroup?,
+//        insideInfo: FormInsideInfo,
+//        item: BaseForm
+//    ) = Unit
 }

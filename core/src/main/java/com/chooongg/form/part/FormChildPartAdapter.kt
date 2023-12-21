@@ -10,6 +10,8 @@ import org.json.JSONObject
 class FormChildPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     BaseFormPartAdapter(formAdapter, style) {
 
+    override var needBlankFill: Boolean = false
+
     internal lateinit var data: VariantBaseForm
 
     fun set(data: VariantBaseForm) {

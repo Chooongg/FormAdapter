@@ -16,6 +16,8 @@ import org.json.JSONObject
 class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     BaseFormPartAdapter(formAdapter, style) {
 
+    override var needBlankFill: Boolean = false
+
     internal var data = VariantChildDynamicGroup(null, null)
 
     fun set(data: VariantChildDynamicGroup) {
@@ -41,6 +43,7 @@ class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
             }
         }
         val context = formAdapter.recyclerView?.context
+        val groups = ArrayList<List<BaseForm>>()
         val items = ArrayList<BaseForm>().apply {
             data.getGroups().forEachIndexed { index, it ->
                 it.parentItem = data
@@ -55,7 +58,7 @@ class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                     )
                 } else data.name
                 it.isHasDeleteConfirm = data.isHasDeleteConfirm
-                if (data.minGroupCount <= index) {
+                if (data.minGroupCount < data.getGroups().size) {
                     it.dynamicGroupDeletingBlock = {
                         data.getGroups().remove(it)
                         var tempAdapter: BaseFormPartAdapter = this@FormChildDynamicPartAdapter
@@ -74,31 +77,34 @@ class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
                 }
                 add(it)
             }
-            if (formAdapter.isEnabled && data.dynamicGroupCreateBlock != null && data.maxGroupCount > data.getGroups().size) {
-                add(InternalFormDynamicAddButton().apply {
-                    name = if (context != null) {
-                        data.dynamicGroupNameFormatter.invoke(
-                            context,
-                            FormUtils.getText(context, data.name),
-                            data.getGroups().size,
-                            data.getGroups().size + 1
-                        )
-                    } else data.name
-                    buttonStyle = data.addButtonStyle
-                    iconGravity = data.addIconGravity
-                    icon = data.addIcon
-                    addBlock = {
-                        if (data.dynamicGroupCreateBlock != null) {
-                            val tempAdd = VariantChildGroup(null, null)
-                            data.dynamicGroupCreateBlock!!.invoke(tempAdd)
-                            data.getGroups().add(tempAdd)
-                            executeUpdate()
-                        }
-                    }
-                })
-            }
         }
-        return arrayListOf(items)
+        groups.add(items)
+        if (formAdapter.isEnabled && data.dynamicGroupCreateBlock != null && data.maxGroupCount > data.getGroups().size) {
+            val addItems = ArrayList<BaseForm>()
+            addItems.add(InternalFormDynamicAddButton().apply {
+                name = if (context != null) {
+                    data.dynamicGroupNameFormatter.invoke(
+                        context,
+                        FormUtils.getText(context, data.name),
+                        data.getGroups().size,
+                        data.getGroups().size + 1
+                    )
+                } else data.name
+                buttonStyle = data.addButtonStyle
+                iconGravity = data.addIconGravity
+                icon = data.addIcon
+                addBlock = {
+                    if (data.dynamicGroupCreateBlock != null) {
+                        val tempAdd = VariantChildGroup(null, null)
+                        data.dynamicGroupCreateBlock!!.invoke(tempAdd)
+                        data.getGroups().add(tempAdd)
+                        executeUpdate()
+                    }
+                }
+            })
+            groups.add(addItems)
+        }
+        return groups
     }
 
     override fun findOfField(field: String): BaseForm? {

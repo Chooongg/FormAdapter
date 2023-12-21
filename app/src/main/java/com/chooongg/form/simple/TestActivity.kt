@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.chooongg.form.simple.databinding.ActivityTestBinding
+import com.yy.mobile.rollingtextview.CharOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,35 +17,29 @@ class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        binding.test.text = "测试文本"
+        binding.test.addCharOrder(arrayOf('.'))
+        binding.test.addCharOrder(CharOrder.Number)
+        binding.test.setText("421315.51")
         lifecycleScope.launch {
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.animateText("测试输入文本")
+                binding.test.setText("845.21")
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.animateText("测试文本111")
+                binding.test.setText("876.5")
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.animateText("222测试文本")
+                binding.test.setText("1")
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.animateText("测试文本44")
+                binding.test.setText("5124.32")
             }
             delay(2000)
             withContext(Dispatchers.Main) {
-                binding.test.animateText("测试22文本")
-            }
-            delay(2000)
-            withContext(Dispatchers.Main) {
-                binding.test.animateText("测试文本")
-            }
-            delay(2000)
-            withContext(Dispatchers.Main) {
-                binding.test.animateText("123测试文本")
+                binding.test.setText("5093.4")
             }
         }
     }

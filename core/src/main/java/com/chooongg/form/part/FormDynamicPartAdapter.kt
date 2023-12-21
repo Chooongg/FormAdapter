@@ -8,7 +8,7 @@ import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.InternalFormDynamicAddButton
 import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.style.BaseStyle
-import com.chooongg.form.style.NotAlignmentStyle
+import com.chooongg.form.style.ExternalAlignedStyle
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -30,7 +30,7 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
         if (item is InternalFormDynamicAddButton) {
-            return formAdapter.getItemViewType4Pool(NotAlignmentStyle(), item)
+            return formAdapter.getItemViewType4Pool(ExternalAlignedStyle(), item)
         }
         return formAdapter.getItemViewType4Pool(style, item)
     }
@@ -46,13 +46,13 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
         }
         return if (data.isEnablePart) {
             ArrayList<List<BaseForm>>().apply {
-                data.getGroups().forEachIndexed { index, it ->
+                data.getGroups().forEach {
                     val group = ArrayList<BaseForm>()
                     group.add(it.getGroupNameItem { item ->
                         item.name = data.partName
                         item.isHasDeleteConfirm = data.isHasDeleteConfirm
                         item.dynamicGroupNameFormatBlock = data.dynamicGroupNameFormatter
-                        if (data.minGroupCount <= index) {
+                        if (data.minGroupCount < data.getGroups().size) {
                             item.dynamicGroupDeletingBlock = {
                                 data.getGroups().remove(it)
                                 executeUpdate()

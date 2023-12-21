@@ -33,6 +33,8 @@ import com.chooongg.form.inputMode.InputModePassword
 import com.chooongg.form.item.FormButton
 import com.chooongg.form.item.FormTime
 import com.chooongg.form.option.Option
+import com.chooongg.form.style.CardElevatedStyle
+import com.chooongg.form.style.CardFilledStyle
 import kotlinx.coroutines.delay
 
 class AdvancedViewModel : ViewModel() {
@@ -57,12 +59,14 @@ class AdvancedViewModel : ViewModel() {
                     }
                     childDynamicGroup("ChildGroup", "temp") {
                         isIndependent = true
+                        style = CardFilledStyle()
                         addGroup {
                             addSwitch("ChildSwitch")
                             addText("ChildText") {
                                 content = "ChildTest"
                             }
                             childDynamicGroup("ChildChildGroup", "temp") {
+                                style = CardElevatedStyle()
                                 addButtonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
                                 isIndependent = true
                                 addGroup {
@@ -85,6 +89,7 @@ class AdvancedViewModel : ViewModel() {
                                 content = "ChildTest"
                             }
                             childDynamicGroup("ChildChildGroup", "temp") {
+                                style = CardElevatedStyle()
                                 addButtonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
                                 isIndependent = true
                                 addGroup {

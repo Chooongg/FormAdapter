@@ -9,7 +9,7 @@ import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.part.BaseFormPartAdapter
 
-class NotAlignmentStyle : BaseStyle() {
+class ExternalAlignedStyle : BaseStyle() {
 
     override fun isDecorateNoneItem() = false
 

@@ -93,7 +93,7 @@ abstract class BaseTypeset {
         item: BaseForm
     ) {
         if (item.preventAdjustmentBoundaries) return
-        layout?.setPaddingRelative(
+        (layout ?: holder.itemView as? ViewGroup)?.setPaddingRelative(
             when (item.insideBoundary.start) {
                 Boundary.GLOBAL -> insideInfo.start - insideInfo.middleStart
                 else -> 0

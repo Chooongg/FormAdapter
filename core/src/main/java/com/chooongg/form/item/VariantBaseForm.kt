@@ -5,7 +5,7 @@ import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.provider.VariantFormProvider
 import com.chooongg.form.style.BaseStyle
-import com.chooongg.form.style.EmptyStyle
+import com.chooongg.form.style.NegativePaddingStyle
 import com.chooongg.form.typeset.BaseTypeset
 import com.chooongg.form.typeset.EmptyTypeset
 import kotlin.reflect.KClass
@@ -24,7 +24,7 @@ abstract class VariantBaseForm(name: Any?, field: String?) : BaseForm(name, fiel
     /**
      * 主题
      */
-    var style: BaseStyle = EmptyStyle()
+    var style: BaseStyle = NegativePaddingStyle()
 
     /**
      * 删除是否需要确认操作

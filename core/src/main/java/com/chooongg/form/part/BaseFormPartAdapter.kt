@@ -31,9 +31,14 @@ import org.json.JSONObject
 abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyle) :
     RecyclerView.Adapter<FormViewHolder>() {
 
+    protected open var needBlankFill: Boolean = true
+
     internal var recyclerView: RecyclerView? = null
 
     internal var parentAdapter: BaseFormPartAdapter? = null
+
+    internal var parentBoundary: Boundary =
+        Boundary(Boundary.GLOBAL, Boundary.MIDDLE, Boundary.GLOBAL, Boundary.MIDDLE)
 
     var style: BaseStyle = style
         internal set
@@ -142,7 +147,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                         if (lastItem.spanIndex + lastItem.spanSize < spanCount) {
                             if (lastItem.autoFill) {
                                 lastItem.spanSize = spanCount - lastItem.spanIndex
-                            } else {
+                            } else if (needBlankFill) {
                                 val noneIndex = lastItem.spanIndex + lastItem.spanSize
                                 tempGroup.add(InternalFormNone(noneIndex, spanCount - noneIndex))
                             }
@@ -159,7 +164,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                     if (item.spanIndex + item.spanSize < spanCount) {
                         if (item.autoFill) {
                             item.spanSize = spanCount - item.spanIndex
-                        } else {
+                        } else if (needBlankFill) {
                             val noneIndex = item.spanIndex + item.spanSize
                             tempGroup.add(InternalFormNone(noneIndex, spanCount - noneIndex))
                         }
@@ -326,7 +331,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
     private fun calculateBoundary() {
         itemList.forEachIndexed { index, item ->
             // Start
-            if (item.spanIndex == 0) {
+            if (item.spanIndex == 0 && parentBoundary.start == Boundary.GLOBAL) {
                 item.marginBoundary.start = Boundary.GLOBAL
                 item.insideBoundary.start = Boundary.GLOBAL
             } else {
@@ -334,7 +339,9 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 item.insideBoundary.start = style.horizontalMiddleBoundary
             }
             // End
-            if (item.spanIndex + item.spanSize >= spanCount) {
+            if ((item.spanIndex + item.spanSize >= spanCount || item.positionInGroup == item.countInGroup - 1)
+                && parentBoundary.end == Boundary.GLOBAL
+            ) {
                 item.marginBoundary.end = Boundary.GLOBAL
                 item.insideBoundary.end = Boundary.GLOBAL
             } else {
@@ -342,7 +349,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 item.insideBoundary.end = style.horizontalMiddleBoundary
             }
             // Top
-            if (item.positionInGroup == 0) {
+            if (item.positionInGroup == 0 && parentBoundary.top == Boundary.MIDDLE) {
 //                // 使用ItemDecoration控制GLOBAL类型
                 item.marginBoundary.top = Boundary.MIDDLE
                 item.insideBoundary.top = Boundary.GLOBAL
@@ -363,7 +370,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
         for (index in itemList.lastIndex downTo 0) {
             val item = getItem(index)
             // Bottom
-            if (item.countInGroup - 1 - item.positionInGroup == 0) {
+            if (item.countInGroup - 1 - item.positionInGroup == 0 && parentBoundary.bottom == Boundary.MIDDLE) {
                 item.marginBoundary.bottom = Boundary.MIDDLE
                 item.insideBoundary.bottom = Boundary.GLOBAL
             } else if (item.spanIndex + item.spanSize == spanCount) {
