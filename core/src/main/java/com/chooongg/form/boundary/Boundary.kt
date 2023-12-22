@@ -52,6 +52,10 @@ class Boundary(
         return true
     }
 
+    override fun toString(): String {
+        return "[start: ${start}, top:${top}, end:${end}, bottom:${bottom}]"
+    }
+
     override fun hashCode(): Int {
         var result = start
         result = 31 * result + top

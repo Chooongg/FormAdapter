@@ -8,7 +8,7 @@ import com.chooongg.form.FormViewHolder
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.item.BaseForm
 
-class NegativePaddingStyle : BaseStyle() {
+internal class InternalDynamicAddButtonStyle : BaseStyle() {
 
     override fun isDecorateNoneItem() = false
 
@@ -16,21 +16,21 @@ class NegativePaddingStyle : BaseStyle() {
 
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         holder.itemView.updateLayoutParams<GridLayoutManager.LayoutParams> {
-            topMargin = when (item.marginBoundary.top) {
-                Boundary.MIDDLE -> -holder.style.marginInfo.middleTop
-                else -> 0
-            }
-            bottomMargin = when (item.marginBoundary.bottom) {
-                Boundary.MIDDLE -> -holder.style.marginInfo.middleBottom
-                else -> 0
-            }
+//            topMargin = when (item.marginBoundary.top) {
+//                Boundary.MIDDLE -> -holder.style.marginInfo.middleTop
+//                else -> 0
+//            }
+//            bottomMargin = when (item.marginBoundary.bottom) {
+//                Boundary.MIDDLE -> -holder.style.marginInfo.middleBottom
+//                else -> 0
+//            }
             marginStart = when (item.marginBoundary.start) {
-                Boundary.GLOBAL -> -holder.style.marginInfo.start
+                Boundary.GLOBAL -> -holder.style.marginInfo.middleStart
                 Boundary.MIDDLE -> -holder.style.marginInfo.middleStart
                 else -> -holder.style.marginInfo.middleStart
             }
             marginEnd = when (item.marginBoundary.end) {
-                Boundary.GLOBAL -> -holder.style.marginInfo.end
+                Boundary.GLOBAL -> -holder.style.marginInfo.middleEnd
                 Boundary.MIDDLE -> -holder.style.marginInfo.middleEnd
                 else -> -holder.style.marginInfo.middleEnd
             }

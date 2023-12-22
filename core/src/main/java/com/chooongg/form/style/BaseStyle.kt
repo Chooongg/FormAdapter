@@ -22,9 +22,14 @@ import com.chooongg.form.typeset.BaseTypeset
 abstract class BaseStyle {
 
     /**
-     * 片段名称提供器
+     * 组名称提供器
      */
     var groupNameProvider: BaseGroupNameProvider = FormManager.Default.groupNameProvider
+
+    /**
+     * 子组名称提供器
+     */
+    var groupChildNameProvider: BaseGroupNameProvider = FormManager.Default.groupChildNameProvider
 
     /**
      * 图标提供器
@@ -121,6 +126,7 @@ abstract class BaseStyle {
         if (other !is BaseStyle) return false
         if (javaClass != other.javaClass) return false
         if (groupNameProvider != other.groupNameProvider) return false
+        if (groupChildNameProvider != other.groupChildNameProvider) return false
         if (typeset != other.typeset) return false
         if (horizontalIsSeparateItem != other.horizontalIsSeparateItem) return false
         return true

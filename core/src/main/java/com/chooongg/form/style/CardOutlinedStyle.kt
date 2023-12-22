@@ -1,7 +1,6 @@
 package com.chooongg.form.style
 
 import android.graphics.Color
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -49,9 +48,6 @@ class CardOutlinedStyle : BaseCardStyle() {
         }
         shapeDrawable.setStroke(strokeWidth, strokeColor)
         holder.itemView.background = shapeDrawable
-        if (item.field == "selector") {
-            Log.e("Form", "修改了背景")
-        }
     }
 
     override fun addView(parentView: ViewGroup, child: View) {

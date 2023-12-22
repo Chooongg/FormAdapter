@@ -10,6 +10,7 @@ import com.chooongg.form.core.R
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.part.BaseFormPartAdapter
+import com.chooongg.form.part.FormChildDynamicPartAdapter
 import com.chooongg.form.part.FormChildPartAdapter
 import com.chooongg.form.style.BaseStyle
 import com.chooongg.form.style.NegativePaddingStyle
@@ -50,20 +51,11 @@ class VariantFormProvider : BaseFormProvider() {
             FormChildPartAdapter(bindingAdapter.formAdapter, item.style).apply {
                 columnCount = variant._column
                 parentAdapter = bindingAdapter
-                val boundary = Boundary()
-                boundary.start = if (item.positionInGroup == 0) {
-                    Boundary.GLOBAL
-                } else item.marginBoundary.start
-                boundary.end = if (item.positionInGroup == item.countInGroup - 1) {
-                    Boundary.GLOBAL
-                } else item.marginBoundary.end
-                boundary.top = if (item.style !is NegativePaddingStyle) {
-                    0
-                } else bindingAdapter.parentBoundary.top
-                boundary.bottom = if (item.style !is NegativePaddingStyle) {
-                    0
-                } else bindingAdapter.parentBoundary.bottom
-                parentBoundary = boundary
+                if (bindingAdapter !is FormChildDynamicPartAdapter) {
+                    parentBoundary = item.marginBoundary
+                }else if (bindingAdapter.style is NegativePaddingStyle){
+                    Boundary(Boundary.GLOBAL, Boundary.MIDDLE, Boundary.GLOBAL, Boundary.MIDDLE)
+                }
                 set(variant)
             }, false
         )

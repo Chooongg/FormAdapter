@@ -69,27 +69,11 @@ class FormChildPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     }
 
     @Throws(FormDataVerificationException::class)
-    override fun executeDataVerification() {
-        data.getItems().forEach { item -> item.executeDataVerification(formAdapter) }
-    }
+    override fun executeDataVerification() = Unit
 
     override fun getDataVerificationError(): List<FormDataVerificationException> {
-        val errors = ArrayList<FormDataVerificationException>()
-        data.getItems().forEach {
-            try {
-                it.executeDataVerification(formAdapter)
-            } catch (e: FormDataVerificationException) {
-                errors.add(e)
-            }
-        }
-        return errors
+        return ArrayList()
     }
 
-    override fun executeOutput(json: JSONObject) {
-        if (data.field != null) {
-            val childJson = JSONObject()
-            data.getItems().forEach { item -> item.executeOutput(formAdapter, childJson) }
-            json.put(data.field!!, childJson)
-        } else data.getItems().forEach { item -> item.executeOutput(formAdapter, json) }
-    }
+    override fun executeOutput(json: JSONObject) = Unit
 }

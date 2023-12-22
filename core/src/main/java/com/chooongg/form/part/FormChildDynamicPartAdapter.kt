@@ -9,7 +9,7 @@ import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.item.VariantChildDynamicGroup
 import com.chooongg.form.item.VariantChildGroup
 import com.chooongg.form.style.BaseStyle
-import com.chooongg.form.style.NoneStyle
+import com.chooongg.form.style.InternalDynamicAddButtonStyle
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -28,7 +28,7 @@ class FormChildDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
         if (item is InternalFormDynamicAddButton) {
-            return formAdapter.getItemViewType4Pool(NoneStyle(), item)
+            return formAdapter.getItemViewType4Pool(InternalDynamicAddButtonStyle(), item)
         }
         return formAdapter.getItemViewType4Pool(style, item)
     }

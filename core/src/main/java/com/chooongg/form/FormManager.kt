@@ -14,6 +14,7 @@ import com.chooongg.form.error.NormalErrorOutputTool
 import com.chooongg.form.format.BaseNameFormatter
 import com.chooongg.form.format.NormalNameFormatter
 import com.chooongg.form.groupNameProvider.BaseGroupNameProvider
+import com.chooongg.form.groupNameProvider.DefaultGroupChildNameProvider
 import com.chooongg.form.groupNameProvider.DefaultGroupNameProvider
 import com.chooongg.form.iconProvider.BaseIconProvider
 import com.chooongg.form.iconProvider.NormalIconProvider
@@ -49,6 +50,8 @@ object FormManager {
         var typeset: BaseTypeset = HorizontalTypeset()
 
         var groupNameProvider: BaseGroupNameProvider = DefaultGroupNameProvider()
+
+        var groupChildNameProvider: BaseGroupNameProvider = DefaultGroupChildNameProvider()
 
         var iconProvider: BaseIconProvider = NormalIconProvider()
 

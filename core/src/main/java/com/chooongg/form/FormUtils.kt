@@ -75,6 +75,8 @@ internal fun getTextAppearance(view: View, @AttrRes resId: Int): Int =
     view.context.obtainStyledAttributes(intArrayOf(resId)).use {
         it.getResourceId(
             0, when (resId) {
+                R.attr.formTextAppearanceGroupName -> R.style.Form_TextAppearance_GroupName
+                R.attr.formTextAppearanceLabel -> R.style.Form_TextAppearance_Label
                 R.attr.formTextAppearanceName -> R.style.Form_TextAppearance_Name
                 R.attr.formTextAppearanceContent -> R.style.Form_TextAppearance_Content
                 R.attr.formTextAppearanceHint -> R.style.Form_TextAppearance_Hint
@@ -82,7 +84,6 @@ internal fun getTextAppearance(view: View, @AttrRes resId: Int): Int =
                 R.attr.formTextAppearancePrefix -> R.style.Form_TextAppearance_Prefix
                 R.attr.formTextAppearanceSuffix -> R.style.Form_TextAppearance_Suffix
                 R.attr.formTextAppearancePlaceholder -> R.style.Form_TextAppearance_Placeholder
-                R.attr.formTextAppearanceLabel -> R.style.Form_TextAppearance_Label
                 R.attr.formTextAppearanceTip -> R.style.Form_TextAppearance_Tip
                 R.attr.formTextAppearanceCounter -> R.style.Form_TextAppearance_Counter
                 else -> 0

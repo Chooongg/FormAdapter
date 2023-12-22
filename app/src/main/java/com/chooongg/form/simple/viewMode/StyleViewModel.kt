@@ -11,7 +11,7 @@ import com.chooongg.form.initCardOutlinedPart
 import com.chooongg.form.initCardSeparateElevatedPart
 import com.chooongg.form.initCardSeparateFilledPart
 import com.chooongg.form.initCardSeparateOutlinedPart
-import com.chooongg.form.initNotAlignmentPart
+import com.chooongg.form.initExternalAlignedPart
 import com.chooongg.form.typeset.VerticalTypeset
 
 class StyleViewModel : ViewModel() {
@@ -19,12 +19,13 @@ class StyleViewModel : ViewModel() {
     val adapter = FormAdapter(true)
 
     fun created() {
+        if (adapter.isNotEmpty()) return
         adapter.setNewInstance {
             initPart {
                 partName = "NoneStyle"
                 addChild()
             }
-            initNotAlignmentPart {
+            initExternalAlignedPart {
                 partName = "NotAlignmentStyle"
                 addChild()
             }

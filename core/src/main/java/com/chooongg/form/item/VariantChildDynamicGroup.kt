@@ -6,6 +6,8 @@ import com.chooongg.form.FormChildGroupCreateBlock
 import com.chooongg.form.FormGroupNameFormatter
 import com.chooongg.form.core.R
 import com.chooongg.form.provider.VariantChildDynamicGroupProvider
+import com.chooongg.form.style.BaseStyle
+import com.chooongg.form.style.NegativePaddingStyle
 import com.chooongg.form.typeset.BaseTypeset
 import com.chooongg.form.typeset.EmptyTypeset
 import com.google.android.material.button.MaterialButton
@@ -13,6 +15,8 @@ import com.google.android.material.button.MaterialButton
 class VariantChildDynamicGroup(name: Any?, field: String?) : VariantBaseForm(name, field) {
 
     private val _groups = mutableListOf<VariantChildGroup>()
+
+    internal var addButton = InternalFormDynamicAddButton()
 
     internal var dynamicGroupCreateBlock: FormChildGroupCreateBlock? = null
 
@@ -49,6 +53,8 @@ class VariantChildDynamicGroup(name: Any?, field: String?) : VariantBaseForm(nam
     var maxGroupCount: Int = 10
 
     override var loneLine: Boolean = true
+
+    override var style: BaseStyle = NegativePaddingStyle()
 
     override var typeset: BaseTypeset? = EmptyTypeset()
 

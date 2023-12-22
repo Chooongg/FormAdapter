@@ -30,7 +30,9 @@ class FormDynamicPartAdapter(formAdapter: FormAdapter, style: BaseStyle) :
     override fun getItemViewType(position: Int): Int {
         val item = getItem(position)
         if (item is InternalFormDynamicAddButton) {
-            return formAdapter.getItemViewType4Pool(ExternalAlignedStyle(), item)
+            if (item.parentItem == null) {
+                return formAdapter.getItemViewType4Pool(ExternalAlignedStyle(), item)
+            }
         }
         return formAdapter.getItemViewType4Pool(style, item)
     }

@@ -5,7 +5,7 @@ import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.provider.VariantFormProvider
 import com.chooongg.form.style.BaseStyle
-import com.chooongg.form.style.NegativePaddingStyle
+import com.chooongg.form.style.ExternalAlignedStyle
 import com.chooongg.form.typeset.BaseTypeset
 import com.chooongg.form.typeset.EmptyTypeset
 import kotlin.reflect.KClass
@@ -14,17 +14,17 @@ abstract class VariantBaseForm(name: Any?, field: String?) : BaseForm(name, fiel
 
     internal var adapter: BaseFormPartAdapter? = null
 
-    private var _groupNameItem: InternalFormGroupName? = null
+    private var _groupNameItem: InternalFormGroupChildName? = null
+
+    /**
+     * 主题
+     */
+    open var style: BaseStyle = ExternalAlignedStyle()
 
     /**
      * 是否是独立的
      */
     var isIndependent: Boolean = false
-
-    /**
-     * 主题
-     */
-    var style: BaseStyle = NegativePaddingStyle()
 
     /**
      * 删除是否需要确认操作
@@ -41,8 +41,8 @@ abstract class VariantBaseForm(name: Any?, field: String?) : BaseForm(name, fiel
 
     fun getItems() = _items
 
-    internal fun getGroupNameItem(block: (InternalFormGroupName) -> Unit): InternalFormGroupName {
-        if (_groupNameItem == null) _groupNameItem = InternalFormGroupName()
+    internal fun getGroupNameItem(block: (InternalFormGroupChildName) -> Unit): InternalFormGroupChildName {
+        if (_groupNameItem == null) _groupNameItem = InternalFormGroupChildName()
         block.invoke(_groupNameItem!!)
         return _groupNameItem!!
     }

@@ -20,8 +20,8 @@ import com.chooongg.form.part.FormDynamicPartAdapter
 import com.chooongg.form.part.FormPartAdapter
 import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.style.BaseStyle
+import com.chooongg.form.style.ExternalAlignedStyle
 import com.chooongg.form.style.NoneStyle
-import com.chooongg.form.style.NegativePaddingStyle
 import com.chooongg.form.typeset.BaseTypeset
 import org.json.JSONObject
 import kotlin.math.max
@@ -119,7 +119,10 @@ open class FormAdapter(isEnabled: Boolean = false) :
         updateForm()
     }
 
-    fun showOperationButton(style: BaseStyle = NegativePaddingStyle(), block: FormButton.() -> Unit) {
+    fun showOperationButton(
+        style: BaseStyle = ExternalAlignedStyle(),
+        block: FormButton.() -> Unit
+    ) {
         if (operationPart != null) {
             dismissOperationButton()
         }
@@ -498,6 +501,14 @@ open class FormAdapter(isEnabled: Boolean = false) :
     internal fun getProvider4ItemViewType(viewType: Int): BaseFormProvider {
         return providerPool[itemTypePool[viewType].third]
     }
+
+    fun isEmpty() = if (operationPart != null) {
+        concatAdapter.adapters.size <= 1
+    } else {
+        concatAdapter.adapters.isEmpty()
+    }
+
+    fun isNotEmpty() = !isEmpty()
 
     fun clearPool() {
         recyclerView?.recycledViewPool?.clear()

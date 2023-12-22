@@ -45,6 +45,7 @@ class BasicViewModel : ViewModel() {
     }
 
     fun created() {
+        if (adapter.isNotEmpty()) return
         adapter.setNewInstance {
             initCardElevatedPart(/*"Default"*/) {
                 singleLine {

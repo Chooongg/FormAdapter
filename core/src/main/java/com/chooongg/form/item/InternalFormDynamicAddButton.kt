@@ -12,5 +12,7 @@ class InternalFormDynamicAddButton internal constructor() : FormButton(null, nul
     var addBlock: (() -> Unit)? = null
         internal set
 
+    override var loneLine: Boolean = true
+
     override fun getProvider(adapter: FormAdapter) = InternalFormDynamicAddButtonProvider::class
 }

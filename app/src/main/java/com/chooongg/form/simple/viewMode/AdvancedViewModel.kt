@@ -33,8 +33,6 @@ import com.chooongg.form.inputMode.InputModePassword
 import com.chooongg.form.item.FormButton
 import com.chooongg.form.item.FormTime
 import com.chooongg.form.option.Option
-import com.chooongg.form.style.CardElevatedStyle
-import com.chooongg.form.style.CardFilledStyle
 import kotlinx.coroutines.delay
 
 class AdvancedViewModel : ViewModel() {
@@ -42,6 +40,7 @@ class AdvancedViewModel : ViewModel() {
     val adapter = FormAdapter(true)
 
     fun created() {
+        if (adapter.isNotEmpty()) return
         adapter.setNewInstance {
             initCardOutlinedDynamicPart("Test Group") {
                 minGroupCount = 0
@@ -58,15 +57,15 @@ class AdvancedViewModel : ViewModel() {
                         content = "Test"
                     }
                     childDynamicGroup("ChildGroup", "temp") {
+//                        style = CardFilledStyle()
                         isIndependent = true
-                        style = CardFilledStyle()
                         addGroup {
                             addSwitch("ChildSwitch")
                             addText("ChildText") {
                                 content = "ChildTest"
                             }
                             childDynamicGroup("ChildChildGroup", "temp") {
-                                style = CardElevatedStyle()
+//                                style = CardElevatedStyle()
                                 addButtonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
                                 isIndependent = true
                                 addGroup {
@@ -89,7 +88,7 @@ class AdvancedViewModel : ViewModel() {
                                 content = "ChildTest"
                             }
                             childDynamicGroup("ChildChildGroup", "temp") {
-                                style = CardElevatedStyle()
+//                                style = CardElevatedStyle()
                                 addButtonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
                                 isIndependent = true
                                 addGroup {
@@ -107,6 +106,9 @@ class AdvancedViewModel : ViewModel() {
                             }
                         }
                     }
+//                    addText("Text") {
+//                        content = "Test"
+//                    }
                 }
             }
             initCardOutlinedPart("VisibilityMode") {

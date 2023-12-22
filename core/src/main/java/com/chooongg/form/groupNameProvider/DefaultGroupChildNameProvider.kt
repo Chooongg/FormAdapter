@@ -21,14 +21,14 @@ import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textview.MaterialTextView
 
-class DefaultGroupNameProvider : BaseGroupNameProvider() {
+class DefaultGroupChildNameProvider : BaseGroupNameProvider() {
     override fun onCreateGroupName(style: BaseStyle, parent: ViewGroup): View {
         return LinearLayoutCompat(parent.context).also {
             it.isBaselineAligned = false
             it.addView(MaterialTextView(it.context).apply {
                 id = R.id.formInternalContentChildView
                 setTextIsSelectable(true)
-                setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceGroupName))
+                setTextAppearance(formTextAppearance(this, R.attr.formTextAppearanceLabel))
                 setPaddingRelative(
                     style.insideInfo.middleStart, style.insideInfo.middleTop,
                     style.insideInfo.middleEnd, style.insideInfo.middleBottom

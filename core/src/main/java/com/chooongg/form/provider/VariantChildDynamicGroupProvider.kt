@@ -51,9 +51,9 @@ class VariantChildDynamicGroupProvider : BaseFormProvider() {
                 columnCount = variant._column
                 parentAdapter = bindingAdapter
                 parentBoundary = Boundary(
-                    item.marginBoundary.start,
+                    if (item.positionInGroup == 0) Boundary.GLOBAL else item.marginBoundary.start,
                     if (item.style is NegativePaddingStyle) Boundary.NONE else Boundary.MIDDLE,
-                    item.marginBoundary.end,
+                    if (item.positionInGroup == item.countInGroup - 1) Boundary.GLOBAL else item.marginBoundary.end,
                     if (item.style is NegativePaddingStyle) Boundary.NONE else Boundary.MIDDLE
                 )
                 set(variant)

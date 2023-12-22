@@ -1,5 +1,6 @@
 package com.chooongg.form.part
 
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -15,11 +16,11 @@ import com.chooongg.form.FormViewHolder
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.error.FormDataVerificationException
 import com.chooongg.form.item.BaseForm
-import com.chooongg.form.item.InternalFormDynamicAddButton
 import com.chooongg.form.item.InternalFormNone
 import com.chooongg.form.item.InternalFormOperationButton
 import com.chooongg.form.item.VariantBaseForm
 import com.chooongg.form.item.VariantChildDynamicGroup
+import com.chooongg.form.item.VariantChildGroup
 import com.chooongg.form.provider.InternalFormNoneProvider
 import com.chooongg.form.style.BaseStyle
 import kotlinx.coroutines.CoroutineScope
@@ -269,12 +270,14 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 tempChildList.add(child.getGroupNameItem {
                     it.name = if (context != null) {
                         item.dynamicGroupNameFormatter.invoke(
-                            context, FormUtils.getText(context, item.name), i, item.getGroups().size
+                            context,
+                            FormUtils.getText(context, item.name),
+                            i,
+                            item.getGroups().size
                         )
                     } else item.name
-                    it.name = item.name
                     it.isHasDeleteConfirm = item.isHasDeleteConfirm
-                    if (item.minGroupCount <= index) {
+                    if (item.minGroupCount < item.getGroups().size) {
                         it.dynamicGroupDeletingBlock = {
                             item.getGroups().remove(child)
                             executeUpdate()
@@ -316,12 +319,27 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 group.addAll(tempChildList)
             }
             if (formAdapter.isEnabled && item.dynamicGroupCreateBlock != null && item.maxGroupCount > item.getGroups().size) {
-                group.add(InternalFormDynamicAddButton().apply {
-                    name = item.name
-                    dynamicGroupNameFormatter = item.dynamicGroupNameFormatter
+                group.add(item.addButton.apply {
+                    parentItem = item
+                    name = if (context != null) {
+                        item.dynamicGroupNameFormatter.invoke(
+                            context,
+                            FormUtils.getText(context, item.name),
+                            item.getGroups().size,
+                            item.getGroups().size + 1
+                        )
+                    } else item.name
                     buttonStyle = item.addButtonStyle
                     iconGravity = item.addIconGravity
                     icon = item.addIcon
+                    addBlock = {
+                        if (item.dynamicGroupCreateBlock != null) {
+                            val tempAdd = VariantChildGroup(null, null)
+                            item.dynamicGroupCreateBlock!!.invoke(tempAdd)
+                            item.getGroups().add(tempAdd)
+                            executeUpdate()
+                        }
+                    }
                 })
             }
         }
@@ -329,6 +347,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
     }
 
     private fun calculateBoundary() {
+        Log.e("Form", javaClass.simpleName)
         itemList.forEachIndexed { index, item ->
             // Start
             if (item.spanIndex == 0 && parentBoundary.start == Boundary.GLOBAL) {
@@ -359,7 +378,9 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
             } else {
                 var beginIndex = index - 1
                 var beginItem = getItem(beginIndex)
-                while (beginItem.spanIndex != 0) {
+                while (beginIndex < itemList.size - 1 && beginItem.spanIndex != 0
+                    && item.positionInGroup != 0
+                ) {
                     beginIndex--
                     beginItem = getItem(beginIndex)
                 }
@@ -377,10 +398,10 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 item.marginBoundary.bottom = Boundary.NONE
                 item.insideBoundary.bottom = Boundary.MIDDLE
             } else {
-                var lastIndex = index + 1
+                var lastIndex = index
                 var lastItem = getItem(lastIndex)
-                while (lastIndex > 0 && lastItem.countInGroup - 1 - lastItem.positionInGroup != 0
-                    && (lastIndex + 1 < itemList.size && getItem(lastIndex + 1).spanIndex != 0)
+                while (lastIndex + 1 < itemList.size && getItem(lastIndex + 1).spanIndex != 0
+                    && lastItem.countInGroup - 1 - lastItem.positionInGroup != 0
                 ) {
                     lastIndex++
                     lastItem = getItem(lastIndex)
@@ -388,6 +409,9 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
                 item.marginBoundary.bottom = getItem(lastIndex).marginBoundary.bottom
                 item.insideBoundary.bottom = getItem(lastIndex).insideBoundary.bottom
             }
+        }
+        itemList.forEach {
+            Log.e("Form", "${it.javaClass.simpleName}: boundary:${it.marginBoundary}")
         }
     }
 
