@@ -45,7 +45,7 @@ abstract class BaseStyle {
     /**
      * 排版
      */
-    var typeset: BaseTypeset? = null
+    open var typeset: BaseTypeset? = null
 
     var marginInfo: FormMarginInfo = FormMarginInfo(0, 0, 0, 0, 0, 0, 0, 0)
         private set

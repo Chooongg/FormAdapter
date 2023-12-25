@@ -8,6 +8,8 @@ import com.chooongg.form.FormViewHolder
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.part.BaseFormPartAdapter
+import com.chooongg.form.part.FormChildDynamicPartAdapter
+import com.chooongg.form.part.FormChildPartAdapter
 
 class ExternalAlignedStyle : BaseStyle() {
 
@@ -19,7 +21,10 @@ class ExternalAlignedStyle : BaseStyle() {
         holder.itemView.updateLayoutParams<GridLayoutManager.LayoutParams> {
             topMargin = when (item.marginBoundary.top) {
                 Boundary.MIDDLE -> {
-                    if (holder.absoluteAdapterPosition == 0) 0 else -holder.style.marginInfo.middleTop
+                    val adapter = holder.bindingAdapter as? BaseFormPartAdapter
+                    if (adapter == null || adapter is FormChildPartAdapter || adapter is FormChildDynamicPartAdapter) {
+                        0
+                    } else -holder.style.marginInfo.middleTop
                 }
 
                 else -> 0
@@ -27,9 +32,9 @@ class ExternalAlignedStyle : BaseStyle() {
             bottomMargin = when (item.marginBoundary.bottom) {
                 Boundary.MIDDLE -> {
                     val adapter = holder.bindingAdapter as? BaseFormPartAdapter
-                    val itemCount = adapter?.formAdapter?.itemCount ?: 0
-                    if (holder.absoluteAdapterPosition == itemCount - 1) 0
-                    else -holder.style.marginInfo.middleBottom
+                    if (adapter == null || adapter is FormChildPartAdapter || adapter is FormChildDynamicPartAdapter) {
+                        0
+                    } else -holder.style.marginInfo.middleBottom
                 }
 
                 else -> 0

@@ -37,7 +37,7 @@ class FormView @JvmOverloads constructor(
         layoutManager = FormLayoutManager(context, maxItemWidth).apply {
             setFormMargin(formMarginStart, formMarginEnd)
         }
-        addItemDecoration(FormItemDecoration())
+//        addItemDecoration(FormItemDecoration())
         addOnScrollListener(object : OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 when (newState) {

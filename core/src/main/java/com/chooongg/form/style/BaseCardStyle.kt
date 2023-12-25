@@ -100,8 +100,7 @@ abstract class BaseCardStyle : BaseStyle() {
     override fun equals(other: Any?): Boolean {
         if (other !is BaseCardStyle) return false
         if (!super.equals(other)) return false
-        if (shapeAppearanceResId != other.shapeAppearanceResId) return false
-        return true
+        return shapeAppearanceResId == other.shapeAppearanceResId
     }
 
     override fun hashCode(): Int {

@@ -33,6 +33,8 @@ import com.chooongg.form.inputMode.InputModePassword
 import com.chooongg.form.item.FormButton
 import com.chooongg.form.item.FormTime
 import com.chooongg.form.option.Option
+import com.chooongg.form.style.CardElevatedStyle
+import com.chooongg.form.style.CardFilledStyle
 import kotlinx.coroutines.delay
 
 class AdvancedViewModel : ViewModel() {
@@ -106,9 +108,6 @@ class AdvancedViewModel : ViewModel() {
                             }
                         }
                     }
-//                    addText("Text") {
-//                        content = "Test"
-//                    }
                 }
             }
             initCardOutlinedPart("VisibilityMode") {

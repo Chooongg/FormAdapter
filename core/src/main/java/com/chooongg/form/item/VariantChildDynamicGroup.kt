@@ -56,7 +56,7 @@ class VariantChildDynamicGroup(name: Any?, field: String?) : VariantBaseForm(nam
 
     override var style: BaseStyle = NegativePaddingStyle()
 
-    override var typeset: BaseTypeset? = EmptyTypeset()
+    override var typeset: BaseTypeset? = EmptyTypeset
 
     /**
      * 初始化组

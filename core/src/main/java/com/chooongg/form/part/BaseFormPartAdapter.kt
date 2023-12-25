@@ -361,7 +361,9 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
             if ((item.spanIndex + item.spanSize >= spanCount || item.positionInGroup == item.countInGroup - 1)
                 && parentBoundary.end == Boundary.GLOBAL
             ) {
-                item.marginBoundary.end = Boundary.GLOBAL
+                item.marginBoundary.end = if (item.spanIndex + item.spanSize >= spanCount){
+                    Boundary.GLOBAL
+                } else Boundary.MIDDLE
                 item.insideBoundary.end = Boundary.GLOBAL
             } else {
                 item.marginBoundary.end = Boundary.NONE
@@ -485,6 +487,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
 
     override fun onBindViewHolder(holder: FormViewHolder, position: Int) {
         val item = getItem(position)
+        holder.itemView.tag = "margin:${item.marginBoundary}\ninside:${item.insideBoundary}"
         val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
         val provider = formAdapter.getProvider4ItemViewType(holder.itemViewType)
         if (provider !is InternalFormNoneProvider || style.isDecorateNoneItem()) {
@@ -509,6 +512,7 @@ abstract class BaseFormPartAdapter(val formAdapter: FormAdapter, style: BaseStyl
     ) {
         val payloadEmpty = payloads.isEmpty()
         val item = getItem(position)
+        holder.itemView.tag = "margin:${item.marginBoundary}\ninside:${item.insideBoundary}"
         val style = formAdapter.getStyle4ItemViewType(holder.itemViewType)
         val typeset = formAdapter.getTypeset4ItemViewType(holder.itemViewType)
         val provider = formAdapter.getProvider4ItemViewType(holder.itemViewType)

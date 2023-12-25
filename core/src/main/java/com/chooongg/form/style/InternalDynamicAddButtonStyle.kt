@@ -16,14 +16,6 @@ internal class InternalDynamicAddButtonStyle : BaseStyle() {
 
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
         holder.itemView.updateLayoutParams<GridLayoutManager.LayoutParams> {
-//            topMargin = when (item.marginBoundary.top) {
-//                Boundary.MIDDLE -> -holder.style.marginInfo.middleTop
-//                else -> 0
-//            }
-//            bottomMargin = when (item.marginBoundary.bottom) {
-//                Boundary.MIDDLE -> -holder.style.marginInfo.middleBottom
-//                else -> 0
-//            }
             marginStart = when (item.marginBoundary.start) {
                 Boundary.GLOBAL -> -holder.style.marginInfo.middleStart
                 Boundary.MIDDLE -> -holder.style.marginInfo.middleStart

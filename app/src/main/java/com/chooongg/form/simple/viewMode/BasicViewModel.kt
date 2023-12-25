@@ -47,9 +47,14 @@ class BasicViewModel : ViewModel() {
     fun created() {
         if (adapter.isNotEmpty()) return
         adapter.setNewInstance {
-            initCardElevatedPart(/*"Default"*/) {
+            initCardElevatedPart {
+                addText("Text") {
+                    content = "Test"
+                }
+                addText("Text") {
+                    content = "Test"
+                }
                 singleLine {
-//                    name = "测试"
                     isIndependent = true
                     addText("Text") {
                         content = "Test"

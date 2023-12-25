@@ -11,8 +11,8 @@ import com.chooongg.form.item.BaseForm
 import com.chooongg.form.item.VariantChildDynamicGroup
 import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.part.FormChildDynamicPartAdapter
+import com.chooongg.form.part.FormChildPartAdapter
 import com.chooongg.form.style.BaseStyle
-import com.chooongg.form.style.NegativePaddingStyle
 import kotlinx.coroutines.CoroutineScope
 
 class VariantChildDynamicGroupProvider : BaseFormProvider() {
@@ -52,9 +52,9 @@ class VariantChildDynamicGroupProvider : BaseFormProvider() {
                 parentAdapter = bindingAdapter
                 parentBoundary = Boundary(
                     if (item.positionInGroup == 0) Boundary.GLOBAL else item.marginBoundary.start,
-                    if (item.style is NegativePaddingStyle) Boundary.NONE else Boundary.MIDDLE,
+                    if (bindingAdapter is FormChildPartAdapter) Boundary.NONE else item.marginBoundary.top,
                     if (item.positionInGroup == item.countInGroup - 1) Boundary.GLOBAL else item.marginBoundary.end,
-                    if (item.style is NegativePaddingStyle) Boundary.NONE else Boundary.MIDDLE
+                    if (bindingAdapter is FormChildPartAdapter) Boundary.NONE else item.marginBoundary.bottom
                 )
                 set(variant)
             }, false

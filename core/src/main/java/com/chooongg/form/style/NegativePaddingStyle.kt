@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.chooongg.form.FormViewHolder
 import com.chooongg.form.boundary.Boundary
 import com.chooongg.form.item.BaseForm
@@ -15,13 +16,27 @@ class NegativePaddingStyle : BaseStyle() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewGroup? = null
 
     override fun onBindViewHolder(holder: FormViewHolder, layout: ViewGroup?, item: BaseForm) {
-        holder.itemView.updateLayoutParams<GridLayoutManager.LayoutParams> {
+        if (holder.itemView is RecyclerView) {
+            holder.itemView.setPaddingRelative(
+                0, when (item.marginBoundary.top) {
+                    Boundary.GLOBAL -> holder.style.marginInfo.top
+                    Boundary.MIDDLE -> holder.style.marginInfo.top - holder.style.marginInfo.middleTop
+                    else -> 0
+                }, 0, when (item.marginBoundary.bottom) {
+                    Boundary.GLOBAL -> holder.style.marginInfo.bottom
+                    Boundary.MIDDLE -> holder.style.marginInfo.bottom - holder.style.marginInfo.middleBottom
+                    else -> 0
+                }
+            )
+        } else holder.itemView.updateLayoutParams<GridLayoutManager.LayoutParams> {
             topMargin = when (item.marginBoundary.top) {
-                Boundary.MIDDLE -> -holder.style.marginInfo.middleTop
+                Boundary.GLOBAL -> holder.style.marginInfo.top
+                Boundary.MIDDLE -> 0
                 else -> 0
             }
             bottomMargin = when (item.marginBoundary.bottom) {
-                Boundary.MIDDLE -> -holder.style.marginInfo.middleBottom
+                Boundary.GLOBAL -> holder.style.marginInfo.bottom
+                Boundary.MIDDLE -> 0
                 else -> 0
             }
             marginStart = when (item.marginBoundary.start) {

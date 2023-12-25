@@ -52,9 +52,14 @@ class VariantFormProvider : BaseFormProvider() {
                 columnCount = variant._column
                 parentAdapter = bindingAdapter
                 if (bindingAdapter !is FormChildDynamicPartAdapter) {
+                    parentBoundary = Boundary(
+                        item.marginBoundary.start,
+                        if (bindingAdapter is FormChildPartAdapter) Boundary.NONE else item.marginBoundary.top,
+                        item.marginBoundary.end,
+                        if (bindingAdapter is FormChildPartAdapter) Boundary.NONE else item.marginBoundary.bottom
+                    )
+                } else if (bindingAdapter.style is NegativePaddingStyle) {
                     parentBoundary = item.marginBoundary
-                }else if (bindingAdapter.style is NegativePaddingStyle){
-                    Boundary(Boundary.GLOBAL, Boundary.MIDDLE, Boundary.GLOBAL, Boundary.MIDDLE)
                 }
                 set(variant)
             }, false

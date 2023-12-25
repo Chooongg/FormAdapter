@@ -9,7 +9,7 @@ import com.chooongg.form.enum.FormEmsMode
 import com.chooongg.form.item.BaseForm
 import com.chooongg.form.style.BaseStyle
 
-class EmptyTypeset : BaseTypeset() {
+object EmptyTypeset : BaseTypeset() {
 
     override var emsMode = FormEmsMode.NONE
     override var multiColumnEmsMode: FormEmsMode = FormEmsMode.NONE

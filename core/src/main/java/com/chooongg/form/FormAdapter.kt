@@ -18,13 +18,13 @@ import com.chooongg.form.item.LinkageForm
 import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.part.FormDynamicPartAdapter
 import com.chooongg.form.part.FormPartAdapter
+import com.chooongg.form.part.PlaceholderPartAdapter
 import com.chooongg.form.provider.BaseFormProvider
 import com.chooongg.form.style.BaseStyle
 import com.chooongg.form.style.ExternalAlignedStyle
 import com.chooongg.form.style.NoneStyle
 import com.chooongg.form.typeset.BaseTypeset
 import org.json.JSONObject
-import kotlin.math.max
 
 open class FormAdapter(isEnabled: Boolean = false) :
     RecyclerView.Adapter<ViewHolder>() {
@@ -38,7 +38,10 @@ open class FormAdapter(isEnabled: Boolean = false) :
 
     private val concatAdapter = ConcatAdapter(
         ConcatAdapter.Config.Builder().setIsolateViewTypes(false).build()
-    )
+    ).apply {
+        addAdapter(PlaceholderPartAdapter(this@FormAdapter, true))
+        addAdapter(PlaceholderPartAdapter(this@FormAdapter, false))
+    }
 
     val partAdapters get() = concatAdapter.adapters.map { it as BaseFormPartAdapter }
 
@@ -106,14 +109,17 @@ open class FormAdapter(isEnabled: Boolean = false) :
 
     fun setNewInstance(block: FormAdapterData.() -> Unit) {
         clear()
-        if (operationPart != null) addPart(operationPart)
         val data = FormAdapterData(this)
         block(data)
         data.getParts().forEach {
-            when (it) {
-                is FormPartAdapter -> addPart(it, false)
-                is FormDynamicPartAdapter -> addDynamicPart(it, false)
-            }
+            if (operationPart != null) {
+                concatAdapter.addAdapter(concatAdapter.adapters.size - 2, it)
+            } else concatAdapter.addAdapter(concatAdapter.adapters.lastIndex, it)
+
+//            when (it) {
+//                is FormPartAdapter -> addPart(it, false)
+//                is FormDynamicPartAdapter -> addDynamicPart(it, false)
+//            }
         }
         if (refreshLinkageWhileCreate) refreshLinkage()
         updateForm()
@@ -356,10 +362,13 @@ open class FormAdapter(isEnabled: Boolean = false) :
     }
 
     fun addPart(adapter: FormPartAdapter?, update: Boolean = true) {
+        if (operationPart != null && !concatAdapter.adapters.contains(operationPart)) {
+            concatAdapter.addAdapter(concatAdapter.adapters.lastIndex, operationPart!!)
+        }
         if (adapter != null) {
             if (operationPart != null) {
-                concatAdapter.addAdapter(max(0, concatAdapter.adapters.lastIndex), adapter)
-            } else concatAdapter.addAdapter(adapter)
+                concatAdapter.addAdapter(concatAdapter.adapters.size - 2, adapter)
+            } else concatAdapter.addAdapter(concatAdapter.adapters.lastIndex, adapter)
             if (update) adapter.update()
         }
     }
@@ -375,10 +384,13 @@ open class FormAdapter(isEnabled: Boolean = false) :
     }
 
     fun addDynamicPart(adapter: FormDynamicPartAdapter?, update: Boolean = true) {
+        if (operationPart != null && !concatAdapter.adapters.contains(operationPart)) {
+            concatAdapter.addAdapter(concatAdapter.adapters.lastIndex, operationPart!!)
+        }
         if (adapter != null) {
             if (operationPart != null) {
-                concatAdapter.addAdapter(max(0, concatAdapter.adapters.lastIndex), adapter)
-            } else concatAdapter.addAdapter(adapter)
+                concatAdapter.addAdapter(concatAdapter.adapters.size - 2, adapter)
+            } else concatAdapter.addAdapter(concatAdapter.adapters.lastIndex, adapter)
             if (update) adapter.update()
         }
     }
@@ -503,9 +515,9 @@ open class FormAdapter(isEnabled: Boolean = false) :
     }
 
     fun isEmpty() = if (operationPart != null) {
-        concatAdapter.adapters.size <= 1
+        concatAdapter.adapters.size <= 3
     } else {
-        concatAdapter.adapters.isEmpty()
+        concatAdapter.adapters.size <= 2
     }
 
     fun isNotEmpty() = !isEmpty()
@@ -523,5 +535,8 @@ open class FormAdapter(isEnabled: Boolean = false) :
     fun clear() {
         concatAdapter.adapters.forEach { concatAdapter.removeAdapter(it) }
         clearPool()
+        concatAdapter.addAdapter(PlaceholderPartAdapter(this@FormAdapter, true))
+        if (operationPart != null) concatAdapter.addAdapter(operationPart!!)
+        concatAdapter.addAdapter(PlaceholderPartAdapter(this@FormAdapter, false))
     }
 }

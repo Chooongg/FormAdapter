@@ -35,7 +35,7 @@ abstract class VariantBaseForm(name: Any?, field: String?) : BaseForm(name, fiel
 
     internal var dynamicGroupDeletingBlock: (() -> Unit)? = null
 
-    override var typeset: BaseTypeset? = EmptyTypeset()
+    override var typeset: BaseTypeset? = EmptyTypeset
 
     private var _items = mutableListOf<BaseForm>()
 

@@ -37,7 +37,7 @@ class Boundary(
         const val GLOBAL = 3
     }
 
-    @IntDef(NONE, MIDDLE, GLOBAL)
+    @IntDef(NONE, MIDDLE_NO_MARGIN, MIDDLE, GLOBAL)
     annotation class BoundaryInt
 
     override fun equals(other: Any?): Boolean {
