@@ -51,6 +51,14 @@ abstract class BaseSeparateCardStyle : BaseStyle() {
                 Boundary.GLOBAL -> marginInfo.bottom
                 else -> marginInfo.middleBottom
             }
+            marginStart = when(item.marginBoundary.start){
+                Boundary.GLOBAL -> 0
+                else-> marginInfo.middleStart
+            }
+            marginEnd = when(item.marginBoundary.end){
+                Boundary.GLOBAL -> 0
+                else-> marginInfo.middleEnd
+            }
         }
     }
 

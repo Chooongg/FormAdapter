@@ -13,6 +13,7 @@ import com.chooongg.form.part.BaseFormPartAdapter
 import com.chooongg.form.part.FormChildDynamicPartAdapter
 import com.chooongg.form.part.FormChildPartAdapter
 import com.chooongg.form.style.BaseStyle
+import com.chooongg.form.style.ExternalAlignedStyle
 import kotlinx.coroutines.CoroutineScope
 
 class VariantChildDynamicGroupProvider : BaseFormProvider() {
@@ -23,10 +24,7 @@ class VariantChildDynamicGroupProvider : BaseFormProvider() {
             clipChildren = false
             clipToPadding = false
             isNestedScrollingEnabled = false
-            layoutManager = object : BaseFormLayoutManager(context) {
-                override fun canScrollVertically() = false
-                override fun canScrollHorizontally() = false
-            }
+            layoutManager = BaseFormLayoutManager(context)
         }
 
     override fun onBindViewHolder(
@@ -52,9 +50,9 @@ class VariantChildDynamicGroupProvider : BaseFormProvider() {
                 parentAdapter = bindingAdapter
                 parentBoundary = Boundary(
                     if (item.positionInGroup == 0) Boundary.GLOBAL else item.marginBoundary.start,
-                    if (bindingAdapter is FormChildPartAdapter) Boundary.NONE else item.marginBoundary.top,
+                    if (variant.style is ExternalAlignedStyle) Boundary.NONE else Boundary.MIDDLE,
                     if (item.positionInGroup == item.countInGroup - 1) Boundary.GLOBAL else item.marginBoundary.end,
-                    if (bindingAdapter is FormChildPartAdapter) Boundary.NONE else item.marginBoundary.bottom
+                    if (variant.style is ExternalAlignedStyle) Boundary.NONE else Boundary.MIDDLE
                 )
                 set(variant)
             }, false

@@ -47,19 +47,13 @@ class AdvancedViewModel : ViewModel() {
             initCardOutlinedDynamicPart("Test Group") {
                 minGroupCount = 0
                 maxGroupCount = 10
-                addGroup {
-                    addSwitch("Switch")
-                    addText("Text") {
-                        content = "Test"
-                    }
-                }
                 setDynamicGroupCreator {
                     addSwitch("Switch")
                     addText("Text") {
                         content = "Test"
                     }
                     childDynamicGroup("ChildGroup", "temp") {
-//                        style = CardFilledStyle()
+                        style = CardFilledStyle()
                         isIndependent = true
                         addGroup {
                             addSwitch("ChildSwitch")
@@ -67,7 +61,7 @@ class AdvancedViewModel : ViewModel() {
                                 content = "ChildTest"
                             }
                             childDynamicGroup("ChildChildGroup", "temp") {
-//                                style = CardElevatedStyle()
+                                style = CardElevatedStyle()
                                 addButtonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
                                 isIndependent = true
                                 addGroup {
@@ -90,7 +84,64 @@ class AdvancedViewModel : ViewModel() {
                                 content = "ChildTest"
                             }
                             childDynamicGroup("ChildChildGroup", "temp") {
-//                                style = CardElevatedStyle()
+                                style = CardElevatedStyle()
+                                addButtonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
+                                isIndependent = true
+                                addGroup {
+                                    addSwitch("ChildChildSwitch")
+                                    addText("ChildChildText") {
+                                        content = "ChildChildTest"
+                                    }
+                                }
+                                setDynamicGroupCreator {
+                                    addSwitch("ChildChildSwitch")
+                                    addText("ChildChildText") {
+                                        content = "ChildChildTest"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            initCardOutlinedDynamicPart("Test Group") {
+                minGroupCount = 0
+                maxGroupCount = 10
+                setDynamicGroupCreator {
+                    addSwitch("Switch")
+                    addText("Text") {
+                        content = "Test"
+                    }
+                    childDynamicGroup("ChildGroup", "temp") {
+                        isIndependent = true
+                        addGroup {
+                            addSwitch("ChildSwitch")
+                            addText("ChildText") {
+                                content = "ChildTest"
+                            }
+                            childDynamicGroup("ChildChildGroup", "temp") {
+                                addButtonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
+                                isIndependent = true
+                                addGroup {
+                                    addSwitch("ChildChildSwitch")
+                                    addText("ChildChildText") {
+                                        content = "ChildChildTest"
+                                    }
+                                }
+                                setDynamicGroupCreator {
+                                    addSwitch("ChildChildSwitch")
+                                    addText("ChildChildText") {
+                                        content = "ChildChildTest"
+                                    }
+                                }
+                            }
+                        }
+                        setDynamicGroupCreator {
+                            addSwitch("ChildSwitch")
+                            addText("ChildText") {
+                                content = "ChildTest"
+                            }
+                            childDynamicGroup("ChildChildGroup", "temp") {
                                 addButtonStyle = FormButton.ButtonStyle.TERTIARY_TEXT
                                 isIndependent = true
                                 addGroup {

@@ -24,10 +24,7 @@ class VariantFormProvider : BaseFormProvider() {
             clipChildren = false
             clipToPadding = false
             isNestedScrollingEnabled = false
-            layoutManager = object : BaseFormLayoutManager(context) {
-                override fun canScrollVertically() = false
-                override fun canScrollHorizontally() = false
-            }
+            layoutManager = BaseFormLayoutManager(context)
         }
 
     override fun onBindViewHolder(
@@ -59,6 +56,8 @@ class VariantFormProvider : BaseFormProvider() {
                         if (bindingAdapter is FormChildPartAdapter) Boundary.NONE else item.marginBoundary.bottom
                     )
                 } else if (bindingAdapter.style is NegativePaddingStyle) {
+                    parentBoundary = item.marginBoundary
+                } else {
                     parentBoundary = item.marginBoundary
                 }
                 set(variant)
